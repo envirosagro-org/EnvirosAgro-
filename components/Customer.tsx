@@ -1,7 +1,58 @@
 import React from 'react';
 import { Users, Leaf, ShieldPlus, Cpu, Factory, Heart, Smile, MessageCircle, Star, Award } from 'lucide-react';
 
-const CUSTOMER_SEGMENTS: any[] = [];
+const CUSTOMER_SEGMENTS = [
+  {
+    id: 1,
+    title: 'The Modern Farmer',
+    thrust: 'Precision Agriculture',
+    focus: 'Yield Optimization',
+    quote: 'Technology helps me make data-driven decisions, increasing my farm\'s efficiency and sustainability.',
+    icon: <Users size={48} className="text-agro-500" />,
+    bg: 'bg-agro-50',
+    border: 'border-agro-100',
+  },
+  {
+    id: 2,
+    title: 'The Eco-Conscious Consumer',
+    thrust: 'Sustainable Supply Chains',
+    focus: 'Product Provenance',
+    quote: 'I want to know where my food comes from and that it\'s produced in an environmentally friendly way.',
+    icon: <Leaf size={48} className="text-earth-500" />,
+    bg: 'bg-earth-50',
+    border: 'border-earth-100',
+  },
+  {
+    id: 3,
+    title: 'The Policy Maker',
+    thrust: 'Food Security & Biosecurity',
+    focus: 'National Resilience',
+    quote: 'Ensuring a stable and secure food supply for our nation is my top priority. We need robust systems.',
+    icon: <ShieldPlus size={48} className="text-blue-500" />,
+    bg: 'bg-blue-50',
+    border: 'border-blue-100',
+  },
+  {
+    id: 4,
+    title: 'The AgriTech Innovator',
+    thrust: 'Bio-manufacturing & Novel Farming',
+    focus: 'Scalable Solutions',
+    quote: 'We are developing the next generation of farming technologies to feed the world sustainably.',
+    icon: <Cpu size={48} className="text-rose-500" />,
+    bg: 'bg-rose-50',
+    border: 'border-rose-100',
+  },
+  {
+    id: 5,
+    title: 'The Food Processor',
+    thrust: 'Next-Gen Food Production',
+    focus: 'Operational Efficiency',
+    quote: 'Integrating new technologies into our production lines is key to meeting market demands.',
+    icon: <Factory size={48} className="text-amber-500" />,
+    bg: 'bg-amber-50',
+    border: 'border-amber-100',
+  },
+];
 
 export const Customer: React.FC = () => {
   return (
