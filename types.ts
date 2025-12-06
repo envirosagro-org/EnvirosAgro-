@@ -72,3 +72,32 @@ export interface User {
   avatar?: string;
   joinedDate?: string;
 }
+
+export interface CommunityPost {
+  id: string;
+  author: string;
+  timestamp: string;
+  content: string;
+  likes: number;
+  comments: number;
+  avatar: string;
+}
+
+export interface HeritageForumThread {
+  id: string;
+  title: string;
+  author: string;
+  lastReply: string;
+  replies: number;
+  views: number;
+  date: string;
+}
+
+export interface PodcastEpisode {
+  id: string;
+  title: string;
+  duration: string;
+  description: string;
+  audioUrl: string;
+  imageUrl: string;
+}
