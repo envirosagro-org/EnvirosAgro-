@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Users, Leaf, ShieldPlus, Cpu, Factory, PlayCircle, Newspaper, Radio, Cast, Megaphone, Share2, Link2, Globe, CheckCircle2, MessageCircle, Video, Glasses, Monitor, Film, Bell, Heart, BarChart2 } from 'lucide-react';
+import { Users, Leaf, ShieldPlus, Cpu, Factory, PlayCircle, Newspaper, Radio, Cast, Megaphone, Share2, Link2, Globe, CheckCircle2, MessageCircle, Video, Glasses, Monitor, Film, Bell, Heart, BarChart2, Calendar } from 'lucide-react';
 import { View } from '../types';
 
 const MEDIA_CHANNELS = [
@@ -61,7 +61,7 @@ const MEDIA_CHANNELS = [
     description: 'Market analysis, supply chain news, and large-scale operational reports.',
     channels: [
       { name: 'AgBiz Weekly', type: 'Newsletter', desc: 'Global market trends and analysis.', isNewsletter: true },
-      { name: 'ScaleUp Summit', type: 'Event', desc: 'Coverage of industrial ag conferences.' }
+      { name: 'ScaleUp Summit', type: 'Event', desc: 'Coverage of industrial ag conferences.', isEvent: true }
     ]
   }
 ];
@@ -211,6 +211,16 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
                                     className="block mt-2 w-full text-center bg-slate-100 text-slate-700 text-xs font-bold py-1 rounded hover:bg-slate-200 transition-colors flex items-center justify-center gap-1"
                                 >
                                     <BarChart2 size={12} /> View Market Data
+                                </button>
+                            )}
+
+                            {/* Special Action for ScaleUp Summit (NEW) */}
+                            {channel.isEvent && onNavigate && (
+                                <button 
+                                    onClick={() => onNavigate(View.SCALEUP_SUMMIT)}
+                                    className="block mt-2 w-full text-center bg-slate-100 text-slate-700 text-xs font-bold py-1 rounded hover:bg-slate-200 transition-colors flex items-center justify-center gap-1"
+                                >
+                                    <Calendar size={12} /> Enter Summit
                                 </button>
                             )}
                             
