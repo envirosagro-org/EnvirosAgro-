@@ -1,8 +1,86 @@
 
-import React from 'react';
-import { Calendar, Users, Video, Mic, MessageSquare, Star, ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Users, Video, Mic, MessageSquare, Star, ArrowRight, X, Download, Globe } from 'lucide-react';
 
 export const ScaleUpSummit: React.FC = () => {
+  const [showExpo, setShowExpo] = useState(false);
+  const [selectedSponsor, setSelectedSponsor] = useState<string | null>('AgriBank');
+
+  if (showExpo) {
+      return (
+          <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-4">
+              <button onClick={() => setShowExpo(false)} className="mb-6 flex items-center gap-2 text-earth-600 hover:text-agro-600 font-bold transition-colors">
+                  <ArrowRight className="rotate-180" size={20} /> Back to Lobby
+              </button>
+              
+              <div className="bg-slate-900 text-white rounded-3xl p-8 lg:p-12 min-h-[70vh] relative overflow-hidden shadow-2xl">
+                  {/* Background Accents */}
+                  <div className="absolute top-0 right-0 w-1/2 h-full bg-blue-600/10 blur-3xl rounded-full pointer-events-none"></div>
+                  <div className="absolute bottom-0 left-0 w-1/3 h-2/3 bg-purple-600/10 blur-3xl rounded-full pointer-events-none"></div>
+
+                  <h2 className="text-3xl font-serif font-bold mb-8 flex items-center gap-3 relative z-10">
+                      <Star className="text-yellow-400" fill="currentColor" /> Virtual Expo Hall
+                  </h2>
+                  
+                  <div className="grid lg:grid-cols-3 gap-8 relative z-10">
+                      {/* Sponsor List */}
+                      <div className="space-y-4">
+                          <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Exhibitors</h3>
+                          {['AgriBank', 'EcoFert', 'LogiTech', 'SolarSystems'].map((sponsor) => (
+                              <button
+                                  key={sponsor}
+                                  onClick={() => setSelectedSponsor(sponsor)}
+                                  className={`w-full p-4 rounded-xl text-left font-bold transition-all border-2 flex justify-between items-center group ${
+                                      selectedSponsor === sponsor
+                                      ? 'bg-blue-600/20 border-blue-500 text-white shadow-lg shadow-blue-900/20'
+                                      : 'bg-white/5 border-transparent hover:bg-white/10 text-slate-400 hover:text-white'
+                                  }`}
+                              >
+                                  {sponsor}
+                                  {selectedSponsor === sponsor && <div className="w-2 h-2 bg-blue-400 rounded-full shadow-[0_0_10px_#60a5fa]"></div>}
+                              </button>
+                          ))}
+                      </div>
+                      
+                      {/* Booth Detail */}
+                      <div className="lg:col-span-2 bg-white/5 rounded-3xl p-8 border border-white/10 flex flex-col">
+                          {selectedSponsor ? (
+                              <div className="flex-1 flex flex-col">
+                                  <div className="flex justify-between items-start mb-6">
+                                      <div>
+                                          <h3 className="text-3xl font-bold mb-1">{selectedSponsor}</h3>
+                                          <p className="text-blue-400 text-sm font-mono">Premium Partner</p>
+                                      </div>
+                                      <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-bold uppercase border border-green-500/50 flex items-center gap-2 animate-pulse">
+                                          <span className="w-2 h-2 bg-green-400 rounded-full"></span> Live Now
+                                      </span>
+                                  </div>
+                                  
+                                  <div className="bg-black/20 rounded-xl p-6 mb-8 border border-white/5">
+                                      <p className="text-slate-300 leading-relaxed text-lg">
+                                          Welcome to the {selectedSponsor} virtual experience. We are pioneering industrial solutions to scale your operations efficiently and sustainably.
+                                      </p>
+                                  </div>
+
+                                  <div className="mt-auto grid sm:grid-cols-2 gap-4">
+                                      <button className="bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-lg">
+                                          <MessageSquare size={20} /> Chat with Rep
+                                      </button>
+                                      <button className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors border border-white/10">
+                                          <Download size={20} /> Download Kit
+                                      </button>
+                                  </div>
+                              </div>
+                          ) : (
+                              <div className="h-full flex items-center justify-center text-slate-500">Select a sponsor to visit their booth</div>
+                          )}
+                      </div>
+                  </div>
+              </div>
+          </div>
+      );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
       {/* Header */}
@@ -79,22 +157,36 @@ export const ScaleUpSummit: React.FC = () => {
               </div>
           </div>
 
-          <div className="bg-slate-900 text-white p-8 rounded-3xl relative overflow-hidden">
-              <div className="relative z-10">
+          <div className="bg-slate-900 text-white p-8 rounded-3xl relative overflow-hidden flex flex-col">
+              <div className="relative z-10 flex-1 flex flex-col">
                   <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                      <Star className="text-yellow-400" /> Virtual Expo Hall
+                      <Star className="text-yellow-400" fill="currentColor" /> Virtual Expo Hall
                   </h3>
                   <p className="text-slate-300 mb-8">
-                      Visit virtual booths from top industry partners. Download whitepapers, watch demos, and chat with representatives.
+                      Visit virtual booths from top industry partners.
                   </p>
+                  
+                  {/* Sponsor Selector Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-8">
                       {['AgriBank', 'EcoFert', 'LogiTech', 'SolarSystems'].map((sponsor, i) => (
-                          <div key={i} className="bg-white/10 p-4 rounded-xl text-center font-bold text-sm hover:bg-white/20 cursor-pointer transition-colors">
+                          <button
+                              key={i}
+                              onClick={() => setSelectedSponsor(sponsor)}
+                              className={`p-4 rounded-xl text-center font-bold text-sm transition-all border-2 ${
+                                  selectedSponsor === sponsor
+                                  ? 'bg-blue-600/20 border-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] scale-[1.02]'
+                                  : 'bg-white/10 border-transparent hover:bg-white/20 text-slate-300'
+                              }`}
+                          >
                               {sponsor}
-                          </div>
+                          </button>
                       ))}
                   </div>
-                  <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-colors flex items-center justify-center gap-2">
+                  
+                  <button 
+                    onClick={() => setShowExpo(true)}
+                    className="w-full mt-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/50 hover:scale-[1.02]"
+                  >
                       Enter Expo Hall <ArrowRight size={18} />
                   </button>
               </div>
