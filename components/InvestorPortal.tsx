@@ -1,19 +1,65 @@
 
 import React, { useState } from 'react';
-import { TrendingUp, PieChart, ArrowUpRight, DollarSign, Leaf, Globe, ShieldCheck, Download, Plus, Coins, CreditCard, X, Smartphone } from 'lucide-react';
+import { TrendingUp, PieChart, ArrowUpRight, DollarSign, Leaf, Globe, ShieldCheck, Download, Plus, Coins, CreditCard, X, Smartphone, Loader2, CheckCircle2, ArrowDownLeft, Clock, Activity, Trash2 } from 'lucide-react';
 import { PieChart as RePie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
-
-const PORTFOLIO_DATA = [
-  // Empty State
-];
-
-const OPPORTUNITIES: any[] = [
-  // Empty State
-];
 
 export const InvestorPortal: React.FC = () => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [depositMethod, setDepositMethod] = useState<'TOKENZ' | 'FIAT'>('TOKENZ');
+  
+  // Portfolio State
+  const [portfolioValue, setPortfolioValue] = useState(0);
+  const [totalImpact, setTotalImpact] = useState(0);
+  
+  // Transaction History State
+  const [transactions, setTransactions] = useState<any[]>([]);
+  
+  // Deposit State
+  const [amount, setAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'MOBILE'>('CARD');
+  const [depositStatus, setDepositStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
+
+  const handleDeposit = () => {
+      const val = parseFloat(amount);
+      if (!amount || isNaN(val) || val <= 0) {
+          alert("Please enter a valid amount.");
+          return;
+      }
+
+      setDepositStatus('PROCESSING');
+
+      // Simulate Network Request
+      setTimeout(() => {
+          setPortfolioValue(prev => prev + val);
+          setTotalImpact(prev => prev + (val * 0.5)); // Mock impact calculation
+          
+          const newTransaction = {
+              id: Date.now(),
+              type: 'Deposit',
+              amount: val,
+              method: depositMethod === 'TOKENZ' ? 'Tokenz Wallet' : (paymentMethod === 'CARD' ? 'Visa/Mastercard' : 'Mobile Money'),
+              date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+              currency: depositMethod === 'TOKENZ' ? 'TKZ' : 'USD'
+          };
+          
+          setTransactions(prev => [newTransaction, ...prev]);
+          setDepositStatus('SUCCESS');
+
+          setTimeout(() => {
+              setShowDepositModal(false);
+              setDepositStatus('IDLE');
+              setAmount('');
+          }, 2000);
+      }, 2000);
+  };
+
+  const handleReset = () => {
+      if (confirm("Are you sure you want to clear your portfolio and transaction history?")) {
+          setPortfolioValue(0);
+          setTotalImpact(0);
+          setTransactions([]);
+      }
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 relative">
@@ -44,17 +90,35 @@ export const InvestorPortal: React.FC = () => {
         </div>
       </div>
 
-      {/* Portfolio Overview - Empty State */}
+      {/* Portfolio Overview */}
       <div className="grid lg:grid-cols-3 gap-8 mb-12">
          
          {/* Stats Cards */}
          <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm flex flex-col justify-center">
-                <div className="flex justify-between items-start mb-4">
+            <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                <div className="flex justify-between items-start mb-4 relative z-10">
                     <h3 className="font-bold text-earth-500 text-sm uppercase tracking-wider">Total Asset Value</h3>
+                    {portfolioValue > 0 && (
+                        <button 
+                            onClick={handleReset}
+                            className="text-earth-300 hover:text-red-500 transition-colors p-1 rounded-full hover:bg-red-50"
+                            title="Clear Portfolio"
+                        >
+                            <Trash2 size={16} />
+                        </button>
+                    )}
                 </div>
-                <div className="text-4xl font-serif font-bold text-earth-900 mb-2">$0.00</div>
-                <p className="text-earth-400 text-xs">Waiting for initial deposit...</p>
+                <div className="text-4xl font-serif font-bold text-earth-900 mb-2 relative z-10">
+                    ${portfolioValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                </div>
+                <p className="text-earth-400 text-xs relative z-10">
+                    {portfolioValue > 0 ? '+100.0% (Net Deposit)' : 'Waiting for initial deposit...'}
+                </p>
+                {portfolioValue > 0 && (
+                    <div className="absolute -bottom-4 -right-4 text-blue-50 opacity-50">
+                        <TrendingUp size={100} />
+                    </div>
+                )}
             </div>
             
             <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm flex flex-col justify-center">
@@ -64,27 +128,51 @@ export const InvestorPortal: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-earth-400">
                     <div>
-                        <div className="text-2xl font-bold">--</div>
-                        <div className="text-xs">CO2 Offset</div>
+                        <div className={`text-2xl font-bold ${totalImpact > 0 ? 'text-earth-900' : ''}`}>
+                            {totalImpact > 0 ? totalImpact.toFixed(1) : '--'}
+                        </div>
+                        <div className="text-xs">CO2 Offset (tons)</div>
                     </div>
                     <div>
-                        <div className="text-2xl font-bold">--</div>
+                        <div className={`text-2xl font-bold ${totalImpact > 0 ? 'text-earth-900' : ''}`}>
+                            {totalImpact > 0 ? Math.floor(totalImpact / 10) : '--'}
+                        </div>
                         <div className="text-xs">Jobs Supported</div>
                     </div>
                 </div>
             </div>
 
-            {/* Asset Allocation Chart - Empty State */}
+            {/* Asset Allocation Chart */}
             <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm md:col-span-2 flex items-center justify-center text-center h-64">
-                <div>
-                    <PieChart size={48} className="mx-auto text-earth-200 mb-4" />
-                    <h3 className="text-earth-500 font-bold mb-1">No Active Investments</h3>
-                    <p className="text-xs text-earth-400">Deposit funds to start building your green portfolio.</p>
-                </div>
+                {portfolioValue > 0 ? (
+                    <div className="flex flex-col items-center justify-center w-full h-full">
+                        <div className="w-48 h-48 relative">
+                             <ResponsiveContainer width="100%" height="100%">
+                                <RePie>
+                                    <Pie data={[{name: 'Cash Reserves', value: portfolioValue}]} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={60} outerRadius={80} fill="#3b82f6">
+                                        <Cell fill="#3b82f6" />
+                                    </Pie>
+                                    <Tooltip />
+                                </RePie>
+                             </ResponsiveContainer>
+                             <div className="absolute inset-0 flex items-center justify-center flex-col">
+                                 <span className="text-xs text-earth-400 font-bold uppercase">Liquidity</span>
+                                 <span className="text-xl font-bold text-blue-600">100%</span>
+                             </div>
+                        </div>
+                        <p className="text-xs text-earth-500 mt-2">Allocated to Cash Reserves. View opportunities to invest.</p>
+                    </div>
+                ) : (
+                    <div>
+                        <PieChart size={48} className="mx-auto text-earth-200 mb-4" />
+                        <h3 className="text-earth-500 font-bold mb-1">No Active Investments</h3>
+                        <p className="text-xs text-earth-400">Deposit funds to start building your green portfolio.</p>
+                    </div>
+                )}
             </div>
          </div>
 
-         {/* Right Sidebar: Quick Actions */}
+         {/* Right Sidebar: Quick Actions & History */}
          <div className="space-y-6">
              <div className="bg-agro-900 text-white p-8 rounded-3xl relative overflow-hidden">
                  <div className="relative z-10">
@@ -97,6 +185,39 @@ export const InvestorPortal: React.FC = () => {
                          No Logs Available
                      </button>
                  </div>
+             </div>
+
+             {/* Recent Activity Feed */}
+             <div className="bg-white p-6 rounded-3xl border border-earth-200 shadow-sm flex-1">
+                <h3 className="font-bold text-lg text-earth-900 mb-4 flex items-center gap-2">
+                    <Clock size={18} className="text-earth-400" /> Recent Activity
+                </h3>
+                <div className="space-y-3">
+                    {transactions.length > 0 ? (
+                        transactions.map((tx) => (
+                            <div key={tx.id} className="flex items-center justify-between p-3 bg-earth-50 rounded-xl border border-earth-100 hover:border-agro-200 transition-colors">
+                                <div className="flex items-center gap-3">
+                                    <div className="bg-green-100 p-2 rounded-full text-green-600">
+                                        <ArrowDownLeft size={16} />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm font-bold text-earth-900">{tx.type}</p>
+                                        <p className="text-[10px] text-earth-500">{tx.date}</p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <p className="text-sm font-bold text-green-600">+{tx.amount.toLocaleString()} <span className="text-[10px] text-green-700">{tx.currency}</span></p>
+                                    <p className="text-[10px] text-earth-400">{tx.method}</p>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className="text-center py-8 text-earth-400">
+                            <Activity size={24} className="mx-auto mb-2 opacity-50" />
+                            <p className="text-xs italic">No transactions yet.</p>
+                        </div>
+                    )}
+                </div>
              </div>
          </div>
       </div>
@@ -132,56 +253,111 @@ export const InvestorPortal: React.FC = () => {
                </div>
                
                <div className="p-6">
-                  <div className="flex gap-2 mb-6 bg-earth-50 p-1 rounded-xl">
-                      <button 
-                        onClick={() => setDepositMethod('TOKENZ')}
-                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'TOKENZ' ? 'bg-white text-amber-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
-                      >
-                          <Coins size={16} /> Pay with Tokenz
-                      </button>
-                      <button 
-                        onClick={() => setDepositMethod('FIAT')}
-                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'FIAT' ? 'bg-white text-blue-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
-                      >
-                          <CreditCard size={16} /> Fiat Deposit
-                      </button>
-                  </div>
-
-                  {depositMethod === 'TOKENZ' ? (
-                      <div className="space-y-4">
-                          <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 flex justify-between items-center">
-                              <div>
-                                  <p className="text-xs font-bold text-amber-700 uppercase">Available Balance</p>
-                                  <p className="text-xl font-bold text-amber-900">250.00 TKZ</p>
-                              </div>
-                              <Coins className="text-amber-400" size={32} />
+                  {depositStatus === 'SUCCESS' ? (
+                      <div className="text-center py-8 animate-in zoom-in">
+                          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
+                              <CheckCircle2 size={40} />
                           </div>
-                          <div>
-                              <label className="text-sm font-bold text-earth-700 block mb-1">Transfer Amount (TKZ)</label>
-                              <input type="number" className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-lg" placeholder="0.00" />
-                          </div>
-                          <button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">
-                              Transfer to Portfolio
-                          </button>
+                          <h3 className="text-2xl font-bold text-earth-900 mb-2">Deposit Successful!</h3>
+                          <p className="text-earth-600 mb-2">
+                              Your funds have been added to your portfolio liquidity.
+                          </p>
+                          <p className="text-sm font-bold text-blue-600">
+                              New Balance: ${(portfolioValue + parseFloat(amount || '0')).toLocaleString()}
+                          </p>
                       </div>
                   ) : (
-                      <div className="space-y-4">
-                          <div>
-                              <label className="text-sm font-bold text-earth-700 block mb-1">Deposit Amount (USD)</label>
-                              <input type="number" className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg" placeholder="0.00" />
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                              <button className="flex items-center justify-center gap-2 border border-earth-200 rounded-xl py-3 hover:bg-earth-50 font-bold text-sm text-earth-700">
-                                  <CreditCard size={16} /> Card
-                              </button>
-                              <button className="flex items-center justify-center gap-2 border border-earth-200 rounded-xl py-3 hover:bg-earth-50 font-bold text-sm text-earth-700">
-                                  <Smartphone size={16} /> Mobile Money
-                              </button>
-                          </div>
-                          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">
-                              Process Deposit
-                          </button>
-                      </div>
+                      <>
+                        <div className="flex gap-2 mb-6 bg-earth-50 p-1 rounded-xl">
+                            <button 
+                                onClick={() => { setDepositMethod('TOKENZ'); setAmount(''); }}
+                                disabled={depositStatus === 'PROCESSING'}
+                                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'TOKENZ' ? 'bg-white text-amber-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
+                            >
+                                <Coins size={16} /> Pay with Tokenz
+                            </button>
+                            <button 
+                                onClick={() => { setDepositMethod('FIAT'); setAmount(''); }}
+                                disabled={depositStatus === 'PROCESSING'}
+                                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'FIAT' ? 'bg-white text-blue-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
+                            >
+                                <CreditCard size={16} /> Fiat Deposit
+                            </button>
+                        </div>
+
+                        {depositMethod === 'TOKENZ' ? (
+                            <div className="space-y-4">
+                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 flex justify-between items-center">
+                                    <div>
+                                        <p className="text-xs font-bold text-amber-700 uppercase">Available Balance</p>
+                                        <p className="text-xl font-bold text-amber-900">250.00 TKZ</p>
+                                    </div>
+                                    <Coins className="text-amber-400" size={32} />
+                                </div>
+                                <div>
+                                    <label className="text-sm font-bold text-earth-700 block mb-1">Transfer Amount (TKZ)</label>
+                                    <input 
+                                        type="number" 
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        disabled={depositStatus === 'PROCESSING'}
+                                        className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-lg" 
+                                        placeholder="0.00" 
+                                    />
+                                </div>
+                                <button 
+                                    onClick={handleDeposit}
+                                    disabled={depositStatus === 'PROCESSING'}
+                                    className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                                >
+                                    {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin" /> Processing Transfer...</> : 'Transfer to Portfolio'}
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-sm font-bold text-earth-700 block mb-1">Deposit Amount (USD)</label>
+                                    <input 
+                                        type="number" 
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        disabled={depositStatus === 'PROCESSING'}
+                                        className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg" 
+                                        placeholder="0.00" 
+                                    />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button 
+                                        onClick={() => setPaymentMethod('CARD')}
+                                        className={`flex items-center justify-center gap-2 border rounded-xl py-3 font-bold text-sm transition-all ${
+                                            paymentMethod === 'CARD' 
+                                            ? 'border-blue-500 bg-blue-50 text-blue-700 ring-1 ring-blue-500' 
+                                            : 'border-earth-200 hover:bg-earth-50 text-earth-700'
+                                        }`}
+                                    >
+                                        <CreditCard size={16} /> Card
+                                    </button>
+                                    <button 
+                                        onClick={() => setPaymentMethod('MOBILE')}
+                                        className={`flex items-center justify-center gap-2 border rounded-xl py-3 font-bold text-sm transition-all ${
+                                            paymentMethod === 'MOBILE' 
+                                            ? 'border-green-500 bg-green-50 text-green-700 ring-1 ring-green-500' 
+                                            : 'border-earth-200 hover:bg-earth-50 text-earth-700'
+                                        }`}
+                                    >
+                                        <Smartphone size={16} /> Mobile Money
+                                    </button>
+                                </div>
+                                <button 
+                                    onClick={handleDeposit}
+                                    disabled={depositStatus === 'PROCESSING'}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                                >
+                                    {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin" /> Verifying Payment...</> : <><CheckCircle2 size={18} /> Process Deposit</>}
+                                </button>
+                            </div>
+                        )}
+                      </>
                   )}
                </div>
             </div>

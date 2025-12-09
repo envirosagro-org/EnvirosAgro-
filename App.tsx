@@ -32,6 +32,8 @@ import { NutriLife } from './components/NutriLife';
 import { AgBizWeekly } from './components/AgBizWeekly';
 import { InvestorPortal } from './components/InvestorPortal';
 import { ScaleUpSummit } from './components/ScaleUpSummit';
+import { LiveHost } from './components/LiveHost';
+import { CommunityGuidelines } from './components/CommunityGuidelines';
 import { 
   Sprout, LayoutDashboard, BookOpen, MessageSquareText, Menu, X, 
   UserCircle, LogOut, ChevronDown, Info, ShoppingBag, Database as DbIcon, Users, Scale, Tag, FileText, Award, Layers, MonitorPlay, Truck, HeartHandshake, Handshake, Wallet, Fingerprint
@@ -76,7 +78,7 @@ const App: React.FC = () => {
       case View.SERVICES:
         return <Services />;
       case View.DATABASE:
-        return <Database />;
+        return <Database user={user} />;
       case View.HUMAN_RESOURCE:
         return <HumanResource />;
       case View.KNOWLEDGE:
@@ -106,7 +108,7 @@ const App: React.FC = () => {
       case View.FINANCE:
         return <Finance onNavigate={setCurrentView} />;
       case View.COMMUNITY:
-        return <Community />;
+        return <Community onNavigate={setCurrentView} />;
       case View.PODCAST:
         return <Podcast />;
       case View.HERITAGE_FORUM:
@@ -129,6 +131,10 @@ const App: React.FC = () => {
         return <InvestorPortal />;
       case View.SCALEUP_SUMMIT:
         return <ScaleUpSummit />;
+      case View.LIVE_HOST:
+        return <LiveHost />;
+      case View.COMMUNITY_GUIDELINES:
+        return <CommunityGuidelines onNavigate={setCurrentView} />;
       default:
         return <Hero onNavigate={setCurrentView} />;
     }
@@ -394,7 +400,7 @@ const App: React.FC = () => {
               <li onClick={() => setCurrentView(View.INFORMATION)} className="cursor-pointer hover:text-agro-400">About Us</li>
               <li onClick={() => setCurrentView(View.MEDIA)} className="cursor-pointer hover:text-agro-400">Media</li>
               <li onClick={() => setCurrentView(View.SUPPLY)} className="cursor-pointer hover:text-agro-400">Supply Chain</li>
-              <li onClick={() => setCurrentView(View.CUSTOMER)} className="cursor-pointer hover:text-agro-400">Customers</li>
+              <li onClick={() => setCurrentView(View.COMMUNITY_GUIDELINES)} className="cursor-pointer hover:text-agro-400 text-agro-200">Community Guidelines</li>
             </ul>
           </div>
           <div>

@@ -1,7 +1,8 @@
 
 import React, { useState } from 'react';
-import { Users, Building2, Fingerprint, CreditCard, CheckCircle2, QrCode, ArrowRight, ShieldCheck, Sprout, MessageSquarePlus, ThumbsUp, Coins, Send, Share2, Award, Zap, Tag } from 'lucide-react';
+import { Users, Building2, Fingerprint, CreditCard, CheckCircle2, QrCode, ArrowRight, ShieldCheck, Sprout, MessageSquarePlus, ThumbsUp, Coins, Send, Share2, Award, Zap, Tag, Info } from 'lucide-react';
 import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { View } from '../types';
 
 type Tab = 'REGISTER_GROUP' | 'REGISTER_SOCIETY' | 'GET_ESIN' | 'ID_CARD' | 'FEED';
 
@@ -15,7 +16,11 @@ const REWARDS_HISTORY = [
   { day: 'Sun', amount: 50 },
 ];
 
-export const Community: React.FC = () => {
+interface CommunityProps {
+    onNavigate?: (view: View) => void;
+}
+
+export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<Tab>('REGISTER_GROUP');
   const [esin, setEsin] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -227,9 +232,19 @@ export const Community: React.FC = () => {
                             className="w-full bg-earth-50 border border-earth-200 rounded-xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-agro-500 mb-4 resize-none h-24"
                         />
                         <div className="flex justify-between items-center">
-                            <div className="text-xs text-earth-400 font-medium">
-                                Share to inspire others!
-                            </div>
+                            {onNavigate ? (
+                                <button 
+                                    type="button"
+                                    onClick={() => onNavigate(View.COMMUNITY_GUIDELINES)}
+                                    className="text-[10px] text-earth-400 font-medium hover:text-agro-600 flex items-center gap-1 transition-colors"
+                                >
+                                    <Info size={12} /> Review Community Guidelines
+                                </button>
+                            ) : (
+                                <div className="text-xs text-earth-400 font-medium">
+                                    Share to inspire others!
+                                </div>
+                            )}
                             <button 
                                 type="submit" 
                                 disabled={!postContent.trim()}

@@ -1,8 +1,10 @@
+
 import React, { useState, useMemo } from 'react';
 import { 
   Users, Leaf, ShieldPlus, Cpu, Factory, 
   Calculator, BookOpen, Activity, Sprout, 
-  Globe, BarChart3, Droplets, TrendingUp, Settings, Scale
+  Globe, BarChart3, Droplets, TrendingUp, Settings, Scale,
+  Share2, X, Copy
 } from 'lucide-react';
 import { 
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, ComposedChart, Bar 
@@ -81,6 +83,7 @@ const APPLICATIONS = [
 
 export const SustainabilityFramework: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'model' | 'simulation'>('model');
+  const [showShareModal, setShowShareModal] = useState(false);
   
   // Simulation State
   const [params, setParams] = useState({
@@ -136,6 +139,15 @@ export const SustainabilityFramework: React.FC = () => {
   }, [params]);
 
   const finalValues = simulationData[simulationData.length - 1];
+
+  const handleCopyResults = () => {
+      if (!finalValues) return;
+      const text = `EnvirosAgro Simulation Results:\nSustainable Time Constant m(t): ${finalValues.m}\nSustainability Coefficient C(a): ${finalValues.ca}\nParameters: Base=${params.x}, Growth=${params.r}, Rain=${params.dn}`;
+      navigator.clipboard.writeText(text).then(() => {
+          alert("Results copied to clipboard!");
+          setShowShareModal(false);
+      });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
@@ -429,6 +441,45 @@ export const SustainabilityFramework: React.FC = () => {
                 </p>
              </div>
           </div>
+
+          {/* Share Button */}
+          <div className="mt-8 flex justify-center">
+              <button 
+                  onClick={() => setShowShareModal(true)}
+                  className="bg-agro-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-agro-700 transition-all flex items-center gap-2"
+              >
+                  <Share2 size={20} /> Share Simulation Results
+              </button>
+          </div>
+
+          {/* Share Modal */}
+          {showShareModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+                  <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl relative">
+                      <button 
+                          onClick={() => setShowShareModal(false)}
+                          className="absolute top-4 right-4 text-earth-400 hover:text-earth-600"
+                      >
+                          <X size={24} />
+                      </button>
+                      <h3 className="text-2xl font-bold text-agro-900 mb-4">Share Results</h3>
+                      <div className="bg-earth-50 p-4 rounded-xl border border-earth-100 mb-6">
+                          <p className="text-earth-600 text-sm font-mono leading-relaxed">
+                              My Farm Simulation:<br/>
+                              <strong>m(t) Resilience:</strong> {finalValues?.m}<br/>
+                              <strong>C(a) Sustainability:</strong> {finalValues?.ca}<br/>
+                              <span className="text-xs text-earth-400 mt-2 block">Generated via EnvirosAgro Framework</span>
+                          </p>
+                      </div>
+                      <button 
+                          onClick={handleCopyResults}
+                          className="w-full bg-agro-600 text-white font-bold py-3 rounded-xl hover:bg-agro-700 transition-colors flex items-center justify-center gap-2"
+                      >
+                          <Copy size={18} /> Copy Summary
+                      </button>
+                  </div>
+              </div>
+          )}
         </div>
       )}
     </div>

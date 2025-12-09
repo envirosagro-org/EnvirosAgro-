@@ -146,12 +146,20 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
 
                             {/* Special Action for Webinars */}
                             {channel.isWebinar && onNavigate && (
-                                <button 
-                                    onClick={() => onNavigate(View.WEBINAR)}
-                                    className="block mt-2 w-full text-center bg-blue-100 text-blue-700 text-xs font-bold py-1 rounded hover:bg-blue-200 transition-colors flex items-center justify-center gap-1"
-                                >
-                                    <Video size={12} /> Watch Live
-                                </button>
+                                <>
+                                    <button 
+                                        onClick={() => onNavigate(View.WEBINAR)}
+                                        className="block mt-2 w-full text-center bg-blue-100 text-blue-700 text-xs font-bold py-1 rounded hover:bg-blue-200 transition-colors flex items-center justify-center gap-1"
+                                    >
+                                        <Video size={12} /> Watch Live
+                                    </button>
+                                    <button 
+                                        onClick={() => onNavigate(View.LIVE_HOST)}
+                                        className="block mt-1 w-full text-center bg-white border border-blue-200 text-blue-600 text-xs font-bold py-1 rounded hover:bg-blue-50 transition-colors flex items-center justify-center gap-1"
+                                    >
+                                        <Cast size={12} /> Host Coverage
+                                    </button>
+                                </>
                             )}
 
                             {/* Special Action for SmartFarm VR */}
@@ -166,12 +174,20 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
 
                             {/* Special Action for Planet Watch News */}
                             {channel.isNews && onNavigate && (
-                                <button 
-                                    onClick={() => onNavigate(View.PLANET_WATCH)}
-                                    className="block mt-2 w-full text-center bg-green-100 text-green-700 text-xs font-bold py-1 rounded hover:bg-green-200 transition-colors flex items-center justify-center gap-1"
-                                >
-                                    <Monitor size={12} /> Watch Report
-                                </button>
+                                <>
+                                    <button 
+                                        onClick={() => onNavigate(View.PLANET_WATCH)}
+                                        className="block mt-2 w-full text-center bg-green-100 text-green-700 text-xs font-bold py-1 rounded hover:bg-green-200 transition-colors flex items-center justify-center gap-1"
+                                    >
+                                        <Monitor size={12} /> Watch Report
+                                    </button>
+                                    <button 
+                                        onClick={() => onNavigate(View.LIVE_HOST)}
+                                        className="block mt-1 w-full text-center bg-white border border-green-200 text-green-600 text-xs font-bold py-1 rounded hover:bg-green-50 transition-colors flex items-center justify-center gap-1"
+                                    >
+                                        <Cast size={12} /> Host Coverage
+                                    </button>
+                                </>
                             )}
 
                             {/* Special Action for Green Lens Docs */}
@@ -216,12 +232,20 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
 
                             {/* Special Action for ScaleUp Summit (NEW) */}
                             {channel.isEvent && onNavigate && (
-                                <button 
-                                    onClick={() => onNavigate(View.SCALEUP_SUMMIT)}
-                                    className="block mt-2 w-full text-center bg-slate-100 text-slate-700 text-xs font-bold py-1 rounded hover:bg-slate-200 transition-colors flex items-center justify-center gap-1"
-                                >
-                                    <Calendar size={12} /> Enter Summit
-                                </button>
+                                <>
+                                    <button 
+                                        onClick={() => onNavigate(View.SCALEUP_SUMMIT)}
+                                        className="block mt-2 w-full text-center bg-slate-100 text-slate-700 text-xs font-bold py-1 rounded hover:bg-slate-200 transition-colors flex items-center justify-center gap-1"
+                                    >
+                                        <Calendar size={12} /> Enter Summit
+                                    </button>
+                                    <button 
+                                        onClick={() => onNavigate(View.LIVE_HOST)}
+                                        className="block mt-1 w-full text-center bg-white border border-slate-200 text-slate-600 text-xs font-bold py-1 rounded hover:bg-slate-50 transition-colors flex items-center justify-center gap-1"
+                                    >
+                                        <Cast size={12} /> Host Coverage
+                                    </button>
+                                </>
                             )}
                             
                             {/* Share Button */}

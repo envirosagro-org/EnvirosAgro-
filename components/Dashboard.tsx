@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { 
-  Users, Factory, Leaf, ShieldPlus, Cpu, ArrowUpRight, AlertCircle, Signal, Loader2
+  Users, Factory, Leaf, ShieldPlus, Cpu, ArrowUpRight, Signal, Loader2, CloudSun, Wind, Droplets
 } from 'lucide-react';
 import { View } from '../types';
 
@@ -30,26 +30,50 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
-             <div className="bg-white px-6 py-4 rounded-2xl border border-earth-200 shadow-sm flex items-center justify-between">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+             {/* Weather Widget (New) */}
+             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                <div className="relative z-10 flex justify-between items-start mb-6">
+                    <div>
+                        <h4 className="font-bold text-blue-100 text-sm flex items-center gap-2"><CloudSun size={16} /> Local Weather</h4>
+                        <p className="text-2xl font-bold">24°C</p>
+                        <p className="text-xs text-blue-100">Kiriaini, Kenya</p>
+                    </div>
+                    <CloudSun size={48} className="text-blue-100 opacity-80" />
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs relative z-10">
+                    <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                        <span className="block opacity-70 mb-1 flex items-center gap-1"><Droplets size={10} /> Humidity</span>
+                        <span className="font-bold">65%</span>
+                    </div>
+                    <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                        <span className="block opacity-70 mb-1 flex items-center gap-1"><Wind size={10} /> Wind</span>
+                        <span className="font-bold">12 km/h</span>
+                    </div>
+                </div>
+             </div>
+
+             <div className="bg-white px-6 py-4 rounded-2xl border border-earth-200 shadow-sm flex flex-col justify-center">
                 <div>
                     <span className="text-xs text-earth-500 uppercase font-bold block mb-1">Network C(a)</span>
                     <span className="text-2xl font-serif font-bold text-earth-300 flex items-center gap-2">
                         -- <Loader2 size={16} className="animate-spin text-earth-300" />
                     </span>
                 </div>
-                <div className="text-right">
+                <div className="text-right mt-2">
                     <span className="text-xs bg-earth-100 text-earth-500 px-2 py-1 rounded font-bold">Calibrating</span>
                 </div>
              </div>
-             <div className="bg-white px-6 py-4 rounded-2xl border border-earth-200 shadow-sm flex items-center justify-between">
+             
+             <div className="bg-white px-6 py-4 rounded-2xl border border-earth-200 shadow-sm flex flex-col justify-center">
                 <div>
                     <span className="text-xs text-earth-500 uppercase font-bold block mb-1">Resilience m(t)</span>
                     <span className="text-2xl font-serif font-bold text-earth-300 flex items-center gap-2">
                         -- <Loader2 size={16} className="animate-spin text-earth-300" />
                     </span>
                 </div>
-                <div className="text-right">
+                <div className="text-right mt-2">
                     <span className="text-xs bg-earth-100 text-earth-500 px-2 py-1 rounded font-bold">Awaiting Data</span>
                 </div>
              </div>

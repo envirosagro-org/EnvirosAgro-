@@ -1,17 +1,43 @@
 
 import React, { useState } from 'react';
-import { Database as DbIcon, Search, Download, FileText, Globe, Filter, ChevronRight, Droplets, Wind, Sprout, Cat, UploadCloud, X, ClipboardList, FileSpreadsheet, CheckCircle2, Plus, Calculator, BarChart3, Activity } from 'lucide-react';
-import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { Database as DbIcon, Search, Download, FileText, Globe, Filter, ChevronRight, Droplets, Wind, Sprout, Cat, UploadCloud, X, ClipboardList, FileSpreadsheet, CheckCircle2, Plus, Calculator, BarChart3, Activity, Lock, Edit } from 'lucide-react';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
 import { THRUSTS, DATASETS, RESOURCE_TYPES, COLLECTION_TOOLS } from '../data';
+import { User } from '../types';
 
-export const Database: React.FC = () => {
+interface DatabaseProps {
+    user?: User | null;
+}
+
+// Soil Comparison Data
+const SOIL_TYPES = [
+    { name: 'Clay', ph: 6.5, drainage: 20, nutrient: 90, aeration: 30, organic: 60 },
+    { name: 'Sand', ph: 7.0, drainage: 90, nutrient: 20, aeration: 95, organic: 10 },
+    { name: 'Loam', ph: 6.8, drainage: 60, nutrient: 80, aeration: 70, organic: 80 },
+    { name: 'Silt', ph: 6.2, drainage: 50, nutrient: 70, aeration: 60, organic: 50 },
+    { name: 'Peat', ph: 4.5, drainage: 10, nutrient: 50, aeration: 20, organic: 100 },
+];
+
+export const Database: React.FC<DatabaseProps> = ({ user }) => {
   const [activeThrustId, setActiveThrustId] = useState('SA');
   const [activeResourceType, setActiveResourceType] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [showContributeModal, setShowContributeModal] = useState(false);
   const [activeModalTab, setActiveModalTab] = useState<'SUBMIT' | 'TOOLS'>('SUBMIT');
-  const [activeViewTab, setActiveViewTab] = useState<'DATASETS' | 'HEALTH'>('DATASETS');
+  const [activeViewTab, setActiveViewTab] = useState<'DATASETS' | 'HEALTH' | 'COMPARE' | 'MY_PORTAL'>('DATASETS');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Soil Compare State
+  const [selectedSoils, setSelectedSoils] = useState<string[]>(['Loam', 'Clay']);
+
+  // Role Logic
+  const isInternal = user?.role === 'Researcher' || user?.role === 'Stakeholder';
+  const isExternal = user?.role === 'Farmer';
+
+  // Drag & Drop State
+  const [dragActive, setDragActive] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   // Sustainability Feedback State
   const [sustainScore, setSustainScore] = useState<number | null>(null);
@@ -36,16 +62,43 @@ export const Database: React.FC = () => {
   );
 
   const calculateSustainability = () => {
-      // Formula: m = sqrt[ ((Dn * In) * C(a)) / S ]
-      // Dn = Data Depth (Volume)
-      // In = Integrity (Standardization)
-      // C(a) = Application Coefficient (Thrust Alignment)
-      // S = Obsolescence Rate (Demand/Decay)
-      
       const { dn, in_val, ca, s } = sustainParams;
       const numerator = (dn * in_val) * ca;
       const m = Math.sqrt(numerator / s);
       setSustainScore(parseFloat(m.toFixed(2)));
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.type === "dragenter" || e.type === "dragover") {
+          setDragActive(true);
+      } else if (e.type === "dragleave") {
+          setDragActive(false);
+      }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          validateFile(e.dataTransfer.files[0]);
+      }
+  };
+
+  const validateFile = (file: File) => {
+      const allowedTypes = ['text/csv', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/pdf'];
+      if (!allowedTypes.includes(file.type)) {
+          setUploadError('Invalid file type. Only CSV, XLSX, and PDF allowed.');
+          return;
+      }
+      if (file.size > 50 * 1024 * 1024) { // 50MB
+          setUploadError('File too large. Max 50MB.');
+          return;
+      }
+      setUploadError(null);
+      setUploadedFile(file);
   };
 
   const handleContributeSubmit = (e: React.FormEvent) => {
@@ -54,8 +107,9 @@ export const Database: React.FC = () => {
       setTimeout(() => {
           setIsSubmitting(false);
           setShowContributeModal(false);
+          setUploadedFile(null);
           alert(`Thank you! Your dataset has been submitted. Calculated Sustainability Score (m): ${sustainScore || 'Pending Review'}\nYou earned 50 EAC for this contribution!`);
-          setSustainScore(null); // Reset
+          setSustainScore(null);
       }, 1500);
   };
 
@@ -80,7 +134,7 @@ export const Database: React.FC = () => {
                 A comprehensive repository organized by the Five Thrusts Framework.
             </p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
              <div className="bg-earth-100 p-1 rounded-xl flex gap-1">
                 <button 
                    onClick={() => setActiveViewTab('DATASETS')}
@@ -92,19 +146,43 @@ export const Database: React.FC = () => {
                    onClick={() => setActiveViewTab('HEALTH')}
                    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeViewTab === 'HEALTH' ? 'bg-white shadow-sm text-agro-700' : 'text-earth-500 hover:text-earth-800'}`}
                 >
-                   <Activity size={16} /> Database Health
+                   <Activity size={16} /> Health
                 </button>
+                {activeThrustId === 'EA' && (
+                    <button 
+                        onClick={() => setActiveViewTab('COMPARE')}
+                        className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeViewTab === 'COMPARE' ? 'bg-white shadow-sm text-agro-700' : 'text-earth-500 hover:text-earth-800'}`}
+                    >
+                        <BarChart3 size={16} /> Compare Soil
+                    </button>
+                )}
              </div>
-             <button 
-                onClick={() => { setActiveModalTab('SUBMIT'); setShowContributeModal(true); }}
-                className="bg-agro-600 text-white px-5 py-2 rounded-xl font-bold shadow-md hover:bg-agro-700 transition-colors flex items-center gap-2"
-             >
-                <UploadCloud size={18} /> Contribute Data
-             </button>
+             
+             {user ? (
+                 <div className="flex gap-2">
+                     {/* Internal / External Portal Toggle */}
+                     <button 
+                        onClick={() => setActiveViewTab('MY_PORTAL')}
+                        className={`px-5 py-2 rounded-xl font-bold flex items-center gap-2 transition-colors shadow-sm ${activeViewTab === 'MY_PORTAL' ? 'bg-blue-600 text-white' : 'bg-white border border-blue-200 text-blue-700 hover:bg-blue-50'}`}
+                     >
+                        <Lock size={16} /> {isInternal ? 'Admin Portal' : 'My Contributions'}
+                     </button>
+                     <button 
+                        onClick={() => { setActiveModalTab('SUBMIT'); setShowContributeModal(true); }}
+                        className="bg-agro-600 text-white px-5 py-2 rounded-xl font-bold shadow-md hover:bg-agro-700 transition-colors flex items-center gap-2"
+                     >
+                        <UploadCloud size={18} /> Contribute
+                     </button>
+                 </div>
+             ) : (
+                 <button disabled className="bg-earth-200 text-earth-500 px-5 py-2 rounded-xl font-bold flex items-center gap-2 cursor-not-allowed">
+                    Sign in to Contribute
+                 </button>
+             )}
         </div>
       </div>
 
-      {activeViewTab === 'DATASETS' ? (
+      {activeViewTab === 'DATASETS' && (
         <>
             {/* Navigation Tabs */}
             <div className="flex flex-wrap gap-2 mb-8 border-b border-earth-200 pb-1">
@@ -269,7 +347,9 @@ export const Database: React.FC = () => {
                 </div>
             </div>
         </>
-      ) : (
+      )}
+
+      {activeViewTab === 'HEALTH' && (
           /* DATABASE HEALTH DASHBOARD */
           <div className="animate-in fade-in slide-in-from-top-4 duration-500">
               <div className="grid lg:grid-cols-2 gap-8 mb-8">
@@ -346,6 +426,219 @@ export const Database: React.FC = () => {
           </div>
       )}
 
+      {/* SOIL COMPARISON TOOL */}
+      {activeViewTab === 'COMPARE' && (
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 bg-white rounded-2xl shadow-sm border border-earth-100 overflow-hidden">
+              <div className="flex h-[600px]">
+                  {/* Selector Sidebar */}
+                  <div className="w-64 bg-earth-50 border-r border-earth-100 p-6 overflow-y-auto">
+                      <h3 className="font-bold text-earth-900 mb-4 flex items-center gap-2">
+                          <DbIcon size={16} /> Select Soils
+                      </h3>
+                      <div className="space-y-2">
+                          {SOIL_TYPES.map(soil => (
+                              <label key={soil.name} className="flex items-center gap-3 p-3 rounded-xl hover:bg-white border border-transparent hover:border-earth-200 cursor-pointer transition-all">
+                                  <input 
+                                    type="checkbox" 
+                                    checked={selectedSoils.includes(soil.name)}
+                                    onChange={(e) => {
+                                        if(e.target.checked) {
+                                            if(selectedSoils.length < 3) setSelectedSoils([...selectedSoils, soil.name]);
+                                        } else {
+                                            setSelectedSoils(selectedSoils.filter(s => s !== soil.name));
+                                        }
+                                    }}
+                                    className="w-4 h-4 accent-agro-600 rounded"
+                                  />
+                                  <span className="font-bold text-earth-700 text-sm">{soil.name}</span>
+                              </label>
+                          ))}
+                      </div>
+                      <p className="text-xs text-earth-400 mt-4 px-2">Select up to 3 to compare.</p>
+                  </div>
+
+                  {/* Comparison Area */}
+                  <div className="flex-1 p-8 flex flex-col">
+                      <h3 className="text-2xl font-serif font-bold text-agro-900 mb-6">Property Comparison</h3>
+                      
+                      <div className="grid lg:grid-cols-2 gap-8 flex-1">
+                          {/* Radar Chart */}
+                          <div className="bg-earth-50 rounded-2xl p-4 flex items-center justify-center">
+                              <ResponsiveContainer width="100%" height="100%">
+                                  <RadarChart outerRadius={90} data={[
+                                      { subject: 'pH (norm)', ...SOIL_TYPES.reduce((acc, s) => ({...acc, [s.name]: s.ph * 10}), {}) },
+                                      { subject: 'Drainage', ...SOIL_TYPES.reduce((acc, s) => ({...acc, [s.name]: s.drainage}), {}) },
+                                      { subject: 'Nutrients', ...SOIL_TYPES.reduce((acc, s) => ({...acc, [s.name]: s.nutrient}), {}) },
+                                      { subject: 'Aeration', ...SOIL_TYPES.reduce((acc, s) => ({...acc, [s.name]: s.aeration}), {}) },
+                                      { subject: 'Organic', ...SOIL_TYPES.reduce((acc, s) => ({...acc, [s.name]: s.organic}), {}) },
+                                  ]}>
+                                      <PolarGrid />
+                                      <PolarAngleAxis dataKey="subject" fontSize={10} />
+                                      <PolarRadiusAxis angle={30} domain={[0, 100]} fontSize={10} />
+                                      {selectedSoils.map((soilName, idx) => {
+                                          const colors = ['#16a34a', '#3b82f6', '#f59e0b'];
+                                          return (
+                                              <Radar 
+                                                key={soilName}
+                                                name={soilName}
+                                                dataKey={soilName}
+                                                stroke={colors[idx]}
+                                                fill={colors[idx]}
+                                                fillOpacity={0.3}
+                                              />
+                                          );
+                                      })}
+                                      <Tooltip />
+                                  </RadarChart>
+                              </ResponsiveContainer>
+                          </div>
+
+                          {/* Table */}
+                          <div>
+                              <table className="w-full text-sm">
+                                  <thead>
+                                      <tr className="text-earth-500 border-b border-earth-200">
+                                          <th className="text-left py-2 font-medium">Property</th>
+                                          {selectedSoils.map(s => <th key={s} className="text-right py-2 font-bold text-earth-900">{s}</th>)}
+                                      </tr>
+                                  </thead>
+                                  <tbody className="divide-y divide-earth-100">
+                                      <tr>
+                                          <td className="py-3 text-earth-600 font-medium">Acidity (pH)</td>
+                                          {selectedSoils.map(s => (
+                                              <td key={s} className="text-right py-3 font-mono">{SOIL_TYPES.find(st => st.name === s)?.ph}</td>
+                                          ))}
+                                      </tr>
+                                      <tr>
+                                          <td className="py-3 text-earth-600 font-medium">Drainage (%)</td>
+                                          {selectedSoils.map(s => (
+                                              <td key={s} className="text-right py-3 font-mono">{SOIL_TYPES.find(st => st.name === s)?.drainage}%</td>
+                                          ))}
+                                      </tr>
+                                      <tr>
+                                          <td className="py-3 text-earth-600 font-medium">Nutrient Retention</td>
+                                          {selectedSoils.map(s => (
+                                              <td key={s} className="text-right py-3 font-mono">{SOIL_TYPES.find(st => st.name === s)?.nutrient}/100</td>
+                                          ))}
+                                      </tr>
+                                      <tr>
+                                          <td className="py-3 text-earth-600 font-medium">Organic Matter</td>
+                                          {selectedSoils.map(s => (
+                                              <td key={s} className="text-right py-3 font-mono">{SOIL_TYPES.find(st => st.name === s)?.organic}/100</td>
+                                          ))}
+                                      </tr>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      )}
+
+      {/* USER ROLE PORTAL VIEW */}
+      {activeViewTab === 'MY_PORTAL' && user && (
+          <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+              <div className="bg-white p-8 rounded-3xl border border-earth-100 shadow-lg">
+                  <div className="flex justify-between items-center mb-8 border-b border-earth-100 pb-6">
+                      <div>
+                          <h2 className="text-2xl font-bold text-agro-900 flex items-center gap-2">
+                              {isInternal ? <Lock className="text-blue-600" /> : <UploadCloud className="text-green-600" />}
+                              {isInternal ? 'Internal Data Management Portal' : 'Contributor Dashboard'}
+                          </h2>
+                          <p className="text-earth-500 mt-1">
+                              Logged in as <span className="font-bold text-earth-900">{user.name}</span> ({user.role})
+                          </p>
+                      </div>
+                      <div className="bg-earth-50 px-4 py-2 rounded-lg text-xs font-mono border border-earth-200">
+                          PERMISSIONS: <span className={isInternal ? 'text-blue-600 font-bold' : 'text-green-600 font-bold'}>
+                              {isInternal ? 'READ | WRITE | DELETE' : 'READ | UPLOAD'}
+                          </span>
+                      </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-8">
+                      {isInternal ? (
+                          <>
+                              {/* Internal Tools */}
+                              <div className="space-y-6">
+                                  <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
+                                      <h3 className="font-bold text-blue-900 mb-4 flex items-center gap-2">
+                                          <Edit size={18} /> Manage Datasets
+                                      </h3>
+                                      <p className="text-sm text-blue-800 mb-4">Edit metadata, approve user submissions, or deprecate outdated files.</p>
+                                      <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-700 transition-colors w-full">
+                                          Open Admin Console
+                                      </button>
+                                  </div>
+                                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                                      <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
+                                          <Activity size={18} /> System Audit
+                                      </h3>
+                                      <p className="text-sm text-slate-700 mb-4">Review data integrity scores (In) across all thrusts.</p>
+                                      <button className="border border-slate-300 text-slate-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-white transition-colors w-full">
+                                          Run Report
+                                      </button>
+                                  </div>
+                              </div>
+                              <div className="bg-white border border-earth-200 rounded-2xl p-6 h-full">
+                                  <h3 className="font-bold text-earth-900 mb-4">Pending Approvals</h3>
+                                  <ul className="space-y-3">
+                                      <li className="flex justify-between items-center text-sm p-2 bg-earth-50 rounded-lg">
+                                          <span className="text-earth-700">Soil_Data_Kiriaini_Q2.csv</span>
+                                          <button className="text-xs text-blue-600 font-bold hover:underline">Review</button>
+                                      </li>
+                                      <li className="flex justify-between items-center text-sm p-2 bg-earth-50 rounded-lg">
+                                          <span className="text-earth-700">Pest_Report_Zone4.pdf</span>
+                                          <button className="text-xs text-blue-600 font-bold hover:underline">Review</button>
+                                      </li>
+                                  </ul>
+                              </div>
+                          </>
+                      ) : (
+                          <>
+                              {/* External Tools */}
+                              <div className="bg-green-50 p-6 rounded-2xl border border-green-100">
+                                  <h3 className="font-bold text-green-900 mb-4 flex items-center gap-2">
+                                      <UploadCloud size={18} /> My Contributions
+                                  </h3>
+                                  <p className="text-sm text-green-800 mb-6">Track the status of your uploaded data and view earned rewards.</p>
+                                  
+                                  <div className="space-y-3 mb-6">
+                                      <div className="flex justify-between text-sm border-b border-green-200 pb-2">
+                                          <span className="text-green-800">Farm Yield Log 2023</span>
+                                          <span className="bg-green-200 text-green-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Approved</span>
+                                      </div>
+                                      <div className="flex justify-between text-sm border-b border-green-200 pb-2">
+                                          <span className="text-green-800">Local Weather Obs.</span>
+                                          <span className="bg-amber-200 text-amber-800 text-[10px] px-2 py-0.5 rounded-full font-bold">Pending</span>
+                                      </div>
+                                  </div>
+
+                                  <button 
+                                    onClick={() => { setActiveModalTab('SUBMIT'); setShowContributeModal(true); }}
+                                    className="bg-green-600 text-white px-4 py-3 rounded-xl font-bold text-sm hover:bg-green-700 transition-colors w-full flex justify-center gap-2"
+                                  >
+                                      <Plus size={16} /> Submit New Data
+                                  </button>
+                              </div>
+                              
+                              <div className="bg-earth-50 p-6 rounded-2xl border border-earth-200 flex flex-col justify-center text-center">
+                                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-earth-300 shadow-sm">
+                                      <Lock size={24} />
+                                  </div>
+                                  <h3 className="font-bold text-earth-500 mb-2">Restricted Access</h3>
+                                  <p className="text-sm text-earth-400">
+                                      Your account level permits uploading and viewing public datasets. To request write/edit access for research purposes, please contact admin.
+                                  </p>
+                              </div>
+                          </>
+                      )}
+                  </div>
+              </div>
+          </div>
+      )}
+
       {/* CONTRIBUTE MODAL */}
       {showContributeModal && (
          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -385,28 +678,46 @@ export const Database: React.FC = () => {
                    {activeModalTab === 'SUBMIT' ? (
                        <form onSubmit={handleContributeSubmit} className="space-y-6">
                           
-                          {/* Metadata Section */}
-                          <div className="grid md:grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Dataset Name</label>
-                                 <input required type="text" className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm" placeholder="e.g. Local Rainfall Log 2024" />
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Region / Location</label>
-                                 <input required type="text" className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm" placeholder="e.g. Kiriaini, Kenya" />
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Primary Thrust</label>
-                                 <select className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm bg-white">
-                                     {THRUSTS.map(t => <option key={t.id} value={t.id}>{t.title}</option>)}
-                                 </select>
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Resource Type</label>
-                                 <select className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm bg-white">
-                                     {RESOURCE_TYPES.filter(r => r.id !== 'All').map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
-                                 </select>
-                              </div>
+                          {/* Drag and Drop Area */}
+                          <div 
+                              onDragEnter={handleDrag}
+                              onDragLeave={handleDrag}
+                              onDragOver={handleDrag}
+                              onDrop={handleDrop}
+                              className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
+                                  dragActive 
+                                  ? 'border-agro-500 bg-agro-50 scale-[1.02]' 
+                                  : 'border-earth-200 hover:bg-earth-50 hover:border-agro-300'
+                              }`}
+                          >
+                              {uploadedFile ? (
+                                  <div className="flex flex-col items-center animate-in zoom-in">
+                                      <FileSpreadsheet size={48} className="text-agro-600 mb-2" />
+                                      <p className="font-bold text-agro-900">{uploadedFile.name}</p>
+                                      <p className="text-xs text-agro-700">{(uploadedFile.size / 1024 / 1024).toFixed(2)} MB</p>
+                                      <button 
+                                        type="button" 
+                                        onClick={(e) => { e.stopPropagation(); setUploadedFile(null); }}
+                                        className="mt-4 text-xs text-red-500 hover:underline font-bold"
+                                      >
+                                          Remove File
+                                      </button>
+                                  </div>
+                              ) : (
+                                  <>
+                                      <UploadCloud className={`mx-auto mb-3 ${dragActive ? 'text-agro-600 animate-bounce' : 'text-earth-400'}`} size={40} />
+                                      <p className="text-sm text-earth-700 font-bold mb-1">Drag & Drop your file here</p>
+                                      <p className="text-xs text-earth-500">or click to browse</p>
+                                      <p className="text-[10px] text-earth-400 mt-4 uppercase font-bold tracking-wide">
+                                          CSV, XLSX, PDF (Max 50MB)
+                                      </p>
+                                  </>
+                              )}
+                              {uploadError && (
+                                  <div className="mt-4 bg-red-50 text-red-600 text-xs font-bold px-3 py-2 rounded-lg flex items-center justify-center gap-2">
+                                      <X size={14} /> {uploadError}
+                                  </div>
+                              )}
                           </div>
 
                           {/* Data Sustainability Calculator */}
@@ -431,7 +742,6 @@ export const Database: React.FC = () => {
                                         onChange={(e) => setSustainParams({...sustainParams, dn: parseInt(e.target.value)})}
                                         className="w-full h-1 bg-earth-200 rounded-lg appearance-none cursor-pointer accent-agro-600"
                                       />
-                                      <div className="flex justify-between text-[10px] text-earth-400"><span>Low</span><span>High</span></div>
                                   </div>
                                   <div>
                                       <label className="text-[10px] font-bold text-earth-500 uppercase block mb-1">Standardization (In)</label>
@@ -441,7 +751,6 @@ export const Database: React.FC = () => {
                                         onChange={(e) => setSustainParams({...sustainParams, in_val: parseInt(e.target.value)})}
                                         className="w-full h-1 bg-earth-200 rounded-lg appearance-none cursor-pointer accent-agro-600"
                                       />
-                                      <div className="flex justify-between text-[10px] text-earth-400"><span>Poor</span><span>Perfect</span></div>
                                   </div>
                               </div>
                               <button 
@@ -453,18 +762,12 @@ export const Database: React.FC = () => {
                               </button>
                           </div>
 
-                          <div className="border-2 border-dashed border-earth-200 rounded-xl p-6 text-center cursor-pointer hover:bg-earth-50 transition-colors">
-                              <Plus className="mx-auto text-earth-400 mb-2" />
-                              <p className="text-sm text-earth-600 font-bold">Upload File (CSV, XLSX, PDF)</p>
-                              <p className="text-xs text-earth-400">Max size: 50MB</p>
-                          </div>
-
                           <button 
                             type="submit" 
-                            disabled={isSubmitting}
-                            className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+                            disabled={isSubmitting || !uploadedFile}
+                            className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                             {isSubmitting ? 'Uploading...' : <><CheckCircle2 size={18} /> Submit Contribution</>}
+                             {isSubmitting ? 'Processing...' : <><CheckCircle2 size={18} /> Submit Contribution</>}
                           </button>
                        </form>
                    ) : (
