@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react';
-import { Users, Building2, Fingerprint, CreditCard, CheckCircle2, QrCode, ArrowRight, ShieldCheck, Sprout, MessageSquarePlus, ThumbsUp, Coins, Send, Share2, Award, Zap, Tag, Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Users, Building2, Fingerprint, CreditCard, CheckCircle2, QrCode, ArrowRight, ShieldCheck, Sprout, MessageSquarePlus, ThumbsUp, Coins, Send, Share2, Award, Zap, Tag, Info, Bell, Mail, Edit2 } from 'lucide-react';
 import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { View } from '../types';
 
-type Tab = 'REGISTER_GROUP' | 'REGISTER_SOCIETY' | 'GET_ESIN' | 'ID_CARD' | 'FEED';
+type Tab = 'REGISTER_GROUP' | 'REGISTER_SOCIETY' | 'GET_ESIN' | 'ID_CARD' | 'FEED' | 'NOTIFICATIONS';
 
 const REWARDS_HISTORY = [
   { day: 'Mon', amount: 15 },
@@ -15,6 +15,16 @@ const REWARDS_HISTORY = [
   { day: 'Sat', amount: 60 },
   { day: 'Sun', amount: 50 },
 ];
+
+interface Notification {
+  id: number;
+  type: 'like' | 'comment' | 'system';
+  actor: string;
+  avatar?: string;
+  content: string;
+  time: string;
+  isRead: boolean;
+}
 
 interface CommunityProps {
     onNavigate?: (view: View) => void;
@@ -39,6 +49,21 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
       { id: 1, author: "Sarah Jenkins", role: "Farmer", time: "2h ago", content: "Successfully implemented vertical mulching in our banana plantation. Soil moisture retention has improved significantly! 🍌💧 #SoilHealth", thrust: "EA", likes: 14, liked: false, reward: 10 },
       { id: 2, author: "Kiriaini Youth Group", role: "Society", time: "5h ago", content: "Hosted a training session on Digital ID registration today. 50 new members onboarded to EnvirosAgro! 🚀 #CommunityGrowth", thrust: "SA", likes: 32, liked: false, reward: 25 }
   ]);
+
+  // Edit Post State
+  const [editingPostId, setEditingPostId] = useState<number | null>(null);
+  const [editContent, setEditContent] = useState('');
+  const [editCategory, setEditCategory] = useState('');
+
+  // Notification State
+  const [notifications, setNotifications] = useState<Notification[]>([
+      { id: 101, type: 'like', actor: 'John Doe', content: 'liked your post about "Vertical Mulching"', time: '10m ago', isRead: false },
+      { id: 102, type: 'comment', actor: 'AgriCorp', content: 'commented: "Great initiative! Keep it up."', time: '1h ago', isRead: true },
+      { id: 103, type: 'system', actor: 'System', content: 'You earned 50 EAC for completing your profile.', time: '2h ago', isRead: true }
+  ]);
+  const [notificationToast, setNotificationToast] = useState<string | null>(null);
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   const generateESIN = () => {
     // Mock logic to generate a Social ID
@@ -82,15 +107,60 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
       // Trigger reward notification
       setShowReward(true);
       setTimeout(() => setShowReward(false), 3000);
+
+      // Simulate incoming notification after a delay (Interactive Demo)
+      setTimeout(() => {
+          const newNotif: Notification = {
+              id: Date.now() + 1,
+              type: 'like',
+              actor: 'Community Bot',
+              content: 'liked your new activity log.',
+              time: 'Just now',
+              isRead: false
+          };
+          setNotifications(prev => [newNotif, ...prev]);
+      }, 5000);
+  };
+
+  const startEditing = (post: any) => {
+    setEditingPostId(post.id);
+    setEditContent(post.content);
+    setEditCategory(post.thrust);
+  };
+
+  const cancelEditing = () => {
+    setEditingPostId(null);
+    setEditContent('');
+    setEditCategory('');
+  };
+
+  const saveEdit = (postId: number) => {
+    setPosts(posts.map(p => {
+        if (p.id === postId) {
+            return { ...p, content: editContent, thrust: editCategory };
+        }
+        return p;
+    }));
+    setEditingPostId(null);
+    setEditContent('');
+    setEditCategory('');
   };
 
   const toggleLike = (postId: number) => {
     setPosts(posts.map(post => {
       if (post.id === postId) {
+        const isLiking = !post.liked;
+        
+        // Show "Notification Sent" toast when liking
+        if (isLiking) {
+            setNotificationToast(`Notification sent to ${post.author}`);
+            setTimeout(() => setNotificationToast(null), 3000);
+        }
+
         return {
           ...post,
-          liked: !post.liked,
-          likes: post.liked ? post.likes - 1 : post.likes + 1
+          liked: isLiking,
+          likes: isLiking ? post.likes + 1 : post.likes - 1
         };
       }
       return post;
@@ -99,16 +169,13 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
 
   const handleShare = (text: string) => {
     if (navigator.share) {
-        // Ensure the URL is valid HTTP/HTTPS to prevent "Invalid URL" errors in previews
         const url = window.location.href.startsWith('http') ? window.location.href : 'https://envirosagro.com';
-        
         navigator.share({
             title: 'EnvirosAgro Community Post',
             text: text,
             url: url
         }).catch((err) => {
             console.error('Share failed:', err);
-            // Fallback for sharing errors
             alert('Copied to clipboard!');
         });
     } else {
@@ -116,20 +183,36 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
     }
   };
 
+  const markAllRead = () => {
+      setNotifications(notifications.map(n => ({...n, isRead: true})));
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 relative">
-      {/* Reward Notification Toast */}
-      {showReward && (
-        <div className="fixed top-24 right-6 bg-amber-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 z-50 border-2 border-white/20">
-            <div className="bg-white/20 p-1.5 rounded-full">
-                <Coins size={20} className="animate-bounce" />
+      
+      {/* Toast Notifications */}
+      <div className="fixed top-24 right-6 z-50 flex flex-col gap-2 pointer-events-none">
+          {showReward && (
+            <div className="bg-amber-500 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-right-4 border-2 border-white/20 pointer-events-auto">
+                <div className="bg-white/20 p-1.5 rounded-full">
+                    <Coins size={20} className="animate-bounce" />
+                </div>
+                <div>
+                    <p className="font-bold text-sm">+10 EAC Earned!</p>
+                    <p className="text-[10px] text-amber-100 font-medium">Sustainable Practice Shared</p>
+                </div>
             </div>
-            <div>
-                <p className="font-bold text-sm">+10 EAC Earned!</p>
-                <p className="text-[10px] text-amber-100 font-medium">Sustainable Practice Shared</p>
+          )}
+          
+          {notificationToast && (
+            <div className="bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-right-4 border border-slate-700 pointer-events-auto">
+                <div className="bg-green-500 p-1 rounded-full">
+                    <CheckCircle2 size={16} className="text-white" />
+                </div>
+                <p className="font-bold text-sm">{notificationToast}</p>
             </div>
-        </div>
-      )}
+          )}
+      </div>
 
       <div className="text-center mb-12">
         <h2 className="text-4xl font-serif font-bold text-agro-900 mb-4">Community Network</h2>
@@ -189,6 +272,21 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
           }`}
         >
           <MessageSquarePlus size={18} /> Community Feed
+        </button>
+        <button
+          onClick={() => setActiveTab('NOTIFICATIONS')}
+          className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold transition-all relative ${
+            activeTab === 'NOTIFICATIONS' 
+              ? 'bg-blue-600 text-white shadow-lg scale-105' 
+              : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50'
+          }`}
+        >
+          <Bell size={18} /> Notifications
+          {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full shadow-sm">
+                  {unreadCount}
+              </span>
+          )}
         </button>
       </div>
 
@@ -260,44 +358,156 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
                 <div className="space-y-4">
                     {posts.map((post) => (
                         <div key={post.id} className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="flex justify-between items-start mb-3">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-earth-100 rounded-full flex items-center justify-center font-bold text-earth-500">
-                                        {post.author.charAt(0)}
+                            {editingPostId === post.id ? (
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar mb-2">
+                                        <span className="text-xs font-bold text-earth-400 shrink-0">Category:</span>
+                                        {['General', 'SA', 'EA', 'HA', 'TA', 'IA'].map((tag) => (
+                                            <button
+                                                key={tag}
+                                                onClick={() => setEditCategory(tag)}
+                                                className={`text-[10px] font-bold px-2 py-1 rounded-full border transition-all shrink-0 ${
+                                                    editCategory === tag 
+                                                    ? 'bg-agro-600 text-white border-agro-600' 
+                                                    : 'bg-white text-earth-500 border-earth-200'
+                                                }`}
+                                            >
+                                                {tag}
+                                            </button>
+                                        ))}
                                     </div>
-                                    <div>
-                                        <h4 className="font-bold text-earth-900 text-sm">{post.author}</h4>
-                                        <p className="text-xs text-earth-500">{post.role} • {post.time}</p>
+                                    <textarea
+                                        value={editContent}
+                                        onChange={(e) => setEditContent(e.target.value)}
+                                        className="w-full bg-earth-50 border border-earth-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-agro-500 resize-none h-24"
+                                    />
+                                    <div className="flex justify-end gap-2">
+                                        <button 
+                                            onClick={cancelEditing}
+                                            className="text-xs font-bold text-earth-500 px-3 py-1.5 rounded-lg hover:bg-earth-50 border border-transparent"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            onClick={() => saveEdit(post.id)}
+                                            className="text-xs font-bold text-white bg-agro-600 px-3 py-1.5 rounded-lg hover:bg-agro-700 shadow-sm"
+                                        >
+                                            Save Changes
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-100 flex items-center gap-1">
-                                    <Zap size={10} /> +{post.reward} EAC
-                                </div>
-                            </div>
-                            <p className="text-earth-700 text-sm mb-4 leading-relaxed">
-                                {post.content}
-                            </p>
-                            <div className="flex items-center justify-between text-earth-400 pt-2 border-t border-earth-50">
-                                <div className="flex items-center gap-4">
-                                    <button 
-                                        onClick={() => toggleLike(post.id)}
-                                        className={`flex items-center gap-1 transition-all text-xs font-bold ${post.liked ? 'text-rose-600 scale-105' : 'hover:text-agro-600'}`}
-                                    >
-                                        <ThumbsUp size={16} fill={post.liked ? "currentColor" : "none"} /> {post.likes} Likes
-                                    </button>
-                                    <span className="bg-earth-100 text-earth-500 text-[10px] px-2 py-0.5 rounded font-bold uppercase">
-                                        {post.thrust} Thrust
-                                    </span>
-                                </div>
-                                <button 
-                                    onClick={() => handleShare(post.content)}
-                                    className="flex items-center gap-1 hover:text-blue-600 transition-colors text-xs font-bold"
-                                >
-                                    <Share2 size={16} /> Share
-                                </button>
-                            </div>
+                            ) : (
+                                <>
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-earth-100 rounded-full flex items-center justify-center font-bold text-earth-500">
+                                                {post.author.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-bold text-earth-900 text-sm">{post.author}</h4>
+                                                <p className="text-xs text-earth-500">{post.role} • {post.time}</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="flex items-center gap-2">
+                                            {post.author === 'You' && (
+                                                <button
+                                                    onClick={() => startEditing(post)}
+                                                    className="text-earth-400 hover:text-agro-600 p-1 rounded-full hover:bg-earth-50 transition-colors"
+                                                    title="Edit Post"
+                                                >
+                                                    <Edit2 size={14} />
+                                                </button>
+                                            )}
+                                            <div className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-100 flex items-center gap-1">
+                                                <Zap size={10} /> +{post.reward} EAC
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-earth-700 text-sm mb-4 leading-relaxed">
+                                        {post.content}
+                                    </p>
+                                    <div className="flex items-center justify-between text-earth-400 pt-2 border-t border-earth-50">
+                                        <div className="flex items-center gap-4">
+                                            <button 
+                                                onClick={() => toggleLike(post.id)}
+                                                className={`flex items-center gap-1 transition-all text-xs font-bold ${post.liked ? 'text-rose-600 scale-105' : 'hover:text-agro-600'}`}
+                                            >
+                                                <ThumbsUp size={16} fill={post.liked ? "currentColor" : "none"} /> {post.likes} Likes
+                                            </button>
+                                            <span className="bg-earth-100 text-earth-500 text-[10px] px-2 py-0.5 rounded font-bold uppercase">
+                                                {post.thrust} Thrust
+                                            </span>
+                                        </div>
+                                        <button 
+                                            onClick={() => handleShare(post.content)}
+                                            className="flex items-center gap-1 hover:text-blue-600 transition-colors text-xs font-bold"
+                                        >
+                                            <Share2 size={16} /> Share
+                                        </button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     ))}
+                </div>
+            </div>
+        ) : activeTab === 'NOTIFICATIONS' ? (
+            <div className="bg-white p-6 rounded-3xl shadow-xl border border-earth-100 min-h-[500px] flex flex-col animate-in fade-in slide-in-from-left-4 duration-500">
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="font-bold text-xl text-earth-900 flex items-center gap-2">
+                        <Bell size={24} className="text-blue-600" /> Notification Center
+                    </h3>
+                    {unreadCount > 0 && (
+                        <button 
+                            onClick={markAllRead}
+                            className="text-xs font-bold text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                            Mark all as read
+                        </button>
+                    )}
+                </div>
+
+                <div className="space-y-2 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                    {notifications.length > 0 ? (
+                        notifications.map((notif) => (
+                            <div 
+                                key={notif.id} 
+                                className={`p-4 rounded-xl flex gap-3 transition-colors border ${
+                                    notif.isRead 
+                                    ? 'bg-white border-transparent hover:bg-earth-50' 
+                                    : 'bg-blue-50 border-blue-100 shadow-sm'
+                                }`}
+                            >
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
+                                    notif.type === 'like' ? 'bg-rose-100 text-rose-600' : 
+                                    notif.type === 'comment' ? 'bg-blue-100 text-blue-600' : 
+                                    'bg-amber-100 text-amber-600'
+                                }`}>
+                                    {notif.type === 'like' && <ThumbsUp size={16} />}
+                                    {notif.type === 'comment' && <MessageSquarePlus size={16} />}
+                                    {notif.type === 'system' && <Zap size={16} />}
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start">
+                                        <span className="text-sm font-bold text-earth-900">{notif.actor}</span>
+                                        <span className="text-[10px] text-earth-400 font-medium">{notif.time}</span>
+                                    </div>
+                                    <p className={`text-xs ${notif.isRead ? 'text-earth-500' : 'text-earth-700 font-medium'}`}>
+                                        {notif.content}
+                                    </p>
+                                </div>
+                                {!notif.isRead && (
+                                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                )}
+                            </div>
+                        ))
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-earth-400">
+                            <Mail size={48} className="mb-4 opacity-50" />
+                            <p>No notifications yet.</p>
+                        </div>
+                    )}
                 </div>
             </div>
         ) : (
@@ -472,7 +682,7 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
 
         {/* Right Side: Informational Content / Wallet */}
         <div className="space-y-8">
-            {activeTab === 'FEED' ? (
+            {(activeTab === 'FEED' || activeTab === 'NOTIFICATIONS') ? (
                 <div className="bg-gradient-to-br from-amber-500 to-amber-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-10">
                         <Coins size={120} />
@@ -492,19 +702,21 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
                         <p className="text-xs text-amber-200 mb-6">≈ ${(walletBalance * 0.10).toFixed(2)} USD value</p>
 
                         {/* Chart Section */}
-                        <div className="h-32 w-full mb-6 bg-black/10 rounded-xl p-2 border border-white/10">
-                             <p className="text-[10px] font-bold text-amber-100 uppercase tracking-wider mb-2 text-center">7-Day Earnings Trend</p>
-                             <ResponsiveContainer width="100%" height="80%">
-                                <LineChart data={REWARDS_HISTORY}>
-                                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: 'rgba(255,255,255,0.6)', fontSize: 10}} />
-                                    <Tooltip 
-                                        cursor={{stroke: 'rgba(255,255,255,0.2)'}}
-                                        contentStyle={{background: 'rgba(255,255,255,0.95)', borderRadius: '8px', border: 'none', color: '#b45309', fontSize: '12px', fontWeight: 'bold'}}
-                                        itemStyle={{color: '#b45309'}}
-                                    />
-                                    <Line type="monotone" dataKey="amount" stroke="#fff" strokeWidth={2} dot={{fill: '#f59e0b', strokeWidth: 0, r: 2}} activeDot={{r: 4, stroke: '#fff', strokeWidth: 2}} />
-                                </LineChart>
-                             </ResponsiveContainer>
+                        <div className="h-32 w-full mb-6 bg-black/10 rounded-xl p-2 border border-white/10 flex flex-col">
+                             <p className="text-[10px] font-bold text-amber-100 uppercase tracking-wider mb-2 text-center shrink-0">7-Day Earnings Trend</p>
+                             <div className="flex-1 min-h-0">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <LineChart data={REWARDS_HISTORY}>
+                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{fill: 'rgba(255,255,255,0.6)', fontSize: 10}} />
+                                        <Tooltip 
+                                            cursor={{stroke: 'rgba(255,255,255,0.2)'}}
+                                            contentStyle={{background: 'rgba(255,255,255,0.95)', borderRadius: '8px', border: 'none', color: '#b45309', fontSize: '12px', fontWeight: 'bold'}}
+                                            itemStyle={{color: '#b45309'}}
+                                        />
+                                        <Line type="monotone" dataKey="amount" stroke="#fff" strokeWidth={2} dot={{fill: '#f59e0b', strokeWidth: 0, r: 2}} activeDot={{r: 4, stroke: '#fff', strokeWidth: 2}} />
+                                    </LineChart>
+                                </ResponsiveContainer>
+                             </div>
                         </div>
 
                         <div className="space-y-3">

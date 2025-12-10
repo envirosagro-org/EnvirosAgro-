@@ -2,8 +2,13 @@
 import React, { useState } from 'react';
 import { TrendingUp, PieChart, ArrowUpRight, DollarSign, Leaf, Globe, ShieldCheck, Download, Plus, Coins, CreditCard, X, Smartphone, Loader2, CheckCircle2, ArrowDownLeft, Clock, Activity, Trash2 } from 'lucide-react';
 import { PieChart as RePie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { View } from '../types';
 
-export const InvestorPortal: React.FC = () => {
+interface InvestorPortalProps {
+  onNavigate?: (view: View) => void;
+}
+
+export const InvestorPortal: React.FC<InvestorPortalProps> = ({ onNavigate }) => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [depositMethod, setDepositMethod] = useState<'TOKENZ' | 'FIAT'>('TOKENZ');
   
@@ -33,11 +38,14 @@ export const InvestorPortal: React.FC = () => {
           setPortfolioValue(prev => prev + val);
           setTotalImpact(prev => prev + (val * 0.5)); // Mock impact calculation
           
+          let methodLabel = paymentMethod === 'CARD' ? 'EnvirosAgro Visa' : 'Mobile Money';
+          if (depositMethod === 'TOKENZ') methodLabel = 'Tokenz Wallet';
+
           const newTransaction = {
               id: Date.now(),
               type: 'Deposit',
               amount: val,
-              method: depositMethod === 'TOKENZ' ? 'Tokenz Wallet' : (paymentMethod === 'CARD' ? 'Visa/Mastercard' : 'Mobile Money'),
+              method: methodLabel,
               date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
               currency: depositMethod === 'TOKENZ' ? 'TKZ' : 'USD'
           };
@@ -348,13 +356,43 @@ export const InvestorPortal: React.FC = () => {
                                         <Smartphone size={16} /> Mobile Money
                                     </button>
                                 </div>
-                                <button 
-                                    onClick={handleDeposit}
-                                    disabled={depositStatus === 'PROCESSING'}
-                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
-                                >
-                                    {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin" /> Verifying Payment...</> : <><CheckCircle2 size={18} /> Process Deposit</>}
-                                </button>
+                                
+                                {paymentMethod === 'MOBILE' ? (
+                                     <div className="space-y-3">
+                                        <div className="bg-green-50 p-4 rounded-xl border border-green-100 text-center">
+                                             <p className="text-xs text-green-800 mb-1">Send funds to M-Pesa / Mobile Money</p>
+                                             <p className="text-lg font-bold text-green-900 font-mono">EnvirosAgro Paybill</p>
+                                        </div>
+                                        <a 
+                                            href={`tel:+254740161447`}
+                                            className="block w-full bg-green-600 hover:bg-green-700 text-white text-center font-bold py-3 rounded-xl transition-all shadow-md mb-2"
+                                        >
+                                            <Smartphone className="inline mr-2" size={18} /> Dial Number
+                                        </a>
+                                        <button 
+                                            onClick={handleDeposit}
+                                            disabled={depositStatus === 'PROCESSING'}
+                                            className="w-full border border-green-200 text-green-700 font-bold py-3 rounded-xl transition-all hover:bg-green-50"
+                                        >
+                                            {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin inline mr-2" /> Verifying...</> : 'Confirm Transfer'}
+                                        </button>
+                                     </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
+                                                <p className="text-xs text-blue-800 mb-1">Transfer to</p>
+                                                <p className="text-lg font-bold text-blue-900 font-mono mb-2">EnvirosAgro Corporate Account</p>
+                                                <p className="text-[10px] text-blue-600">Use this card number for direct bank transfers.</p>
+                                        </div>
+                                        <button 
+                                            onClick={handleDeposit}
+                                            disabled={depositStatus === 'PROCESSING'}
+                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                                        >
+                                            {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin" /> Verifying Payment...</> : <><CheckCircle2 size={18} /> Process Deposit</>}
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
                       </>

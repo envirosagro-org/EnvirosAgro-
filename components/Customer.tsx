@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { 
   ScanBarcode, CheckCircle2, MapPin, Calendar, Star, ShieldCheck, Leaf, Cpu, Users, 
   Heart, MessageCircle, BookOpen, ShoppingBag, X, Activity, FileText, ShieldPlus, 
-  Sprout, Microscope, Zap, Wifi, Database, Handshake
+  Sprout, Microscope, Zap, Wifi, Database, Handshake, ArrowRight, Download
 } from 'lucide-react';
+import { View } from '../types';
 
 const CUSTOMER_SEGMENTS = [
   {
@@ -49,7 +50,11 @@ const CUSTOMER_SEGMENTS = [
   }
 ];
 
-export const Customer: React.FC = () => {
+interface CustomerProps {
+    onNavigate?: (view: View) => void;
+}
+
+export const Customer: React.FC<CustomerProps> = ({ onNavigate }) => {
   const [traceId, setTraceId] = useState('');
   const [traceResult, setTraceResult] = useState<any>(null);
   const [isTracing, setIsTracing] = useState(false);
@@ -80,6 +85,10 @@ export const Customer: React.FC = () => {
         });
         setIsTracing(false);
     }, 1500);
+  };
+
+  const handleDownload = (docName: string) => {
+    alert(`Downloading ${docName}...`);
   };
 
   return (
@@ -325,8 +334,11 @@ export const Customer: React.FC = () => {
 
                     <div className="bg-rose-50 p-4 rounded-xl border border-rose-100 text-center">
                         <p className="text-xs font-bold text-rose-800 mb-2">Join Local Group</p>
-                        <button className="w-full bg-rose-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-rose-700 transition-colors">
-                            Find Nearest Co-op
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.COMMUNITY)}
+                            className="w-full bg-rose-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-rose-700 transition-colors flex items-center justify-center gap-2"
+                        >
+                            Find Nearest Co-op <ArrowRight size={16} />
                         </button>
                     </div>
                 </div>
@@ -383,8 +395,11 @@ export const Customer: React.FC = () => {
 
                     <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
                         <p className="text-xs font-bold text-red-800 mb-2">View Sample Lab Report</p>
-                        <button className="w-full bg-red-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-red-700 transition-colors">
-                            Download PDF
+                        <button 
+                            onClick={() => handleDownload("SafeHarvest Lab Sample.pdf")}
+                            className="w-full bg-red-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                        >
+                            Download PDF <ArrowRight size={16} />
                         </button>
                     </div>
                 </div>
@@ -441,8 +456,11 @@ export const Customer: React.FC = () => {
 
                     <div className="bg-green-50 p-4 rounded-xl border border-green-100 text-center">
                         <p className="text-xs font-bold text-green-800 mb-2">Detailed Tech Sheet</p>
-                        <button className="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-green-700 transition-colors">
-                            Download PDF
+                        <button 
+                            onClick={() => handleDownload("Regenerative Inputs Specs.pdf")}
+                            className="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                        >
+                            Download PDF <ArrowRight size={16} />
                         </button>
                     </div>
                 </div>
@@ -512,9 +530,12 @@ export const Customer: React.FC = () => {
                     </div>
 
                     <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
-                        <p className="text-xs font-bold text-blue-800 mb-2">Technical Documentation</p>
-                        <button className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors">
-                            View API Keys
+                        <p className="text-xs font-bold text-blue-800 mb-2">Access Integration Hub</p>
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.DASHBOARD)}
+                            className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+                        >
+                            Open Farm Dashboard
                         </button>
                     </div>
                 </div>

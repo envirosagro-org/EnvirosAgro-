@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { User } from '../types';
 import { 
   User as UserIcon, MapPin, Calendar, Mail, Edit2, Save, X, 
@@ -16,7 +17,29 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
     name: user.name,
     location: user.location || '',
     bio: user.bio || '',
+    avatar: user.avatar || ''
   });
+
+  // Sync state with props if user changes
+  useEffect(() => {
+    setFormData({
+        name: user.name,
+        location: user.location || '',
+        bio: user.bio || '',
+        avatar: user.avatar || ''
+    });
+  }, [user]);
+
+  const handleCancel = () => {
+    // Revert changes to original user data
+    setFormData({
+        name: user.name,
+        location: user.location || '',
+        bio: user.bio || '',
+        avatar: user.avatar || ''
+    });
+    setIsEditing(false);
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +47,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
       ...user,
       name: formData.name,
       location: formData.location,
-      bio: formData.bio
+      bio: formData.bio,
+      avatar: formData.avatar
     });
     setIsEditing(false);
   };
@@ -37,8 +61,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
         <div className="space-y-8">
           
           {/* Digital ID Card */}
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-earth-100">
-             <h3 className="font-bold text-earth-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-earth-900 p-6 rounded-3xl shadow-sm border border-earth-100 dark:border-earth-800 transition-colors">
+             <h3 className="font-bold text-earth-900 dark:text-earth-100 mb-4 flex items-center gap-2">
                 <Fingerprint className="text-agro-600" /> Digital Identity
              </h3>
              
@@ -61,7 +85,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
 
                 {/* Content */}
                 <div className="relative z-10 px-4 mt-2 flex gap-3">
-                      <div className="w-16 h-16 bg-white rounded-lg p-0.5 shrink-0">
+                      <div className="w-16 h-16 bg-white rounded-lg p-0.5 shrink-0 overflow-hidden">
                         {user.avatar ? (
                             <img src={user.avatar} className="w-full h-full object-cover rounded" alt="Avatar" />
                         ) : (
@@ -91,27 +115,27 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
                 </div>
             </div>
             
-            <div className="mt-4 flex justify-between items-center text-xs text-earth-500">
-               <span>Status: <strong className="text-green-600">Active</strong></span>
+            <div className="mt-4 flex justify-between items-center text-xs text-earth-500 dark:text-earth-400">
+               <span>Status: <strong className="text-green-600 dark:text-green-400">Active</strong></span>
                <span>Member Since: <strong>{user.joinedDate || '2024'}</strong></span>
             </div>
           </div>
 
           {/* Tokenz Wallet */}
-          <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-3xl shadow-sm border border-amber-100">
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 p-6 rounded-3xl shadow-sm border border-amber-100 dark:border-amber-900/50 transition-colors">
              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-amber-900 flex items-center gap-2">
-                   <Coins className="text-amber-600" /> Tokenz Wallet
+                <h3 className="font-bold text-amber-900 dark:text-amber-100 flex items-center gap-2">
+                   <Coins className="text-amber-600 dark:text-amber-500" /> Tokenz Wallet
                 </h3>
-                <span className="bg-white px-2 py-1 rounded text-[10px] font-bold text-amber-600 border border-amber-200">
+                <span className="bg-white dark:bg-amber-900/50 px-2 py-1 rounded text-[10px] font-bold text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
                    ESIN Linked
                 </span>
              </div>
-             <div className="text-3xl font-serif font-bold text-amber-800 mb-1">250.00 TKZ</div>
-             <p className="text-xs text-amber-600 mb-4">≈ $250.00 USD</p>
+             <div className="text-3xl font-serif font-bold text-amber-800 dark:text-amber-200 mb-1">250.00 TKZ</div>
+             <p className="text-xs text-amber-600 dark:text-amber-400 mb-4">≈ $250.00 USD</p>
              
              <div className="space-y-2">
-                <div className="flex justify-between text-xs text-amber-800 border-b border-amber-200 pb-1">
+                <div className="flex justify-between text-xs text-amber-800 dark:text-amber-300 border-b border-amber-200 dark:border-amber-800/50 pb-1">
                    <span>Wallet Address</span>
                    <span className="font-mono">{user.esin || 'N/A'}</span>
                 </div>
@@ -119,28 +143,28 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
           </div>
 
           {/* Quick Stats */}
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-earth-100">
-             <h3 className="font-bold text-earth-900 mb-4">Sustainability Impact</h3>
+          <div className="bg-white dark:bg-earth-900 p-6 rounded-3xl shadow-sm border border-earth-100 dark:border-earth-800 transition-colors">
+             <h3 className="font-bold text-earth-900 dark:text-earth-100 mb-4">Sustainability Impact</h3>
              <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                   <span className="text-sm text-earth-600">Sustainability Score C(a)</span>
-                   <span className="font-serif font-bold text-agro-700 text-xl">2.4</span>
+                   <span className="text-sm text-earth-600 dark:text-earth-400">Sustainability Score C(a)</span>
+                   <span className="font-serif font-bold text-agro-700 dark:text-agro-400 text-xl">2.4</span>
                 </div>
-                <div className="w-full bg-earth-100 rounded-full h-2">
+                <div className="w-full bg-earth-100 dark:bg-earth-800 rounded-full h-2">
                    <div className="bg-agro-500 h-2 rounded-full" style={{width: '45%'}}></div>
                 </div>
-                <div className="pt-4 border-t border-earth-100 flex gap-4 text-center">
+                <div className="pt-4 border-t border-earth-100 dark:border-earth-800 flex gap-4 text-center">
                    <div className="flex-1">
-                      <div className="text-lg font-bold text-earth-900">12</div>
-                      <div className="text-xs text-earth-500">Datasets</div>
+                      <div className="text-lg font-bold text-earth-900 dark:text-white">12</div>
+                      <div className="text-xs text-earth-500 dark:text-earth-400">Datasets</div>
                    </div>
-                   <div className="flex-1 border-l border-earth-100">
-                      <div className="text-lg font-bold text-earth-900">5</div>
-                      <div className="text-xs text-earth-500">Courses</div>
+                   <div className="flex-1 border-l border-earth-100 dark:border-earth-800">
+                      <div className="text-lg font-bold text-earth-900 dark:text-white">5</div>
+                      <div className="text-xs text-earth-500 dark:text-earth-400">Courses</div>
                    </div>
-                   <div className="flex-1 border-l border-earth-100">
-                      <div className="text-lg font-bold text-earth-900">3</div>
-                      <div className="text-xs text-earth-500">Certificates</div>
+                   <div className="flex-1 border-l border-earth-100 dark:border-earth-800">
+                      <div className="text-lg font-bold text-earth-900 dark:text-white">3</div>
+                      <div className="text-xs text-earth-500 dark:text-earth-400">Certificates</div>
                    </div>
                 </div>
              </div>
@@ -151,19 +175,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
         <div className="lg:col-span-2 space-y-8">
            
            {/* Profile Header & Edit */}
-           <div className="bg-white p-8 rounded-3xl shadow-sm border border-earth-100 relative">
+           <div className="bg-white dark:bg-earth-900 p-8 rounded-3xl shadow-sm border border-earth-100 dark:border-earth-800 relative transition-colors">
               <div className="absolute top-6 right-6">
                  {!isEditing ? (
                     <button 
                         onClick={() => setIsEditing(true)}
-                        className="flex items-center gap-2 text-agro-600 font-bold text-sm hover:bg-agro-50 px-3 py-1.5 rounded-lg transition-colors"
+                        className="flex items-center gap-2 text-agro-600 dark:text-agro-400 font-bold text-sm hover:bg-agro-50 dark:hover:bg-agro-900/30 px-3 py-1.5 rounded-lg transition-colors"
                     >
                         <Edit2 size={16} /> Edit Profile
                     </button>
                  ) : (
                     <button 
-                        onClick={() => setIsEditing(false)}
-                        className="flex items-center gap-2 text-earth-400 font-bold text-sm hover:bg-earth-50 px-3 py-1.5 rounded-lg transition-colors"
+                        onClick={handleCancel}
+                        className="flex items-center gap-2 text-earth-400 font-bold text-sm hover:bg-earth-50 dark:hover:bg-earth-800 px-3 py-1.5 rounded-lg transition-colors"
                     >
                         <X size={16} /> Cancel
                     </button>
@@ -172,77 +196,102 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
 
               {isEditing ? (
                  <form onSubmit={handleSave} className="space-y-6 max-w-lg">
-                    <h2 className="text-2xl font-bold text-earth-900 mb-6">Edit Profile</h2>
+                    <h2 className="text-2xl font-bold text-earth-900 dark:text-white mb-6">Edit Profile</h2>
                     
                     <div className="space-y-1">
-                       <label className="text-sm font-bold text-earth-700">Full Name</label>
+                       <label className="text-sm font-bold text-earth-700 dark:text-earth-300">Full Name</label>
                        <input 
                           type="text" 
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
-                          className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50"
+                          className="w-full border border-earth-200 dark:border-earth-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50 dark:bg-earth-800 text-earth-900 dark:text-white"
                        />
                     </div>
                     
                     <div className="space-y-1">
-                       <label className="text-sm font-bold text-earth-700">Location</label>
+                       <label className="text-sm font-bold text-earth-700 dark:text-earth-300">Location</label>
                        <input 
                           type="text" 
                           value={formData.location}
                           onChange={(e) => setFormData({...formData, location: e.target.value})}
-                          className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50"
+                          className="w-full border border-earth-200 dark:border-earth-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50 dark:bg-earth-800 text-earth-900 dark:text-white"
                           placeholder="e.g. Nairobi, Kenya"
                        />
                     </div>
 
                     <div className="space-y-1">
-                       <label className="text-sm font-bold text-earth-700">Bio / Description</label>
+                       <label className="text-sm font-bold text-earth-700 dark:text-earth-300">Avatar URL</label>
+                       <div className="flex gap-2">
+                           <input 
+                              type="text" 
+                              value={formData.avatar}
+                              onChange={(e) => setFormData({...formData, avatar: e.target.value})}
+                              className="w-full border border-earth-200 dark:border-earth-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50 dark:bg-earth-800 text-earth-900 dark:text-white"
+                              placeholder="https://..."
+                           />
+                           <div className="w-12 h-12 rounded-lg bg-earth-100 dark:bg-earth-800 shrink-0 overflow-hidden border border-earth-200 dark:border-earth-700">
+                               {formData.avatar && <img src={formData.avatar} className="w-full h-full object-cover" alt="Preview" />}
+                           </div>
+                       </div>
+                    </div>
+
+                    <div className="space-y-1">
+                       <label className="text-sm font-bold text-earth-700 dark:text-earth-300">Bio / Description</label>
                        <textarea 
                           rows={4}
                           value={formData.bio}
                           onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                          className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50"
+                          className="w-full border border-earth-200 dark:border-earth-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 bg-earth-50 dark:bg-earth-800 text-earth-900 dark:text-white"
                           placeholder="Tell us about your farming practices..."
                        />
                     </div>
 
-                    <button 
-                        type="submit" 
-                        className="bg-agro-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-agro-700 transition-colors flex items-center gap-2"
-                    >
-                        <Save size={18} /> Save Changes
-                    </button>
+                    <div className="flex gap-4 pt-2">
+                        <button 
+                            type="button" 
+                            onClick={handleCancel}
+                            className="flex-1 bg-white dark:bg-transparent border border-earth-200 dark:border-earth-700 text-earth-600 dark:text-earth-300 font-bold px-6 py-3 rounded-xl hover:bg-earth-50 dark:hover:bg-earth-800 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button 
+                            type="submit" 
+                            className="flex-1 bg-agro-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-agro-700 transition-colors flex items-center justify-center gap-2"
+                        >
+                            <Save size={18} /> Save Changes
+                        </button>
+                    </div>
                  </form>
               ) : (
                  <>
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="w-20 h-20 bg-earth-100 rounded-full flex items-center justify-center text-earth-400 text-3xl font-serif">
-                            {user.avatar ? <img src={user.avatar} className="w-full h-full rounded-full object-cover" /> : user.name.charAt(0)}
+                        <div className="w-20 h-20 bg-earth-100 dark:bg-earth-800 rounded-full flex items-center justify-center text-earth-400 dark:text-earth-500 text-3xl font-serif overflow-hidden">
+                            {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : user.name.charAt(0)}
                         </div>
                         <div>
-                            <h2 className="text-2xl font-bold text-earth-900">{user.name}</h2>
-                            <p className="text-agro-600 font-bold text-sm uppercase tracking-wide">{user.role}</p>
+                            <h2 className="text-2xl font-bold text-earth-900 dark:text-white">{user.name}</h2>
+                            <p className="text-agro-600 dark:text-agro-400 font-bold text-sm uppercase tracking-wide">{user.role}</p>
                         </div>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
-                        <div className="flex items-center gap-3 text-earth-600">
+                        <div className="flex items-center gap-3 text-earth-600 dark:text-earth-300">
                             <MapPin size={20} className="text-earth-400" />
                             <span>{user.location || 'No location set'}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-earth-600">
+                        <div className="flex items-center gap-3 text-earth-600 dark:text-earth-300">
                             <Mail size={20} className="text-earth-400" />
                             <span>{user.email}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-earth-600">
+                        <div className="flex items-center gap-3 text-earth-600 dark:text-earth-300">
                             <Calendar size={20} className="text-earth-400" />
                             <span>Joined {user.joinedDate}</span>
                         </div>
                     </div>
 
-                    <div className="bg-earth-50 p-6 rounded-2xl border border-earth-100">
-                        <h4 className="font-bold text-earth-900 mb-2">About</h4>
-                        <p className="text-earth-600 leading-relaxed italic">
+                    <div className="bg-earth-50 dark:bg-earth-800 p-6 rounded-2xl border border-earth-100 dark:border-earth-700">
+                        <h4 className="font-bold text-earth-900 dark:text-earth-100 mb-2">About</h4>
+                        <p className="text-earth-600 dark:text-earth-300 leading-relaxed italic">
                             {user.bio || "No bio added yet. Click edit to tell the community about your agricultural journey."}
                         </p>
                     </div>
@@ -252,38 +301,38 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
 
            {/* Activity Feed */}
            <div>
-              <h3 className="text-xl font-bold text-earth-900 mb-6 flex items-center gap-2">
+              <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-6 flex items-center gap-2">
                  <Activity className="text-earth-400" /> Recent Activity
               </h3>
               
               <div className="space-y-4">
-                 <div className="bg-white p-4 rounded-xl border border-earth-100 flex gap-4 items-start">
-                    <div className="bg-blue-50 p-2 rounded-lg text-blue-600 mt-1">
+                 <div className="bg-white dark:bg-earth-900 p-4 rounded-xl border border-earth-100 dark:border-earth-800 flex gap-4 items-start transition-colors">
+                    <div className="bg-blue-50 dark:bg-blue-900/30 p-2 rounded-lg text-blue-600 dark:text-blue-400 mt-1">
                         <BookOpen size={20} />
                     </div>
                     <div>
-                        <p className="text-earth-900 font-medium">Downloaded "Sustainable Pest Control Strategies"</p>
-                        <p className="text-xs text-earth-500">2 days ago • Environmental Agriculture</p>
+                        <p className="text-earth-900 dark:text-earth-100 font-medium">Downloaded "Sustainable Pest Control Strategies"</p>
+                        <p className="text-xs text-earth-500 dark:text-earth-400">2 days ago • Environmental Agriculture</p>
                     </div>
                  </div>
 
-                 <div className="bg-white p-4 rounded-xl border border-earth-100 flex gap-4 items-start">
-                    <div className="bg-rose-50 p-2 rounded-lg text-rose-600 mt-1">
+                 <div className="bg-white dark:bg-earth-900 p-4 rounded-xl border border-earth-100 dark:border-earth-800 flex gap-4 items-start transition-colors">
+                    <div className="bg-rose-50 dark:bg-rose-900/30 p-2 rounded-lg text-rose-600 dark:text-rose-400 mt-1">
                         <Briefcase size={20} />
                     </div>
                     <div>
-                        <p className="text-earth-900 font-medium">Applied for "Sustainable Farming Consultant"</p>
-                        <p className="text-xs text-earth-500">1 week ago • GreenEarth Advisory</p>
+                        <p className="text-earth-900 dark:text-earth-100 font-medium">Applied for "Sustainable Farming Consultant"</p>
+                        <p className="text-xs text-earth-500 dark:text-earth-400">1 week ago • GreenEarth Advisory</p>
                     </div>
                  </div>
 
-                 <div className="bg-white p-4 rounded-xl border border-earth-100 flex gap-4 items-start">
-                    <div className="bg-green-50 p-2 rounded-lg text-green-600 mt-1">
+                 <div className="bg-white dark:bg-earth-900 p-4 rounded-xl border border-earth-100 dark:border-earth-800 flex gap-4 items-start transition-colors">
+                    <div className="bg-green-50 dark:bg-green-900/30 p-2 rounded-lg text-green-600 dark:text-green-400 mt-1">
                         <Sprout size={20} />
                     </div>
                     <div>
-                        <p className="text-earth-900 font-medium">Completed "Introduction to Regenerative Ag" Module</p>
-                        <p className="text-xs text-earth-500">2 weeks ago • EnvirosAgro Academy</p>
+                        <p className="text-earth-900 dark:text-earth-100 font-medium">Completed "Introduction to Regenerative Ag" Module</p>
+                        <p className="text-xs text-earth-500 dark:text-earth-400">2 weeks ago • EnvirosAgro Academy</p>
                     </div>
                  </div>
               </div>

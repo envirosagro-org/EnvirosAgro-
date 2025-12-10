@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Video, Mic, Share2, MessageSquare, Layout, Database, PlayCircle, StopCircle, Eye, AlertCircle } from 'lucide-react';
-import { DATASETS } from '../data';
+import { DATASETS } from './data';
 
 export const LiveHost: React.FC = () => {
   const [isLive, setIsLive] = useState(false);

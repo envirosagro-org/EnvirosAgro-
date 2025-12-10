@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Users, Leaf, ShieldPlus, Cpu, Factory, Truck, Package, Thermometer, BarChart, ShoppingCart, Store, BookOpen, ClipboardCheck, GraduationCap, X, CheckCircle2, Search, FileText, Microscope, QrCode, Scale, Scan, Sun, Recycle, RefreshCw, Zap, Map, Globe, Smartphone, Tag } from 'lucide-react';
+import { View } from '../types';
 
 const SUPPLY_CHAIN = [
   {
@@ -45,7 +46,11 @@ const SUPPLY_CHAIN = [
   }
 ];
 
-export const Supply: React.FC = () => {
+interface SupplyProps {
+    onNavigate?: (view: View) => void;
+}
+
+export const Supply: React.FC<SupplyProps> = ({ onNavigate }) => {
   const [showPurchasingModal, setShowPurchasingModal] = useState(false);
   const [showQualityModal, setShowQualityModal] = useState(false);
   const [showProcessingModal, setShowProcessingModal] = useState(false);
@@ -248,7 +253,10 @@ export const Supply: React.FC = () => {
 
                     <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
                         <p className="text-xs font-bold text-blue-800 mb-2">Are you a supplier?</p>
-                        <button className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors">
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.PARTNERSHIPS)}
+                            className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+                        >
                             Register as Vendor
                         </button>
                     </div>
@@ -326,7 +334,10 @@ export const Supply: React.FC = () => {
 
                     <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-center">
                         <p className="text-xs font-bold text-amber-800 mb-2">Want to learn more?</p>
-                        <button className="w-full bg-amber-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-amber-700 transition-colors">
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.SUSTAINABILITY_FRAMEWORK)}
+                            className="w-full bg-amber-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-amber-700 transition-colors"
+                        >
                             View Quality Certifications
                         </button>
                     </div>
@@ -404,7 +415,10 @@ export const Supply: React.FC = () => {
 
                     <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
                         <p className="text-xs font-bold text-slate-800 mb-2">See Technology in Action</p>
-                        <button className="w-full bg-slate-800 text-white font-bold py-2 rounded-lg text-sm hover:bg-slate-700 transition-colors">
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.SMART_FARM_VR)}
+                            className="w-full bg-slate-800 text-white font-bold py-2 rounded-lg text-sm hover:bg-slate-700 transition-colors"
+                        >
                             Virtual Factory Tour
                         </button>
                     </div>
@@ -482,7 +496,10 @@ export const Supply: React.FC = () => {
 
                     <div className="bg-green-50 p-4 rounded-xl border border-green-100 text-center">
                         <p className="text-xs font-bold text-green-800 mb-2">Monitor Live Operations</p>
-                        <button className="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-green-700 transition-colors">
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.DASHBOARD)}
+                            className="w-full bg-green-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-green-700 transition-colors"
+                        >
                             Open Fleet Dashboard
                         </button>
                     </div>
@@ -560,7 +577,10 @@ export const Supply: React.FC = () => {
 
                     <div className="bg-rose-50 p-4 rounded-xl border border-rose-100 text-center">
                         <p className="text-xs font-bold text-rose-800 mb-2">Access Market Data</p>
-                        <button className="w-full bg-rose-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-rose-700 transition-colors">
+                        <button 
+                            onClick={() => onNavigate && onNavigate(View.AGBIZ_WEEKLY)}
+                            className="w-full bg-rose-600 text-white font-bold py-2 rounded-lg text-sm hover:bg-rose-700 transition-colors"
+                        >
                             View Live Prices
                         </button>
                     </div>

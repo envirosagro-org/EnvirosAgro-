@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Users, Leaf, ShieldPlus, Cpu, Factory, PiggyBank, Coins, TrendingUp, Wallet, ArrowUpRight, Gem, Fingerprint, CheckCircle2, ArrowRightLeft, Smartphone, Building2, Globe, Mail, Newspaper, CreditCard } from 'lucide-react';
+import React, { useState } from 'react';
+import { Users, Leaf, ShieldPlus, Cpu, Factory, PiggyBank, Coins, TrendingUp, Wallet, ArrowUpRight, Gem, Fingerprint, CheckCircle2, ArrowRightLeft, Smartphone, Building2, Globe, Mail, Newspaper, CreditCard, Loader2, X } from 'lucide-react';
 import { View } from '../types';
 
 const FINANCIAL_PRODUCTS = [
@@ -71,8 +71,70 @@ interface FinanceProps {
 }
 
 export const Finance: React.FC<FinanceProps> = ({ onNavigate }) => {
+  const [showDepositModal, setShowDepositModal] = useState(false);
+  const [depositMethod, setDepositMethod] = useState<'TOKENZ' | 'FIAT'>('TOKENZ');
+  
+  // Portfolio State
+  const [portfolioValue, setPortfolioValue] = useState(0);
+  const [totalImpact, setTotalImpact] = useState(0);
+  
+  // Transaction History State
+  const [transactions, setTransactions] = useState<any[]>([]);
+  
+  // Deposit State
+  const [amount, setAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'MOBILE' | 'PAYPAL'>('CARD');
+  const [depositStatus, setDepositStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
+
+  const handleDeposit = () => {
+      const val = parseFloat(amount);
+      if (!amount || isNaN(val) || val <= 0) {
+          alert("Please enter a valid amount.");
+          return;
+      }
+
+      setDepositStatus('PROCESSING');
+
+      // Simulate Network Request
+      setTimeout(() => {
+          setPortfolioValue(prev => prev + val);
+          setTotalImpact(prev => prev + (val * 0.5)); // Mock impact calculation
+          
+          let methodLabel = paymentMethod === 'CARD' ? 'EnvirosAgro Visa' : paymentMethod === 'MOBILE' ? 'Mobile Money' : 'PayPal';
+          if (depositMethod === 'TOKENZ') methodLabel = 'Tokenz Wallet';
+
+          const newTransaction = {
+              id: Date.now(),
+              type: 'Deposit',
+              amount: val,
+              method: methodLabel,
+              date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+              currency: depositMethod === 'TOKENZ' ? 'TKZ' : 'USD'
+          };
+          
+          setTransactions(prev => [newTransaction, ...prev]);
+          setDepositStatus('SUCCESS');
+
+          setTimeout(() => {
+              setShowDepositModal(false);
+              setDepositStatus('IDLE');
+              setAmount('');
+          }, 2000);
+      }, 2000);
+  };
+
+  const handleReset = () => {
+      if (confirm("Are you sure you want to clear your portfolio and transaction history?")) {
+          setPortfolioValue(0);
+          setTotalImpact(0);
+          setTransactions([]);
+      }
+  };
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 py-12 relative">
+      
+      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
         <div>
            <div className="flex items-center gap-3 mb-4">
@@ -208,16 +270,32 @@ export const Finance: React.FC<FinanceProps> = ({ onNavigate }) => {
                     <div className="flex items-center justify-between p-3 rounded-xl bg-earth-50 border border-earth-100">
                         <div className="flex items-center gap-3">
                             <Globe size={24} className="text-blue-600" />
-                            <span className="font-bold text-earth-700 text-sm">PayPal</span>
+                            <div>
+                                <span className="font-bold text-earth-700 text-sm block">PayPal</span>
+                            </div>
                         </div>
-                        <button className="text-xs font-bold text-agro-600 hover:underline">Connect</button>
+                        <a 
+                            href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=9STR6FS6XBLVY&currency_code=USD" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-xs font-bold text-agro-600 hover:underline"
+                        >
+                            Pay Now
+                        </a>
                     </div>
                      <div className="flex items-center justify-between p-3 rounded-xl bg-earth-50 border border-earth-100">
                         <div className="flex items-center gap-3">
                             <Smartphone size={24} className="text-green-600" />
-                            <span className="font-bold text-earth-700 text-sm">Mobile Money</span>
+                             <div>
+                                <span className="font-bold text-earth-700 text-sm block">Mobile Money</span>
+                            </div>
                         </div>
-                        <button className="text-xs font-bold text-agro-600 hover:underline">Manage</button>
+                         <a 
+                            href="tel:+254740161447"
+                            className="text-xs font-bold text-agro-600 hover:underline"
+                        >
+                            Pay Now
+                        </a>
                     </div>
                 </div>
             </div>
@@ -278,6 +356,181 @@ export const Finance: React.FC<FinanceProps> = ({ onNavigate }) => {
 
         </div>
       </div>
+
+      {/* DEPOSIT MODAL */}
+      {showDepositModal && (
+         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+               <div className="p-6 border-b border-earth-100 flex justify-between items-center bg-blue-50">
+                  <h3 className="font-bold text-xl text-blue-900 flex items-center gap-2">
+                     <Wallet className="text-blue-600" /> Fund Investment Wallet
+                  </h3>
+                  <button onClick={() => setShowDepositModal(false)} className="text-blue-400 hover:text-blue-700 transition-colors">
+                     <X size={24} />
+                  </button>
+               </div>
+               
+               <div className="p-6">
+                  {depositStatus === 'SUCCESS' ? (
+                      <div className="text-center py-8 animate-in zoom-in">
+                          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600">
+                              <CheckCircle2 size={40} />
+                          </div>
+                          <h3 className="text-2xl font-bold text-earth-900 mb-2">Deposit Successful!</h3>
+                          <p className="text-earth-600 mb-2">
+                              Your funds have been added to your portfolio liquidity.
+                          </p>
+                          <p className="text-sm font-bold text-blue-600">
+                              New Balance: ${(portfolioValue + parseFloat(amount || '0')).toLocaleString()}
+                          </p>
+                      </div>
+                  ) : (
+                      <>
+                        <div className="flex gap-2 mb-6 bg-earth-50 p-1 rounded-xl">
+                            <button 
+                                onClick={() => { setDepositMethod('TOKENZ'); setAmount(''); }}
+                                disabled={depositStatus === 'PROCESSING'}
+                                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'TOKENZ' ? 'bg-white text-amber-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
+                            >
+                                <Coins size={16} /> Pay with Tokenz
+                            </button>
+                            <button 
+                                onClick={() => { setDepositMethod('FIAT'); setAmount(''); }}
+                                disabled={depositStatus === 'PROCESSING'}
+                                className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'FIAT' ? 'bg-white text-blue-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
+                            >
+                                <CreditCard size={16} /> Fiat Deposit
+                            </button>
+                        </div>
+
+                        {depositMethod === 'TOKENZ' ? (
+                            <div className="space-y-4">
+                                <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 flex justify-between items-center">
+                                    <div>
+                                        <p className="text-xs font-bold text-amber-700 uppercase">Available Balance</p>
+                                        <p className="text-xl font-bold text-amber-900">250.00 TKZ</p>
+                                    </div>
+                                    <Coins className="text-amber-400" size={32} />
+                                </div>
+                                <div>
+                                    <label className="text-sm font-bold text-earth-700 block mb-1">Transfer Amount (TKZ)</label>
+                                    <input 
+                                        type="number" 
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        disabled={depositStatus === 'PROCESSING'}
+                                        className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-lg" 
+                                        placeholder="0.00" 
+                                    />
+                                </div>
+                                <button 
+                                    onClick={handleDeposit}
+                                    disabled={depositStatus === 'PROCESSING'}
+                                    className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                                >
+                                    {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin" /> Processing Transfer...</> : 'Transfer to Portfolio'}
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="text-sm font-bold text-earth-700 block mb-1">Deposit Amount (USD)</label>
+                                    <input 
+                                        type="number" 
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        disabled={depositStatus === 'PROCESSING'}
+                                        className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg" 
+                                        placeholder="0.00" 
+                                    />
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <button 
+                                        onClick={() => setPaymentMethod('CARD')}
+                                        className={`flex items-center justify-center gap-1 border rounded-xl py-3 font-bold text-xs transition-all ${
+                                            paymentMethod === 'CARD' 
+                                            ? 'border-blue-500 bg-blue-50 text-blue-700 ring-1 ring-blue-500' 
+                                            : 'border-earth-200 hover:bg-earth-50 text-earth-700'
+                                        }`}
+                                    >
+                                        <CreditCard size={14} /> Card
+                                    </button>
+                                    <button 
+                                        onClick={() => setPaymentMethod('MOBILE')}
+                                        className={`flex items-center justify-center gap-1 border rounded-xl py-3 font-bold text-xs transition-all ${
+                                            paymentMethod === 'MOBILE' 
+                                            ? 'border-green-500 bg-green-50 text-green-700 ring-1 ring-green-500' 
+                                            : 'border-earth-200 hover:bg-earth-50 text-earth-700'
+                                        }`}
+                                    >
+                                        <Smartphone size={14} /> Mobile
+                                    </button>
+                                     <button 
+                                        onClick={() => setPaymentMethod('PAYPAL')}
+                                        className={`flex items-center justify-center gap-1 border rounded-xl py-3 font-bold text-xs transition-all ${
+                                            paymentMethod === 'PAYPAL' 
+                                            ? 'border-blue-600 bg-blue-100 text-blue-800 ring-1 ring-blue-600' 
+                                            : 'border-earth-200 hover:bg-earth-50 text-earth-700'
+                                        }`}
+                                    >
+                                        <Globe size={14} /> PayPal
+                                    </button>
+                                </div>
+                                {paymentMethod === 'PAYPAL' ? (
+                                    <a 
+                                        href={`https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=9STR6FS6XBLVY&currency_code=USD&amount=${amount}`}
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                                    >
+                                        <Globe size={18} /> Continue to PayPal
+                                    </a>
+                                ) : paymentMethod === 'MOBILE' ? (
+                                     <div className="space-y-3">
+                                        <div className="bg-green-50 p-4 rounded-xl border border-green-100 text-center">
+                                             <p className="text-xs text-green-800 mb-1">Send funds to</p>
+                                             <p className="text-lg font-bold text-green-900 font-mono mb-2">EnvirosAgro Paybill</p>
+                                             <p className="text-[10px] text-green-600">After sending, click 'Confirm Transaction' below.</p>
+                                        </div>
+                                        <a 
+                                            href={`tel:+254740161447`}
+                                            className="block w-full bg-green-600 hover:bg-green-700 text-white text-center font-bold py-3 rounded-xl transition-all shadow-md mb-2"
+                                        >
+                                            <Smartphone className="inline mr-2" size={18} /> Dial Number
+                                        </a>
+                                        <button 
+                                            onClick={handleDeposit}
+                                            disabled={depositStatus === 'PROCESSING'}
+                                            className="w-full border border-green-200 text-green-700 font-bold py-3 rounded-xl transition-all hover:bg-green-50"
+                                        >
+                                            {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin inline mr-2" /> Verifying...</> : 'Confirm Transaction'}
+                                        </button>
+                                     </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
+                                                <p className="text-xs text-blue-800 mb-1">Transfer to</p>
+                                                <p className="text-lg font-bold text-blue-900 font-mono mb-2">EnvirosAgro Corporate Account</p>
+                                                <p className="text-[10px] text-blue-600">Use this for direct bank transfers.</p>
+                                        </div>
+                                        <button 
+                                            onClick={handleDeposit}
+                                            disabled={depositStatus === 'PROCESSING'}
+                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-50"
+                                        >
+                                            {depositStatus === 'PROCESSING' ? <><Loader2 className="animate-spin" /> Verifying Payment...</> : <><CheckCircle2 size={18} /> Process Deposit</>}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                      </>
+                  )}
+               </div>
+            </div>
+         </div>
+      )}
+
     </div>
   );
 };

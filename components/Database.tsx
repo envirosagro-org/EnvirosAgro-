@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Database as DbIcon, Search, Download, FileText, Globe, Filter, ChevronRight, Droplets, Wind, Sprout, Cat, UploadCloud, X, ClipboardList, FileSpreadsheet, CheckCircle2, Plus, Calculator, BarChart3, Activity, Lock, Edit } from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
-import { THRUSTS, DATASETS, RESOURCE_TYPES, COLLECTION_TOOLS } from '../data';
+import { THRUSTS, DATASETS, RESOURCE_TYPES, COLLECTION_TOOLS } from './data';
 import { User } from '../types';
 
 interface DatabaseProps {
@@ -324,9 +324,13 @@ export const Database: React.FC<DatabaseProps> = ({ user }) => {
                                                     </span>
                                                 </td>
                                                 <td className="p-6">
-                                                    <button className="text-agro-600 hover:bg-agro-50 p-2 rounded-lg transition-colors" title="Download">
+                                                    <a 
+                                                        href={`#download-${data.id}`} // Simulated download link
+                                                        className="text-agro-600 hover:bg-agro-50 p-2 rounded-lg transition-colors inline-block" 
+                                                        title="Download"
+                                                    >
                                                         <Download size={20} />
-                                                    </button>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         ))
@@ -463,7 +467,7 @@ export const Database: React.FC<DatabaseProps> = ({ user }) => {
                       
                       <div className="grid lg:grid-cols-2 gap-8 flex-1">
                           {/* Radar Chart */}
-                          <div className="bg-earth-50 rounded-2xl p-4 flex items-center justify-center">
+                          <div className="bg-earth-50 rounded-2xl p-4 flex items-center justify-center w-full h-full min-h-[300px]">
                               <ResponsiveContainer width="100%" height="100%">
                                   <RadarChart outerRadius={90} data={[
                                       { subject: 'pH (norm)', ...SOIL_TYPES.reduce((acc, s) => ({...acc, [s.name]: s.ph * 10}), {}) },
