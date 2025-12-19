@@ -1,7 +1,9 @@
 {
   "name": "EnvirosAgro",
-  "description": "A comprehensive network advancing agricultural sustainability by connecting farmers, researchers, and stakeholders.",
+  "description": "A pioneering sustainable agriculture network connecting farmers, researchers, and stakeholders through data-driven innovation and AI diagnostics.",
   "requestFramePermissions": [
-    "camera"
+    "camera",
+    "microphone",
+    "geolocation"
   ]
 }

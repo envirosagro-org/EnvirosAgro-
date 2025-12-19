@@ -41,10 +41,14 @@ import { CommunityGuidelines } from './components/CommunityGuidelines';
 import { IntranetDashboard } from './components/IntranetDashboard';
 import { ExtranetDashboard } from './components/ExtranetDashboard';
 import { AiConsultantFloating } from './components/AiConsultantFloating';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
+import { SupplyChainAudit } from './components/SupplyChainAudit';
+import { Logo } from './components/Logo';
+/* Added missing import: MapPin */
 import { 
   Sprout, LayoutDashboard, BookOpen, MessageSquareText, Menu, X, 
   UserCircle, LogOut, ChevronDown, Info, ShoppingBag, Database as DbIcon, Users, Scale, Tag, FileText, Award, Layers, MonitorPlay, Truck, HeartHandshake, Handshake, Wallet, Fingerprint, Sun, Moon,
-  Twitter, Facebook, Linkedin, ArrowLeft, Bug, Sparkles, Calculator, Briefcase, PlayCircle, Coins, TrendingUp, Mail, Grid3X3, Leaf, Heart, Box, ShieldCheck, Monitor
+  Twitter, Facebook, Linkedin, ArrowLeft, Bug, Sparkles, Calculator, Briefcase, PlayCircle, Coins, TrendingUp, Mail, Grid3X3, Leaf, Heart, Box, ShieldCheck, Monitor, ClipboardCheck, ArrowRight, MapPin
 } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -54,6 +58,13 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     if (isDarkMode) document.documentElement.classList.add('dark');
@@ -75,13 +86,19 @@ const App: React.FC = () => {
   };
 
   const handleLogin = (newUser: User) => {
-    setUser(newUser);
+    setUser({ ...newUser, eacBalance: newUser.eacBalance || 100 }); 
     setCurrentView(View.HOME);
   };
 
   const handleLogout = () => {
     setUser(null);
     setCurrentView(View.HOME);
+  };
+
+  const awardEac = (amount: number) => {
+    if (user) {
+      setUser({ ...user, eacBalance: (user.eacBalance || 0) + amount });
+    }
   };
 
   const getBackTarget = (view: View): { target: View; label: string } => {
@@ -93,6 +110,7 @@ const App: React.FC = () => {
     if (mediaViews.includes(view)) return { target: View.MEDIA, label: 'Media Hub' };
     if (view === View.COMMUNITY_GUIDELINES) return { target: View.COMMUNITY, label: 'Community' };
     if (view === View.PROFILE) return { target: View.HOME, label: 'Home' };
+    if (view === View.SUPPLY_CHAIN_AUDIT) return { target: View.SUPPLY, label: 'Supply Network' };
     return { target: View.HOME, label: 'Home' };
   };
 
@@ -101,17 +119,18 @@ const App: React.FC = () => {
       case View.HOME: return <Hero onNavigate={handleNavClick} />;
       case View.INFORMATION: return <Information />;
       case View.PRODUCTS: return <Products />;
-      case View.SERVICES: return <Services />;
-      case View.DATABASE: return <Database user={user} />;
-      case View.HUMAN_RESOURCE: return <HumanResource />;
+      case View.SERVICES: return <Services onNavigate={handleNavClick} />;
+      case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
+      case View.HUMAN_RESOURCE: return <HumanResource onNavigate={handleNavClick} />;
       case View.KNOWLEDGE: return <KnowledgeHub onNavigate={handleNavClick} initialSearch={globalSearchQuery} />;
       case View.DASHBOARD: return <Dashboard onNavigate={handleNavClick} />;
       case View.AI_ADVISOR: return <AiAdvisor />;
       case View.ROADMAP_AI: return <RoadmapAI />;
       case View.CROP_DOCTOR: return <CropDoctor />;
       case View.SUSTAINABILITY_CALCULATOR: return <SustainabilityCalculator />;
-      case View.FARM_SCOUT: return <FarmScout />;
-      case View.CARBON_LEDGER: return <CarbonLedger />;
+      case View.FARM_SCOUT: return <FarmScout onNavigate={handleNavClick} />;
+      // Fix: Passed handleNavClick as onNavigate prop to CarbonLedger
+      case View.CARBON_LEDGER: return <CarbonLedger user={user} onAwardEac={awardEac} onNavigate={handleNavClick} />;
       case View.SIGN_UP: return <Auth onLogin={handleLogin} onNavigate={handleNavClick} />;
       case View.PROFILE: return user ? <UserProfile user={user} onUpdateUser={(u) => setUser(u)} /> : <Auth onLogin={handleLogin} onNavigate={handleNavClick} />;
       case View.SUSTAINABILITY_FRAMEWORK: return <SustainabilityFramework />;
@@ -121,15 +140,16 @@ const App: React.FC = () => {
       case View.SUPPLY: return <Supply onNavigate={handleNavClick} />;
       case View.CUSTOMER: return <Customer onNavigate={handleNavClick} />;
       case View.PARTNERSHIPS: return <Partnerships />;
-      case View.FINANCE: return <Finance onNavigate={handleNavClick} />;
-      case View.COMMUNITY: return <Community onNavigate={handleNavClick} />;
+      case View.FINANCE: return <Finance user={user} onNavigate={handleNavClick} />;
+      case View.COMMUNITY: return <Community user={user} onNavigate={handleNavClick} onAwardEac={awardEac} />;
       case View.PODCAST: return <Podcast />;
       case View.HERITAGE_FORUM: return <HeritageForum />;
       case View.WEBINAR: return <Webinar />;
       case View.SMART_FARM_VR: return <SmartFarmVR />;
       case View.PLANET_WATCH: return <PlanetWatch />;
       case View.GREEN_LENS: return <GreenLens />;
-      case View.SAFE_HARVEST: return <SafeHarvest />;
+      // Fix: Passed handleNavClick as onNavigate prop to SafeHarvest to fix errors in child component
+      case View.SAFE_HARVEST: return <SafeHarvest onNavigate={handleNavClick} />;
       case View.NUTRILIFE: return <NutriLife />;
       case View.AGBIZ_WEEKLY: return <AgBizWeekly />;
       case View.INVESTOR_PORTAL: return <InvestorPortal onNavigate={handleNavClick} />;
@@ -138,6 +158,8 @@ const App: React.FC = () => {
       case View.COMMUNITY_GUIDELINES: return <CommunityGuidelines onNavigate={handleNavClick} />;
       case View.INTRANET_DASHBOARD: return <IntranetDashboard />;
       case View.EXTRANET_DASHBOARD: return <ExtranetDashboard />;
+      case View.PRIVACY_POLICY: return <PrivacyPolicy />;
+      case View.SUPPLY_CHAIN_AUDIT: return <SupplyChainAudit />;
       default: return <Hero onNavigate={handleNavClick} />;
     }
   };
@@ -145,221 +167,253 @@ const App: React.FC = () => {
   const backInfo = getBackTarget(currentView);
 
   return (
-    <div className="min-h-screen bg-earth-50 dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-300">
-      <nav className="bg-white/95 dark:bg-earth-900/95 shadow-sm sticky top-0 z-50 border-b border-earth-100 dark:border-earth-800 transition-colors" onMouseLeave={() => setActiveDropdown(null)}>
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => handleNavClick(View.HOME)}>
-            <div className="bg-agro-600 text-white p-2 rounded-lg group-hover:scale-110 transition-transform"><Sprout size={24} /></div>
-            <span className="text-xl font-serif font-bold text-agro-900 dark:text-white tracking-tight">EnvirosAgro</span>
-          </div>
-
-          <div className="hidden xl:flex items-center space-x-1">
-            <button onClick={() => handleNavClick(View.HOME)} className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${currentView === View.HOME ? 'bg-agro-50 text-agro-700 dark:bg-agro-900' : 'text-earth-600 dark:text-earth-300 hover:text-agro-600'}`}>Home</button>
-            
-            <div className="relative" onMouseEnter={() => setActiveDropdown('about')}>
-               <button className="px-4 py-2 rounded-full text-sm font-bold text-earth-600 dark:text-earth-300 hover:text-agro-600 flex items-center gap-1">About <ChevronDown size={14} /></button>
-               {activeDropdown === 'about' && (
-                 <div className="absolute top-full left-0 w-64 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 py-3 animate-in fade-in slide-in-from-top-2">
-                    <button onClick={() => handleNavClick(View.INFORMATION)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Info size={16} className="text-blue-500" /> Organization Info</button>
-                    <button onClick={() => handleNavClick(View.SUSTAINABILITY_FRAMEWORK)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Layers size={16} className="text-agro-500" /> Five Thrusts Framework</button>
-                    <button onClick={() => handleNavClick(View.BRANDS)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Tag size={16} className="text-rose-500" /> Brand Family</button>
-                    <button onClick={() => handleNavClick(View.TRADEMARKS)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Scale size={16} className="text-slate-500" /> IP & Trademarks</button>
-                 </div>
-               )}
+    <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-300">
+      
+      {/* Dynamic Navigation Bar */}
+      <nav 
+        className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 border-b ${
+          scrolled 
+          ? 'bg-white/80 dark:bg-earth-900/80 backdrop-blur-xl border-earth-100 dark:border-earth-800 py-3 shadow-lg shadow-black/5' 
+          : 'bg-transparent border-transparent py-5'
+        }`}
+        onMouseLeave={() => setActiveDropdown(null)}
+      >
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-8">
+          
+          <div className="flex items-center gap-10">
+            <div 
+              className="flex items-center gap-2 cursor-pointer group shrink-0" 
+              onClick={() => handleNavClick(View.HOME)}
+            >
+              <div className="group-hover:scale-[1.03] transition-transform duration-500">
+                <Logo size={scrolled ? 34 : 42} variant="horizontal" useGradient={true} />
+              </div>
             </div>
 
-            <div className="relative" onMouseEnter={() => setActiveDropdown('network')}>
-               <button className="px-4 py-2 rounded-full text-sm font-bold text-earth-600 dark:text-earth-300 hover:text-agro-600 flex items-center gap-1">Network <ChevronDown size={14} /></button>
-               {activeDropdown === 'network' && (
-                 <div className="absolute top-full left-0 w-64 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 py-3 animate-in fade-in slide-in-from-top-2">
-                    <button onClick={() => handleNavClick(View.COMMUNITY)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Users size={16} className="text-rose-500" /> Groups & Societies</button>
-                    <button onClick={() => handleNavClick(View.CUSTOMER)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Heart size={16} className="text-red-500" /> Customer Experience</button>
-                    <button onClick={() => handleNavClick(View.BRANDS)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Box size={16} className="text-orange-500" /> Brand Portfolio</button>
-                    <button onClick={() => handleNavClick(View.HUMAN_RESOURCE)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Briefcase size={16} className="text-blue-500" /> Workforce Cloud</button>
-                    <button onClick={() => handleNavClick(View.DATABASE)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><DbIcon size={16} className="text-agro-500" /> Research Database</button>
-                    <button onClick={() => handleNavClick(View.DASHBOARD)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><LayoutDashboard size={16} className="text-indigo-500" /> Impact Dashboard</button>
-                 </div>
-               )}
-            </div>
+            {/* Desktop Menu */}
+            <div className="hidden xl:flex items-center space-x-1">
+              <button onClick={() => handleNavClick(View.HOME)} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${currentView === View.HOME ? 'text-agro-700 dark:text-agro-400 bg-agro-50 dark:bg-agro-900/30' : 'text-earth-600 dark:text-earth-300 hover:text-agro-600'}`}>Home</button>
+              
+              <div className="relative group" onMouseEnter={() => setActiveDropdown('solutions')}>
+                 <button className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1 ${activeDropdown === 'solutions' ? 'text-agro-600' : 'text-earth-600 dark:text-earth-300 hover:text-agro-600'}`}>
+                   Solutions <ChevronDown size={14} className={`transition-transform duration-300 ${activeDropdown === 'solutions' ? 'rotate-180' : ''}`} />
+                 </button>
+                 {activeDropdown === 'solutions' && (
+                   <div className="absolute top-full left-0 w-72 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 p-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <button onClick={() => handleNavClick(View.SERVICES)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><Sprout size={18} className="text-agro-600" /> Professional Services</button>
+                      <button onClick={() => handleNavClick(View.KNOWLEDGE)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><BookOpen size={18} className="text-blue-600" /> Research & Intelligence</button>
+                      <button onClick={() => handleNavClick(View.FARM_SCOUT)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><Grid3X3 size={18} className="text-purple-600" /> AI Precision Scout</button>
+                      <button onClick={() => handleNavClick(View.SUSTAINABILITY_FRAMEWORK)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><Layers size={18} className="text-amber-600" /> Five Thrusts Framework</button>
+                   </div>
+                 )}
+              </div>
 
-            <div className="relative" onMouseEnter={() => setActiveDropdown('ai')}>
-               <button className="px-4 py-2 rounded-full text-sm font-bold text-earth-600 dark:text-earth-300 hover:text-purple-600 flex items-center gap-1">AI Tools <ChevronDown size={14} /></button>
-               {activeDropdown === 'ai' && (
-                 <div className="absolute top-full left-0 w-64 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 py-3 animate-in fade-in slide-in-from-top-2">
-                    <button onClick={() => handleNavClick(View.FARM_SCOUT)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Grid3X3 size={16} className="text-blue-500" /> AI Field Scout</button>
-                    <button onClick={() => handleNavClick(View.AI_ADVISOR)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><MessageSquareText size={16} className="text-purple-500" /> Sustainability Advisor</button>
-                    <button onClick={() => handleNavClick(View.CROP_DOCTOR)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Bug size={16} className="text-red-500" /> AI Crop Doctor</button>
-                    <button onClick={() => handleNavClick(View.ROADMAP_AI)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Sparkles size={16} className="text-amber-500" /> Strategic Roadmap</button>
-                 </div>
-               )}
-            </div>
+              <div className="relative group" onMouseEnter={() => setActiveDropdown('ecosystem')}>
+                 <button className={`px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1 ${activeDropdown === 'ecosystem' ? 'text-agro-600' : 'text-earth-600 dark:text-earth-300 hover:text-agro-600'}`}>
+                   Ecosystem <ChevronDown size={14} className={`transition-transform duration-300 ${activeDropdown === 'ecosystem' ? 'rotate-180' : ''}`} />
+                 </button>
+                 {activeDropdown === 'ecosystem' && (
+                   <div className="absolute top-full left-0 w-72 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 p-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <button onClick={() => handleNavClick(View.COMMUNITY)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><Users size={18} className="text-rose-600" /> Community Network</button>
+                      <button onClick={() => handleNavClick(View.BRANDS)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><Box size={18} className="text-orange-600" /> Brand Portfolio</button>
+                      <button onClick={() => handleNavClick(View.MEDIA)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><MonitorPlay size={18} className="text-red-600" /> Media Hub</button>
+                      <button onClick={() => handleNavClick(View.FINANCE)} className="w-full text-left px-4 py-3 rounded-xl text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3 transition-colors"><Wallet size={18} className="text-amber-600" /> Financial Capital</button>
+                   </div>
+                 )}
+              </div>
 
-            <div className="relative" onMouseEnter={() => setActiveDropdown('dashboards')}>
-               <button className="px-4 py-2 rounded-full text-sm font-bold text-earth-600 dark:text-earth-300 hover:text-blue-600 flex items-center gap-1">Admin <ChevronDown size={14} /></button>
-               {activeDropdown === 'dashboards' && (
-                 <div className="absolute top-full left-0 w-64 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 py-3 animate-in fade-in slide-in-from-top-2">
-                    <button onClick={() => handleNavClick(View.INTRANET_DASHBOARD)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><ShieldCheck size={16} className="text-blue-500" /> Intranet (Org)</button>
-                    <button onClick={() => handleNavClick(View.EXTRANET_DASHBOARD)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Monitor size={16} className="text-purple-500" /> Extranet (Partner)</button>
-                 </div>
-               )}
+              <button onClick={() => handleNavClick(View.DASHBOARD)} className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${currentView === View.DASHBOARD ? 'text-agro-700' : 'text-earth-600 dark:text-earth-300 hover:text-agro-600'}`}>Impact</button>
             </div>
-
-            <div className="relative" onMouseEnter={() => setActiveDropdown('eco')}>
-               <button className="px-4 py-2 rounded-full text-sm font-bold text-earth-600 dark:text-earth-300 hover:text-agro-600 flex items-center gap-1">Ecosystem <ChevronDown size={14} /></button>
-               {activeDropdown === 'eco' && (
-                 <div className="absolute top-full right-0 w-64 bg-white dark:bg-earth-900 rounded-2xl shadow-2xl border border-earth-100 dark:border-earth-800 py-3 animate-in fade-in slide-in-from-top-2">
-                    <button onClick={() => handleNavClick(View.PRODUCTS)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><ShoppingBag size={16} className="text-orange-500" /> Marketplace</button>
-                    <button onClick={() => handleNavClick(View.CARBON_LEDGER)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Leaf size={16} className="text-green-500" /> Carbon Ledger</button>
-                    <button onClick={() => handleNavClick(View.SUPPLY)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><Truck size={16} className="text-slate-500" /> Supply Chain Hub</button>
-                    <button onClick={() => handleNavClick(View.CUSTOMER)} className="w-full text-left px-5 py-2.5 text-sm hover:bg-earth-50 dark:hover:bg-earth-800 flex items-center gap-3"><HeartHandshake size={16} className="text-rose-500" /> Traceability Hub</button>
-                 </div>
-               )}
-            </div>
-
-            <button onClick={() => handleNavClick(View.FINANCE)} className={`px-4 py-2 rounded-full text-sm font-bold transition-all flex items-center gap-1 ${currentView === View.FINANCE ? 'text-amber-600' : 'text-earth-600 dark:text-earth-300 hover:text-amber-600'}`}>Capital <Coins size={14} /></button>
           </div>
 
           <div className="flex items-center gap-3">
-            <button onClick={toggleDarkMode} className="p-2.5 rounded-full text-earth-500 hover:bg-earth-100 dark:hover:bg-earth-800 transition-colors">
-                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            <div className="hidden lg:flex items-center gap-2 mr-2">
+                <button 
+                  onClick={toggleDarkMode} 
+                  className="p-2.5 rounded-full text-earth-400 hover:bg-earth-100 dark:hover:bg-earth-800 hover:text-agro-600 transition-all"
+                  aria-label="Toggle Theme"
+                >
+                    {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                </button>
+            </div>
+
             {user ? (
                 <div className="flex items-center gap-2">
-                    <button onClick={() => handleNavClick(View.PROFILE)} className="flex items-center gap-2 hover:bg-earth-50 dark:hover:bg-earth-800 px-3 py-1.5 rounded-xl transition-all">
-                        <div className="w-8 h-8 bg-agro-100 rounded-full flex items-center justify-center overflow-hidden border border-agro-200">
-                            {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <UserCircle size={20} className="text-agro-600" />}
+                    <div className="hidden sm:flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 px-3 py-1.5 rounded-xl border border-amber-100 dark:border-amber-800/50">
+                        <Coins size={14} className="text-amber-600" />
+                        <span className="text-xs font-black text-amber-700 dark:text-amber-400">{user.eacBalance} EAC</span>
+                    </div>
+                    <button 
+                      onClick={() => handleNavClick(View.PROFILE)} 
+                      className="flex items-center gap-2 p-1.5 rounded-xl border border-earth-200 dark:border-earth-800 hover:bg-earth-50 dark:hover:bg-earth-800 transition-all shadow-sm bg-white dark:bg-earth-900"
+                    >
+                        <div className="w-8 h-8 rounded-lg overflow-hidden border border-earth-100">
+                            {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-agro-100 flex items-center justify-center text-agro-600 font-bold">{user.name.charAt(0)}</div>}
                         </div>
-                        <span className="text-sm font-bold hidden sm:inline">{user.name}</span>
+                        <span className="text-xs font-bold mr-2 hidden md:inline">{user.name}</span>
                     </button>
-                    <button onClick={handleLogout} className="text-earth-400 hover:text-red-500 transition-colors p-2"><LogOut size={20} /></button>
+                    <button onClick={handleLogout} className="p-2.5 text-earth-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-all"><LogOut size={18} /></button>
                 </div>
             ) : (
-                <button onClick={() => handleNavClick(View.SIGN_UP)} className="nature-gradient hover:opacity-90 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md transition-all">Sign In</button>
+                <button 
+                  onClick={() => handleNavClick(View.SIGN_UP)} 
+                  className="nature-gradient text-white px-6 py-2.5 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-agro-900/20 hover:scale-[1.02] hover:brightness-110 active:scale-95 transition-all"
+                >
+                  Get Started
+                </button>
             )}
-            <button className="xl:hidden p-2 text-earth-600 dark:text-earth-300" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            
+            <button className="xl:hidden p-2.5 text-earth-600 dark:text-earth-300 hover:bg-earth-50 dark:hover:bg-earth-800 rounded-xl transition-all" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                 {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
 
+        {/* Dynamic Context Bar */}
         {currentView !== View.HOME && (
-          <div className="bg-earth-50/95 dark:bg-earth-900/95 border-b border-earth-100 dark:border-earth-800 animate-in slide-in-from-top-2 duration-300">
-            <div className="max-w-7xl mx-auto px-6 py-3 flex items-center">
+          <div className="bg-earth-50/80 dark:bg-earth-950/80 backdrop-blur-md border-b border-earth-100 dark:border-earth-800 animate-in slide-in-from-top-2 duration-300">
+            <div className="max-w-7xl mx-auto px-6 py-2 flex items-center gap-6 overflow-x-auto no-scrollbar">
               <button 
                 onClick={() => handleNavClick(backInfo.target)}
-                className="group flex items-center gap-2 text-xs font-bold text-earth-500 hover:text-agro-600 dark:text-earth-400 dark:hover:text-agro-400 transition-all uppercase tracking-widest"
+                className="group flex items-center gap-2 text-[10px] font-black text-earth-400 hover:text-agro-600 transition-all uppercase tracking-[0.2em] whitespace-nowrap"
               >
-                <div className="p-1.5 bg-white dark:bg-earth-800 rounded-lg shadow-sm border border-earth-200 dark:border-earth-700 group-hover:nature-gradient dark:group-hover:bg-agro-900 group-hover:border-agro-200 group-hover:text-white transition-colors">
-                  <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-                </div>
-                Back to {backInfo.label}
+                <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" /> Back to {backInfo.label}
               </button>
+              <div className="h-4 w-px bg-earth-200 dark:bg-earth-800 shrink-0"></div>
+              <span className="text-[10px] font-black text-agro-600 uppercase tracking-[0.2em] whitespace-nowrap">
+                Current: {currentView.replace('_', ' ')}
+              </span>
             </div>
           </div>
         )}
       </nav>
 
+      {/* Modern Mobile Fullscreen Navigation */}
       {isMobileMenuOpen && (
-        <div className="xl:hidden fixed inset-0 z-40 bg-white dark:bg-earth-950 p-6 pt-24 overflow-y-auto animate-in slide-in-from-top-4 duration-300">
-           <div className="flex flex-col space-y-8 pb-20">
-              <button onClick={() => handleNavClick(View.HOME)} className="text-left text-3xl font-bold text-agro-900 dark:text-agro-400">Home</button>
+        <div className="xl:hidden fixed inset-0 z-[100] bg-white dark:bg-earth-950 p-6 flex flex-col animate-in fade-in duration-300">
+           <div className="flex justify-between items-center mb-10">
+              <Logo size={32} variant="horizontal" useGradient={true} />
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-3 bg-earth-50 dark:bg-earth-900 rounded-2xl"><X size={24} /></button>
+           </div>
+           
+           <div className="flex-1 overflow-y-auto space-y-10 pb-20">
               <div className="space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-earth-400 border-b border-earth-100 pb-2">Network</h4>
-                <div className="grid grid-cols-2 gap-3">
-                   <button onClick={() => handleNavClick(View.COMMUNITY)} className="flex flex-col gap-2 p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left"><Users size={20} className="text-rose-500" /> <span className="text-sm font-bold">Groups</span></button>
-                   <button onClick={() => handleNavClick(View.CUSTOMER)} className="flex flex-col gap-2 p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left"><Heart size={20} className="text-red-500" /> <span className="text-sm font-bold">Experience</span></button>
-                   <button onClick={() => handleNavClick(View.BRANDS)} className="flex flex-col gap-2 p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left"><Box size={20} className="text-orange-500" /> <span className="text-sm font-bold">Portfolio</span></button>
-                   <button onClick={() => handleNavClick(View.DATABASE)} className="flex flex-col gap-2 p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left"><DbIcon size={20} className="text-agro-500" /> <span className="text-sm font-bold">Database</span></button>
-                   <button onClick={() => handleNavClick(View.FARM_SCOUT)} className="flex flex-col gap-2 p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left"><Grid3X3 size={20} className="text-blue-500" /> <span className="text-sm font-bold">Scout</span></button>
-                   <button onClick={() => handleNavClick(View.DASHBOARD)} className="flex flex-col gap-2 p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left"><LayoutDashboard size={20} className="text-indigo-500" /> <span className="text-sm font-bold">Impact</span></button>
-                </div>
+                 <p className="text-[10px] font-black text-earth-400 uppercase tracking-widest px-2">Navigation</p>
+                 <div className="grid gap-2">
+                    <button onClick={() => handleNavClick(View.HOME)} className="w-full text-left p-4 rounded-2xl bg-earth-50 dark:bg-earth-900 font-bold text-lg flex justify-between items-center group">
+                      Home <ArrowRight className="text-earth-300 group-hover:text-agro-600 transition-colors" />
+                    </button>
+                    <button onClick={() => handleNavClick(View.DASHBOARD)} className="w-full text-left p-4 rounded-2xl bg-earth-50 dark:bg-earth-900 font-bold text-lg flex justify-between items-center group">
+                      Impact <ArrowRight className="text-earth-300 group-hover:text-agro-600 transition-colors" />
+                    </button>
+                 </div>
               </div>
 
               <div className="space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-earth-400 border-b border-earth-100 pb-2">Admin Tools</h4>
-                <div className="grid grid-cols-1 gap-2">
-                   <button onClick={() => handleNavClick(View.INTRANET_DASHBOARD)} className="flex items-center gap-3 p-3 text-lg font-medium"><ShieldCheck className="text-blue-500" /> Intranet Dashboard</button>
-                   <button onClick={() => handleNavClick(View.EXTRANET_DASHBOARD)} className="flex items-center gap-3 p-3 text-lg font-medium"><Monitor className="text-purple-500" /> Extranet Dashboard</button>
-                </div>
-              </div>
-
-              <div className="pt-8 border-t border-earth-100 dark:border-earth-800">
-                  {user ? (
-                      <button onClick={() => handleNavClick(View.PROFILE)} className="flex items-center gap-4 p-4 bg-agro-50 dark:bg-agro-900 rounded-2xl w-full">
-                          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center overflow-hidden border border-agro-200">
-                              {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <UserCircle size={24} className="text-agro-600" />}
-                          </div>
-                          <div className="text-left">
-                              <p className="font-bold text-agro-900 dark:text-agro-400">{user.name}</p>
-                              <p className="text-xs text-agro-600">View Profile</p>
-                          </div>
+                 <p className="text-[10px] font-black text-earth-400 uppercase tracking-widest px-2">Ecosystem & Data</p>
+                 <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { view: View.COMMUNITY, icon: <Users size={18} />, label: 'Community', color: 'text-rose-500' },
+                      { view: View.KNOWLEDGE, icon: <BookOpen size={18} />, label: 'Intelligence', color: 'text-blue-500' },
+                      { view: View.DATABASE, icon: <DbIcon size={18} />, label: 'Datasets', color: 'text-agro-500' },
+                      { view: View.MEDIA, icon: <MonitorPlay size={18} />, label: 'Media Hub', color: 'text-red-500' },
+                      { view: View.FINANCE, icon: <Wallet size={18} />, label: 'Capital', color: 'text-amber-500' },
+                      { view: View.BRANDS, icon: <Box size={18} />, label: 'Portfolio', color: 'text-orange-500' }
+                    ].map((item) => (
+                      <button key={item.view} onClick={() => handleNavClick(item.view)} className="p-4 bg-earth-50 dark:bg-earth-900 rounded-2xl text-left transition-all hover:scale-[0.98]">
+                        <div className={`mb-3 ${item.color}`}>{item.icon}</div>
+                        <span className="text-xs font-bold text-earth-800 dark:text-earth-200">{item.label}</span>
                       </button>
-                  ) : (
-                      <button onClick={() => handleNavClick(View.SIGN_UP)} className="w-full nature-gradient text-white py-4 rounded-2xl font-bold text-lg shadow-lg">Get Started</button>
-                  )}
+                    ))}
+                 </div>
+              </div>
+
+              <div className="pt-10 border-t border-earth-100 dark:border-earth-800 flex items-center justify-between">
+                <button onClick={toggleDarkMode} className="flex items-center gap-3 p-4 bg-earth-50 dark:bg-earth-800 rounded-2xl font-bold text-sm">
+                  {isDarkMode ? <><Sun size={18} /> Light Mode</> : <><Moon size={18} /> Dark Mode</>}
+                </button>
+                {user && (
+                  <button onClick={handleLogout} className="p-4 text-red-500 font-bold flex items-center gap-2">
+                    <LogOut size={18} /> Logout
+                  </button>
+                )}
               </div>
            </div>
+
+           {!user && (
+              <div className="pt-6">
+                <button onClick={() => handleNavClick(View.SIGN_UP)} className="w-full nature-gradient text-white py-5 rounded-3xl font-black uppercase tracking-widest shadow-xl">Get Started Free</button>
+              </div>
+           )}
         </div>
       )}
 
-      <main className="fade-in">{renderContent()}</main>
+      {/* Add padding to account for fixed navbar */}
+      <main className="pt-24 min-h-screen">
+        <div className="fade-in transition-all duration-500">
+          {renderContent()}
+        </div>
+      </main>
 
-      <footer className="bg-earth-900 text-earth-400 py-16 px-6 mt-12">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-12 text-sm">
+      <footer className="bg-earth-950 text-earth-400 py-24 px-6 mt-20 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5"></div>
+        
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 text-sm relative z-10">
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-6 text-white">
-                <Sprout size={28} />
-                <span className="text-2xl font-serif font-bold">EnvirosAgro</span>
+            <div className="mb-8">
+                <Logo size={48} variant="horizontal" color="white" />
             </div>
-            <p className="max-w-sm leading-relaxed">Empowering the agricultural community through a measured, data-driven framework for global sustainability.</p>
-            <div className="flex gap-4 mt-6">
-                <Twitter size={20} className="hover:text-white cursor-pointer transition-colors" />
-                <Facebook size={20} className="hover:text-white cursor-pointer transition-colors" />
-                <Linkedin size={20} className="hover:text-white cursor-pointer transition-colors" />
+            <p className="max-w-xs leading-relaxed text-earth-500 mb-10">Empowering the agricultural community through a measured, data-driven framework for global sustainability and resilient futures.</p>
+            <div className="flex gap-4">
+                <div className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer text-white border border-white/5"><Twitter size={20} /></div>
+                <div className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer text-white border border-white/5"><Facebook size={20} /></div>
+                <div className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all cursor-pointer text-white border border-white/5"><Linkedin size={20} /></div>
             </div>
           </div>
           
           <div>
-            <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Innovation Hub</h4>
-            <ul className="space-y-3 text-sm">
-              <li onClick={() => handleNavClick(View.FARM_SCOUT)} className="cursor-pointer hover:text-white transition-colors">AI Field Scout</li>
-              <li onClick={() => handleNavClick(View.CARBON_LEDGER)} className="cursor-pointer hover:text-white transition-colors">Carbon Ledger</li>
-              <li onClick={() => handleNavClick(View.CROP_DOCTOR)} className="cursor-pointer hover:text-white transition-colors">AI Crop Doctor</li>
-              <li onClick={() => handleNavClick(View.ROADMAP_AI)} className="cursor-pointer hover:text-white transition-colors">Sustainability Roadmap</li>
+            <h4 className="text-white font-black mb-8 uppercase tracking-[0.2em] text-[10px]">Innovation Ecosystem</h4>
+            <ul className="space-y-4">
+              <li onClick={() => handleNavClick(View.FARM_SCOUT)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> AI Field Scout</li>
+              <li onClick={() => handleNavClick(View.CARBON_LEDGER)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> Carbon Ledger</li>
+              <li onClick={() => handleNavClick(View.CROP_DOCTOR)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> AI Crop Doctor</li>
+              <li onClick={() => handleNavClick(View.ROADMAP_AI)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> Sustainability Roadmap</li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Ecosystem</h4>
-            <ul className="space-y-3 text-sm">
-              <li onClick={() => handleNavClick(View.PRODUCTS)} className="cursor-pointer hover:text-white transition-colors">Agro Marketplace</li>
-              <li onClick={() => handleNavClick(View.SUPPLY)} className="cursor-pointer hover:text-white transition-colors">Supply Chain</li>
-              <li onClick={() => handleNavClick(View.FINANCE)} className="cursor-pointer hover:text-white transition-colors">Capital & Grants</li>
-              <li onClick={() => handleNavClick(View.HUMAN_RESOURCE)} className="cursor-pointer hover:text-white transition-colors">Workforce Cloud</li>
+            <h4 className="text-white font-black mb-8 uppercase tracking-[0.2em] text-[10px]">Strategic Hubs</h4>
+            <ul className="space-y-4">
+              <li onClick={() => handleNavClick(View.PRODUCTS)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> Agro Marketplace</li>
+              <li onClick={() => handleNavClick(View.SUPPLY)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> Supply Network</li>
+              <li onClick={() => handleNavClick(View.FINANCE)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> Capital & Grants</li>
+              <li onClick={() => handleNavClick(View.HUMAN_RESOURCE)} className="cursor-pointer hover:text-agro-400 transition-colors flex items-center gap-2"><ArrowRight size={12} className="text-earth-700" /> Workforce Cloud</li>
             </ul>
           </div>
 
-          <div>
-             <h4 className="text-white font-bold mb-6 uppercase tracking-widest text-xs">Connect</h4>
-             <ul className="space-y-3 text-sm">
-               <li className="flex items-center gap-2"><Mail size={16} /> envirosagro.com@gmail.com</li>
-               <li>Kiriaini Headquarters, Kenya</li>
-               <li className="pt-2">
-                   <button onClick={() => handleNavClick(View.INFORMATION)} className="bg-white/10 text-white px-4 py-2 rounded-lg font-bold hover:bg-white/20 transition-all">Support Center</button>
+          <div className="bg-white/5 p-8 rounded-[2.5rem] border border-white/5">
+             <h4 className="text-white font-black mb-6 uppercase tracking-[0.2em] text-[10px]">Contact Hub</h4>
+             <ul className="space-y-5 text-sm">
+               <li className="flex items-center gap-3 text-earth-300 font-medium"><Mail size={16} className="text-agro-500" /> envirosagro.com@gmail.com</li>
+               <li className="flex items-center gap-3 text-earth-300 font-medium"><MapPin size={16} className="text-agro-500" /> Kiriaini HQ, Kenya</li>
+               <li className="pt-4">
+                   <button onClick={() => handleNavClick(View.INFORMATION)} className="w-full nature-gradient text-white py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl hover:-translate-y-1 transition-all center">Support Center</button>
                </li>
              </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium">
-            <p>© {new Date().getFullYear()} EnvirosAgro Infrastructure. All rights reserved.</p>
-            <div className="flex gap-6">
-                <span onClick={() => handleNavClick(View.COMMUNITY_GUIDELINES)} className="hover:text-white cursor-pointer">Guidelines</span>
-                <span className="hover:text-white cursor-pointer">Privacy Policy</span>
-                <span onClick={() => handleNavClick(View.TRADEMARKS)} className="hover:text-white cursor-pointer">Trademarks</span>
+
+        <div className="max-w-7xl mx-auto mt-24 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black uppercase tracking-widest">
+            <p className="text-earth-600">© {new Date().getFullYear()} ENVIROSAGRO INFRASTRUCTURE. ALL RIGHTS RESERVED.</p>
+            <div className="flex gap-8">
+                <span onClick={() => handleNavClick(View.COMMUNITY_GUIDELINES)} className="hover:text-white cursor-pointer transition-colors">Guidelines</span>
+                <span onClick={() => handleNavClick(View.PRIVACY_POLICY)} className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
+                <span onClick={() => handleNavClick(View.TRADEMARKS)} className="hover:text-white cursor-pointer transition-colors">Trademarks</span>
             </div>
         </div>
       </footer>
-      <AiConsultantFloating />
+      
+      <AiConsultantFloating onOpenFull={() => handleNavClick(View.AI_ADVISOR)} />
     </div>
   );
 };

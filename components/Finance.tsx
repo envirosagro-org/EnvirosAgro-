@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Users, Leaf, ShieldPlus, Cpu, Factory, PiggyBank, Coins, TrendingUp, Wallet, ArrowUpRight, Gem, Fingerprint, CheckCircle2, ArrowRightLeft, Smartphone, Building2, Globe, Mail, Newspaper, CreditCard, Loader2, X } from 'lucide-react';
-import { View } from '../types';
+import { View, User } from '../types';
 
 const FINANCIAL_PRODUCTS = [
   {
@@ -66,10 +66,11 @@ const FINANCIAL_PRODUCTS = [
 ];
 
 interface FinanceProps {
+    user: User | null;
     onNavigate?: (view: View) => void;
 }
 
-export const Finance: React.FC<FinanceProps> = ({ onNavigate }) => {
+export const Finance: React.FC<FinanceProps> = ({ user, onNavigate }) => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [depositMethod, setDepositMethod] = useState<'TOKENZ' | 'FIAT'>('TOKENZ');
   const [portfolioValue, setPortfolioValue] = useState(0);
@@ -115,9 +116,15 @@ export const Finance: React.FC<FinanceProps> = ({ onNavigate }) => {
            </div>
            <p className="text-xl text-earth-600 max-w-2xl">Powered by <strong>Tokenz™</strong> — Innovative financial solutions to fuel sustainable growth.</p>
         </div>
-        <div className="bg-amber-50 px-6 py-4 rounded-2xl border border-amber-100">
-            <p className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1 flex items-center gap-2"><Gem size={14} /> Tokenz Pool</p>
-            <p className="text-3xl font-serif font-bold text-agro-900">$12.5M</p>
+        <div className="flex gap-4">
+            <div className="bg-amber-50 px-6 py-4 rounded-2xl border border-amber-100">
+                <p className="text-xs font-bold text-amber-600 uppercase tracking-wider mb-1 flex items-center gap-2"><Gem size={14} /> My EAC Balance</p>
+                <p className="text-3xl font-serif font-bold text-agro-900">{user?.eacBalance || 0}</p>
+            </div>
+            <div className="bg-blue-50 px-6 py-4 rounded-2xl border border-blue-100">
+                <p className="text-xs font-bold text-blue-600 uppercase tracking-wider mb-1 flex items-center gap-2"><Wallet size={14} /> Portfolio</p>
+                <p className="text-3xl font-serif font-bold text-agro-900">${portfolioValue.toLocaleString()}</p>
+            </div>
         </div>
       </div>
 

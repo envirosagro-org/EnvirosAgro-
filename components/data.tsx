@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Users, Leaf, ShieldPlus, Cpu, Factory, Database as DbIcon, Sprout, Cat, Droplets, Wind } from 'lucide-react';
 
@@ -10,7 +9,7 @@ export const THRUSTS = [
     icon: <Users size={20} />,
     color: 'bg-rose-100 text-rose-700',
     borderColor: 'border-rose-200',
-    description: 'Encompasses both scientific inquiry and artistic expression, developed through the study of natural societies and their complex interactions with natural resources.',
+    description: 'The foundation of Sustainable Integrated Development. It studies natural societies and their interactions with resources, specifically addressing social risks like Social Influenza Disease (SI-D).',
     domains: [
       'Historical Agriculture: Evolution of civilizations & nature',
       'Geographical Agriculture: Human-resource relationships across locations',
@@ -27,7 +26,7 @@ export const THRUSTS = [
     icon: <Leaf size={20} />,
     color: 'bg-green-100 text-green-700',
     borderColor: 'border-green-200',
-    description: 'A proactive strategy that applies the principles of social agriculture to enhance natural resources and positively impact our environment.',
+    description: 'A proactive strategy within our Integrated Development model that applies Social Agriculture principles to enhance and regenerate natural resources.',
     domains: [
       'Human Impact: Mitigating adverse consequences of industrialization',
       'Sustainable Solutions: Interdisciplinary approaches to climate change',
@@ -44,7 +43,7 @@ export const THRUSTS = [
     icon: <ShieldPlus size={20} />,
     color: 'bg-red-100 text-red-700',
     borderColor: 'border-red-200',
-    description: 'The progressive integration of environmental agricultural practices designed to enhance the wellbeing of natural resources and communities.',
+    description: 'The progressive integration of environmental practices to enhance the holistic wellbeing of natural resources, communities, and the global body politic.',
     domains: [
       'General Ag Health: Disease prevention & emergency response',
       'Biological Sciences: Anatomy & biochemistry of ag health',
@@ -61,7 +60,7 @@ export const THRUSTS = [
     icon: <Cpu size={20} />,
     color: 'bg-blue-100 text-blue-700',
     borderColor: 'border-blue-200',
-    description: 'Integral to the efficient utilization of natural resources, merging principles of health-focused agriculture with practical skills and innovative methodologies.',
+    description: 'The application of innovative methodologies and precision tools to achieve the efficiency required for large-scale Sustainable Integrated Development.',
     domains: [
       'Ag Information Technology (IT): Cybersecurity & data analytics',
       'AI-Powered Agricultural Diagnostics: AI for pest/disease ID, soil analysis, & yield prediction',
@@ -79,7 +78,7 @@ export const THRUSTS = [
     icon: <Factory size={20} />,
     color: 'bg-slate-100 text-slate-700',
     borderColor: 'border-slate-200',
-    description: 'The deliberate application of advanced agricultural methodologies to responsibly manage natural resources and promote sustainable living.',
+    description: 'The final scale-up phase of our development model, responsibly managing resources through manufacturing, processing, and value-chain optimization.',
     domains: [
       'Industrial Sector: Manufacturing & infrastructure',
       'Industrial Engineering: Process optimization & efficiency',
@@ -112,7 +111,220 @@ export const COLLECTION_TOOLS = [
 
 // Mock Data aligned with Framework and Elements
 export const DATASETS = [
+  // --- SUSTAINABLE INTEGRATED DEVELOPMENT STRATEGY ---
+  {
+    id: 'DS-CORE-001',
+    name: 'Sustainable Integrated Development Strategy (SIDS)',
+    thrust: 'IA',
+    domain: 'Industrial Sector',
+    category: 'General',
+    region: 'Global',
+    type: 'Strategic Blueprint',
+    size: '12.4 MB',
+    date: 'June 01, 2024',
+    access: 'Public',
+    content: `
+# Sustainable Integrated Development: The Overarching Strategy
+
+## 1. Rationale
+Sustainable Integrated Development is the primary operational strategy of EnvirosAgro. It is the synthesis of all five agricultural thrusts (SA, EA, HA, TA, IA) into a singular, cohesive engine for societal and ecological progress.
+
+## 2. Core Objective
+The objective is to move agricultural systems beyond simple production towards a "Steady-State Resilience" where natural resource extraction and societal growth are perfectly balanced.
+
+## 3. Implementation Pathway
+The strategy follows a linear progression:
+- **Phase 1: Social Stabilization.** Building social immunity and resolving conflicts (mitigating SI-D).
+- **Phase 2: Environmental Integration.** Applying regenerative methods to land.
+- **Phase 3: Health Standardization.** Ensuring the biological safety of the system.
+- **Phase 4: Technical Optimization.** Scaling through precision tools.
+- **Phase 5: Industrial Maturity.** Achieving global value-chain stability.
+
+## 4. Contrast with SI-D
+While Sustainable Integrated Development is the *solution* and *method*, Social Influenza Disease (SI-D) is the *primary obstacle* identified within the Social Agriculture thrust. One provides the growth framework; the other diagnoses the societal fractures that prevent growth.
+    `
+  },
+  // --- CASE STUDY: WANKAN VILLAGE ---
+  {
+    id: 'DS-IA-017',
+    name: 'Case Study: Constraints on Agri-Supply Chain (Wankan Village)',
+    thrust: 'IA',
+    domain: 'Value Chain Development',
+    category: 'Finance',
+    region: 'Kenya (Kiambu)',
+    type: 'Thesis / Case Study',
+    size: '3.2 MB',
+    date: 'Oct 2024',
+    access: 'Public',
+    content: `
+# CONSTRAINTS ON PERFORMANCE OF AGRICULTURAL SUPPLY CHAIN PRACTICES: A CASE STUDY OF WANKAN VILLAGE GROCERIES
+
+**Author:** Maina Bonface Ndungu  
+**Context:** Zetech University, School of Business and Economics  
+**Date:** October 2024
+
+## 1. Introduction & Background
+Kenya’s rural economy is heavily dependent on agriculture, contributing 33% directly and 27% indirectly to the GDP. Despite this, 46% of the population lives on less than 1 USD a day, and 36.5% are food insecure. This research examines Wankan Village (Kimbo, Ruiru) to identify why there is a disconnect between professional knowledge and actual performance in agricultural supply chains.
+
+## 2. Problem Statement
+Ideal agri-supply chain practices—Reduced Costs, Improved Quality, Efficient Resource Utilization, Strategic Relationships, and Reduced Time to Market—are rarely met in the Kenyan context. 
+
+### Key Performance Gaps Identified:
+- **Increased Cost of Production:** Fertilizer prices rose from KES 2,600 to KES 6,000 in four years despite subsidies.
+- **Decreased Production:** Mixed performance in 2022 saw declines in maize, wheat, and tea outputs.
+- **Haphazard Resource Allocation:** Diminishing land parcels due to residential construction and delayed distribution of inputs.
+
+## 3. Theoretical Frameworks Applied
+- **Malthusian Theory:** Population growth outstripping arithmetic food supply growth.
+- **Political Development:** Modernization vs. Dependency theories regarding government infrastructure.
+- **Self-Efficacy:** Albert Bandura's theory on the lack of belief/drive for innovation among management.
+- **Milankovitch Theory:** The role of natural orbital cycles in climate-driven agricultural shocks.
+
+## 4. Key Findings from Wankan Village (100% Response Rate)
+- **Technology (High Impact):** 99% of surveyed vendors utilize some form of technology, leading to 80% efficiency gains.
+- **Climate (Critical Constraint):** Climate change is seen as an independent, largely unpredictable factor that drastically disrupts harvests.
+- **Government (Mixed):** 55% perceived positive improvements (roads), but significant concerns exist regarding high taxation on inputs.
+- **Population (Disruptive):** Rapid growth has led to mismatched supply and demand, fueling food insecurity.
+
+## 5. Statistical Conclusions (ANOVA & Chi-Square)
+- **Technology & Knowledge:** Statistically significant relationship with performance. Poor adoption results in disorganized chains.
+- **Climate & Population:** Identified as the most significant, yet independent, influences. They are natural constraints requiring adaptive resilience rather than direct control.
+
+## 6. Strategic Recommendations
+1. **Data-Driven Tech:** Tech development must prioritize feasibility studies and actual farmer preferences before rollout.
+2. **Bottom-Up Innovation:** Knowledge should flow from frontline workers (farmers) to management, rather than top-down.
+3. **Sustainability Integration:** Mitigate climate risks through efficient irrigation and renewable energy.
+4. **Fair Budgeting:** Government funds should be distributed proportionally to the revenue generated by specific agricultural sectors.
+    `
+  },
   // --- SOCIAL AGRICULTURE (SA) ---
+  {
+    id: 'DS-SA-039',
+    name: 'SI-D Theory: Conceptual Exploration',
+    thrust: 'SA',
+    domain: 'Sociological & Anthropological',
+    category: 'General',
+    region: 'Global',
+    type: 'Conceptual Framework',
+    size: '4.2 MB',
+    date: 'May 15, 2024',
+    access: 'Public',
+    content: `
+# Social Influenza Disease (SI-D): A Conceptual and Socio-Psychological Exploration
+
+## 1. Introduction
+Social Influenza Disease is a conceptual framework describing the rapid spread of harmful social beliefs, psychological stressors, and inherited ideological conflicts within human societies. Unlike biological influenza, it originates not from pathogens but from social interactions, cultural memory, communication patterns, and belief systems. 
+
+## 2. Mechanism of Transmission
+### 2.1 Language as the Primary Vector
+Language—spoken words, narratives, and symbols—is the main carrier of social influenza. It can activate fear responses, reinforce prejudice, and normalize hostility. Repeated exposure to ambiguous or fear-based language can reprogram neural pathways, influencing cognition and decision-making.
+
+### 2.2 Psychological and Epigenetic Influence
+While social influenza does not alter DNA, chronic psychological stress influences epigenetic expression, affecting stress hormone regulation and immune system responsiveness. Prolonged exposure to social tension thus creates biological vulnerability.
+
+## 3. Incubation Zones
+The family serves as the primary incubation zone. Conflicting ideologies within families generate emotional fragmentation, increasing susceptibility to external manipulation. Unresolved familial tension often expands outward, influencing community disputes and political polarization.
+
+## 4. Symptoms of SI-D
+### 4.1 Societal-Level
+- Social disorganization and breakdown of trust.
+- Tribalism, discrimination, and religious hostility.
+- Resistance to education and rejection of innovation.
+
+### 4.2 Individual-Level
+- Chronic anxiety, depression, and identity confusion.
+- Hypertension and immune dysfunction linked to prolonged stress.
+- Breakdown of intergenerational bonds.
+
+## 5. Conclusion
+SI-D provides a lens to understand how narratives shape societies as profoundly as pathogens shape bodies. Prevention requires conscious communication, critical thinking, and collective healing of historical trauma.
+    `
+  },
+  {
+    id: 'DS-SA-040',
+    name: 'National SI-D Policy & Diagnostic Toolkit',
+    thrust: 'SA',
+    domain: 'Civic & Governmental',
+    category: 'General',
+    region: 'National',
+    type: 'Policy Toolkit',
+    size: '5.8 MB',
+    date: 'May 18, 2024',
+    access: 'Public',
+    content: `
+# National SI-D Policy & Implementation Toolkit
+
+## I. Executive Summary
+This toolkit provides governments and organizations with actionable models to diagnose and intervene in the spread of Social Influenza Disease (SI-D). It emphasizes the creation of "Social Immunity" as critical national infrastructure.
+
+## II. Diagnostic Framework
+### A. Early Warning Indicators
+- Polarized language in media and family units.
+- Historical narratives used to justify exclusion.
+- Rising collective fear without identifiable causes.
+
+### B. Chronic Indicators
+- Persistent underdevelopment and innovation resistance.
+- High prevalence of stress-related physical diseases.
+- Weakening of institutional trust.
+
+## III. Social Immunity Model (SIM)
+Just as vaccines protect biologically, social immunity protects the body politic through:
+- **Education:** Critical filtering of incoming narratives.
+- **Emotional Literacy:** Regulation of collective stress.
+- **Ethical Communication:** Reducing the transmission of toxic language.
+- **Reconciliation:** Healing intergenerational trauma.
+
+## IV. Intervention Strategy
+### 1. Primary: Family-Level
+- Programs for intergenerational dialogue.
+- Parenting education focusing on emotional modeling.
+### 2. Secondary: Community-Level
+- Media literacy campaigns.
+- Storytelling correction forums led by trusted cultural leaders.
+### 3. Tertiary: Institutional-Level
+- Curricular reform in schools (Ethics, Logic, EQ).
+- Health system integration for stress screening.
+    `
+  },
+  {
+    id: 'DS-SA-041',
+    name: 'Integrated Sustainability: SI-D × EnvirosAgro',
+    thrust: 'SA',
+    domain: 'Philosophy & Education',
+    category: 'General',
+    region: 'Global',
+    type: 'Integrated Model',
+    size: '3.5 MB',
+    date: 'May 20, 2024',
+    access: 'Public',
+    content: `
+# SI-D × EnvirosAgro Integrated Sustainability Framework
+
+## 1. The Rationale
+Sustainability does not fail first in the soil; it fails first in social systems. Where Social Influenza Disease (SI-D) exists, agricultural initiatives fail due to distrust, innovation resistance, and fragmented cooperation.
+
+## 2. Integration Model
+EnvirosAgro provides the **Environmental & Technical Structure**, while SI-D mitigation provides the **Social Immunity** required for that structure to function.
+
+| System | Role | Failure with SI-D |
+|--------|------|-----------------|
+| Social | Trust & Knowledge Flow | Conflict & Fragmentation |
+| Agricultural | Production & Efficiency | Low Adoption & Misuse |
+| Environmental | Resource Stewardship | Overexploitation |
+
+## 3. How SI-D Undermines Agriculture
+- **Knowledge Breakdown:** Farmers reject extension services due to ideological mistrust.
+- **Cooperative Failure:** Tribalism and family conflict lead to the collapse of shared resources.
+- **Stress Cycles:** Chronic social stress results in poor farm decision-making and neglect of soil health.
+
+## 4. Strategic Insights
+Nature establishes the boundaries of sustainability, but the human social state determines if those boundaries are respected. SI-D is the "hidden pest" of agriculture—consuming cooperation and weakening resilience long before crops fail.
+
+## 5. Conclusion
+Integrating SI-D mitigation into the EnvirosAgro framework transforms sustainability from a technical goal into a societal state. Healthy societies produce healthy farms.
+    `
+  },
   {
     id: 'DS-SA-001',
     name: 'Historical Farming Patterns in Mesopotamia',

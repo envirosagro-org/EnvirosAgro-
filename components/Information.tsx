@@ -1,8 +1,11 @@
-
 import React, { useState } from 'react';
-import { Target, Lightbulb, Heart, ShieldCheck, Scale, FileText, Lock, Globe, ChevronDown, HelpCircle, Eye, RefreshCw, Users, Smile, Gavel, Leaf, MapPin, ExternalLink } from 'lucide-react';
+import { Target, Lightbulb, Heart, ShieldCheck, Scale, FileText, Lock, Globe, ChevronDown, HelpCircle, Eye, RefreshCw, Users, Smile, Gavel, Leaf, MapPin, ExternalLink, AlertTriangle, Zap } from 'lucide-react';
 
 const FAQS = [
+  {
+    question: "What is the difference between Sustainable Integrated Development and SI-D?",
+    answer: "Sustainable Integrated Development is our overarching organizational strategy to harmonize all five agricultural thrusts for global resilience. Social Influenza Disease (SI-D), however, is a specific socio-psychological framework within the Social Agriculture thrust used to identify and treat harmful narratives and fractures that block development. One is the goal; the other is a primary obstacle we diagnose."
+  },
   {
     question: "What is the EnvirosAgro Sustainability Framework?",
     answer: "It is a holistic model organizing agricultural development into five interconnected thrusts: Social (SA), Environmental (EA), Health (HA), Technical (TA), and Industrial (IA). This framework ensures that farming practices are not just productive but also socially equitable, environmentally regenerative, and economically scalable."
@@ -14,10 +17,6 @@ const FAQS = [
   {
     question: "What is an ESIN and why do I need one?",
     answer: "ESIN stands for EnvirosAgro Social Identification Number. It is a unique digital identifier assigned to registered farmers, groups, and societies. It serves as your 'sustainability passport,' allowing you to track your impact, access financial grants, and verify the authenticity of your produce in the supply chain."
-  },
-  {
-    question: "Is membership open to individual farmers?",
-    answer: "Yes! While we encourage group formation for economies of scale, individual farmers, researchers, and industrial partners are all welcome to join the network. You can register through our Community page to get started."
   },
   {
     question: "How does EnvirosAgro protect my data?",
@@ -62,6 +61,40 @@ export const Information: React.FC = () => {
             <p className="text-xl text-earth-600 leading-relaxed italic">
                "To have socioeconomic and healthy future for agricultural community."
             </p>
+         </div>
+      </div>
+
+      {/* Concept Distinction Section */}
+      <div className="mb-20">
+         <div className="bg-white border-2 border-agro-100 rounded-[3rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-8 opacity-5">
+                <AlertTriangle size={200} />
+            </div>
+            <div className="relative z-10">
+                <h3 className="text-2xl font-serif font-bold text-agro-900 mb-8 flex items-center gap-3">
+                   <Zap className="text-agro-600" /> Key Framework Distinctions
+                </h3>
+                <div className="grid md:grid-cols-2 gap-10">
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 px-3 py-1 bg-agro-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest w-fit">
+                            Strategic Framework
+                        </div>
+                        <h4 className="text-xl font-bold text-earth-900">Sustainable Integrated Development</h4>
+                        <p className="text-sm text-earth-600 leading-relaxed">
+                            This is our <strong>overarching organizational model</strong>. It focuses on the horizontal integration of technology, society, and nature to build long-term stability. Measured by the Sustainable Time Constant m(t).
+                        </p>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2 px-3 py-1 bg-red-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest w-fit">
+                            Diagnostic Framework
+                        </div>
+                        <h4 className="text-xl font-bold text-earth-900">Social Influenza Disease (SI-D)</h4>
+                        <p className="text-sm text-earth-600 leading-relaxed">
+                            A specific <strong>socio-psychological framework</strong> within the Social Agriculture thrust. It treats societal fractures as "infections"—diagnosing how harmful narratives and stressors prevent integrated growth.
+                        </p>
+                    </div>
+                </div>
+            </div>
          </div>
       </div>
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { User } from '../types';
 import { 
@@ -131,8 +130,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
                    ESIN Linked
                 </span>
              </div>
-             <div className="text-3xl font-serif font-bold text-amber-800 dark:text-amber-200 mb-1">250.00 TKZ</div>
-             <p className="text-xs text-amber-600 dark:text-amber-400 mb-4">≈ $250.00 USD</p>
+             <div className="text-3xl font-serif font-bold text-amber-800 dark:text-amber-200 mb-1">{user.eacBalance || 0} EAC</div>
+             <p className="text-xs text-amber-600 dark:text-amber-400 mb-4">≈ ${((user.eacBalance || 0) * 0.1).toFixed(2)} USD</p>
              
              <div className="space-y-2">
                 <div className="flex justify-between text-xs text-amber-800 dark:text-amber-300 border-b border-amber-200 dark:border-amber-800/50 pb-1">

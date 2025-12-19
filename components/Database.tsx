@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Database as DbIcon, Search, Download, FileText, Globe, Filter, ChevronRight, Droplets, Wind, Sprout, Cat, UploadCloud, X, ClipboardList, FileSpreadsheet, CheckCircle2, Plus, Calculator, BarChart3, Activity, Lock, Edit } from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts';
@@ -7,6 +6,7 @@ import { User } from '../types';
 
 interface DatabaseProps {
     user?: User | null;
+    onAwardEac?: (amount: number) => void;
 }
 
 // Soil Comparison Data
@@ -18,7 +18,7 @@ const SOIL_TYPES = [
     { name: 'Peat', ph: 4.5, drainage: 10, nutrient: 50, aeration: 20, organic: 100 },
 ];
 
-export const Database: React.FC<DatabaseProps> = ({ user }) => {
+export const Database: React.FC<DatabaseProps> = ({ user, onAwardEac }) => {
   const [activeThrustId, setActiveThrustId] = useState('SA');
   const [activeResourceType, setActiveResourceType] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -108,6 +108,12 @@ export const Database: React.FC<DatabaseProps> = ({ user }) => {
           setIsSubmitting(false);
           setShowContributeModal(false);
           setUploadedFile(null);
+          
+          // Award EAC globally
+          if (onAwardEac) {
+              onAwardEac(50);
+          }
+          
           alert(`Thank you! Your dataset has been submitted. Calculated Sustainability Score (m): ${sustainScore || 'Pending Review'}\nYou earned 50 EAC for this contribution!`);
           setSustainScore(null);
       }, 1500);

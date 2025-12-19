@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Gamepad2, Glasses, CheckCircle, Lock, Play, RotateCcw, Info, Battery, Wifi, MousePointer2, Box, Loader2, Move, Hand, Menu } from 'lucide-react';
 
@@ -49,13 +50,44 @@ export const SmartFarmVR: React.FC = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  /**
+   * Triggers subtle haptic feedback via the Web Vibration API.
+   * @param duration Milliseconds for the vibration burst or a vibration pattern array.
+   */
+  // Fix: Changed type of duration from number to number | number[] to support vibration patterns.
+  const triggerHaptic = (duration: number | number[] = 10) => {
+    if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
+      window.navigator.vibrate(duration);
+    }
+  };
+
   const handleEnterSimulation = () => {
+    triggerHaptic(40); // Stronger burst for entering simulation
     setIsLoading(true);
     // Simulate asset loading delay
     setTimeout(() => {
         setIsLoading(false);
         setIsSimulating(true);
+        // Fix: This call is now valid as triggerHaptic accepts number[].
+        triggerHaptic([10, 30, 10]); // Multi-burst signal for "Ready"
     }, 2500);
+  };
+
+  const handleModuleSelect = (module: typeof VR_MODULES[0]) => {
+    if (module.status !== 'Locked' && !isSimulating && !isLoading) {
+        triggerHaptic(15); // Light click feedback
+        setActiveModule(module);
+    }
+  };
+
+  const handleExitSimulation = () => {
+    triggerHaptic(20);
+    setIsSimulating(false);
+  };
+
+  const handleReset = () => {
+    // Fix: This call is now valid as triggerHaptic accepts number[].
+    triggerHaptic([10, 10, 10]); // Rapid triple tap for reset
   };
 
   return (
@@ -182,14 +214,14 @@ export const SmartFarmVR: React.FC = () => {
                         <div className="bg-blue-500 h-2 rounded-full" style={{width: '40%'}}></div>
                      </div>
                      <div className="flex justify-center gap-4">
-                        <button className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        <button onClick={handleReset} className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors">
                            <RotateCcw size={14} className="inline mr-1" /> Reset
                         </button>
-                        <button className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors">
+                        <button onClick={() => triggerHaptic(5)} className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold transition-colors">
                            <Info size={14} className="inline mr-1" /> Help
                         </button>
                         <button 
-                           onClick={() => setIsSimulating(false)}
+                           onClick={handleExitSimulation}
                            className="bg-red-500/20 hover:bg-red-500/40 text-red-300 px-4 py-2 rounded-lg text-xs font-bold transition-colors border border-red-500/30"
                         >
                            Exit
@@ -210,7 +242,7 @@ export const SmartFarmVR: React.FC = () => {
          {VR_MODULES.map((module) => (
             <div 
                key={module.id} 
-               onClick={() => module.status !== 'Locked' && !isSimulating && !isLoading && setActiveModule(module)}
+               onClick={() => handleModuleSelect(module)}
                className={`bg-white p-4 rounded-2xl shadow-sm border transition-all cursor-pointer group ${
                   activeModule.id === module.id 
                   ? 'border-blue-500 ring-2 ring-blue-100' 

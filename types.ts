@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export enum View {
@@ -42,6 +41,8 @@ export enum View {
   INTRANET_DASHBOARD = 'INTRANET_DASHBOARD',
   EXTRANET_DASHBOARD = 'EXTRANET_DASHBOARD',
   COMMUNITY_GUIDELINES = 'COMMUNITY_GUIDELINES',
+  PRIVACY_POLICY = 'PRIVACY_POLICY',
+  SUPPLY_CHAIN_AUDIT = 'SUPPLY_CHAIN_AUDIT',
 }
 
 export interface NavItem {
@@ -58,6 +59,7 @@ export interface Article {
   date: string;
   imageUrl: string;
   category: 'Research' | 'Practice' | 'Technology';
+  fullContent?: string; // Support for long-form text
 }
 
 export interface ChatMessage {
@@ -75,4 +77,5 @@ export interface User {
   bio?: string;
   avatar?: string;
   joinedDate?: string;
+  eacBalance?: number;
 }

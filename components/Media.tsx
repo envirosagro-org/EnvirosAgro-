@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Users, Leaf, ShieldPlus, Cpu, Factory, PlayCircle, Newspaper, Radio, Cast, 
   Megaphone, Share2, Link2, Globe, CheckCircle2, MessageCircle, Video, Glasses, 
   Monitor, Film, Bell, Heart, BarChart2, Calendar, TrendingUp, Zap, Clock, 
-  ArrowRight, Search, Play, Volume2, Mic2, Info, BookOpen
+  ArrowRight, Search, Play, Volume2, Mic2, Info, BookOpen, X, Pause, Settings,
+  Activity, Headphones, Music, Loader2
 } from 'lucide-react';
 import { View } from '../types';
 
@@ -83,6 +84,25 @@ interface MediaProps {
 }
 
 export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
+  const [showLiveRadio, setShowLiveRadio] = useState(false);
+  const [isRadioPlaying, setIsRadioPlaying] = useState(false);
+  const [volume, setVolume] = useState(80);
+  const [radioStation, setRadioStation] = useState("Voice of Earth (Global)");
+  const [visualizerData, setVisualizerData] = useState<number[]>(new Array(40).fill(2));
+
+  // Visualizer Animation
+  useEffect(() => {
+    let interval: any;
+    if (showLiveRadio && isRadioPlaying) {
+      interval = setInterval(() => {
+        setVisualizerData(prev => prev.map(() => Math.floor(Math.random() * 20) + 5));
+      }, 100);
+    } else {
+      setVisualizerData(new Array(40).fill(2));
+    }
+    return () => clearInterval(interval);
+  }, [showLiveRadio, isRadioPlaying]);
+
   const handleShare = (title: string, text: string) => {
     if (navigator.share) {
       const url = window.location.href.startsWith('http') ? window.location.href : 'https://envirosagro.com';
@@ -92,6 +112,12 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
     } else {
       alert(`Copied to clipboard: ${title} - ${text}`);
     }
+  };
+
+  const handleListenLive = () => {
+    setShowLiveRadio(true);
+    // Auto-play simulation
+    setTimeout(() => setIsRadioPlaying(true), 1000);
   };
 
   return (
@@ -164,7 +190,7 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
                 <div className="bg-agro-900 p-8 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden">
                     <Mic2 size={120} className="absolute top-0 right-0 p-8 opacity-10" />
                     <h3 className="text-2xl font-serif font-bold mb-2">Voice of Earth</h3>
-                    <button onClick={() => onNavigate && onNavigate(View.PODCAST)} className="w-full mt-4 bg-white text-agro-900 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 hover:bg-agro-50 transition-colors">Listen Live</button>
+                    <button onClick={handleListenLive} className="w-full mt-4 bg-white text-agro-900 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 hover:bg-agro-50 transition-colors">Listen Live</button>
                 </div>
             </div>
         </div>
@@ -204,14 +230,148 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
                     <div className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-agro-600 mb-4"><Radio size={16} className="animate-pulse" /> Live Radio</div>
                     <h3 className="text-4xl font-serif font-bold text-earth-900 dark:text-white mb-6">Agricultural Airwaves</h3>
                     <div className="flex flex-wrap gap-4">
-                        <button onClick={() => alert("Connecting to live audio stream...")} className="bg-agro-600 hover:bg-agro-700 text-white px-10 py-4 rounded-2xl font-black flex items-center gap-3 transition-all shadow-xl shadow-agro-600/30"><Volume2 size={24} /> Listen Live</button>
+                        <button onClick={handleListenLive} className="bg-agro-600 hover:bg-agro-700 text-white px-10 py-4 rounded-2xl font-black flex items-center gap-3 transition-all shadow-xl shadow-agro-600/30 active:scale-95"><Volume2 size={24} /> Listen Live</button>
                         <button onClick={() => onNavigate && onNavigate(View.WEBINAR)} className="bg-earth-50 dark:bg-earth-800 text-earth-700 dark:text-earth-300 px-8 py-4 rounded-2xl font-bold flex items-center gap-2 transition-all"><Clock size={20} /> Schedule</button>
                     </div>
                 </div>
-                <div className="lg:w-1/2 w-full"><div className="bg-earth-50 dark:bg-earth-800/50 p-8 rounded-[2rem] border border-earth-100"><div className="flex gap-6 items-center mb-8"><div className="w-20 h-20 bg-agro-600 rounded-3xl flex items-center justify-center text-white shadow-lg"><Mic2 size={40} /></div><div><h4 className="text-xl font-bold text-earth-900 dark:text-white">Regen-Ag 101</h4><p className="text-earth-500 dark:text-earth-400">with Host Samuel O.</p></div></div></div></div>
+                <div className="lg:w-1/2 w-full">
+                    <div className="bg-earth-50 dark:bg-earth-800/50 p-8 rounded-[2rem] border border-earth-100 group cursor-pointer" onClick={handleListenLive}>
+                        <div className="flex gap-6 items-center mb-8">
+                            <div className="w-20 h-20 bg-agro-600 rounded-3xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform"><Mic2 size={40} /></div>
+                            <div>
+                                <h4 className="text-xl font-bold text-earth-900 dark:text-white">Regen-Ag 101</h4>
+                                <p className="text-earth-500 dark:text-earth-400">with Host Samuel O.</p>
+                            </div>
+                        </div>
+                        <div className="flex gap-1 items-end h-6 w-full px-2">
+                             {visualizerData.slice(0, 15).map((h, i) => (
+                                <div key={i} className="flex-1 bg-agro-200 dark:bg-agro-900 rounded-t-sm" style={{ height: `${h}%` }}></div>
+                             ))}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
       </div>
+
+      {/* LIVE RADIO PLAYER MODAL */}
+      {showLiveRadio && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl animate-in fade-in duration-300">
+              <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[4rem] shadow-2xl border border-white/10 overflow-hidden animate-in zoom-in-95 flex flex-col">
+                  {/* Studio Header */}
+                  <div className="bg-agro-900 p-8 text-white relative overflow-hidden flex justify-between items-center">
+                      <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12"><Music size={150} /></div>
+                      <div className="relative z-10 flex items-center gap-5">
+                          <div className="bg-red-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 animate-pulse shadow-lg shadow-red-600/30">
+                              <span className="w-1.5 h-1.5 bg-white rounded-full"></span> LIVE STUDIO
+                          </div>
+                          <div>
+                            <h3 className="text-2xl font-serif font-bold tracking-tight">{radioStation}</h3>
+                            <p className="text-agro-300 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Unified Frequency 99.8 MHz</p>
+                          </div>
+                      </div>
+                      <button 
+                        onClick={() => setShowLiveRadio(false)} 
+                        className="relative z-10 p-2 hover:bg-white/10 rounded-full transition-all group"
+                      >
+                          <X size={28} className="group-hover:rotate-90 transition-transform" />
+                      </button>
+                  </div>
+
+                  <div className="p-12 flex flex-col items-center">
+                      {/* Visualizer Area */}
+                      <div className="w-full h-48 bg-slate-50 dark:bg-black/40 rounded-[2.5rem] border border-earth-100 dark:border-white/5 p-8 mb-12 flex items-center justify-center gap-1.5 relative overflow-hidden">
+                          {isRadioPlaying ? (
+                            <>
+                                {visualizerData.map((h, i) => (
+                                    <div 
+                                        key={i} 
+                                        className="w-2 bg-agro-500 rounded-full transition-all duration-100 shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+                                        style={{ height: `${h * 4}%`, opacity: 0.3 + (h/25) }}
+                                    ></div>
+                                ))}
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-50 dark:from-slate-900 via-transparent to-transparent pointer-events-none"></div>
+                            </>
+                          ) : (
+                              <div className="flex flex-col items-center gap-4 animate-in fade-in">
+                                  <Loader2 size={32} className="text-agro-600 animate-spin" />
+                                  <p className="text-[10px] font-black text-earth-400 uppercase tracking-widest">Buffering Global Feed...</p>
+                              </div>
+                          )}
+                      </div>
+
+                      {/* Metadata */}
+                      <div className="text-center mb-12">
+                          <h4 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Sustainable Integrated Development</h4>
+                          <p className="text-agro-600 dark:text-agro-400 font-black text-xs uppercase tracking-widest mb-6">Current Talk: Soil Resilience Engine v4.0</p>
+                          <div className="flex items-center justify-center gap-10">
+                              <div className="flex flex-col items-center">
+                                  <span className="text-[9px] font-black text-earth-400 uppercase tracking-widest mb-1">Host</span>
+                                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Samuel Omondi</span>
+                              </div>
+                              <div className="h-6 w-px bg-earth-200 dark:bg-white/10"></div>
+                              <div className="flex flex-col items-center">
+                                  <span className="text-[9px] font-black text-earth-400 uppercase tracking-widest mb-1">Location</span>
+                                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Kiriaini, Kenya</span>
+                              </div>
+                              <div className="h-6 w-px bg-earth-200 dark:bg-white/10"></div>
+                              <div className="flex flex-col items-center">
+                                  <span className="text-[9px] font-black text-earth-400 uppercase tracking-widest mb-1">Listeners</span>
+                                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">1,242 Live</span>
+                              </div>
+                          </div>
+                      </div>
+
+                      {/* Main Controls */}
+                      <div className="flex flex-col items-center gap-10 w-full">
+                          <div className="flex items-center gap-12">
+                              <button className="text-earth-300 hover:text-agro-600 transition-colors"><SkipBack size={32} /></button>
+                              <button 
+                                  onClick={() => setIsRadioPlaying(!isRadioPlaying)}
+                                  className={`w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-105 active:scale-95 ${isRadioPlaying ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-agro-600 text-white shadow-agro-600/30'}`}
+                              >
+                                  {isRadioPlaying ? <Pause size={40} fill="currentColor" /> : <Play size={40} fill="currentColor" className="ml-2" />}
+                              </button>
+                              <button className="text-earth-300 hover:text-agro-600 transition-colors"><SkipForward size={32} /></button>
+                          </div>
+
+                          <div className="w-full max-w-xs flex items-center gap-4">
+                              <Volume2 size={20} className="text-earth-400" />
+                              <div className="flex-1 h-1.5 bg-earth-100 dark:bg-white/10 rounded-full overflow-hidden group cursor-pointer">
+                                  <div className="h-full bg-agro-500 shadow-[0_0_10px_#22c55e]" style={{ width: `${volume}%` }}></div>
+                              </div>
+                              <span className="text-[10px] font-black text-earth-400 font-mono">{volume}%</span>
+                          </div>
+                      </div>
+                  </div>
+
+                  {/* Footer Stats */}
+                  <div className="p-8 bg-earth-50 dark:bg-earth-950/50 border-t border-earth-100 dark:border-white/5 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                          <Headphones size={20} className="text-blue-500" />
+                          <p className="text-[9px] text-earth-400 dark:text-earth-500 font-black uppercase tracking-[0.4em]">High Fidelity Neural Stream Optimized</p>
+                      </div>
+                      <div className="flex gap-4">
+                          <button className="text-[9px] font-black text-agro-600 uppercase tracking-widest hover:underline">Stream History</button>
+                          <button className="text-[9px] font-black text-agro-600 uppercase tracking-widest hover:underline">Full Schedule</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      )}
     </div>
   );
 };
+
+// Helper Icons
+const Volume2Icon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+);
+
+const SkipBack = ({ size, className }: { size?: number, className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
+);
+
+const SkipForward = ({ size, className }: { size?: number, className?: string }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+);

@@ -1,16 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, Loader2, Sparkles, MessageSquare, ArrowRight, Minimize2, Maximize2, Zap, BrainCircuit } from 'lucide-react';
+import { Bot, X, Send, Loader2, Sparkles, MessageSquare, ArrowRight, Minimize2, Maximize2, Zap, BrainCircuit, ExternalLink } from 'lucide-react';
 import { createAgroChat, sendMessageStream } from '../services/gemini';
-import { ChatMessage } from '../types';
+import { ChatMessage, View } from '../types';
 import { GenerateContentResponse, Chat } from "@google/genai";
 
-export const AiConsultantFloating: React.FC = () => {
+interface AiConsultantFloatingProps {
+    onOpenFull?: () => void;
+}
+
+export const AiConsultantFloating: React.FC<AiConsultantFloatingProps> = ({ onOpenFull }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'model',
-      text: "Greetings! I am your EnvirosAgro Digital Consultant. How can I assist your sustainable journey today?",
+      text: "Hello! I am your EnvirosAgro AI Assistant. How can I help you advance your sustainable farming goals today?",
       timestamp: new Date(),
     }
   ]);
@@ -63,7 +67,7 @@ export const AiConsultantFloating: React.FC = () => {
       console.error("Consultant Error:", error);
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: "I encountered a synchronization error with the network. Please try again in a moment.", 
+        text: "I encountered a synchronization error. Please try again in a moment.", 
         timestamp: new Date() 
       }]);
     } finally {
@@ -87,7 +91,7 @@ export const AiConsultantFloating: React.FC = () => {
         <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
         <BrainCircuit size={28} className="group-hover:rotate-12 transition-transform" />
         <span className="absolute right-full mr-4 bg-white text-agro-900 px-4 py-2 rounded-xl text-xs font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-earth-100">
-          Agro Consultant Online
+          AI Assistant Online
         </span>
       </button>
     );
@@ -104,11 +108,18 @@ export const AiConsultantFloating: React.FC = () => {
               <Sparkles size={18} fill="white" />
             </div>
             <div>
-              <h3 className="font-bold text-sm leading-tight">AI Consultant</h3>
+              <h3 className="font-bold text-sm leading-tight">AI Assistant</h3>
               <p className="text-[10px] text-agro-400 font-bold uppercase tracking-widest">Sustainability Expert</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <button 
+                onClick={() => { setIsOpen(false); onOpenFull?.(); }}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                title="Open Full Interface"
+            >
+              <ExternalLink size={16} />
+            </button>
             <button onClick={() => setIsMinimized(!isMinimized)} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
               {isMinimized ? <Maximize2 size={16} /> : <Minimize2 size={16} />}
             </button>
@@ -136,8 +147,8 @@ export const AiConsultantFloating: React.FC = () => {
               ))}
               {messages.length < 3 && !isLoading && (
                 <div className="grid gap-2 pt-4">
-                  <p className="text-[10px] font-black text-earth-400 uppercase tracking-widest px-2">Suggestions</p>
-                  {["Analyze my soil health", "Explain C(a) coefficient", "Sustainable pest control"].map((hint, i) => (
+                  <p className="text-[10px] font-black text-earth-400 uppercase tracking-widest px-2">Assistant Topics</p>
+                  {["My soil resilience score", "Sustainable irrigation", "IA Thrust overview"].map((hint, i) => (
                     <button 
                       key={i} 
                       onClick={() => handleSend(hint)}

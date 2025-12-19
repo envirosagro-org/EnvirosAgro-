@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import { ShoppingCart, Star, Filter, Users, Leaf, ShieldPlus, Cpu, Factory, Search, Tag } from 'lucide-react';
+import { SafeImage } from './SafeImage';
 
 const THRUST_FILTERS = [
   { id: 'ALL', title: 'All Products', icon: null },
@@ -125,9 +125,10 @@ export const Products: React.FC = () => {
           filteredProducts.map((product) => (
             <div key={product.id} className="bg-white dark:bg-earth-900 rounded-2xl shadow-sm border border-earth-100 dark:border-earth-800 overflow-hidden group hover:shadow-xl transition-all flex flex-col h-full">
               <div className="h-56 overflow-hidden relative">
-                <img 
+                <SafeImage 
                   src={product.image} 
                   alt={product.name} 
+                  containerClassName="w-full h-full"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute top-3 left-3">
@@ -147,7 +148,7 @@ export const Products: React.FC = () => {
                     <Star size={12} fill="currentColor" /> {product.rating}
                   </span>
                 </div>
-                <p className="text-earth-500 dark:text-earth-400 text-sm mb-6 line-clamp-2 leading-relaxed">
+                <p className="text-earth-600 dark:text-earth-400 text-sm mb-6 line-clamp-2 leading-relaxed">
                     {product.description}
                 </p>
                 <div className="mt-auto pt-4 border-t border-earth-50 dark:border-earth-800 flex items-center justify-between">

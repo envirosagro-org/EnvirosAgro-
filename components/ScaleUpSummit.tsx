@@ -1,10 +1,209 @@
-
-import React, { useState } from 'react';
-import { Calendar, Users, Video, Mic, MessageSquare, Star, ArrowRight, X, Download, Globe, ChevronRight } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { 
+  Calendar, Users, Video, Mic, MessageSquare, Star, ArrowRight, X, 
+  Download, Globe, ChevronRight, Volume2, Settings, Maximize, Send, 
+  Activity, Zap, ShieldCheck, Clock, Bot, User, Loader2, Sparkles
+} from 'lucide-react';
+import { createAgroChat, sendMessageStream } from '../services/gemini';
+import { ChatMessage, View } from '../types';
+import { GenerateContentResponse } from "@google/genai";
 
 export const ScaleUpSummit: React.FC = () => {
   const [showExpo, setShowExpo] = useState(false);
+  const [showLiveStream, setShowLiveStream] = useState(false);
   const [selectedSponsor, setSelectedSponsor] = useState<string | null>('AgriBank');
+  
+  // Rep Chat States
+  const [showRepChat, setShowRepChat] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [isRepTyping, setIsRepTyping] = useState(false);
+  const chatInstance = useRef<any>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, isRepTyping]);
+
+  const handleStartChat = () => {
+    const repName = selectedSponsor === 'AgriBank' ? 'Marcus' : 
+                    selectedSponsor === 'EcoFert' ? 'Sarah' : 
+                    selectedSponsor === 'LogiTech' ? 'Kevin' : 'Amani';
+    
+    setChatMessages([
+      {
+        role: 'model',
+        text: `Hello! I'm ${repName}, your dedicated representative from ${selectedSponsor}. Welcome to our virtual booth at the ScaleUp Summit. How can I help you optimize your industrial operations today?`,
+        timestamp: new Date()
+      }
+    ]);
+    setShowRepChat(true);
+    
+    // Initialize AI with brand-specific context
+    const ai = createAgroChat();
+    // Inject brand context as first message (hidden or implicit)
+    chatInstance.current = ai;
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim() || isRepTyping) return;
+
+    const userText = chatInput;
+    setChatInput('');
+    const userMsg: ChatMessage = { role: 'user', text: userText, timestamp: new Date() };
+    setChatMessages(prev => [...prev, userMsg]);
+    setIsRepTyping(true);
+
+    try {
+      if (!chatInstance.current) chatInstance.current = createAgroChat();
+      
+      const prompt = `[CONTEXT: You are acting as a corporate representative for ${selectedSponsor} at the ScaleUp Summit. Stay professional and focused on ${selectedSponsor}'s industrial ag solutions.] ${userText}`;
+      
+      const stream = await sendMessageStream(chatInstance.current, prompt);
+      let fullResponse = '';
+      
+      setChatMessages(prev => [...prev, { role: 'model', text: '', timestamp: new Date() }]);
+
+      for await (const chunk of stream) {
+        const response = chunk as GenerateContentResponse;
+        const text = response.text;
+        if (text) {
+          fullResponse += text;
+          setChatMessages(prev => {
+            const next = [...prev];
+            next[next.length - 1] = { ...next[next.length - 1], text: fullResponse };
+            return next;
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Rep Chat Error:", err);
+    } finally {
+      setIsRepTyping(false);
+    }
+  };
+
+  if (showLiveStream) {
+    return (
+      <div className="fixed inset-0 z-[120] bg-slate-950 flex flex-col animate-in fade-in duration-500">
+        {/* Summit Header Overlay */}
+        <div className="flex justify-between items-center bg-black/40 backdrop-blur-md p-6 border-b border-white/10 relative z-20">
+          <div className="flex items-center gap-6">
+            <div className="bg-red-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 animate-pulse shadow-[0_0_20px_rgba(220,38,38,0.4)]">
+              <span className="w-1.5 h-1.5 bg-white rounded-full"></span> LIVE BROADCAST
+            </div>
+            <div>
+              <h3 className="text-white font-bold text-xl leading-none mb-1">Keynote: The Future of Food Security</h3>
+              <p className="text-blue-400 text-[10px] font-black uppercase tracking-widest">Main Stage • ScaleUp Summit 2024</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-white/10 px-4 py-2 rounded-xl text-white text-[10px] font-black flex items-center gap-2 border border-white/10">
+              <Users size={14} className="text-blue-400" /> 2,450 STREAMING
+            </div>
+            <button 
+              onClick={() => setShowLiveStream(false)}
+              className="p-3 bg-white/5 hover:bg-white/10 text-white rounded-2xl transition-all border border-white/10 group"
+            >
+              <X size={24} className="group-hover:rotate-90 transition-transform" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+          {/* Main Cinematic Video Player */}
+          <div className="flex-1 bg-black relative overflow-hidden group">
+            <img 
+              src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?w=1600&auto=format&fit=crop&q=80" 
+              className="w-full h-full object-cover opacity-60"
+              alt="Live Conference"
+            />
+            
+            {/* Visual Overlays */}
+            <div className="absolute inset-0 p-8 flex flex-col justify-between pointer-events-none">
+              <div className="flex justify-end">
+                <div className="bg-black/40 backdrop-blur-md p-5 rounded-[2rem] border border-white/10 text-white flex flex-col items-center gap-2 animate-in slide-in-from-right-10">
+                  <div className="w-12 h-12 bg-blue-600/20 rounded-2xl flex items-center justify-center text-blue-400">
+                    <Activity size={24} className="animate-pulse" />
+                  </div>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-blue-300">Signal Integrity</span>
+                </div>
+              </div>
+
+              <div className="flex items-end justify-between pointer-events-auto">
+                <div className="bg-black/80 backdrop-blur-2xl p-6 rounded-[2.5rem] border border-white/10 w-full max-w-2xl flex items-center gap-8 shadow-2xl">
+                  <div className="flex items-center gap-4 border-r border-white/10 pr-8">
+                    <button className="text-white hover:text-blue-400 transition-colors"><Volume2 size={24} /></button>
+                    <button className="text-white hover:text-blue-400 transition-colors"><Settings size={20} /></button>
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-center mb-2">
+                       <span className="text-[8px] font-black text-blue-400 uppercase tracking-widest">Network Throughput</span>
+                       <span className="text-[8px] font-mono text-white/40">12.4 Mbps</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-full bg-blue-500 w-[70%] shadow-[0_0_10px_#3b82f6]"></div>
+                    </div>
+                  </div>
+                  <button className="text-white hover:text-blue-400 transition-colors"><Maximize size={24} /></button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Summit Social & Chat Panel */}
+          <div className="w-full lg:w-96 bg-slate-900 border-l border-white/10 flex flex-col shadow-2xl">
+            <div className="p-6 border-b border-white/10 bg-slate-800/50 flex justify-between items-center">
+              <h4 className="font-black text-xs text-white uppercase tracking-widest flex items-center gap-2">
+                <MessageSquare size={16} className="text-blue-400" /> Delegate Chat
+              </h4>
+              <span className="bg-blue-500/20 text-blue-400 text-[8px] font-black px-2 py-0.5 rounded uppercase border border-blue-500/30">Secure Channel</span>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+              {[
+                { user: "Director Mark", msg: "This session on supply chain digitisation is vital for the Q3 roadmap.", time: "10:42" },
+                { user: "Elena (EA)", msg: "Agreed. The m(t) constant alignment here is exactly what we discussed.", time: "10:44" },
+                { user: "Summit Bot", msg: "Live interpretation available in the settings menu.", time: "System", isSys: true },
+                { user: "Investor Hub", msg: "Will these slides be available for the Capital Exchange?", time: "10:45" }
+              ].map((chat, i) => (
+                <div key={i} className={`flex flex-col ${chat.isSys ? 'items-center' : 'items-start'}`}>
+                  {chat.isSys ? (
+                    <p className="text-[8px] font-black text-slate-500 uppercase tracking-[0.2em] bg-slate-800 px-4 py-1.5 rounded-full border border-white/5">{chat.msg}</p>
+                  ) : (
+                    <>
+                      <div className="flex justify-between w-full mb-1">
+                        <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">{chat.user}</span>
+                        <span className="text-[8px] font-bold text-slate-500 uppercase">{chat.time}</span>
+                      </div>
+                      <p className="text-xs text-slate-300 leading-relaxed bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5 hover:bg-white/10 transition-colors">{chat.msg}</p>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="p-6 border-t border-white/10 bg-slate-900">
+              <form onSubmit={(e) => e.preventDefault()} className="relative">
+                <input 
+                  type="text" 
+                  placeholder="Share your thoughts with delegates..." 
+                  className="w-full bg-black/40 border border-white/10 rounded-2xl pl-5 pr-14 py-4 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-4 focus:ring-blue-500/5 transition-all"
+                />
+                <button className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-blue-600 text-white rounded-xl shadow-lg shadow-blue-600/20 active:scale-90 transition-all hover:bg-blue-500">
+                  <Send size={18} />
+                </button>
+              </form>
+              <p className="text-[8px] text-slate-500 mt-3 text-center uppercase tracking-widest font-bold">Press enter to broadcast to Summit</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (showExpo) {
       return (
@@ -72,7 +271,10 @@ export const ScaleUpSummit: React.FC = () => {
                                   </div>
 
                                   <div className="mt-auto grid sm:grid-cols-2 gap-4">
-                                      <button className="bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-600/30 hover:-translate-y-1">
+                                      <button 
+                                        onClick={handleStartChat}
+                                        className="bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg hover:shadow-blue-600/30 hover:-translate-y-1"
+                                      >
                                           <MessageSquare size={20} /> Chat with Rep
                                       </button>
                                       <button className="bg-white/10 hover:bg-white/20 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all border border-white/10 hover:border-white/30">
@@ -86,6 +288,82 @@ export const ScaleUpSummit: React.FC = () => {
                       </div>
                   </div>
               </div>
+
+              {/* REP CHAT MODAL */}
+              {showRepChat && (
+                <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-xl animate-in fade-in duration-300">
+                    <div className="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[3rem] shadow-2xl overflow-hidden animate-in zoom-in-95 border border-white/10 flex flex-col h-[600px]">
+                        <div className="bg-blue-600 p-6 text-white flex justify-between items-center shrink-0">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center shadow-inner">
+                                    <Bot size={24} />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-lg leading-tight">{selectedSponsor} Rep</h3>
+                                    <p className="text-blue-200 text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                                        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span> Online Now
+                                    </p>
+                                </div>
+                            </div>
+                            <button 
+                                onClick={() => setShowRepChat(false)}
+                                className="p-2 hover:bg-white/10 rounded-xl transition-all"
+                            >
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-slate-50 dark:bg-slate-950/20">
+                            {chatMessages.map((msg, i) => (
+                                <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2`}>
+                                    <div className={`max-w-[85%] flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-sm border ${msg.role === 'user' ? 'bg-blue-100 text-blue-600 border-blue-200' : 'bg-white dark:bg-slate-800 text-slate-400 border-slate-200 dark:border-slate-700'}`}>
+                                            {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
+                                        </div>
+                                        <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-none border border-slate-100 dark:border-slate-700'}`}>
+                                            {msg.text}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            {isRepTyping && (
+                                <div className="flex justify-start animate-in fade-in">
+                                    <div className="flex gap-3">
+                                        <div className="w-8 h-8 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
+                                            <Loader2 size={14} className="animate-spin text-blue-600" />
+                                        </div>
+                                        <div className="bg-white dark:bg-slate-800 p-4 rounded-2xl rounded-tl-none border border-slate-100 dark:border-slate-700 flex gap-1">
+                                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce"></span>
+                                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce delay-150"></span>
+                                            <span className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-bounce delay-300"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={chatEndRef} />
+                        </div>
+
+                        <div className="p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-white/5">
+                            <form onSubmit={handleSendMessage} className="relative flex items-center gap-2">
+                                <input 
+                                    type="text" 
+                                    value={chatInput}
+                                    onChange={(e) => setChatInput(e.target.value)}
+                                    placeholder="Ask about our industrial solutions..."
+                                    className="flex-1 bg-slate-50 dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl pl-5 pr-12 py-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-500 transition-all"
+                                />
+                                <button 
+                                    type="submit"
+                                    disabled={!chatInput.trim() || isRepTyping}
+                                    className="p-3 bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-500 disabled:opacity-50 transition-all"
+                                >
+                                    <Send size={20} />
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              )}
           </div>
       );
   }
@@ -105,7 +383,7 @@ export const ScaleUpSummit: React.FC = () => {
 
       {/* Hero Stream Area */}
       <div className="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl mb-12 border-4 border-slate-800">
-         <div className="aspect-video bg-black relative group cursor-pointer">
+         <div className="aspect-video bg-black relative group cursor-pointer" onClick={() => setShowLiveStream(true)}>
              <img 
                src="https://images.unsplash.com/photo-1544531586-fde5298cdd40?w=1600&auto=format&fit=crop&q=80" 
                className="w-full h-full object-cover opacity-60 group-hover:opacity-50 transition-opacity"
@@ -117,7 +395,10 @@ export const ScaleUpSummit: React.FC = () => {
                         Live Now
                      </span>
                      <h1 className="text-4xl md:text-6xl font-bold text-white mb-8 drop-shadow-lg">Keynote: The Future of Food Security</h1>
-                     <button className="bg-white text-slate-900 font-bold py-4 px-10 rounded-full hover:bg-slate-100 transition-all flex items-center gap-3 mx-auto shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]">
+                     <button 
+                        onClick={(e) => { e.stopPropagation(); setShowLiveStream(true); }}
+                        className="bg-white text-slate-900 font-bold py-4 px-10 rounded-full hover:bg-slate-100 transition-all flex items-center gap-3 mx-auto shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.5)]"
+                     >
                         <Video size={24} className="text-slate-900" /> <span className="text-lg">Join Stream</span>
                      </button>
                  </div>
