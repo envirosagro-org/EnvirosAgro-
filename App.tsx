@@ -40,6 +40,7 @@ import { LiveHost } from './components/LiveHost';
 import { CommunityGuidelines } from './components/CommunityGuidelines';
 import { IntranetDashboard } from './components/IntranetDashboard';
 import { ExtranetDashboard } from './components/ExtranetDashboard';
+import { AiConsultantFloating } from './components/AiConsultantFloating';
 import { 
   Sprout, LayoutDashboard, BookOpen, MessageSquareText, Menu, X, 
   UserCircle, LogOut, ChevronDown, Info, ShoppingBag, Database as DbIcon, Users, Scale, Tag, FileText, Award, Layers, MonitorPlay, Truck, HeartHandshake, Handshake, Wallet, Fingerprint, Sun, Moon,
@@ -52,6 +53,7 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [globalSearchQuery, setGlobalSearchQuery] = useState('');
 
   useEffect(() => {
     if (isDarkMode) document.documentElement.classList.add('dark');
@@ -60,7 +62,12 @@ const App: React.FC = () => {
 
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
-  const handleNavClick = (view: View) => {
+  const handleNavClick = (view: View, searchQuery?: string) => {
+    if (searchQuery !== undefined) {
+      setGlobalSearchQuery(searchQuery);
+    } else {
+      setGlobalSearchQuery('');
+    }
     setCurrentView(view);
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
@@ -97,7 +104,7 @@ const App: React.FC = () => {
       case View.SERVICES: return <Services />;
       case View.DATABASE: return <Database user={user} />;
       case View.HUMAN_RESOURCE: return <HumanResource />;
-      case View.KNOWLEDGE: return <KnowledgeHub onNavigate={handleNavClick} />;
+      case View.KNOWLEDGE: return <KnowledgeHub onNavigate={handleNavClick} initialSearch={globalSearchQuery} />;
       case View.DASHBOARD: return <Dashboard onNavigate={handleNavClick} />;
       case View.AI_ADVISOR: return <AiAdvisor />;
       case View.ROADMAP_AI: return <RoadmapAI />;
@@ -352,6 +359,7 @@ const App: React.FC = () => {
             </div>
         </div>
       </footer>
+      <AiConsultantFloating />
     </div>
   );
 };

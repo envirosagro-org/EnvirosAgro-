@@ -26,12 +26,18 @@ interface Article {
 
 interface KnowledgeHubProps {
     onNavigate?: (view: View) => void;
+    initialSearch?: string;
 }
 
-export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialSearch = '' }) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [activeFilter, setActiveFilter] = useState('All');
   const [readingId, setReadingId] = useState<string | null>(null);
+
+  // Sync with global search query
+  useEffect(() => {
+    setSearchTerm(initialSearch);
+  }, [initialSearch]);
 
   // Auto-scroll to top when opening a brief
   useEffect(() => {
@@ -91,7 +97,8 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate }) => {
       const matchesSearch = (
           article.title.toLowerCase().includes(term) ||
           article.excerpt.toLowerCase().includes(term) ||
-          article.domain.toLowerCase().includes(term)
+          article.domain.toLowerCase().includes(term) ||
+          article.thrustName.toLowerCase().includes(term)
       );
       const matchesFilter = activeFilter === 'All' || article.category === activeFilter;
       return matchesSearch && matchesFilter;
@@ -440,7 +447,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate }) => {
           {displayedArticles.length === 0 && (
               <div className="py-32 text-center bg-earth-50 rounded-[3rem] border border-dashed border-earth-200">
                   <Search size={48} className="mx-auto text-earth-300 mb-4 opacity-20" />
-                  <p className="text-earth-500 font-bold">No results matching your query.</p>
+                  <p className="text-earth-500 font-bold">No results matching your query "{searchTerm}".</p>
                   <button onClick={() => { setSearchTerm(''); setActiveFilter('All'); }} className="mt-4 text-agro-600 font-bold hover:underline">Clear all filters</button>
               </div>
           )}

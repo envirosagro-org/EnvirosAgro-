@@ -1,27 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from '../types';
 import { 
   ArrowRight, Activity, Globe, Sprout, Database, ChevronRight, PlayCircle, Star, 
   Users, TrendingUp, ShieldCheck, Leaf, ShoppingBag, MessageSquare, MonitorPlay, 
-  Mic, Play, Film, Volume2, ArrowUpRight
+  Mic, Play, Film, Volume2, ArrowUpRight, Search, Zap, Sparkles
 } from 'lucide-react';
 import { THRUSTS, DATASETS } from './data';
 
 interface HeroProps {
-  onNavigate: (view: View) => void;
+  onNavigate: (view: View, searchQuery?: string) => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
-  // Get latest 3 public datasets
-  const latestResources = DATASETS
-    .filter(d => d.access === 'Public')
-    .slice(0, 3);
+  const [searchValue, setSearchValue] = useState('');
+
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (searchValue.trim()) {
+      onNavigate(View.KNOWLEDGE, searchValue.trim());
+    }
+  };
+
+  const handleQuickSearch = (tag: string) => {
+    onNavigate(View.KNOWLEDGE, tag);
+  };
 
   return (
     <div className="flex flex-col w-full bg-earth-50 dark:bg-earth-950 transition-colors duration-300">
       
       {/* 1. IMMERSIVE HERO BANNER */}
-      <div className="relative bg-agro-950 text-white min-h-[90vh] flex items-center justify-center px-6 overflow-hidden rounded-b-[3rem] shadow-2xl">
+      <div className="relative bg-agro-950 text-white min-h-[95vh] flex items-center justify-center px-6 overflow-hidden rounded-b-[3rem] shadow-2xl">
         {/* Background Image with Gradient Overlay */}
         <div className="absolute inset-0 z-0">
             <img 
@@ -47,13 +55,51 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             and <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Innovation</span>
           </h1>
           
-          <p className="text-xl text-agro-100 max-w-3xl mx-auto mb-12 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+          <p className="text-xl text-agro-100 max-w-3xl mx-auto mb-10 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
             EnvirosAgro establishes a global network advancing sustainability. 
-            Guided by the <strong>Five Thrusts Framework</strong>, we quantify resilience using the <strong>Sustainability Coefficient C(a)</strong> to secure the future of farming.
+            Guided by the <strong>Five Thrusts Framework</strong>, we quantify resilience using the <strong>Sustainability Coefficient C(a)</strong>.
           </p>
+
+          {/* GLOBAL SEARCH BAR */}
+          <div className="max-w-3xl mx-auto mb-16 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+            <form onSubmit={handleSearchSubmit} className="relative group">
+              <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
+                <Search size={24} className="text-agro-400 group-focus-within:text-agro-300 transition-colors" />
+              </div>
+              <input 
+                type="text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                placeholder="Search research, data, or sustainable practices..."
+                className="w-full bg-white/10 hover:bg-white/15 focus:bg-white/20 backdrop-blur-md border-2 border-white/20 focus:border-agro-500/50 rounded-full py-6 pl-16 pr-32 text-xl placeholder-white/40 text-white focus:outline-none focus:ring-4 focus:ring-agro-500/10 transition-all shadow-2xl"
+              />
+              <button 
+                type="submit"
+                className="absolute right-3 top-3 bottom-3 bg-agro-600 hover:bg-agro-500 text-white px-8 rounded-full font-black text-sm uppercase tracking-widest transition-all shadow-lg flex items-center gap-2 group/btn"
+              >
+                Search <ArrowRight size={18} className="group-hover/btn:translate-x-1 transition-transform" />
+              </button>
+            </form>
+            
+            {/* SEARCH TAGS */}
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
+              <span className="text-xs font-bold text-agro-400 uppercase tracking-widest mr-2 py-1.5 flex items-center gap-1">
+                <Sparkles size={12} /> Popular:
+              </span>
+              {['m(t) Constant', 'Drip Design', 'Soil Carbon', 'Regen-Ag'].map((tag) => (
+                <button 
+                  key={tag}
+                  onClick={() => handleQuickSearch(tag)}
+                  className="bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-4 py-1.5 text-xs font-bold text-agro-200 hover:text-white transition-all"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
           
           {/* Persona Pathways */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-400">
              <button onClick={() => onNavigate(View.CUSTOMER)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-green-400 p-4 rounded-2xl transition-all">
                 <Users className="mx-auto mb-2 text-green-400 group-hover:scale-110 transition-transform" />
                 <span className="block text-sm font-bold">I am a Farmer</span>
@@ -109,7 +155,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate(View.MEDIA)}
                 className="bg-agro-600 text-white px-8 py-3 rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-agro-700 transition-all shadow-lg hover:-translate-y-1"
               >
-                  Enter Media Hub <ArrowUpRight size={18} />
+                  Enter Media Hub <ArrowRight size={18} />
               </button>
           </div>
 
@@ -191,7 +237,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 className={`min-w-[85vw] md:min-w-[350px] flex-shrink-0 snap-center bg-white dark:bg-earth-900 p-8 rounded-[2rem] shadow-sm border ${thrust.borderColor} dark:border-earth-800 hover:shadow-2xl hover:border-transparent transition-all group cursor-pointer relative overflow-hidden`}
                 onClick={() => onNavigate(View.SUSTAINABILITY_FRAMEWORK)}
               >
-                <div className={`absolute top-0 right-0 w-24 h-24 ${thrust.color.split(' ')[0]} rounded-bl-[4rem] opacity-20 transition-transform group-hover:scale-150`}></div>
+                <div className={`absolute top-0 right-0 w-24 h-24 ${thrust.id === 'SA' ? 'bg-rose-100' : thrust.id === 'EA' ? 'bg-green-100' : thrust.id === 'HA' ? 'bg-red-100' : thrust.id === 'TA' ? 'bg-blue-100' : 'bg-slate-100'} rounded-bl-[4rem] opacity-20 transition-transform group-hover:scale-150`}></div>
                 
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${thrust.color} shadow-inner group-hover:scale-110 transition-transform duration-300`}>
                   {thrust.icon}
