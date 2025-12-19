@@ -88,7 +88,7 @@ export const PlanetWatch: React.FC = () => {
                      <button className="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full font-bold hover:bg-gray-200 transition-colors">
                         <Play size={18} fill="currentColor" /> Watch Report
                      </button>
-                     <button className="flex items-center gap-2 text-white hover:text-agro-400 transition-colors font-medium text-sm backdrop-blur-sm bg-white/10 px-4 py-2 rounded-full">
+                     <button className="flex items-center gap-2 text-white hover:text-agro-400 transition-colors font-medium text-sm bg-white/10 px-4 py-2 rounded-full">
                         <Info size={18} /> Read Transcript
                      </button>
                   </div>
@@ -99,7 +99,7 @@ export const PlanetWatch: React.FC = () => {
          {/* Up Next List */}
          <div className="bg-white border border-earth-200 rounded-3xl p-6 shadow-sm flex flex-col h-full">
             <h3 className="font-bold text-earth-900 mb-4 flex items-center gap-2">
-               <TrendingUp className="text-agro-600" /> Top Stories
+               <TrendingUp size={20} className="text-agro-600" /> Top Stories
             </h3>
             <div className="space-y-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
                {NEWS_SEGMENTS.map((segment) => (

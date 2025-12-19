@@ -1,79 +1,117 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Join EnvirosAgro, the leading sustainable agriculture network connecting farmers, researchers, and stakeholders to advance resilience through the Five Thrusts Framework." />
-    <link rel="canonical" href="https://envirosagro.org" />
-    <title>EnvirosAgro - The Global Sustainable Agriculture Network</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Merriweather', 'serif'],
-            },
-            colors: {
-              agro: {
-                50: '#f0fdf4',
-                100: '#dcfce7',
-                200: '#bbf7d0',
-                300: '#86efac',
-                400: '#4ade80',
-                500: '#22c55e',
-                600: '#16a34a',
-                700: '#15803d',
-                800: '#166534',
-                900: '#14532d',
-                950: '#052e16',
-              },
-              earth: {
-                50: '#fafaf9',
-                100: '#f5f5f4',
-                200: '#e7e5e4',
-                300: '#d6d3d1',
-                400: '#a8a29e',
-                500: '#78716c',
-                600: '#57534e',
-                700: '#44403c',
-                800: '#292524',
-                900: '#1c1917',
-                950: '#0c0a09',
-              }
-            }
-          }
-        }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnvirosAgro | Sustainable Agriculture Infrastructure</title>
+    
+    <!-- ESM Import Map -->
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@^19.2.3",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "vite": "https://esm.sh/vite@^7.3.0",
+        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+        "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+        "recharts": "https://esm.sh/recharts@^3.6.0"
       }
+    }
     </script>
+
+    <!-- Tailwind & Theme Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80',
+                            500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d', 950: '#052e16',
+                        },
+                        earth: {
+                            50: '#fdf8f6', 100: '#f2e8e5', 200: '#eaddd7', 300: '#e0c1b4', 400: '#d3a28e',
+                            500: '#c07e61', 600: '#ae6649', 700: '#98523a', 800: '#7e4533', 900: '#683b2d', 950: '#371d15',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'pulse-gentle': 'pulse-gentle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'progress': 'progress 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-gentle': {
+                          '0%, 100%': { opacity: 1 },
+                          '50%': { opacity: 0.7 },
+                        },
+                        progress: {
+                          '0%': { transform: 'translateX(-100%)' },
+                          '100%': { transform: 'translateX(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
     <style>
-      body {
-        font-family: 'Inter', sans-serif;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Merriweather', serif;
-      }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .agro-glass {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .dark .agro-glass {
+            background: rgba(5, 46, 22, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nature-gradient {
+            background: linear-gradient(135deg, #15803d 0%, #1e40af 100%);
+        }
+
+        @keyframes scan {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(150px); }
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #374151; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "vite": "https://aistudiocdn.com/vite@^7.2.6",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
-  }
-}
-</script>
 </head>
-  <body>
+<body class="bg-earth-50 dark:bg-earth-950 text-earth-900 dark:text-earth-50 selection:bg-agro-100 selection:text-agro-900 antialiased overflow-x-hidden transition-colors duration-300">
     <div id="root"></div>
-  </body>
+</body>
 </html>

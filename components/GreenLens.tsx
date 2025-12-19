@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Play, Clock, Info, Share2, Award, Heart, Leaf, Mountain, Droplets, ArrowRight } from 'lucide-react';
 
@@ -79,7 +78,7 @@ export const GreenLens: React.FC = () => {
          
          <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 text-white">
             <div className="flex items-center gap-4 mb-4 text-sm font-medium text-green-300">
-               <span className="bg-green-900/80 px-3 py-1 rounded backdrop-blur-sm border border-green-700">{activeFilm.category}</span>
+               <span className="bg-green-900/80 px-3 py-1 rounded border border-green-700">{activeFilm.category}</span>
                <span>{activeFilm.year}</span>
                <span>{activeFilm.duration}</span>
             </div>
@@ -93,10 +92,10 @@ export const GreenLens: React.FC = () => {
                <button className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-full font-bold flex items-center gap-3 transition-colors shadow-lg shadow-green-900/50">
                   <Play fill="currentColor" size={20} /> Watch Now
                </button>
-               <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 transition-colors border border-white/20">
+               <button className="bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 transition-colors border border-white/20">
                   <Info size={20} /> Details
                </button>
-               <button className="bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 rounded-full font-bold transition-colors border border-white/20">
+               <button className="bg-white/10 hover:bg-white/20 text-white p-3 rounded-full font-bold transition-colors border border-white/20">
                   <Heart size={20} />
                </button>
             </div>
@@ -145,7 +144,7 @@ export const GreenLens: React.FC = () => {
                      <p className="text-xs text-gray-300">Verified Impact</p>
                   </div>
 
-                  <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-xs font-bold px-2 py-1 rounded">
+                  <div className="absolute top-3 right-3 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded">
                      {doc.duration}
                   </div>
                </div>

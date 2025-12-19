@@ -11,6 +11,11 @@ export enum View {
   DASHBOARD = 'DASHBOARD',
   KNOWLEDGE = 'KNOWLEDGE',
   AI_ADVISOR = 'AI_ADVISOR',
+  ROADMAP_AI = 'ROADMAP_AI',
+  CROP_DOCTOR = 'CROP_DOCTOR',
+  SUSTAINABILITY_CALCULATOR = 'SUSTAINABILITY_CALCULATOR',
+  FARM_SCOUT = 'FARM_SCOUT',
+  CARBON_LEDGER = 'CARBON_LEDGER',
   SIGN_UP = 'SIGN_UP',
   PROFILE = 'PROFILE',
   SUSTAINABILITY_FRAMEWORK = 'SUSTAINABILITY_FRAMEWORK',
@@ -55,12 +60,6 @@ export interface Article {
   category: 'Research' | 'Practice' | 'Technology';
 }
 
-export interface ChartDataPoint {
-  name: string;
-  value: number;
-  secondary?: number;
-}
-
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
@@ -72,7 +71,7 @@ export interface User {
   email: string;
   role: 'Farmer' | 'Researcher' | 'Stakeholder' | 'Other';
   location?: string;
-  esin?: string; // EnvirosAgro Social ID
+  esin?: string;
   bio?: string;
   avatar?: string;
   joinedDate?: string;

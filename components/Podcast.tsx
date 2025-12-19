@@ -52,9 +52,9 @@ export const Podcast: React.FC = () => {
         {/* Left Column: Player */}
         <div className="lg:col-span-2">
            <div className="bg-agro-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden mb-8">
-              {/* Background Blur */}
+              {/* Background Cover */}
               <div className="absolute inset-0 opacity-20">
-                  <img src={currentEpisode.image} alt="Cover" className="w-full h-full object-cover blur-sm" />
+                  <img src={currentEpisode.image} alt="Cover" className="w-full h-full object-cover" />
               </div>
               
               <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">

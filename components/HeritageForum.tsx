@@ -46,7 +46,7 @@ const STORIES = [
     likes: 45,
     comments: 12,
     tags: ["Folklore", "Trees"],
-    image: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&auto=format&fit=crop&q=80"
   },
   {
     id: 2,
@@ -57,14 +57,9 @@ const STORIES = [
     likes: 38,
     comments: 8,
     tags: ["Farming Practices", "Astronomy"],
-    image: "https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?w=800&auto=format&fit=crop&q=60"
+    image: "https://images.unsplash.com/photo-1495107334309-fcf20504a5ab?w=800&auto=format&fit=crop&q=80"
   }
 ];
-
-// Helper Icons
-function SproutIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.2.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1.7-1.3 2.9-3.3 3-5.5a7 7 0 0 0-6.2 2.9z"/></svg>; }
-function CloudRainIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>; }
-function HeartIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>; }
 
 export const HeritageForum: React.FC = () => {
   const [activeStory, setActiveStory] = useState<number | null>(null);
@@ -89,7 +84,7 @@ export const HeritageForum: React.FC = () => {
               </button>
            </div>
            
-           <div className="bg-white/10 p-6 rounded-2xl backdrop-blur-md border border-white/10 max-w-sm">
+           <div className="bg-white/10 p-6 rounded-2xl border border-white/10 max-w-sm">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2"><Sparkles size={18} className="text-yellow-400" /> Daily Wisdom</h3>
               <p className="text-rose-100 italic text-sm leading-relaxed">
                  "The earth does not belong to us; we belong to the earth. Treat the soil as a living ancestor, and it will feed your children's children."
@@ -131,7 +126,7 @@ export const HeritageForum: React.FC = () => {
                      <div className="md:flex">
                         <div className="md:w-1/3 h-48 md:h-auto relative">
                            <img src={story.image} alt={story.title} className="w-full h-full object-cover" />
-                           <div className="absolute top-4 left-4 bg-black/50 backdrop-blur text-white text-xs font-bold px-2 py-1 rounded-full">
+                           <div className="absolute top-4 left-4 bg-black/50 text-white text-xs font-bold px-2 py-1 rounded-full">
                               {story.tags[0]}
                            </div>
                         </div>
@@ -140,7 +135,7 @@ export const HeritageForum: React.FC = () => {
                               <div className="flex justify-between items-start mb-2">
                                  <div>
                                     <h3 className="font-bold text-xl text-earth-900 mb-1">{story.title}</h3>
-                                    <div className="flex items-center gap-2 text-xs text-earth-500">
+                                    <div className="flex items-center gap-2 text-xs text-earth-50">
                                        <span className="font-bold text-earth-700">{story.author}</span>
                                        <span>•</span>
                                        <span className="flex items-center gap-1"><MapPin size={10} /> {story.location}</span>
@@ -192,7 +187,7 @@ export const HeritageForum: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-3 bg-white p-3 rounded-xl shadow-sm">
                      <div className="w-10 h-10 rounded-full bg-earth-200 overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=100&auto=format&fit=crop&q=60" className="w-full h-full object-cover" />
+                        <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=100&auto=format&fit=crop&q=100" className="w-full h-full object-cover" />
                      </div>
                      <div>
                         <p className="text-sm font-bold text-earth-900">Mzee Kiptoo</p>
@@ -221,3 +216,9 @@ export const HeritageForum: React.FC = () => {
     </div>
   );
 };
+
+// Helper Icons
+/* Removed redundant definitions from earlier in the file to resolve duplication errors */
+function SproutIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.2.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1.7-1.3 2.9-3.3 3-5.5a7 7 0 0 0-6.2 2.9z"/></svg>; }
+function CloudRainIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>; }
+function HeartIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>; }

@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Users, Building2, Fingerprint, CreditCard, CheckCircle2, QrCode, ArrowRight, ShieldCheck, Sprout, MessageSquarePlus, ThumbsUp, Coins, Send, Share2, Award, Zap, Tag, Info, Bell, Mail, Edit2 } from 'lucide-react';
+import { Users, Building2, Fingerprint, CreditCard, CheckCircle2, QrCode, ArrowRight, ShieldCheck, Sprout, MessageSquarePlus, ThumbsUp, Coins, Send, Share2, Award, Zap, Tag, Info, Bell, Mail, Edit2, X } from 'lucide-react';
 import { LineChart, Line, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { View } from '../types';
 
@@ -174,9 +173,12 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
             title: 'EnvirosAgro Community Post',
             text: text,
             url: url
-        }).catch((err) => {
-            console.error('Share failed:', err);
-            alert('Copied to clipboard!');
+        }).catch((err: any) => {
+            // Silently ignore AbortError from user cancellation
+            if (err.name !== 'AbortError') {
+                console.error('Share failed:', err);
+                alert('Copied to clipboard!');
+            }
         });
     } else {
         alert('Copied to clipboard!');
@@ -206,7 +208,7 @@ export const Community: React.FC<CommunityProps> = ({ onNavigate }) => {
           
           {notificationToast && (
             <div className="bg-slate-800 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-right-4 border border-slate-700 pointer-events-auto">
-                <div className="bg-green-500 p-1 rounded-full">
+                <div className="bg-green-50 p-1 rounded-full">
                     <CheckCircle2 size={16} className="text-white" />
                 </div>
                 <p className="font-bold text-sm">{notificationToast}</p>

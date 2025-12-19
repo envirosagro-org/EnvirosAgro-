@@ -93,7 +93,7 @@ export const Webinar: React.FC = () => {
                  className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity"
                />
                <div className="relative z-10 text-center">
-                  <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 mx-auto border-2 border-white/50 group-hover:scale-110 transition-transform">
+                  <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto border-2 border-white/50 group-hover:scale-110 transition-transform">
                      <PlayCircle size={48} className="text-white fill-white" />
                   </div>
                   <p className="text-white font-bold uppercase tracking-widest text-sm">Watch Latest Replay</p>

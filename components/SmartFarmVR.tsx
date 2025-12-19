@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Gamepad2, Glasses, CheckCircle, Lock, Play, RotateCcw, Info, Battery, Wifi, MousePointer2, Box, Loader2, Move, Hand, Menu } from 'lucide-react';
 
@@ -100,18 +99,18 @@ export const SmartFarmVR: React.FC = () => {
          <div className="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
             {/* Top Bar HUD */}
             <div className="flex justify-between items-start">
-               <div className="bg-black/40 backdrop-blur-md text-white px-4 py-2 rounded-lg border border-white/10 flex gap-4 text-xs font-mono">
+               <div className="bg-black/40 text-white px-4 py-2 rounded-lg border border-white/10 flex gap-4 text-xs font-mono">
                   <span className="flex items-center gap-2"><Wifi size={14} className="text-green-400" /> Connected</span>
                   <span className="flex items-center gap-2"><Battery size={14} className="text-green-400" /> 98%</span>
                </div>
-               <div className="bg-black/40 backdrop-blur-md text-white px-4 py-2 rounded-lg border border-white/10 text-xs font-mono">
+               <div className="bg-black/40 text-white px-4 py-2 rounded-lg border border-white/10 text-xs font-mono">
                   Module: {activeModule.title}
                </div>
             </div>
 
             {/* Loading Overlay */}
             {isLoading && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm z-50 pointer-events-auto">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-50 pointer-events-auto">
                     <div className="relative">
                         <Loader2 size={64} className="text-blue-500 animate-spin" />
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -147,7 +146,7 @@ export const SmartFarmVR: React.FC = () => {
             {isSimulating && (
                <>
                   {/* Controls Helper */}
-                  <div className="absolute top-20 right-0 bg-black/60 backdrop-blur-md p-4 rounded-l-xl border-y border-l border-white/10 text-white w-48 pointer-events-auto animate-in slide-in-from-right-10">
+                  <div className="absolute top-20 right-0 bg-black/60 p-4 rounded-l-xl border-y border-l border-white/10 text-white w-48 pointer-events-auto animate-in slide-in-from-right-10">
                       <h4 className="font-bold text-xs uppercase tracking-wider mb-3 text-blue-400">Controls</h4>
                       <ul className="space-y-3 text-xs">
                           <li className="flex items-center gap-3">
@@ -174,7 +173,7 @@ export const SmartFarmVR: React.FC = () => {
                   </div>
 
                   {/* Bottom HUD */}
-                  <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 border border-white/10 w-full max-w-2xl mx-auto pointer-events-auto animate-in slide-in-from-bottom-10 mt-auto">
+                  <div className="bg-black/60 rounded-xl p-4 border border-white/10 w-full max-w-2xl mx-auto pointer-events-auto animate-in slide-in-from-bottom-10 mt-auto">
                      <div className="flex justify-between items-center mb-2">
                         <span className="text-white font-bold text-sm">Objective: Calibrate Sensors</span>
                         <span className="text-blue-400 font-mono text-xs">Step 2 of 5</span>

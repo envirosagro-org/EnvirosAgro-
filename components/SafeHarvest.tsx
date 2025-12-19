@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ShieldAlert, Map, AlertTriangle, Bug, Droplets, Thermometer, ChevronRight, Bell, Phone, CheckCircle2, XCircle } from 'lucide-react';
 
@@ -99,7 +98,7 @@ export const SafeHarvest: React.FC = () => {
                      <div key={alert.id} className={`rounded-2xl p-6 border-l-4 shadow-sm ${alert.color} bg-white`}>
                         <div className="flex justify-between items-start mb-4">
                            <div className="flex gap-4">
-                              <div className={`p-3 rounded-xl h-fit bg-white/50 backdrop-blur-sm border border-white/50 shadow-sm ${alert.color.split(' ')[2]}`}>
+                              <div className={`p-3 rounded-xl h-fit bg-white/50 border border-white/50 shadow-sm ${alert.color.split(' ')[2]}`}>
                                  {alert.icon}
                               </div>
                               <div>
@@ -152,7 +151,7 @@ export const SafeHarvest: React.FC = () => {
                      <Droplets size={12} /> Fungal Risk
                   </div>
 
-                  <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-earth-200 shadow-lg">
+                  <div className="absolute bottom-8 left-8 right-8 bg-white/95 p-6 rounded-2xl border border-earth-200 shadow-lg">
                      <h4 className="font-bold text-earth-900 mb-2">Regional Status: Central Province</h4>
                      <div className="flex items-center gap-2 text-sm text-earth-600 mb-4">
                         <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div> High Alert Level

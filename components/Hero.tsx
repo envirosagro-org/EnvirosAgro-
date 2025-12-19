@@ -1,7 +1,10 @@
-
 import React from 'react';
 import { View } from '../types';
-import { ArrowRight, Activity, Globe, Sprout, Database, ChevronRight, PlayCircle, Star, Users, TrendingUp, ShieldCheck, Leaf, ShoppingBag, MessageSquare } from 'lucide-react';
+import { 
+  ArrowRight, Activity, Globe, Sprout, Database, ChevronRight, PlayCircle, Star, 
+  Users, TrendingUp, ShieldCheck, Leaf, ShoppingBag, MessageSquare, MonitorPlay, 
+  Mic, Play, Film, Volume2, ArrowUpRight
+} from 'lucide-react';
 import { THRUSTS, DATASETS } from './data';
 
 interface HeroProps {
@@ -31,7 +34,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-500/20 border border-green-500/30 backdrop-blur-md text-green-300 text-xs font-bold uppercase tracking-wider mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-500/20 border border-green-500/30 text-green-300 text-xs font-bold uppercase tracking-wider mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -51,19 +54,19 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           
           {/* Persona Pathways */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
-             <button onClick={() => onNavigate(View.CUSTOMER)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-green-400 p-4 rounded-2xl transition-all backdrop-blur-sm">
+             <button onClick={() => onNavigate(View.CUSTOMER)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-green-400 p-4 rounded-2xl transition-all">
                 <Users className="mx-auto mb-2 text-green-400 group-hover:scale-110 transition-transform" />
                 <span className="block text-sm font-bold">I am a Farmer</span>
              </button>
-             <button onClick={() => onNavigate(View.KNOWLEDGE)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400 p-4 rounded-2xl transition-all backdrop-blur-sm">
+             <button onClick={() => onNavigate(View.KNOWLEDGE)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-blue-400 p-4 rounded-2xl transition-all">
                 <Database className="mx-auto mb-2 text-blue-400 group-hover:scale-110 transition-transform" />
                 <span className="block text-sm font-bold">I am a Researcher</span>
              </button>
-             <button onClick={() => onNavigate(View.PARTNERSHIPS)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400 p-4 rounded-2xl transition-all backdrop-blur-sm">
+             <button onClick={() => onNavigate(View.PARTNERSHIPS)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-amber-400 p-4 rounded-2xl transition-all">
                 <Star className="mx-auto mb-2 text-amber-400 group-hover:scale-110 transition-transform" />
                 <span className="block text-sm font-bold">I am a Partner</span>
              </button>
-             <button onClick={() => onNavigate(View.INVESTOR_PORTAL)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-400 p-4 rounded-2xl transition-all backdrop-blur-sm">
+             <button onClick={() => onNavigate(View.INVESTOR_PORTAL)} className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-400 p-4 rounded-2xl transition-all">
                 <TrendingUp className="mx-auto mb-2 text-purple-400 group-hover:scale-110 transition-transform" />
                 <span className="block text-sm font-bold">I am an Investor</span>
              </button>
@@ -93,7 +96,85 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* 3. THE FIVE THRUSTS (Carousel) */}
+      {/* 3. MEDIA HIGHLIGHTS (NEW) */}
+      <div className="py-24 px-6 max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-serif font-bold text-agro-900 dark:text-white mb-4">Latest from Media</h2>
+                <p className="text-earth-600 dark:text-earth-400 max-w-2xl text-lg">
+                    Discover the newest stories, broadcasts, and insights from across the EnvirosAgro network.
+                </p>
+              </div>
+              <button 
+                onClick={() => onNavigate(View.MEDIA)}
+                className="bg-agro-600 text-white px-8 py-3 rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-agro-700 transition-all shadow-lg hover:-translate-y-1"
+              >
+                  Enter Media Hub <ArrowUpRight size={18} />
+              </button>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+              {/* Feature 1: News */}
+              <div onClick={() => onNavigate(View.PLANET_WATCH)} className="group bg-white dark:bg-earth-900 rounded-[2rem] overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-2xl transition-all cursor-pointer">
+                  <div className="h-48 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=800" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="absolute top-4 left-4 bg-green-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        Live News
+                    </div>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
+                  </div>
+                  <div className="p-8">
+                    <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-2 leading-tight">Global Drought Impact: Horn of Africa Report</h3>
+                    <p className="text-earth-500 dark:text-earth-400 text-sm mb-6 line-clamp-2">Analyzing severe rainfall deficits affecting crop yields in the region.</p>
+                    <div className="flex items-center gap-2 text-green-600 dark:text-green-400 font-black text-[10px] uppercase tracking-widest group-hover:gap-3 transition-all">
+                        Watch Report <ArrowRight size={14} />
+                    </div>
+                  </div>
+              </div>
+
+              {/* Feature 2: Podcast */}
+              <div onClick={() => onNavigate(View.PODCAST)} className="group bg-white dark:bg-earth-900 rounded-[2rem] overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-2xl transition-all cursor-pointer">
+                  <div className="h-48 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=800" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="absolute top-4 left-4 bg-orange-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        Podcast
+                    </div>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors flex items-center justify-center">
+                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center border border-white/30 scale-0 group-hover:scale-100 transition-transform duration-500">
+                            <Volume2 size={24} className="text-white" />
+                        </div>
+                    </div>
+                  </div>
+                  <div className="p-8">
+                    <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-2 leading-tight">Roots of Resilience: Indigenous Seed Saving</h3>
+                    <p className="text-earth-500 dark:text-earth-400 text-sm mb-6 line-clamp-2">Discussion with Dr. Amani on the spiritual and biological connection to soil.</p>
+                    <div className="flex items-center gap-2 text-orange-600 dark:text-orange-400 font-black text-[10px] uppercase tracking-widest group-hover:gap-3 transition-all">
+                        Listen Now <ArrowRight size={14} />
+                    </div>
+                  </div>
+              </div>
+
+              {/* Feature 3: Documentary */}
+              <div onClick={() => onNavigate(View.GREEN_LENS)} className="group bg-white dark:bg-earth-900 rounded-[2rem] overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-2xl transition-all cursor-pointer">
+                  <div className="h-48 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <div className="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        Green Lens Original
+                    </div>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
+                  </div>
+                  <div className="p-8">
+                    <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-2 leading-tight">The Great Green Wall: Cinema for Planet Earth</h3>
+                    <p className="text-earth-500 dark:text-earth-400 text-sm mb-6 line-clamp-2">A cinematic journey across the Sahel following the African-led restoration initiative.</p>
+                    <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-black text-[10px] uppercase tracking-widest group-hover:gap-3 transition-all">
+                        Stream Doc <ArrowRight size={14} />
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      {/* 4. THE FIVE THRUSTS (Carousel) */}
       <div className="py-24">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 px-6">
@@ -103,7 +184,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
             </p>
           </div>
 
-          {/* Horizontally Scrollable Container */}
           <div className="flex overflow-x-auto gap-6 px-6 pb-12 snap-x snap-mandatory scrollbar-hide">
             {THRUSTS.map((thrust) => (
               <div 
@@ -131,7 +211,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* 4. THE SUSTAINABILITY EQUATION */}
+      {/* 5. THE SUSTAINABILITY EQUATION */}
       <div className="bg-white dark:bg-earth-900 py-24 px-6 border-y border-earth-100 dark:border-earth-800 relative overflow-hidden">
          <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
              <Activity size={400} className="text-agro-900 dark:text-white absolute -left-20 top-20" />
@@ -174,7 +254,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                      </div>
                   </div>
                   
-                  <div className="bg-black/30 backdrop-blur-md p-8 rounded-2xl border border-white/10 mb-8 overflow-x-auto text-center">
+                  <div className="bg-black/30 p-8 rounded-2xl border border-white/10 mb-8 overflow-x-auto text-center">
                      <div className="font-serif text-3xl md:text-5xl text-white font-bold whitespace-nowrap tracking-wider">
                         m = √[((Dn × In) × C(a)) / S]
                      </div>
@@ -191,7 +271,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
          </div>
       </div>
 
-      {/* 5. EXPLORE THE ECOSYSTEM */}
+      {/* 6. EXPLORE THE ECOSYSTEM */}
       <div className="py-24 px-6 max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-agro-900 dark:text-white mb-4">Explore the Ecosystem</h2>
@@ -205,7 +285,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
              <div onClick={() => onNavigate(View.PRODUCTS)} className="group bg-white dark:bg-earth-900 rounded-3xl overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-xl transition-all cursor-pointer">
                 <div className="h-48 overflow-hidden relative">
                    <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&auto=format&fit=crop&q=60" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                   <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                   <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                       <ShoppingBag size={12} className="text-agro-600" /> Products
                    </div>
                 </div>
@@ -220,7 +300,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
              <div onClick={() => onNavigate(View.COMMUNITY)} className="group bg-white dark:bg-earth-900 rounded-3xl overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-xl transition-all cursor-pointer">
                 <div className="h-48 overflow-hidden relative">
                    <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?w=800&auto=format&fit=crop&q=60" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                   <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                   <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                       <Users size={12} className="text-blue-600" /> Network
                    </div>
                 </div>
@@ -235,8 +315,8 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
              <div onClick={() => onNavigate(View.MEDIA)} className="group bg-white dark:bg-earth-900 rounded-3xl overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-xl transition-all cursor-pointer">
                 <div className="h-48 overflow-hidden relative">
                    <img src="https://images.unsplash.com/photo-1590247813693-5541d1c609fd?w=800&auto=format&fit=crop&q=60" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                   <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 backdrop-blur px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                      <PlayCircle size={12} className="text-red-600" /> Media
+                   <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/80 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                      <MonitorPlay size={12} className="text-red-600" /> Media
                    </div>
                 </div>
                 <div className="p-8">
@@ -253,7 +333,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
         
         <div className="max-w-4xl mx-auto relative z-10">
-           <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-8 text-agro-300 backdrop-blur-sm">
+           <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-8 text-agro-300">
                <Star size={32} fill="currentColor" />
            </div>
            

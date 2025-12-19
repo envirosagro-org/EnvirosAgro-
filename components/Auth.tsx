@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { View, User } from '../types';
 import { Sprout, Mail, Lock, User as UserIcon, Briefcase, ArrowRight, Check } from 'lucide-react';
@@ -79,13 +78,13 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
         <div className="hidden md:flex w-1/2 bg-agro-900 relative flex-col justify-between p-12 text-white">
           <div className="absolute inset-0 opacity-30">
              <img 
-                src="https://picsum.photos/800/1200?grayscale&blur=2" 
+                src="https://picsum.photos/800/1200?grayscale" 
                 alt="Farm Texture" 
                 className="w-full h-full object-cover"
             />
           </div>
           <div className="relative z-10">
-            <div className="bg-agro-500/20 backdrop-blur-sm w-fit p-3 rounded-xl mb-6">
+            <div className="bg-agro-500/20 w-fit p-3 rounded-xl mb-6">
                 <Sprout size={32} />
             </div>
             <h2 className="text-4xl font-serif font-bold mb-6">
@@ -121,7 +120,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
             <h3 className="text-2xl font-bold text-agro-900 mb-2">
                 {isSignUp ? "Create Account" : "Sign In"}
             </h3>
-            <p className="text-earth-500 mb-6">
+            <p className="text-earth-50 mb-6">
                 {isSignUp ? "Enter your details below to get started." : "Enter your credentials to access your account."}
             </p>
 
@@ -222,7 +221,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
               </div>
 
               <button 
-                type="submit"
+                type="submit" 
                 disabled={isLoading}
                 className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-agro-200 transform active:scale-95 transition-all flex items-center justify-center gap-2"
               >
