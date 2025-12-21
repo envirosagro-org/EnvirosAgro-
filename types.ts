@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export enum View {
@@ -45,6 +46,7 @@ export enum View {
   SUPPLY_CHAIN_AUDIT = 'SUPPLY_CHAIN_AUDIT',
   NETWORK_INPUT_HUB = 'NETWORK_INPUT_HUB',
   AGRO_WORKERS_CLOUD = 'AGRO_WORKERS_CLOUD',
+  TRANSMISSION_GATEWAY = 'TRANSMISSION_GATEWAY',
 }
 
 export interface NavItem {

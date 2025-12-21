@@ -8,7 +8,6 @@ import {
   ArrowUpRight, ArrowUp, ChevronDown, ListFilter, Info, Clock,
   History, Settings2, BarChart3, ShieldAlert, GraduationCap, Award, PlayCircle,
   User,
-  // Added comment above fix: Added missing Heart icon for learning metrics
   Heart
 } from 'lucide-react';
 import { DATASETS } from './data';
@@ -40,7 +39,7 @@ interface KnowledgeHubProps {
     initialSearch?: string;
 }
 
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 10;
 
 export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialSearch = '' }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearch);
@@ -130,6 +129,11 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
     learningModules.find(m => m.id === readingId), 
     [readingId, learningModules]
   );
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    scrollToTop();
+  };
 
   if (readingId && activeModule) {
     return (
@@ -348,11 +352,48 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
 
                   {totalPages > 1 && (
                     <div className="flex flex-col items-center gap-6 pt-20 border-t border-earth-100 dark:border-earth-800">
-                       <div className="flex items-center gap-3">
-                          <button onClick={() => setCurrentPage(Math.max(1, currentPage - 1))} disabled={currentPage === 1} className="w-12 h-12 bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-xl flex items-center justify-center text-earth-400 disabled:opacity-20 transition-all"><ChevronLeft size={20} /></button>
-                          <span className="text-[11px] font-black uppercase text-earth-400">Section {currentPage} of {totalPages}</span>
-                          <button onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))} disabled={currentPage === totalPages} className="w-12 h-12 bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-xl flex items-center justify-center text-earth-400 disabled:opacity-20 transition-all"><ChevronRight size={20} /></button>
+                       <div className="flex items-center gap-4">
+                          <button 
+                            onClick={() => handlePageChange(Math.max(1, currentPage - 1))} 
+                            disabled={currentPage === 1} 
+                            className="w-14 h-14 bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-2xl flex items-center justify-center text-earth-400 disabled:opacity-20 transition-all hover:bg-earth-50 dark:hover:bg-earth-800 shadow-sm"
+                          >
+                            <ChevronLeft size={24} />
+                          </button>
+                          
+                          <div className="flex items-center gap-2">
+                            {Array.from({ length: totalPages }).map((_, i) => {
+                                const page = i + 1;
+                                // Showing current, first, last, and neighbors
+                                if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+                                    return (
+                                        <button
+                                            key={page}
+                                            onClick={() => handlePageChange(page)}
+                                            className={`w-12 h-12 rounded-xl text-[11px] font-black transition-all ${currentPage === page ? 'bg-agro-600 text-white shadow-lg shadow-agro-600/20' : 'bg-earth-50 dark:bg-earth-800 text-earth-400 hover:text-earth-900 dark:hover:text-white border border-earth-100 dark:border-earth-700'}`}
+                                        >
+                                            {page}
+                                        </button>
+                                    );
+                                }
+                                if (page === currentPage - 2 || page === currentPage + 2) {
+                                    return <span key={page} className="text-earth-300">...</span>;
+                                }
+                                return null;
+                            })}
+                          </div>
+                          
+                          <button 
+                            onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))} 
+                            disabled={currentPage === totalPages} 
+                            className="w-14 h-14 bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-2xl flex items-center justify-center text-earth-400 disabled:opacity-20 transition-all hover:bg-earth-50 dark:hover:bg-earth-800 shadow-sm"
+                          >
+                            <ChevronRight size={24} />
+                          </button>
                        </div>
+                       <p className="text-[10px] font-black uppercase text-earth-400 tracking-[0.3em]">
+                          Displaying Module Block {currentPage} of {totalPages}
+                       </p>
                     </div>
                   )}
               </div>

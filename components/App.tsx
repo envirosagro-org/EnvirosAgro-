@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { View, User } from '../types';
 import { Hero } from './Hero';
@@ -44,6 +45,7 @@ import { AiConsultantFloating } from './AiConsultantFloating';
 import { PrivacyPolicy } from './PrivacyPolicy';
 import { SupplyChainAudit } from './SupplyChainAudit';
 import { NetworkInputHub } from './NetworkInputHub';
+import { TransmissionGateway } from './TransmissionGateway';
 import { Logo } from './Logo';
 import { 
   Sprout, LayoutDashboard, BookOpen, Menu, X, 
@@ -116,6 +118,7 @@ const App: React.FC = () => {
     if (view === View.PROFILE) return { target: View.HOME, label: 'Home' };
     if (view === View.SUPPLY_CHAIN_AUDIT) return { target: View.SUPPLY, label: 'Supply Network' };
     if (view === View.AGRO_WORKERS_CLOUD) return { target: View.HUMAN_RESOURCE, label: 'HR Hub' };
+    if (view === View.TRANSMISSION_GATEWAY) return { target: View.HUMAN_RESOURCE, label: 'HR Hub' };
     return { target: View.HOME, label: 'Home' };
   };
 
@@ -165,11 +168,10 @@ const App: React.FC = () => {
       case View.PRIVACY_POLICY: return <PrivacyPolicy />;
       case View.SUPPLY_CHAIN_AUDIT: return <SupplyChainAudit />;
       case View.NETWORK_INPUT_HUB: return <NetworkInputHub />;
+      case View.TRANSMISSION_GATEWAY: return <TransmissionGateway onNavigate={handleNavClick} />;
       default: return <Hero onNavigate={handleNavClick} />;
     }
   };
-
-  const backInfo = getBackTarget(currentView);
 
   const MENU_SECTIONS = [
     {
@@ -227,13 +229,16 @@ const App: React.FC = () => {
       icon: <Settings size={16} className="text-slate-600" />,
       items: [
         { id: View.AGRO_WORKERS_CLOUD, label: 'Agro Workers Cloud', icon: <Cloud size={18}/>, desc: 'Professional registry' },
-        { id: View.HUMAN_RESOURCE, label: 'Human Resource', icon: <Users size={18}/>, desc: 'Talent & pathways' },
+        { id: View.TRANSMISSION_GATEWAY, label: 'Transmission Gateway', icon: <Mail size={18}/>, desc: 'Mock Email Worker Hub' },
         { id: View.INTRANET_DASHBOARD, label: 'Internal Intranet', icon: <ShieldCheck size={18}/>, desc: 'Organizational control' },
         { id: View.EXTRANET_DASHBOARD, label: 'Partner Extranet', icon: <Globe size={18}/>, desc: 'Stakeholder alignment' },
         { id: View.SUPPLY_CHAIN_AUDIT, label: 'Gap Analysis', icon: <ClipboardCheck size={18}/>, desc: 'Supply chain health' }
       ]
     }
   ];
+
+  // Added comment above fix: Calculate backInfo for the header before the return statement.
+  const backInfo = getBackTarget(currentView);
 
   return (
     <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-500 overflow-x-hidden selection:bg-agro-500 selection:text-white">
@@ -342,8 +347,8 @@ const App: React.FC = () => {
               </button>
               <div className="h-4 w-px bg-earth-200 dark:bg-white/10 shrink-0"></div>
               <div className="flex items-center gap-3">
-                <div className="p-1 bg-agro-500/10 rounded-lg">
-                  <div className="w-1.5 h-1.5 bg-agro-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+                <div className="p-1 bg-agro-50/10 rounded-lg">
+                  <div className="w-1.5 h-1.5 bg-agro-50 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
                 </div>
                 <span className="text-[9px] font-black text-agro-600 dark:text-agro-400 uppercase tracking-[0.4em] whitespace-nowrap">
                    {currentView.replace('_', ' ')}
@@ -535,7 +540,7 @@ const App: React.FC = () => {
                         Global Headquarters <br/>
                         <span className="text-slate-400">Kiriaini, Murang'a Cluster <br/> East Africa, 0.45S, 36.9E</span>
                       </p>
-                      <button onClick={() => handleNavClick(View.INFORMATION)} className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black py-3 rounded-2xl text-[9px] uppercase tracking-widest transition-all">
+                      <button onClick={() => handleNavClick(View.TRANSMISSION_GATEWAY)} className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black py-3 rounded-2xl text-[9px] uppercase tracking-widest transition-all">
                         Contact Command Node
                       </button>
                   </div>

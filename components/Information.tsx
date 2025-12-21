@@ -1,5 +1,8 @@
+
 import React, { useState } from 'react';
-import { Target, Lightbulb, Heart, ShieldCheck, Scale, FileText, Lock, Globe, ChevronDown, HelpCircle, Eye, RefreshCw, Users, Smile, Gavel, Leaf, MapPin, ExternalLink, AlertTriangle, Zap } from 'lucide-react';
+// Added comment above fix: Added missing Database icon to lucide-react imports
+import { Target, Lightbulb, Heart, ShieldCheck, Scale, FileText, Lock, Globe, ChevronDown, HelpCircle, Eye, RefreshCw, Users, Smile, Gavel, Leaf, MapPin, ExternalLink, AlertTriangle, Zap, Mail, Phone, ArrowRight, Database } from 'lucide-react';
+import { View } from '../types';
 
 const FAQS = [
   {
@@ -24,7 +27,7 @@ const FAQS = [
   }
 ];
 
-export const Information: React.FC = () => {
+export const Information: React.FC<{ onNavigate?: (view: View) => void }> = ({ onNavigate }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {
@@ -280,6 +283,46 @@ export const Information: React.FC = () => {
                 )}
               </div>
             ))}
+         </div>
+      </div>
+
+      {/* New Contact Interaction Block */}
+      <div className="mb-24 bg-blue-900 rounded-[3rem] p-12 text-white relative overflow-hidden shadow-2xl group">
+         <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12 transition-transform duration-1000 group-hover:scale-110"><Mail size={300} /></div>
+         <div className="relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+               <h3 className="text-4xl font-serif font-bold mb-6 tracking-tight">Direct Node Contact</h3>
+               <p className="text-blue-100 text-lg mb-10 leading-relaxed font-medium">
+                  Connect your localized node directly with the EnvirosAgro Command. Whether you're a farmer, researcher, or partner, use our Transmission Gateway for secure dialogue.
+               </p>
+               <div className="flex flex-col sm:flex-row gap-6">
+                  <button 
+                    onClick={() => onNavigate?.(View.TRANSMISSION_GATEWAY)}
+                    className="bg-white text-blue-950 px-12 py-5 rounded-full font-black uppercase text-xs tracking-[0.3em] hover:scale-105 active:scale-95 transition-all shadow-xl flex items-center justify-center gap-4"
+                  >
+                     <Mail size={20} /> Open Gateway
+                  </button>
+                  <div className="flex items-center gap-4 text-blue-200 px-4">
+                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+                     <span className="text-[10px] font-black uppercase tracking-widest">Central Link: Active</span>
+                  </div>
+               </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+               {[
+                 { label: 'Global Comms', val: 'envirosagro.com@gmail.com', icon: <Mail size={16}/> },
+                 { label: 'Emergency Node', val: '+254 700 000 000', icon: <Phone size={16}/> },
+                 { label: 'Data Registry', icon: <Database size={16}/>, val: 'Registry Hub' },
+                 { label: 'HQ Node', icon: <MapPin size={16}/>, val: 'Kiriaini, Kenya' }
+               ].map((link, i) => (
+                 <div key={i} className="bg-white/5 border border-white/10 p-6 rounded-2xl hover:bg-white/10 transition-all group cursor-pointer">
+                    <div className="text-blue-400 mb-4">{link.icon}</div>
+                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">{link.label}</p>
+                    <p className="font-bold text-xs truncate">{link.val}</p>
+                 </div>
+               ))}
+            </div>
          </div>
       </div>
 
