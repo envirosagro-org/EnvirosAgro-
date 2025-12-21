@@ -7,7 +7,11 @@ import {
   Link, Box, ChevronRight, MapPin, AlertCircle, Headphones, Library, Sparkles, 
   BarChart, Battery, RefreshCcw, Droplet, ThermometerSnowflake, ListChecks,
   Leaf, Download, Send, Search, CheckCircle2, History, Power, ThermometerSun,
-  Loader2, XCircle, ArrowRightLeft, PlusCircle, Trash2
+  Loader2, XCircle, ArrowRightLeft, PlusCircle, Trash2,
+  // Added comment above fix: Added missing icon imports Pause, Info, and Truck
+  Pause, Info, Truck,
+  // Added Waveform for Plant Wave Tech
+  Waves as Waveform
 } from 'lucide-react';
 import { View } from '../types';
 
@@ -35,15 +39,15 @@ const BRANDS = [
   {
     id: 2,
     name: "AgroMusika",
-    tagline: "AGRICULTURAL ARTS",
-    description: "Celebrating the cultural rhythm of farming through music, art, and creative expression.",
+    tagline: "PLANT WAVE TECHNOLOGY",
+    description: "Translating the bio-electrical conductivity of plants into immersive harmonic soundscapes for therapeutic and cultural growth.",
     icon: <Music size={32} className="text-purple-600" />,
     color: "bg-purple-50/50",
     blobColor: "bg-purple-100",
     borderColor: "border-purple-100",
     accentColor: "text-purple-600",
-    tier: "CULTURE",
-    features: ["Folk Playlists", "Artist Grants", "Cultural Festivals"]
+    tier: "BIO-SONIFICATION",
+    features: ["Real-time Bio-feedback", "Flora Frequency Mapping", "Ethno-Harmonic Sync"]
   },
   {
     id: 3,
@@ -197,6 +201,7 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [learningProgress, setLearningProgress] = useState(84);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [plantFrequencies, setPlantFrequencies] = useState<number[]>(new Array(30).fill(10));
 
   // Auto-running simulation for Agroboto
   useEffect(() => {
@@ -216,6 +221,19 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
     }
     return () => clearInterval(interval);
   }, [selectedBrand]);
+
+  // AgroMusika Plant Wave Simulation
+  useEffect(() => {
+    let interval: any;
+    if (selectedBrand?.id === 2 && isMusicPlaying) {
+      interval = setInterval(() => {
+        setPlantFrequencies(prev => prev.map(() => Math.floor(Math.random() * 80) + 10));
+      }, 150);
+    } else {
+      setPlantFrequencies(new Array(30).fill(5));
+    }
+    return () => clearInterval(interval);
+  }, [selectedBrand, isMusicPlaying]);
 
   const renderPortalContent = (brand: typeof BRANDS[0]) => {
       switch(brand.id) {
@@ -276,40 +294,78 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
                       </div>
                   </div>
               );
-          case 2: // AgroMusika
+          case 2: // AgroMusika (Plant Wave Technology)
                return (
-                  <div className="space-y-5">
-                      <div className="bg-purple-100 dark:bg-purple-900/40 p-6 rounded-3xl flex items-center gap-5 border border-purple-200 dark:border-purple-800 shadow-inner">
-                          <button 
-                            onClick={() => setIsMusicPlaying(!isMusicPlaying)}
-                            className={`p-5 rounded-full shadow-lg transition-all hover:scale-110 active:scale-95 ${isMusicPlaying ? 'bg-white text-purple-600 animate-pulse' : 'bg-purple-600 text-white'}`}
-                          >
-                            <Play size={24} fill="currentColor" />
-                          </button>
-                          <div className="flex-1">
-                              <h4 className="font-bold text-purple-900 dark:text-purple-100 text-sm">Earth Rhythms Vol. 1</h4>
-                              <p className="text-[10px] text-purple-700 dark:text-purple-400 font-black uppercase tracking-widest mt-0.5">
-                                  {isMusicPlaying ? 'Now Playing • Folk Fusion' : 'Stream Paused'}
-                              </p>
+                  <div className="space-y-6 animate-in fade-in duration-700">
+                      <div className="bg-purple-900/10 dark:bg-purple-900/30 p-8 rounded-[3rem] border border-purple-200 dark:border-purple-800 shadow-inner relative overflow-hidden">
+                          <div className="absolute top-0 right-0 p-8 opacity-5 text-purple-600"><Waveform size={200}/></div>
+                          
+                          <div className="flex flex-col items-center mb-8 relative z-10">
+                              <button 
+                                onClick={() => setIsMusicPlaying(!isMusicPlaying)}
+                                className={`w-24 h-24 rounded-full shadow-[0_0_40px_rgba(147,51,234,0.3)] transition-all hover:scale-110 active:scale-95 flex items-center justify-center border-4 ${isMusicPlaying ? 'bg-white text-purple-600 border-white' : 'bg-purple-600 text-white border-purple-400'}`}
+                              >
+                                {isMusicPlaying ? <Pause size={36} fill="currentColor" /> : <Play size={36} fill="currentColor" className="ml-2" />}
+                              </button>
+                              <div className="text-center mt-6">
+                                  <h4 className="font-serif font-black text-purple-900 dark:text-purple-100 text-2xl tracking-tighter">Bio-Sonic Link</h4>
+                                  <p className="text-[10px] text-purple-600 dark:text-purple-400 font-black uppercase tracking-[0.4em] mt-1">
+                                      {isMusicPlaying ? 'Plant_Waves_Transmitting' : 'Sensors_Standby'}
+                                  </p>
+                              </div>
                           </div>
-                          <div className="flex gap-1 items-end h-8">
-                              {[1,2,3].map(i => (
-                                <span key={i} className={`w-1.5 bg-purple-400 rounded-full ${isMusicPlaying ? 'animate-[pulse_1s_infinite]' : 'h-1'}`} style={{animationDelay: `${i*0.2}s`}}></span>
+
+                          {/* Bio-Oscilloscope Visualizer */}
+                          <div className="bg-black/90 rounded-3xl p-6 h-32 flex items-end justify-center gap-1.5 border border-purple-500/20 shadow-2xl relative">
+                             <div className="absolute top-3 left-6 flex items-center gap-2">
+                                <div className={`w-1.5 h-1.5 rounded-full ${isMusicPlaying ? 'bg-green-500 animate-pulse' : 'bg-slate-700'}`}></div>
+                                <span className="text-[8px] font-mono text-purple-400/60 uppercase tracking-widest">Flora_Vitals_HD</span>
+                             </div>
+                             {plantFrequencies.map((h, i) => (
+                                <div 
+                                    key={i} 
+                                    className={`w-1 rounded-t-full transition-all duration-300 ${isMusicPlaying ? 'bg-gradient-to-t from-purple-600 via-blue-400 to-green-400' : 'bg-slate-800'}`}
+                                    style={{ height: `${h}%`, opacity: isMusicPlaying ? (i % 2 === 0 ? 1 : 0.6) : 0.2 }}
+                                ></div>
+                             ))}
+                          </div>
+                      </div>
+
+                      <div className="space-y-4">
+                          <h5 className="text-[10px] font-black text-purple-400 uppercase tracking-[0.4em] px-2 flex items-center gap-3">
+                            <Activity size={12} /> Detected Plant Frequencies
+                          </h5>
+                          <div className="grid grid-cols-1 gap-2">
+                              {[
+                                { name: 'Ficus Resonance (Photosynthesis)', meta: 'Frequency: 432Hz • Stability: 94%', id: 'FR-01' },
+                                { name: 'Orchid Melodics (Moisture Sync)', meta: 'Frequency: 528Hz • Stability: 88%', id: 'OM-42' },
+                                { name: 'Ancient Oak Echoes (Core Integrity)', meta: 'Frequency: 174Hz • Stability: 99%', id: 'AO-09' }
+                              ].map((item, i) => (
+                                  <div key={i} className="flex items-center justify-between p-5 bg-white dark:bg-earth-900 rounded-2xl border border-purple-50 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all cursor-pointer group shadow-sm">
+                                      <div className="flex items-center gap-5">
+                                          <span className="text-purple-300 font-mono text-[10px] font-black">0{i+1}</span>
+                                          <div>
+                                              <p className="text-sm font-bold text-earth-800 dark:text-earth-200 group-hover:text-purple-700 transition-colors">{item.name}</p>
+                                              <p className="text-[9px] text-earth-400 font-bold uppercase tracking-widest">{item.meta}</p>
+                                          </div>
+                                      </div>
+                                      <div className="p-2 bg-purple-50 dark:bg-purple-900/30 rounded-lg text-purple-400 opacity-0 group-hover:opacity-100 transition-all">
+                                          <Headphones size={14} />
+                                      </div>
+                                  </div>
                               ))}
                           </div>
                       </div>
-                      <div className="space-y-2">
-                          {['Sunrise Over Savanna', 'Soil & Soul', 'Harvest Jubilee'].map((track, i) => (
-                              <div key={i} className="flex items-center justify-between p-4 bg-white dark:bg-earth-800 rounded-2xl border border-purple-50 dark:border-purple-900 hover:bg-purple-50 dark:hover:bg-purple-900/30 transition-all cursor-pointer group">
-                                  <span className="text-xs font-bold text-earth-700 dark:text-earth-200 flex items-center gap-3">
-                                      <span className="text-purple-300 font-mono text-[10px]">0{i+1}</span> {track}
-                                  </span>
-                                  <Headphones size={14} className="text-purple-200 group-hover:text-purple-600 group-hover:scale-110 transition-all" />
-                              </div>
-                          ))}
+
+                      <div className="p-8 bg-slate-900 rounded-[2.5rem] text-white relative overflow-hidden border border-white/5 shadow-2xl">
+                          <div className="absolute top-0 right-0 p-4 opacity-10"><Info size={80} /></div>
+                          <p className="text-xs text-slate-400 leading-relaxed relative z-10 font-medium italic">
+                            "Plant Wave Technology detects micro-voltage fluctuations via electrodes placed on leaves. Our algorithms translate these biological electrical currents into MIDI notes, allowing the plant to 'compose' music in real-time."
+                          </p>
                       </div>
-                      <button onClick={() => onNavigate?.(View.PODCAST)} className="w-full bg-purple-600 hover:bg-purple-700 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-lg shadow-purple-600/20 transition-all">
-                          <Star size={18} /> Open Cultural Hub
+
+                      <button onClick={() => onNavigate?.(View.PODCAST)} className="w-full bg-purple-600 hover:bg-purple-700 transition-all text-white py-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-4 shadow-xl shadow-purple-600/30 active:scale-95">
+                          <Waveform size={20} /> Launch Full Bio-Sonic Terminal
                       </button>
                   </div>
               );
@@ -591,7 +647,7 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
                             </div>
                             <button 
                                 onClick={() => setLearningProgress(Math.min(100, learningProgress + 2))}
-                                className="bg-white dark:bg-earth-800 text-yellow-700 dark:text-yellow-400 px-10 py-4 rounded-[2rem] font-black uppercase text-[10px] tracking-widest border-2 border-yellow-200 dark:border-yellow-900 shadow-lg hover:bg-yellow-50 transition-all hover:-translate-y-1 active:translate-y-0"
+                                className="bg-white dark:bg-earth-800 text-yellow-700 dark:text-yellow-400 px-10 py-4 rounded-[2rem] font-black uppercase text-[10px] tracking-widest border-2 border-yellow-200 dark:border-yellow-900 shadow-lg hover:bg-yellow-50 transition-all hover:-translate-y-1 active:scale-95"
                             >
                                 {learningProgress === 100 ? 'Claim Badge' : 'Continue Lesson'}
                             </button>

@@ -43,6 +43,8 @@ export enum View {
   COMMUNITY_GUIDELINES = 'COMMUNITY_GUIDELINES',
   PRIVACY_POLICY = 'PRIVACY_POLICY',
   SUPPLY_CHAIN_AUDIT = 'SUPPLY_CHAIN_AUDIT',
+  NETWORK_INPUT_HUB = 'NETWORK_INPUT_HUB',
+  AGRO_WORKERS_CLOUD = 'AGRO_WORKERS_CLOUD',
 }
 
 export interface NavItem {
@@ -59,7 +61,7 @@ export interface Article {
   date: string;
   imageUrl: string;
   category: 'Research' | 'Practice' | 'Technology';
-  fullContent?: string; // Support for long-form text
+  fullContent?: string;
 }
 
 export interface ChatMessage {
