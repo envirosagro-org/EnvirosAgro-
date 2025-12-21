@@ -890,12 +890,14 @@ export const HeritageForum: React.FC = () => {
           <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 bg-earth-950/90 backdrop-blur-xl animate-in fade-in duration-300">
               <div className="bg-white dark:bg-earth-900 w-full max-w-3xl rounded-[3.5rem] shadow-2xl overflow-hidden border-2 border-earth-100 dark:border-earth-800 flex flex-col animate-in zoom-in-95">
                   <div className={`p-12 ${activeTopic.color} dark:bg-rose-950/20 relative overflow-hidden shrink-0 transition-all duration-500 ${topicView !== 'OVERVIEW' ? 'py-8' : 'py-12'}`}>
-                      <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12">{React.cloneElement(activeTopic.icon as React.ReactElement, { size: 200 })}</div>
+                      {/* Fix: Cast icon element to ReactElement with any props to allow 'size' property during cloneElement */}
+                      <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12">{React.cloneElement(activeTopic.icon as React.ReactElement<any>, { size: 200 })}</div>
                       <button onClick={() => setActiveTopic(null)} className="absolute top-8 right-8 bg-white/40 hover:bg-white text-earth-900 p-2 rounded-full transition-all"><X size={24} /></button>
                       
                       <div className="relative z-10 flex flex-col items-center text-center">
                           <div className={`bg-white dark:bg-earth-800 rounded-[2rem] shadow-xl transition-all duration-500 ${topicView !== 'OVERVIEW' ? 'p-3 mb-2 scale-75' : 'p-6 mb-6'}`}>
-                              {React.cloneElement(activeTopic.icon as React.ReactElement, { size: topicView !== 'OVERVIEW' ? 32 : 48 })}
+                              {/* Fix: Cast icon element to ReactElement with any props to allow 'size' property during cloneElement */}
+                              {React.cloneElement(activeTopic.icon as React.ReactElement<any>, { size: topicView !== 'OVERVIEW' ? 32 : 48 })}
                           </div>
                           <h3 className={`font-serif font-bold text-earth-900 dark:text-white leading-tight transition-all duration-500 ${topicView !== 'OVERVIEW' ? 'text-2xl' : 'text-4xl mb-2'}`}>{activeTopic.title}</h3>
                           {topicView === 'OVERVIEW' && <p className="text-[10px] font-black uppercase tracking-[0.3em] text-earth-500 mb-6">Network Domain Node</p>}
@@ -1055,7 +1057,7 @@ export const HeritageForum: React.FC = () => {
 
 // Helper Icons
 function SproutIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.2.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1.7-1.3 2.9-3.3 3-5.5a7 7 0 0 0-6.2 2.9z"/></svg>; }
-function CloudRainIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>; }
+function CloudRainIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 14.899A7 7 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>; }
 function HeartIcon() { return <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>; }
 function BoxIcon({ size }: { size: number }) {
   return <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>;

@@ -111,6 +111,201 @@ export const COLLECTION_TOOLS = [
 
 // Mock Data aligned with Framework and Elements
 export const DATASETS = [
+  // --- NATIONAL AGRICULTURE PRODUCTION REPORT 2024 (KNBS) ---
+  {
+    id: 'DS-IA-017',
+    name: 'National Agriculture Production Report 2024 (KNBS)',
+    thrust: 'IA',
+    domain: 'Industrial Sector',
+    category: 'General',
+    region: 'Kenya',
+    type: 'Official Statistical Report',
+    size: '8.4 MB',
+    date: 'April 2024',
+    access: 'Public',
+    content: `
+# National Agriculture Production Report 2024
+**Published by:** Kenya National Bureau of Statistics (KNBS)
+
+## Executive Summary
+The agricultural sector remains an integral part of Kenya’s economy, accounting for **21.8 per cent of the Gross Domestic Product (GDP) in 2023**. It employs over 40 per cent of the total population and remains the cornerstone of national food security.
+
+### Sector Performance (2023)
+- **Gross Value Added (GVA):** KSh 3,295.2 billion.
+- **Crop Growth:** Accounted for 70.7 per cent of the GVA.
+- **Animal Production:** Accounted for 17.3 per cent of the GVA.
+- **Food Crop Area:** Increased from 4,935.3 thousand hectares in 2022 to 5,371.7 thousand hectares in 2023.
+- **Total Production:** Increased from 8.5 million tonnes to 10.7 million tonnes in 2023.
+
+## Key Sub-Sector Insights
+- **Coffee:** Area increased to 111.9 thousand hectares, though clean production declined to 48.7 thousand tonnes due to adverse weather.
+- **Tea:** Produced a record 570.3 million Kgs in 2023, boosted by favorable rains and government fertilizer subsidies.
+- **Sugar:** Production declined by 40.8 per cent to 473.9 thousand tonnes due to a lack of mature cane for milling.
+- **Pyrethrum:** Acreage more than doubled to 9,362 acres, with production reaching 1,680.0 tonnes.
+- **Meat:** Total production was 556.7 thousand tonnes valued at KSh 305 billion.
+- **Dairy:** Registered 5.2 billion Kilogrammes of milk produced.
+- **Fisheries:** Total production reached 161.3 thousand tonnes valued at KSh 35.9 billion.
+
+## Strategic Context
+The report aligns with the government's Bottom-Up Economic Transformation Agenda (BETA), prioritizing the revitalization of agriculture to drive economic growth and improve rural livelihoods.
+    `
+  },
+  {
+    id: 'DS-EA-037',
+    name: 'Food Crop Performance Index (2019-2023)',
+    thrust: 'EA',
+    domain: 'Soil Health & Regeneration',
+    category: 'Plants',
+    region: 'Kenya',
+    type: 'Data Series',
+    size: '2.1 MB',
+    date: 'April 2024',
+    access: 'Public',
+    content: `
+# Food Crop Performance Index (2019-2023)
+Detailed metrics for Kenya's primary food staples over a 5-year cycle.
+
+## Maize (Primary Staple)
+- **2023 Area:** 2,430,013 Ha
+- **2023 Production:** 4,285,206 Tons (47.6M 90kg bags)
+- **Total Value:** KSh 180.8 Billion
+- **Leading Counties:** Uasin Gishu (476k tons), Trans Nzoia (448k tons), Narok (314k tons).
+
+## Wheat
+- **2023 Area:** 104,440 Ha
+- **2023 Production:** 309,492 Tons
+- **Trend:** Production declined from 368.7k tons in 2022 due to acreage shifts to maize and Quelea bird menace.
+
+## Irrigated Rice
+- **Total Paddy:** 229,064 Tons
+- **Mwea Scheme:** 153,654 Tons (Dominant scheme)
+- **Net Pay to Plot Holders:** KSh 10.5 Billion total across all schemes.
+
+## Pulses & Legumes
+- **Dry Beans:** 860,973 Tons (Increased from 750k in 2022).
+- **Green Grams:** 182,260 Tons (Leading Counties: Kitui, Makueni).
+- **Cowpeas:** 171,803 Tons.
+
+## Roots & Tubers
+- **Irish Potatoes:** 2,309,915 Tons (Leading Counties: Nakuru, Nyandarua, Elgeyo Marakwet).
+- **Sweet Potatoes:** 669,100 Tons.
+    `
+  },
+  {
+    id: 'DS-HA-015',
+    name: 'National Livestock & Dairy Census 2024',
+    thrust: 'HA',
+    domain: 'Epidemiology',
+    category: 'Animals',
+    region: 'Kenya',
+    type: 'Census Summary',
+    size: '5.2 MB',
+    date: 'April 2024',
+    access: 'Public',
+    content: `
+# National Livestock & Dairy Census 2024
+Comprehensive population and product metrics for the livestock sector.
+
+## Livestock Populations (2023)
+- **Cattle:** 21.9 Million (Dairy: 5.5M, Beef: 16.3M)
+- **Sheep:** 23.2 Million
+- **Goats:** 35.0 Million
+- **Camels:** 4.3 Million
+- **Poultry (Indigenous):** 54.3 Million
+
+## Dairy Production
+- **Total Milk Produced:** 5.3 Billion Kilogrammes
+- **Value:** KSh 312.7 Billion
+- **Formal Milk Intake:** 806.6 Million Kgs
+- **Trend:** 14.8% increase in production attributed to improved rainfall and pasture.
+
+## Meat Production (556.7k Tons Total)
+- **Beef:** 237,907 Tons
+- **Chevron (Goat):** 77,521 Tons
+- **Mutton (Sheep):** 51,691 Tons
+- **Poultry Meat:** 93,622 Tons
+- **Pork:** 40,056 Tons
+
+## Other Products
+- **Eggs:** 194.7 Million Trays
+- **Honey:** 17,151 Tons
+- **Hides:** 1.3 Million pieces
+- **Beehives:** 1.6 Million total (7.4% increase in modern hive types).
+    `
+  },
+  {
+    id: 'DS-IA-018',
+    name: 'Industrial & Cash Crop Logistics (2024)',
+    thrust: 'IA',
+    domain: 'Value Chain Development',
+    category: 'Finance',
+    region: 'Kenya',
+    type: 'Logistics Audit',
+    size: '4.5 MB',
+    date: 'April 2024',
+    access: 'Public',
+    content: `
+# Industrial & Cash Crop Logistics (2024)
+Analysis of high-value export crops and processing chains.
+
+## Tea (Major Foreign Exchange Earner)
+- **Made Tea Prod:** 570.3 Million Kgs (6.6% increase).
+- **Export Earnings:** KSh 180.57 Billion.
+- **Pakistan Market:** Accounts for 40% of total export volume.
+- **Area:** 227.8 thousand hectares.
+
+## Coffee
+- **Clean Coffee Prod:** 48.7 thousand tonnes.
+- **Acreage:** 111.9 thousand hectares.
+- **Top Exporters:** USA (23.4%), Germany (17.4%), Belgium (10.5%).
+- **Domestic Consumption:** Level increased by 23.5% to 2.1 thousand tonnes.
+
+## Sugar Industry
+- **Area harvested:** 80.7 thousand hectares.
+- **Factory Deliveries:** 5.6 Million tonnes.
+- **Imports:** Nearly doubled to 608.2 thousand tonnes to meet local deficit.
+
+## Fiber & Oil Crops
+- **Sisal:** 25.6 thousand tonnes produced; exports declined to Nigeria due to forex challenges.
+- **Cotton:** Revitalization efforts saw area increase to 12.2 thousand hectares; prod at 3.9k tons.
+- **Coconut:** Production reached 81.7 thousand tonnes valued at KSh 9.4 Billion.
+- **Macadamia:** 44.4 thousand tonnes (nuts-in-shell). Earnings declined due to low global kernel prices.
+    `
+  },
+  {
+    id: 'DS-EA-038',
+    name: 'Fisheries & Blue Economy Audit (2021-2023)',
+    thrust: 'EA',
+    domain: 'Water Conservation',
+    category: 'Water',
+    region: 'Kenya',
+    type: 'Aquatic Database',
+    size: '3.1 MB',
+    date: 'April 2024',
+    access: 'Public',
+    content: `
+# Fisheries & Blue Economy Audit (2021-2023)
+
+## Production Summary (2023)
+- **Total Fish Production:** 161.3 thousand tonnes.
+- **Total Value:** KSh 35.9 Billion.
+- **Trend:** 7.2% decline in production compared to 2022.
+
+## Source Breakdown
+- **Inland Capture (Freshwater):** 121.4 thousand tonnes (56% of total).
+  - **Lake Victoria:** 70.3 thousand tonnes (18.6% decline).
+  - **Lake Turkana:** 15.9 thousand tonnes.
+- **Marine (Artisanal):** 37.0 thousand tonnes.
+- **Aquaculture (Fish Farming):** 31.7 thousand tonnes (14% increase).
+
+## Aquaculture Growth
+Cage culture now accounts for **73 per cent** of total aquaculture production, driven by higher profitability and concerted government investment.
+
+## Marine Dynamics
+Marine artisanal production increased to 37.0 thousand tonnes. Industrial marine catch increased for prawns and deep-water crabs, but decreased for deep-sea longlining.
+    `
+  },
+
   // --- SUSTAINABLE INTEGRATED DEVELOPMENT STRATEGY ---
   {
     id: 'DS-CORE-001',
@@ -142,6 +337,134 @@ The strategy follows a linear progression:
 
 ## 4. Contrast with SI-D
 While Sustainable Integrated Development is the *solution* and *method*, Social Influenza Disease (SI-D) is the *primary obstacle* identified within the Social Agriculture thrust. One provides the growth framework; the other diagnoses the societal fractures that prevent growth.
+    `
+  },
+  // --- LIFE WITH PLANTS MANIFESTO ---
+  {
+    id: 'DS-SA-043',
+    name: 'Life with Plants: An EnvirosAgro Perspective',
+    thrust: 'SA',
+    domain: 'Philosophy & Education',
+    category: 'General',
+    region: 'Global',
+    type: 'Philosophical Manifesto',
+    size: '1.8 MB',
+    date: 'May 20, 2024',
+    access: 'Public',
+    content: `
+# Life with Plants: An EnvirosAgro Perspective
+
+## 1. Agriculture as Human–Nature Interaction
+EnvirosAgro defines agriculture not merely as food production, but as the art and science of structured human interaction with natural resources—including plants, animals, water, soil, air, and energy—guided by the principle of sustainability. This interaction is intentional, reciprocal, and continuous, shaping both human survival and ecological balance.
+
+Plants occupy a central role in this relationship. They are not passive resources, but living systems that interact with humans biologically, socially, spiritually, and technologically. Human civilization itself evolved alongside plants, and sustainability is fundamentally a reflection of how well this relationship is managed.
+
+## 2. Plants as the Foundation of Human Life
+Plants are the primary source of human nourishment throughout life. Every culture, economy, and biological system depends on plants either directly or indirectly. Beyond nutrition, plants influence physical health, mental clarity, emotional stability, social organization, and spiritual meaning.
+
+## 3. Three Pathways of Plant Consumption
+Human interaction with plants can be understood through three interlinked processes: chemical, spiritual (social agriculture), and technical.
+
+### 3.1 Chemical Consumption
+Chemical consumption refers to the biochemical interaction between plant compounds and the human body. Key elements include macronutrients, micronutrients, and phytochemicals. These support growth, immunity, and brain development. Sustainable agricultural practices directly affect human biochemical well-being.
+
+### 3.2 Technical Consumption
+Technical consumption involves the methods by which humans prepare, preserve, and transform plants for use. This includes home science, cooking techniques, fermentation, and processing technologies. Sustainable technical practices ensure that plants are consumed with minimal waste and maximum benefit.
+
+### 3.3 Spiritual and Social Consumption (Social Agriculture)
+Humans experience an innate spiritual urge to connect with plants, shaped by cultural traditions, rituals, and beliefs. Eating is psychological and social. Shared meals and sacred plants strengthen family bonds and cultural identity, aligning with our Social Agriculture (SA) thrust.
+
+## 4. Plants Beyond Food: Medicine and Consciousness
+Plants extend their influence into pharmaceuticals and consciousness modulation. Plant-derived medicines cure diseases and manage pain, while direct plant use can achieve states of stimulation, relaxation, or spiritual elevation.
+
+## 5. Plants as Living Energy Systems
+Plants interact with their environment through electrical signals, chemical emissions, and vibrational patterns, generating unique biological waves. This understanding gives rise to the concept of **Plant Wave Technology**.
+
+## 6. Plant Wave Technology
+This technology explores how biological signals emitted by plants can be translated into sound, rhythm, and frequency-based experiences. Harmonic patterns derived from plant electrical activity can support healing, meditation, and emotional balance without requiring physical consumption.
+
+## 7. Cultural Context: The Sacred Relationship
+### 7.1 The Mugumo Tree (Ficus sycomorus)
+Revered by the Kikuyu community as a sacred site for guidance and harmony. Through plant wave technology, its tranquility can be experienced in musical form.
+### 7.2 Miraa (Khat)
+The biological rhythms of Miraa generate stimulatory wave patterns reflecting its energetic properties.
+
+## 8. Sustainability Through Deep Plant Relationships
+True sustainability emerges when humans respect plants as living systems, balance their interactions, and use technology to amplify harmony rather than exploitation.
+
+## 9. Conclusion
+Plants feed us, heal us, calm us, and connect us to nature and culture. Agriculture is a sustainable art of coexistence. **Plants do not merely grow for us; they grow with us.**
+    `
+  },
+  // --- INTRODUCTION TO AGRICULTURE CURRICULUM ---
+  {
+    id: 'DS-SA-042',
+    name: 'Introduction to Agriculture: Curriculum Foundations',
+    thrust: 'SA',
+    domain: 'Philosophy & Education',
+    category: 'General',
+    region: 'East Africa / Global',
+    type: 'Curriculum Note',
+    size: '1.2 MB',
+    date: 'July 15, 2024',
+    access: 'Public',
+    content: `
+# Introduction to Agriculture: Foundations of Practice
+
+## 1. Definition of Agriculture
+Agriculture is defined as the science and art of cultivation of crops and rearing of livestock. It is a fundamental pillar for socioeconomic and healthy futures within agricultural communities.
+
+### 1.1 Agriculture as a Science
+As a science, it involves experimentation and the application of scientific knowledge in critical areas:
+- **Soil analysis**: Determining nutrient levels, composition, and pH.
+- **Control of pests and diseases**: Identifying destructive organisms and implementing protective protocols.
+- **Farm machinery and structures**: Engineering efficient infrastructure for production.
+- **Crop and livestock breeding**: Enhancing genetic resilience and productivity.
+
+### 1.2 Agriculture as an Art
+As an art, it involves the use of learned skills and craftsmanship in:
+- **Tilling the land**: Physical preparation of the seedbed.
+- **Construction**: Building necessary farm infrastructure.
+- **Measurement**: Quantifying inputs, outputs, and land dimensions.
+- **Harvesting**: Timely and skillful collection of crops.
+- **Feeding and handling of livestock**: Providing optimal care and nutrition.
+- **Marketing**: Strategic positioning of goods for trade and consumption.
+
+## 2. Branches of Agriculture
+The field is subdivided into several specialized domains:
+
+- **Crop Farming (Arable Farming)**:
+  - **Field Crops Cultivation**: Maize, beans, potatoes, coffee, tea, and cotton.
+  - **Horticulture**: Growing perishable, high-value crops, including Floriculture (flowers), Olericulture (vegetables), and Pomoculture (fruits).
+- **Livestock Farming**:
+  - **Pastoralism**: Rearing mammalian livestock such as cattle, sheep, goats, rabbits, pigs, and camels.
+  - **Fish Farming (Aquaculture)**: Rearing fish and other aquatic organisms in controlled environments.
+  - **Bee Keeping (Apiculture)**: Managing bee colonies in structures known as beehives.
+  - **Poultry Keeping**: Rearing domesticated birds for various products.
+- **Agricultural Economics**: Allocation of scarce resources (land, labor, capital, management) for production.
+- **Agricultural Engineering**: Deals with the design, use, and maintenance of farm tools, machinery, and structures.
+
+## 3. Systems of Farming
+- **Extensive System**: Large land area with low investment per unit area. Cheap and requires less labor, but yields lower profit per unit.
+- **Intensive Farming**: Maximum utilization of resources with high management level. Can be practiced on limited land and results in high yields.
+- **Large Scale Farming**: Farming over 20 hectares, primarily commercial and highly mechanized. Realizes economies of scale.
+- **Small Scale Farming**: Typically less than 5 hectares, common among Kenyan farmers due to land availability constraints.
+
+## 4. Methods of Farming
+- **Mixed Farming**: Growing crops and keeping livestock on the same land, providing mutual benefits (manure and feed).
+- **Nomadic Pastoralism**: Moving animals in search of water and pasture, primarily in arid and semi-arid zones.
+- **Shifting Cultivation**: Traditional method where land is abandoned once soil fertility is exhausted, allowing it to rest and regain nutrients.
+- **Organic Farming**: Growing crops and rearing livestock without agrochemicals to reduce long-term environmental and health impacts.
+- **Agro-Forestry**: Integrating trees and crops on the same land to reduce erosion and improve soil nitrates.
+
+## 5. Importance of Agriculture to the Economy
+Agriculture remains the backbone of development by:
+- Providing food security and meeting nutritional requirements.
+- Creating employment opportunities (direct and indirect).
+- Providing raw materials for the industrial sector.
+- Earning foreign exchange through exports.
+- Providing a market for industrial goods from agro-based industries.
+- Generating income for farmers and revenue for governments.
     `
   },
   // --- CASE STUDY: WANKAN VILLAGE ---
@@ -213,31 +536,19 @@ Ideal agri-supply chain practices—Reduced Costs, Improved Quality, Efficient R
 # Social Influenza Disease (SI-D): A Conceptual and Socio-Psychological Exploration
 
 ## 1. Introduction
-Social Influenza Disease is a conceptual framework describing the rapid spread of harmful social beliefs, psychological stressors, and inherited ideological conflicts within human societies. Unlike biological influenza, it originates not from pathogens but from social interactions, cultural memory, communication patterns, and belief systems. 
+Social Influenza Disease is a conceptual framework describing the spread of harmful social beliefs and psychological stressors within human societies.
 
 ## 2. Mechanism of Transmission
 ### 2.1 Language as the Primary Vector
-Language—spoken words, narratives, and symbols—is the main carrier of social influenza. It can activate fear responses, reinforce prejudice, and normalize hostility. Repeated exposure to ambiguous or fear-based language can reprogram neural pathways, influencing cognition and decision-making.
+Language—spoken words, narratives, and symbols—is the main carrier of social influenza.
 
 ### 2.2 Psychological and Epigenetic Influence
-While social influenza does not alter DNA, chronic psychological stress influences epigenetic expression, affecting stress hormone regulation and immune system responsiveness. Prolonged exposure to social tension thus creates biological vulnerability.
+While social influenza does not alter DNA, chronic psychological stress influences epigenetic expression.
 
-## 3. Incubation Zones
-The family serves as the primary incubation zone. Conflicting ideologies within families generate emotional fragmentation, increasing susceptibility to external manipulation. Unresolved familial tension often expands outward, influencing community disputes and political polarization.
-
-## 4. Symptoms of SI-D
-### 4.1 Societal-Level
+## 3. symptoms of SI-D
 - Social disorganization and breakdown of trust.
-- Tribalism, discrimination, and religious hostility.
+- Tribalism and discrimination.
 - Resistance to education and rejection of innovation.
-
-### 4.2 Individual-Level
-- Chronic anxiety, depression, and identity confusion.
-- Hypertension and immune dysfunction linked to prolonged stress.
-- Breakdown of intergenerational bonds.
-
-## 5. Conclusion
-SI-D provides a lens to understand how narratives shape societies as profoundly as pathogens shape bodies. Prevention requires conscious communication, critical thinking, and collective healing of historical trauma.
     `
   },
   {
@@ -250,42 +561,7 @@ SI-D provides a lens to understand how narratives shape societies as profoundly 
     type: 'Policy Toolkit',
     size: '5.8 MB',
     date: 'May 18, 2024',
-    access: 'Public',
-    content: `
-# National SI-D Policy & Implementation Toolkit
-
-## I. Executive Summary
-This toolkit provides governments and organizations with actionable models to diagnose and intervene in the spread of Social Influenza Disease (SI-D). It emphasizes the creation of "Social Immunity" as critical national infrastructure.
-
-## II. Diagnostic Framework
-### A. Early Warning Indicators
-- Polarized language in media and family units.
-- Historical narratives used to justify exclusion.
-- Rising collective fear without identifiable causes.
-
-### B. Chronic Indicators
-- Persistent underdevelopment and innovation resistance.
-- High prevalence of stress-related physical diseases.
-- Weakening of institutional trust.
-
-## III. Social Immunity Model (SIM)
-Just as vaccines protect biologically, social immunity protects the body politic through:
-- **Education:** Critical filtering of incoming narratives.
-- **Emotional Literacy:** Regulation of collective stress.
-- **Ethical Communication:** Reducing the transmission of toxic language.
-- **Reconciliation:** Healing intergenerational trauma.
-
-## IV. Intervention Strategy
-### 1. Primary: Family-Level
-- Programs for intergenerational dialogue.
-- Parenting education focusing on emotional modeling.
-### 2. Secondary: Community-Level
-- Media literacy campaigns.
-- Storytelling correction forums led by trusted cultural leaders.
-### 3. Tertiary: Institutional-Level
-- Curricular reform in schools (Ethics, Logic, EQ).
-- Health system integration for stress screening.
-    `
+    access: 'Public'
   },
   {
     id: 'DS-SA-041',
@@ -297,33 +573,7 @@ Just as vaccines protect biologically, social immunity protects the body politic
     type: 'Integrated Model',
     size: '3.5 MB',
     date: 'May 20, 2024',
-    access: 'Public',
-    content: `
-# SI-D × EnvirosAgro Integrated Sustainability Framework
-
-## 1. The Rationale
-Sustainability does not fail first in the soil; it fails first in social systems. Where Social Influenza Disease (SI-D) exists, agricultural initiatives fail due to distrust, innovation resistance, and fragmented cooperation.
-
-## 2. Integration Model
-EnvirosAgro provides the **Environmental & Technical Structure**, while SI-D mitigation provides the **Social Immunity** required for that structure to function.
-
-| System | Role | Failure with SI-D |
-|--------|------|-----------------|
-| Social | Trust & Knowledge Flow | Conflict & Fragmentation |
-| Agricultural | Production & Efficiency | Low Adoption & Misuse |
-| Environmental | Resource Stewardship | Overexploitation |
-
-## 3. How SI-D Undermines Agriculture
-- **Knowledge Breakdown:** Farmers reject extension services due to ideological mistrust.
-- **Cooperative Failure:** Tribalism and family conflict lead to the collapse of shared resources.
-- **Stress Cycles:** Chronic social stress results in poor farm decision-making and neglect of soil health.
-
-## 4. Strategic Insights
-Nature establishes the boundaries of sustainability, but the human social state determines if those boundaries are respected. SI-D is the "hidden pest" of agriculture—consuming cooperation and weakening resilience long before crops fail.
-
-## 5. Conclusion
-Integrating SI-D mitigation into the EnvirosAgro framework transforms sustainability from a technical goal into a societal state. Healthy societies produce healthy farms.
-    `
+    access: 'Public'
   },
   {
     id: 'DS-SA-001',

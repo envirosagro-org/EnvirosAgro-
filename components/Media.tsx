@@ -4,7 +4,7 @@ import {
   Megaphone, Share2, Link2, Globe, CheckCircle2, MessageCircle, Video, Glasses, 
   Monitor, Film, Bell, Heart, BarChart2, Calendar, TrendingUp, Zap, Clock, 
   ArrowRight, Search, Play, Volume2, Mic2, Info, BookOpen, X, Pause, Settings,
-  Activity, Headphones, Music, Loader2
+  Activity, Headphones, Music, Loader2, Maximize, ChevronRight, ShieldCheck
 } from 'lucide-react';
 import { View } from '../types';
 
@@ -105,7 +105,7 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
 
   const handleShare = (title: string, text: string) => {
     if (navigator.share) {
-      const url = window.location.href.startsWith('http') ? window.location.href : 'https://envirosagro.com';
+      const url = window.location.origin;
       navigator.share({ title, text, url }).catch(err => {
           if (err.name !== 'AbortError') console.error('Share failed:', err);
       });
@@ -121,257 +121,264 @@ export const Media: React.FC<MediaProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="bg-earth-50 dark:bg-earth-950 min-h-screen">
+    <div className="flex flex-col w-full bg-[#fafaf9] dark:bg-earth-950 transition-colors duration-500 pb-32">
       
-      {/* Breaking News Ticker */}
-      <div className="bg-agro-900 text-white py-3 relative overflow-hidden border-b border-agro-800">
-          <div className="absolute left-0 top-0 bottom-0 px-6 bg-red-600 flex items-center gap-2 z-10 font-black italic uppercase text-xs">
-              <Zap size={14} className="fill-white" /> Breaking
-          </div>
-          <div className="flex whitespace-nowrap animate-[marquee_30s_linear_infinite] pl-40">
-              {TICKER_ITEMS.map((item, i) => (
-                  <span key={i} className="mx-8 text-sm font-bold flex items-center gap-4">
-                      {item} <span className="w-1.5 h-1.5 bg-agro-500 rounded-full"></span>
-                  </span>
-              ))}
-              {TICKER_ITEMS.map((item, i) => (
-                  <span key={`dup-${i}`} className="mx-8 text-sm font-bold flex items-center gap-4">
-                      {item} <span className="w-1.5 h-1.5 bg-agro-500 rounded-full"></span>
-                  </span>
-              ))}
-          </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 pt-12">
         
         {/* Featured Spotlight */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-20">
-            <div className="lg:col-span-2 relative h-[500px] rounded-[2.5rem] overflow-hidden group shadow-2xl border border-earth-200 dark:border-earth-800">
-                <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=1600" className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" alt="Featured Content" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
-                <div className="absolute top-8 left-8 bg-agro-500 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-2 shadow-lg">
-                    <span className="w-2 h-2 bg-white rounded-full animate-ping"></span> Live Broadcast
+        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            <div className="lg:col-span-2 relative h-[500px] rounded-[3.5rem] overflow-hidden group shadow-cinematic border border-earth-200 dark:border-earth-800">
+                <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=1600" className="w-full h-full object-cover transition-transform duration-[15s] group-hover:scale-110" alt="Featured Content" />
+                <div className="absolute inset-0 bg-gradient-to-t from-earth-950 via-earth-950/40 to-transparent"></div>
+                <div className="absolute top-8 left-8 bg-agro-600 text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-3 shadow-xl">
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                    </span> Live Broadcast
                 </div>
                 
                 <div className="absolute bottom-10 left-10 right-10 text-white">
-                    <h2 className="text-4xl md:text-5xl font-serif font-bold mb-6 leading-tight drop-shadow-xl">Scaling Precision Diagnostics: <br/>The 2024 Tech Roadmap</h2>
+                    <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 leading-tight tracking-tight drop-shadow-2xl">Scaling Precision Diagnostics: <br/>The 2024 Tech Roadmap</h2>
                     <div className="flex flex-wrap gap-4">
-                        <button onClick={() => onNavigate && onNavigate(View.LIVE_HOST)} className="bg-white text-agro-900 px-8 py-3.5 rounded-2xl font-black flex items-center gap-3 hover:bg-agro-50 transition-all shadow-xl hover:-translate-y-1">
-                            <Play fill="currentColor" size={20} /> Enter Studio
+                        <button onClick={() => onNavigate?.(View.LIVE_HOST)} className="bg-white text-agro-900 px-10 py-4 rounded-2xl font-black flex items-center gap-3 hover:bg-agro-50 transition-all shadow-xl hover:-translate-y-1 active:scale-95 text-xs uppercase tracking-widest">
+                            <Play fill="currentColor" size={18} /> Enter Studio
                         </button>
-                        <button onClick={() => onNavigate && onNavigate(View.GREEN_LENS)} className="bg-black/40 backdrop-blur-md text-white border border-white/20 px-6 py-3.5 rounded-2xl font-bold flex items-center gap-2 hover:bg-black/60 transition-all">
-                            <Info size={20} /> Documentary Details
+                        <button onClick={() => onNavigate?.(View.GREEN_LENS)} className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-white/20 transition-all text-xs uppercase tracking-widest">
+                            <Info size={18} /> Details
                         </button>
                     </div>
                 </div>
             </div>
 
             <div className="flex flex-col gap-6">
-                <div className="bg-white dark:bg-earth-900 p-8 rounded-[2rem] border border-earth-100 dark:border-earth-800 shadow-sm flex-1">
-                    <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-6 flex items-center gap-2"><TrendingUp className="text-agro-600" /> Trending</h3>
-                    <div className="space-y-6">
+                <div className="bg-white dark:bg-earth-900 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 shadow-sm flex-1 flex flex-col">
+                    <h3 className="text-xs font-black text-earth-400 dark:text-earth-500 uppercase tracking-[0.4em] mb-8 flex items-center gap-3">
+                      <TrendingUp size={16} className="text-agro-600" /> Trending Now
+                    </h3>
+                    <div className="space-y-8 flex-1">
                         {[
-                            { title: 'The Soil Microbiome Podcast', meta: 'Audio • 45m', trend: '+124%', target: View.PODCAST },
-                            { title: 'Regenerative Tea Manual', meta: 'Document • 12MB', trend: '+85%', target: View.KNOWLEDGE },
-                            { title: 'Live: Pest Alert Central', meta: 'Broadcast', trend: 'Live', target: View.PLANET_WATCH }
+                            { title: 'The Soil Microbiome Podcast', meta: 'Audio • 45m', trend: '+124%', target: View.PODCAST, icon: <Volume2 size={22}/> },
+                            { title: 'Regenerative Tea Manual', meta: 'Document • 12MB', trend: '+85%', target: View.KNOWLEDGE, icon: <BookOpen size={22}/> },
+                            { title: 'Live: Pest Alert Central', meta: 'Broadcast', trend: 'Live', target: View.PLANET_WATCH, icon: <Cast size={22}/> }
                         ].map((item, i) => (
-                            <div key={i} onClick={() => onNavigate && onNavigate(item.target)} className="flex gap-4 group cursor-pointer">
-                                <div className="w-12 h-12 bg-earth-50 dark:bg-earth-800 rounded-xl flex items-center justify-center text-earth-400 group-hover:text-agro-600 transition-colors">
-                                    {i === 0 ? <Volume2 size={24} /> : i === 1 ? <BookOpen size={24} /> : <Cast size={24} />}
+                            <div key={i} onClick={() => onNavigate?.(item.target)} className="flex gap-5 group cursor-pointer">
+                                <div className="w-14 h-14 bg-earth-50 dark:bg-earth-800 rounded-2xl flex items-center justify-center text-earth-400 group-hover:text-agro-600 transition-all shadow-inner">
+                                    {item.icon}
                                 </div>
-                                <div className="flex-1">
-                                    <h4 className="font-bold text-sm text-earth-900 dark:text-white leading-tight mb-1 group-hover:text-agro-600 transition-colors">{item.title}</h4>
-                                    <div className="flex justify-between items-center"><span className="text-[10px] text-earth-400 font-bold uppercase">{item.meta}</span><span className={`text-[10px] font-black ${item.trend === 'Live' ? 'text-red-500 animate-pulse' : 'text-green-500'}`}>{item.trend}</span></div>
+                                <div className="flex-1 min-w-0">
+                                    <h4 className="font-bold text-sm text-earth-900 dark:text-white leading-tight mb-1 group-hover:text-agro-600 transition-colors truncate">{item.title}</h4>
+                                    <div className="flex justify-between items-center">
+                                       <span className="text-[10px] text-earth-400 font-bold uppercase tracking-tighter">{item.meta}</span>
+                                       <span className="text-[10px] font-black text-agro-600">{item.trend}</span>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                </div>
-                <div className="bg-agro-900 p-8 rounded-[2.5rem] shadow-xl text-white relative overflow-hidden">
-                    <Mic2 size={120} className="absolute top-0 right-0 p-8 opacity-10" />
-                    <h3 className="text-2xl font-serif font-bold mb-2">Voice of Earth</h3>
-                    <button onClick={handleListenLive} className="w-full mt-4 bg-white text-agro-900 py-3 rounded-xl font-black text-sm flex items-center justify-center gap-2 hover:bg-agro-50 transition-colors">Listen Live</button>
+                    <button onClick={() => onNavigate?.(View.PODCAST)} className="w-full mt-8 py-4 border-2 border-earth-50 dark:border-earth-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-earth-400 hover:text-agro-600 hover:bg-earth-50 transition-all">
+                      View Engagement Metrics
+                    </button>
                 </div>
             </div>
         </div>
 
-        {/* Section Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-20">
+        {/* Breaking News Ticker - RELOCATED HERE to prevent header override */}
+        <div className="mb-20">
+          <div className="bg-earth-900 dark:bg-agro-950 text-white py-4 px-10 rounded-[2.5rem] overflow-hidden shadow-2xl flex items-center gap-8 border border-white/5 relative group">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/grid.png')] opacity-[0.03] pointer-events-none"></div>
+            <div className="flex items-center gap-3 font-black text-[10px] uppercase tracking-[0.4em] text-red-500 shrink-0 border-r border-white/10 pr-8 relative z-10">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-ping shadow-[0_0_10px_#ef4444]"></div> 
+                Breaking News
+            </div>
+            <div className="flex-1 overflow-hidden relative h-5 z-10">
+                <div className="absolute whitespace-nowrap animate-[marquee_35s_linear_infinite] text-sm font-bold text-agro-100 tracking-wide hover:[animation-play-state:paused] cursor-default">
+                  {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
+                    <span key={i} className="mr-32 flex-inline items-center gap-3">
+                      {item} <span className="opacity-20 ml-32">•</span>
+                    </span>
+                  ))}
+                </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Explorer Sections */}
+        <div className="space-y-32">
           {MEDIA_CHANNELS.map((section) => (
-              <div key={section.id} className={`p-8 rounded-[2.5rem] border ${section.color.split(' ')[1]} ${section.color.split(' ')[0]} dark:bg-earth-900 transition-all h-full flex flex-col`}>
-                  <div className="flex items-center gap-3 mb-6"><div className="p-3 bg-white dark:bg-earth-800 rounded-2xl shadow-sm">{section.icon}</div><h4 className="font-bold leading-tight dark:text-white">{section.title}</h4></div>
-                  <p className="text-xs text-earth-600 dark:text-earth-400 mb-8 flex-1 leading-relaxed">{section.description}</p>
-                  <div className="space-y-4">
-                      {section.channels.map((channel: any, idx) => (
-                          <div key={idx} className="bg-white/70 dark:bg-earth-800/50 p-4 rounded-2xl hover:bg-white transition-all cursor-pointer relative group border border-transparent hover:border-agro-100">
-                              <div className="flex justify-between items-center mb-1"><span className="font-bold text-sm text-earth-900 dark:text-white leading-tight pr-4">{channel.name}</span><span className="text-[10px] uppercase font-black text-earth-400 bg-earth-50 px-1.5 py-0.5 rounded border">{channel.type}</span></div>
-                              {channel.isPodcast && onNavigate && (<button onClick={() => onNavigate(View.PODCAST)} className="w-full mt-2 py-2 bg-agro-100 text-agro-700 text-[10px] font-black rounded-xl hover:bg-agro-200 transition-colors uppercase flex items-center justify-center gap-2"><PlayCircle size={14} /> Listen</button>)}
-                              {channel.isForum && onNavigate && (<button onClick={() => onNavigate(View.HERITAGE_FORUM)} className="w-full mt-2 py-2 bg-rose-100 text-rose-700 text-[10px] font-black rounded-xl hover:bg-rose-200 transition-colors uppercase flex items-center justify-center gap-2"><MessageCircle size={14} /> Discuss</button>)}
-                              {channel.isWebinar && onNavigate && (<button onClick={() => onNavigate(View.WEBINAR)} className="w-full mt-2 py-2 bg-blue-100 text-blue-700 text-[10px] font-black rounded-xl hover:bg-blue-200 transition-colors uppercase flex items-center justify-center gap-2"><Video size={14} /> Watch</button>)}
-                              {channel.isVR && onNavigate && (<button onClick={() => onNavigate(View.SMART_FARM_VR)} className="w-full mt-2 py-2 bg-purple-100 text-purple-700 text-[10px] font-black rounded-xl hover:bg-purple-200 transition-colors uppercase flex items-center justify-center gap-2"><Glasses size={14} /> VR</button>)}
-                              {channel.isNews && onNavigate && (<button onClick={() => onNavigate(View.PLANET_WATCH)} className="w-full mt-2 py-2 bg-green-100 text-green-700 text-[10px] font-black rounded-xl hover:bg-green-200 transition-colors uppercase flex items-center justify-center gap-2"><Monitor size={14} /> Report</button>)}
-                              {channel.isDoc && onNavigate && (<button onClick={() => onNavigate(View.GREEN_LENS)} className="w-full mt-2 py-2 bg-green-100 text-green-700 text-[10px] font-black rounded-xl hover:bg-green-200 transition-colors uppercase flex items-center justify-center gap-2"><Film size={14} /> Stream</button>)}
-                              {channel.isAlert && onNavigate && (<button onClick={() => onNavigate(View.SAFE_HARVEST)} className="w-full mt-2 py-2 bg-red-100 text-red-700 text-[10px] font-black rounded-xl hover:bg-red-200 transition-colors uppercase flex items-center justify-center gap-2"><Bell size={14} /> Alerts</button>)}
-                              {channel.isBlog && onNavigate && (<button onClick={() => onNavigate(View.NUTRILIFE)} className="w-full mt-2 py-2 bg-red-100 text-red-700 text-[10px] font-black rounded-xl hover:bg-red-200 transition-colors uppercase flex items-center justify-center gap-2"><Heart size={14} /> Read</button>)}
-                              {channel.isNewsletter && onNavigate && (<button onClick={() => onNavigate(View.AGBIZ_WEEKLY)} className="w-full mt-2 py-2 bg-slate-100 text-slate-700 text-[10px] font-black rounded-xl hover:bg-slate-200 transition-colors uppercase flex items-center justify-center gap-2"><BarChart2 size={14} /> Analysis</button>)}
-                              {channel.isEvent && onNavigate && (<button onClick={() => onNavigate(View.SCALEUP_SUMMIT)} className="w-full mt-2 py-2 bg-slate-100 text-slate-700 text-[10px] font-black rounded-xl hover:bg-slate-200 transition-colors uppercase flex items-center justify-center gap-2"><Calendar size={14} /> Join</button>)}
-                              <button onClick={(e) => { e.stopPropagation(); handleShare(channel.name, channel.desc); }} className="absolute top-3 right-3 text-earth-400 hover:text-agro-600 transition-colors p-1"><Share2 size={14} /></button>
-                          </div>
-                      ))}
+            <section key={section.id} className="animate-in fade-in slide-in-from-bottom-6 duration-700">
+               <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8 border-b border-earth-100 dark:border-earth-800 pb-8 px-2">
+                  <div className="max-w-2xl">
+                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-inner border border-black/5 ${section.color.split(' ')[0]}`}>
+                        {section.icon}
+                     </div>
+                     <h2 className="text-3xl font-serif font-bold text-earth-900 dark:text-white mb-3 tracking-tight">{section.title}</h2>
+                     <p className="text-earth-500 dark:text-earth-400 font-medium leading-relaxed">{section.description}</p>
                   </div>
-              </div>
+                  <button onClick={() => onNavigate?.(View.KNOWLEDGE)} className="text-[10px] font-black uppercase tracking-widest text-agro-600 flex items-center gap-3 group">
+                    Enter Domain Archive <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+               </div>
+
+               <div className="grid md:grid-cols-2 gap-8">
+                  {section.channels.map((channel, i) => (
+                    <div 
+                      key={i} 
+                      className="bg-white dark:bg-earth-900 p-10 rounded-[3rem] border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-cinematic hover:-translate-y-1 transition-all group cursor-pointer flex items-start gap-8"
+                      onClick={() => {
+                        if (channel.isPodcast) onNavigate?.(View.PODCAST);
+                        else if (channel.isNews) onNavigate?.(View.PLANET_WATCH);
+                        else if (channel.isWebinar) onNavigate?.(View.WEBINAR);
+                        else if (channel.isVR) onNavigate?.(View.SMART_FARM_VR);
+                        else if (channel.isDoc) onNavigate?.(View.GREEN_LENS);
+                        else if (channel.isNewsletter) onNavigate?.(View.AGBIZ_WEEKLY);
+                        else if (channel.isEvent) onNavigate?.(View.SCALEUP_SUMMIT);
+                        else if (channel.isForum) onNavigate?.(View.HERITAGE_FORUM);
+                        else if (channel.isAlert) onNavigate?.(View.SAFE_HARVEST);
+                        else if (channel.isBlog) onNavigate?.(View.NUTRILIFE);
+                      }}
+                    >
+                       <div className="p-5 bg-earth-50 dark:bg-earth-800 rounded-[1.8rem] text-earth-400 group-hover:bg-agro-50 dark:group-hover:bg-agro-900/40 group-hover:text-agro-600 transition-all shadow-inner">
+                          {channel.type === 'Audio' ? <Headphones size={28} /> : channel.type === 'Video' ? <Video size={28} /> : channel.type === 'Article' ? <Newspaper size={28} /> : <Globe size={28} />}
+                       </div>
+                       <div className="flex-1">
+                          <div className="flex justify-between items-start mb-4">
+                             <span className="text-[9px] font-black text-agro-600 uppercase tracking-widest bg-agro-50 dark:bg-agro-900/30 px-3 py-1 rounded-full border border-agro-100 dark:border-agro-800">
+                                {channel.type}
+                             </span>
+                             <button onClick={(e) => { e.stopPropagation(); handleShare(channel.name, channel.desc); }} className="p-2 text-earth-300 hover:text-agro-600 transition-colors">
+                                <Share2 size={16} />
+                             </button>
+                          </div>
+                          <h4 className="text-2xl font-bold text-earth-900 dark:text-white mb-2 leading-tight group-hover:text-agro-600 transition-colors">
+                             {channel.name}
+                          </h4>
+                          <p className="text-sm text-earth-500 dark:text-earth-400 leading-relaxed font-medium mb-8">
+                             {channel.desc}
+                          </p>
+                          <div className="flex items-center gap-3 font-black text-[10px] uppercase tracking-widest text-earth-300 group-hover:text-agro-600 transition-all">
+                             {/* Added comment above fix: Added missing ChevronRight from lucide-react */}
+                             Connect Stream <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                          </div>
+                       </div>
+                    </div>
+                  ))}
+               </div>
+            </section>
           ))}
         </div>
 
-        {/* Global Radio Widget */}
-        <div className="bg-white dark:bg-earth-900 rounded-[3rem] p-10 border border-earth-100 shadow-sm mb-20 overflow-hidden relative">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
-                <div className="lg:w-1/2">
-                    <div className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-agro-600 mb-4"><Radio size={16} className="animate-pulse" /> Live Radio</div>
-                    <h3 className="text-4xl font-serif font-bold text-earth-900 dark:text-white mb-6">Agricultural Airwaves</h3>
-                    <div className="flex flex-wrap gap-4">
-                        <button onClick={handleListenLive} className="bg-agro-600 hover:bg-agro-700 text-white px-10 py-4 rounded-2xl font-black flex items-center gap-3 transition-all shadow-xl shadow-agro-600/30 active:scale-95"><Volume2 size={24} /> Listen Live</button>
-                        <button onClick={() => onNavigate && onNavigate(View.WEBINAR)} className="bg-earth-50 dark:bg-earth-800 text-earth-700 dark:text-earth-300 px-8 py-4 rounded-2xl font-bold flex items-center gap-2 transition-all"><Clock size={20} /> Schedule</button>
+        {/* Global Radio Hub (Pinned Experience) */}
+        <div className="mt-32">
+          <div className={`bg-slate-900 rounded-[4rem] p-12 lg:p-20 text-white relative overflow-hidden shadow-cinematic transition-all duration-700 ${showLiveRadio ? 'border-4 border-blue-500/50' : ''}`}>
+              <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-[10s]"><Radio size={400} /></div>
+              
+              <div className="grid lg:grid-cols-2 gap-20 items-center relative z-10">
+                 <div>
+                    <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-400 text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+                       <Radio size={16} className={isRadioPlaying ? 'animate-pulse' : ''} /> 24/7 Global Audio Node
                     </div>
-                </div>
-                <div className="lg:w-1/2 w-full">
-                    <div className="bg-earth-50 dark:bg-earth-800/50 p-8 rounded-[2rem] border border-earth-100 group cursor-pointer" onClick={handleListenLive}>
-                        <div className="flex gap-6 items-center mb-8">
-                            <div className="w-20 h-20 bg-agro-600 rounded-3xl flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform"><Mic2 size={40} /></div>
-                            <div>
-                                <h4 className="text-xl font-bold text-earth-900 dark:text-white">Regen-Ag 101</h4>
-                                <p className="text-earth-500 dark:text-earth-400">with Host Samuel O.</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-1 items-end h-6 w-full px-2">
-                             {visualizerData.slice(0, 15).map((h, i) => (
-                                <div key={i} className="flex-1 bg-agro-200 dark:bg-agro-900 rounded-t-sm" style={{ height: `${h}%` }}></div>
-                             ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-
-      {/* LIVE RADIO PLAYER MODAL */}
-      {showLiveRadio && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-2xl animate-in fade-in duration-300">
-              <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[4rem] shadow-2xl border border-white/10 overflow-hidden animate-in zoom-in-95 flex flex-col">
-                  {/* Studio Header */}
-                  <div className="bg-agro-900 p-8 text-white relative overflow-hidden flex justify-between items-center">
-                      <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12"><Music size={150} /></div>
-                      <div className="relative z-10 flex items-center gap-5">
-                          <div className="bg-red-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 animate-pulse shadow-lg shadow-red-600/30">
-                              <span className="w-1.5 h-1.5 bg-white rounded-full"></span> LIVE STUDIO
-                          </div>
-                          <div>
-                            <h3 className="text-2xl font-serif font-bold tracking-tight">{radioStation}</h3>
-                            <p className="text-agro-300 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Unified Frequency 99.8 MHz</p>
-                          </div>
-                      </div>
-                      <button 
-                        onClick={() => setShowLiveRadio(false)} 
-                        className="relative z-10 p-2 hover:bg-white/10 rounded-full transition-all group"
-                      >
-                          <X size={28} className="group-hover:rotate-90 transition-transform" />
-                      </button>
-                  </div>
-
-                  <div className="p-12 flex flex-col items-center">
-                      {/* Visualizer Area */}
-                      <div className="w-full h-48 bg-slate-50 dark:bg-black/40 rounded-[2.5rem] border border-earth-100 dark:border-white/5 p-8 mb-12 flex items-center justify-center gap-1.5 relative overflow-hidden">
-                          {isRadioPlaying ? (
-                            <>
+                    <h3 className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight tracking-tighter">Voice of Earth <br/><span className="text-blue-500">Global Stream</span></h3>
+                    <p className="text-slate-400 text-xl max-w-xl mb-12 leading-relaxed font-medium">
+                       Broadcasting real-time sustainable intelligence, environmental soundscapes, and expert discourse to every node in the network.
+                    </p>
+                    
+                    {!showLiveRadio ? (
+                       <button 
+                        onClick={handleListenLive}
+                        className="bg-white text-slate-950 px-16 py-6 rounded-full font-black uppercase text-xs tracking-[0.4em] hover:scale-105 active:scale-95 transition-all shadow-2xl flex items-center gap-6"
+                       >
+                          Listen Live <Volume2 size={24} />
+                       </button>
+                    ) : (
+                       <div className="space-y-10">
+                          <div className="bg-black/40 backdrop-blur-2xl p-8 rounded-[2.5rem] border border-white/5 shadow-inner">
+                             <div className="flex justify-between items-center mb-8">
+                                <div>
+                                   <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Now Streaming</p>
+                                   <p className="text-2xl font-bold">{radioStation}</p>
+                                </div>
+                                <div className="text-right">
+                                   <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Listener Count</p>
+                                   <p className="text-xl font-mono font-bold text-white">12,482</p>
+                                </div>
+                             </div>
+                             
+                             <div className="flex items-end gap-1.5 h-16 mb-10 overflow-hidden">
                                 {visualizerData.map((h, i) => (
-                                    <div 
-                                        key={i} 
-                                        className="w-2 bg-agro-500 rounded-full transition-all duration-100 shadow-[0_0_10px_rgba(34,197,94,0.3)]"
-                                        style={{ height: `${h * 4}%`, opacity: 0.3 + (h/25) }}
-                                    ></div>
+                                   <div 
+                                    key={i} 
+                                    className="flex-1 bg-gradient-to-t from-blue-600 to-blue-400 rounded-full transition-all duration-300"
+                                    style={{ height: `${h * 5}%`, opacity: isRadioPlaying ? 1 : 0.2 }}
+                                   ></div>
                                 ))}
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-50 dark:from-slate-900 via-transparent to-transparent pointer-events-none"></div>
-                            </>
-                          ) : (
-                              <div className="flex flex-col items-center gap-4 animate-in fade-in">
-                                  <Loader2 size={32} className="text-agro-600 animate-spin" />
-                                  <p className="text-[10px] font-black text-earth-400 uppercase tracking-widest">Buffering Global Feed...</p>
-                              </div>
-                          )}
-                      </div>
+                             </div>
 
-                      {/* Metadata */}
-                      <div className="text-center mb-12">
-                          <h4 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Sustainable Integrated Development</h4>
-                          <p className="text-agro-600 dark:text-agro-400 font-black text-xs uppercase tracking-widest mb-6">Current Talk: Soil Resilience Engine v4.0</p>
-                          <div className="flex items-center justify-center gap-10">
-                              <div className="flex flex-col items-center">
-                                  <span className="text-[9px] font-black text-earth-400 uppercase tracking-widest mb-1">Host</span>
-                                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Samuel Omondi</span>
-                              </div>
-                              <div className="h-6 w-px bg-earth-200 dark:bg-white/10"></div>
-                              <div className="flex flex-col items-center">
-                                  <span className="text-[9px] font-black text-earth-400 uppercase tracking-widest mb-1">Location</span>
-                                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Kiriaini, Kenya</span>
-                              </div>
-                              <div className="h-6 w-px bg-earth-200 dark:bg-white/10"></div>
-                              <div className="flex flex-col items-center">
-                                  <span className="text-[9px] font-black text-earth-400 uppercase tracking-widest mb-1">Listeners</span>
-                                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300">1,242 Live</span>
-                              </div>
-                          </div>
-                      </div>
-
-                      {/* Main Controls */}
-                      <div className="flex flex-col items-center gap-10 w-full">
-                          <div className="flex items-center gap-12">
-                              <button className="text-earth-300 hover:text-agro-600 transition-colors"><SkipBack size={32} /></button>
-                              <button 
+                             <div className="flex items-center gap-10">
+                                <button 
                                   onClick={() => setIsRadioPlaying(!isRadioPlaying)}
-                                  className={`w-24 h-24 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-105 active:scale-95 ${isRadioPlaying ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-agro-600 text-white shadow-agro-600/30'}`}
-                              >
-                                  {isRadioPlaying ? <Pause size={40} fill="currentColor" /> : <Play size={40} fill="currentColor" className="ml-2" />}
-                              </button>
-                              <button className="text-earth-300 hover:text-agro-600 transition-colors"><SkipForward size={32} /></button>
+                                  className="w-20 h-20 bg-white text-slate-950 rounded-full flex items-center justify-center hover:scale-110 active:scale-95 transition-all shadow-2xl shrink-0"
+                                >
+                                   {isRadioPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1.5" />}
+                                </button>
+                                <div className="flex-1 space-y-4">
+                                   <div className="flex justify-between items-center px-1">
+                                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Master Gain Control</span>
+                                      <span className="font-mono text-xs text-blue-400">{volume}%</span>
+                                   </div>
+                                   <input 
+                                      type="range" min="0" max="100" 
+                                      value={volume} 
+                                      onChange={(e) => setVolume(parseInt(e.target.value))}
+                                      className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-blue-500" 
+                                   />
+                                </div>
+                             </div>
                           </div>
-
-                          <div className="w-full max-w-xs flex items-center gap-4">
-                              <Volume2 size={20} className="text-earth-400" />
-                              <div className="flex-1 h-1.5 bg-earth-100 dark:bg-white/10 rounded-full overflow-hidden group cursor-pointer">
-                                  <div className="h-full bg-agro-500 shadow-[0_0_10px_#22c55e]" style={{ width: `${volume}%` }}></div>
-                              </div>
-                              <span className="text-[10px] font-black text-earth-400 font-mono">{volume}%</span>
+                          <button onClick={() => setShowLiveRadio(false)} className="text-[10px] font-black text-slate-500 hover:text-white uppercase tracking-widest flex items-center gap-2">
+                             <X size={14} /> Terminate Link
+                          </button>
+                       </div>
+                    )}
+                 </div>
+                 
+                 <div className="hidden lg:block relative">
+                    <div className="absolute inset-0 bg-blue-500/20 blur-[100px] rounded-full animate-pulse"></div>
+                    <div className="relative bg-black/40 backdrop-blur-3xl p-10 rounded-[4rem] border border-white/10 shadow-2xl overflow-hidden group">
+                       <div className="flex items-center gap-4 mb-10">
+                          <Headphones size={32} className="text-blue-500" />
+                          <div>
+                             <h4 className="font-bold text-xl leading-none mb-1.5">Audio Fidelity Check</h4>
+                             <p className="text-[10px] text-slate-500 uppercase font-black tracking-widest">Encrypted Broadcast v4.2</p>
                           </div>
-                      </div>
-                  </div>
-
-                  {/* Footer Stats */}
-                  <div className="p-8 bg-earth-50 dark:bg-earth-950/50 border-t border-earth-100 dark:border-white/5 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                          <Headphones size={20} className="text-blue-500" />
-                          <p className="text-[9px] text-earth-400 dark:text-earth-500 font-black uppercase tracking-[0.4em]">High Fidelity Neural Stream Optimized</p>
-                      </div>
-                      <div className="flex gap-4">
-                          <button className="text-[9px] font-black text-agro-600 uppercase tracking-widest hover:underline">Stream History</button>
-                          <button className="text-[9px] font-black text-agro-600 uppercase tracking-widest hover:underline">Full Schedule</button>
-                      </div>
-                  </div>
+                       </div>
+                       <div className="space-y-6">
+                          {[
+                            { label: 'Latency (Global)', val: '42ms', color: 'text-green-400' },
+                            { label: 'Sample Rate', val: '48kHz / 24bit', color: 'text-white' },
+                            { label: 'Encryption', val: 'AES-256-GCM', color: 'text-blue-400' }
+                          ].map(stat => (
+                            <div key={stat.label} className="flex justify-between items-center p-5 bg-white/5 rounded-2xl border border-white/5 group-hover:border-blue-500/30 transition-all shadow-inner">
+                               <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">{stat.label}</span>
+                               <span className={`font-mono text-xs font-black ${stat.color}`}>{stat.val}</span>
+                            </div>
+                          ))}
+                       </div>
+                    </div>
+                 </div>
               </div>
           </div>
-      )}
+        </div>
+
+        {/* Footer Ribbon */}
+        <div className="mt-32 pt-16 border-t border-earth-100 dark:border-earth-800 flex flex-col md:flex-row justify-between items-center gap-12 text-[10px] font-black uppercase tracking-[0.5em] text-earth-400">
+           <div className="flex items-center gap-8">
+              <span className="hover:text-agro-600 transition-colors cursor-pointer flex items-center gap-3"><Globe size={14} /> Global Dissemination Unit</span>
+              {/* Added comment above fix: Added missing ShieldCheck from lucide-react */}
+              <span className="hover:text-agro-600 transition-colors cursor-pointer flex items-center gap-3"><ShieldCheck size={14} /> Truth Verified Metadata</span>
+           </div>
+           <p className="opacity-40">ENVIROSAGRO BROADCAST PROTOCOL v4.2.0</p>
+        </div>
+      </div>
     </div>
   );
 };
-
-// Helper Icons
-const Volume2Icon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-);
-
-const SkipBack = ({ size, className }: { size?: number, className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
-);
-
-const SkipForward = ({ size, className }: { size?: number, className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-);

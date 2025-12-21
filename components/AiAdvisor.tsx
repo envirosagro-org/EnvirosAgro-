@@ -1,33 +1,34 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
 import { createAgroChat, sendMessageStream } from '../services/gemini';
 import { 
   Send, Bot, User, Loader2, Sparkles, AlertCircle, MessageSquare, 
-  BrainCircuit, ShieldCheck, Zap, Layers, Users, Leaf, Cpu, Factory 
+  BrainCircuit, ShieldCheck, Zap, Layers, Users, Leaf, Cpu,
+  Activity, X, Terminal, ArrowRight, ShieldAlert,
+  Maximize2, Monitor, Settings, Globe, Command, Radio
 } from 'lucide-react';
 import { Chat, GenerateContentResponse } from "@google/genai";
 
 const SUGGESTIONS = [
-  "How do I improve soil pH naturally?",
-  "Calculate my m(t) resilience score",
-  "Organic pest control for coffee",
-  "Explain the IA Thrust benefits"
+  "Calculate regional m(t) resilience",
+  "Optimize In(val) soil integrity",
+  "Identify EA Thrust deficiencies",
+  "Scalability paths for Industrial Ag"
 ];
 
 const THRUST_MAP = [
-  { id: 'SA', icon: <Users size={12} />, label: 'Social' },
-  { id: 'EA', icon: <Leaf size={12} />, label: 'Env' },
-  { id: 'HA', icon: <ShieldCheck size={12} />, label: 'Health' },
-  { id: 'TA', icon: <Cpu size={12} />, label: 'Tech' },
-  { id: 'IA', icon: <Layers size={12} />, label: 'Ind' }
+  { id: 'SA', icon: <Users size={16} />, label: 'Social Agriculture' },
+  { id: 'EA', icon: <Leaf size={16} />, label: 'Environmental' },
+  { id: 'HA', icon: <ShieldCheck size={16} />, label: 'Health Standards' },
+  { id: 'TA', icon: <Cpu size={16} />, label: 'Technical Systems' },
+  { id: 'IA', icon: <Layers size={16} />, label: 'Industrial Scale' }
 ];
 
 export const AiAdvisor: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'model',
-      text: "Greetings! I am the EnvirosAgro AI Assistant. I'm calibrated to the Five Thrusts framework. What agricultural stability metrics shall we optimize today?",
+      text: "Uplink established. EnvirosAgro Strategic AI is active. Current focus: m(t) resilience calibration. How shall we optimize your sector data today?",
       timestamp: new Date(),
     }
   ]);
@@ -47,13 +48,12 @@ export const AiAdvisor: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Simple heuristic to "detect" the thrust being discussed
   const detectThrust = (text: string) => {
     const t = text.toLowerCase();
-    if (t.includes('social') || t.includes('community') || t.includes('si-d')) return 'SA';
-    if (t.includes('soil') || t.includes('water') || t.includes('environmental')) return 'EA';
-    if (t.includes('pest') || t.includes('disease') || t.includes('health') || t.includes('pathogen')) return 'HA';
-    if (t.includes('tech') || t.includes('ai') || t.includes('precision') || t.includes('data')) return 'TA';
+    if (t.includes('social') || t.includes('community')) return 'SA';
+    if (t.includes('soil') || t.includes('environmental') || t.includes('earth')) return 'EA';
+    if (t.includes('pest') || t.includes('health') || t.includes('safety')) return 'HA';
+    if (t.includes('tech') || t.includes('ai') || t.includes('data')) return 'TA';
     if (t.includes('industrial') || t.includes('supply') || t.includes('scale')) return 'IA';
     return null;
   };
@@ -70,9 +70,7 @@ export const AiAdvisor: React.FC = () => {
 
     try {
       setMessages(prev => [...prev, { role: 'model', text: '', timestamp: new Date() }]);
-
       const result = await sendMessageStream(chatInstance.current, userMsg.text);
-      
       let fullText = '';
       
       for await (const chunk of result) {
@@ -81,127 +79,146 @@ export const AiAdvisor: React.FC = () => {
           if (text) {
               fullText += text;
               setMessages(prev => {
-                  const newMessages = [...prev];
-                  const lastMsg = newMessages[newMessages.length - 1];
-                  if (lastMsg.role === 'model') {
-                      lastMsg.text = fullText;
-                  }
-                  return newMessages;
+                  const next = [...prev];
+                  next[next.length - 1] = { ...next[next.length - 1], text: fullText };
+                  return next;
               });
           }
       }
-
     } catch (err) {
-      console.error("Assistant Error:", err);
-      setError("Network synchronization error. Please try again.");
+      console.error("Terminal Error:", err);
+      setError("Network synchronization timeout. Re-establishing link...");
       setMessages(prev => prev.filter(m => m.text !== ''));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
   return (
-    <div className="max-w-6xl mx-auto h-[calc(100vh-160px)] flex flex-col p-4 md:p-6 gap-6 relative">
-        {/* Background Formula Trace */}
-        <div className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
-            <span className="text-[20vw] font-black italic">m(t)</span>
+    <div className="max-w-[1600px] mx-auto h-[calc(100vh-200px)] flex flex-col p-6 gap-8 relative animate-in fade-in duration-1000">
+        
+        {/* Terminal Header */}
+        <div className="ea-header-block mb-0 py-8 px-12 bg-slate-900/40 border-white/5 ring-1 ring-white/5">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-10 shrink-0">
+                <div className="flex items-center gap-8">
+                    <div className="w-16 h-16 bg-blue-600 rounded-[1.8rem] flex items-center justify-center text-white shadow-glow-blue border border-white/20">
+                        <BrainCircuit size={32} />
+                    </div>
+                    <div>
+                        <div className="ea-label-meta mb-2">Cognitive Link Active</div>
+                        <h2 className="text-4xl font-serif font-black text-slate-900 dark:text-white tracking-tighter">
+                          Intelligence <span className="text-blue-500 italic">Terminal</span>
+                        </h2>
+                    </div>
+                </div>
+                <div className="flex items-center gap-6">
+                   <div className="bg-black/40 backdrop-blur-2xl px-6 py-3 rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] flex items-center gap-4 text-agro-500 shadow-inner">
+                      <div className="w-2.5 h-2.5 bg-agro-500 rounded-full animate-pulse shadow-[0_0_10px_#22c55e]"></div>
+                      Node Status: NOMINAL_SYNC
+                   </div>
+                   <button className="p-4 bg-white/5 hover:bg-white/10 rounded-[1.5rem] transition-all border border-white/10 text-slate-500 hover:text-white">
+                      <Command size={20} />
+                   </button>
+                </div>
+            </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 h-full relative z-10">
+        <div className="flex flex-col lg:flex-row gap-8 h-full relative z-10 min-h-0">
             
-            {/* Context Sidebar */}
-            <div className="hidden lg:flex flex-col w-80 gap-6">
-                <div className="bg-white dark:bg-earth-900 p-6 rounded-3xl border border-earth-100 dark:border-earth-800 shadow-sm">
-                    <h3 className="font-bold text-earth-900 dark:text-white mb-4 flex items-center gap-2">
-                        <ShieldCheck className="text-agro-600" size={18} /> Diagnostic Engine
+            {/* Logic Sidebar */}
+            <aside className="hidden lg:flex flex-col w-[350px] gap-8 shrink-0">
+                <div className="ea-card p-10 flex flex-col h-full bg-slate-900/20 border-white/5 backdrop-blur-3xl ring-1 ring-white/5">
+                    <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-[0.6em] mb-12 flex items-center gap-4">
+                        <Terminal size={18} className="text-blue-500" /> Active Modules
                     </h3>
-                    <p className="text-xs text-earth-600 dark:text-earth-400 leading-relaxed mb-6">
-                        Optimizing regional resilience through steady-state adaptive modeling.
-                    </p>
-                    <div className="space-y-4">
+                    <div className="space-y-8 flex-1">
                         {THRUST_MAP.map(t => (
-                            <div key={t.id} className="flex items-center justify-between group">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-lg bg-earth-50 dark:bg-earth-800 flex items-center justify-center text-earth-400 group-hover:text-agro-600 transition-colors">
-                                        {t.icon}
+                            <div key={t.id} className="group cursor-default">
+                                <div className="flex items-center justify-between mb-3">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-10 h-10 rounded-[1.2rem] bg-black/40 flex items-center justify-center text-slate-500 group-hover:text-blue-400 transition-all duration-700 border border-white/5 ring-1 ring-transparent group-hover:ring-blue-500/20 shadow-inner">
+                                            {t.icon}
+                                        </div>
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-white transition-colors">{t.label}</span>
                                     </div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-earth-500">{t.label}</span>
+                                    <span className="text-[9px] font-mono text-slate-600 group-hover:text-blue-500/60">SYNCED</span>
                                 </div>
-                                <div className="h-1 flex-1 mx-3 bg-earth-100 dark:bg-earth-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-agro-500 w-[60%] opacity-20"></div>
+                                <div className="h-1 w-full bg-black/40 rounded-full overflow-hidden">
+                                    <div className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 w-[78%] group-hover:w-[85%] transition-all duration-1000 shadow-[0_0_10px_#3b82f6]"></div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                </div>
 
-                <div className="bg-agro-950 p-6 rounded-3xl text-white shadow-xl relative overflow-hidden">
-                    <BrainCircuit size={100} className="absolute -bottom-10 -right-10 opacity-10" />
-                    <h4 className="font-bold text-sm mb-2 relative z-10">Steady-State Logic</h4>
-                    <p className="text-xs text-agro-200 relative z-10 leading-relaxed">
-                        Calculations prioritized by $Dn$ and $In$ variables to maximize $m(t)$ efficiency.
-                    </p>
+                    <div className="mt-12 bg-black/60 rounded-[3rem] p-8 text-white relative overflow-hidden shadow-cinematic-xl ring-1 ring-white/5 group">
+                        <div className="absolute top-0 right-0 p-6 opacity-[0.03] transition-transform duration-1000 group-hover:scale-125"><Activity size={180} /></div>
+                        <h4 className="font-black text-[10px] uppercase tracking-[0.3em] mb-6 flex items-center gap-3 text-agro-500">
+                          <Radio size={16} fill="currentColor" className="animate-pulse" /> Real-time Telemetry
+                        </h4>
+                        <p className="text-[11px] text-slate-400 leading-relaxed relative z-10 font-medium italic">
+                          "System prioritizing Soil Moisture (In) deltas for Q2 optimization path."
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </aside>
 
-            {/* Chat Area */}
-            <div className="flex-1 bg-white dark:bg-earth-900 rounded-[2.5rem] shadow-xl overflow-hidden flex flex-col border border-earth-100 dark:border-earth-800">
-                {/* Header */}
-                <div className="bg-agro-950 text-white p-6 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="bg-agro-500 p-2.5 rounded-2xl shadow-lg ring-4 ring-white/5">
-                            <Zap className="text-white" size={24} />
+            {/* Terminal Interface */}
+            <div className="ea-card flex-1 flex flex-col min-w-0 bg-[#050a14]/60 border-white/5 shadow-cinematic-xl ring-1 ring-white/10 backdrop-blur-[80px]">
+                {/* Channel Header */}
+                <div className="bg-black/40 p-8 flex items-center justify-between shrink-0 border-b border-white/10 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-10 opacity-[0.02]"><Monitor size={250}/></div>
+                    <div className="flex items-center gap-8 relative z-10">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-agro-600 rounded-[2rem] flex items-center justify-center text-white shadow-glow-blue border border-white/10 ring-4 ring-white/5">
+                            <Zap size={28} fill="currentColor" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-bold">Unified Intel Hub</h2>
-                            <p className="text-agro-300 text-[10px] font-black uppercase tracking-[0.2em]">Framework Synchronization Mode</p>
+                            <h2 className="text-3xl font-serif font-black text-white tracking-tight leading-none mb-2">Strategic Support</h2>
+                            <div className="flex items-center gap-4">
+                               <div className="flex items-center gap-2 px-3 py-1 bg-agro-500/10 rounded-lg border border-agro-500/20">
+                                  <div className="w-1.5 h-1.5 bg-agro-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
+                                  <span className="text-[9px] text-agro-400 font-black uppercase tracking-[0.4em]">Node_Connected</span>
+                               </div>
+                               <span className="text-[9px] text-slate-600 font-bold uppercase tracking-widest">Latency: 14ms</span>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-[10px] font-bold text-agro-400 uppercase tracking-widest">Resilience: 8.54 m(t)</span>
+                    <div className="flex items-center gap-4 relative z-10">
+                        <button className="p-3.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-all border border-white/5 text-slate-500 hover:text-white shadow-xl"><Maximize2 size={22}/></button>
+                        <button className="p-3.5 bg-white/5 hover:bg-white/10 rounded-2xl transition-all border border-white/5 text-slate-500 hover:text-white shadow-xl"><Settings size={22}/></button>
                     </div>
                 </div>
 
-                {/* Messages Container */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-earth-50/30 dark:bg-earth-950/30 custom-scrollbar">
+                {/* Secure Log Stream */}
+                <div className="flex-1 overflow-y-auto p-12 space-y-12 bg-gradient-to-b from-transparent to-black/20 ea-scroll-area scroll-smooth">
                     {messages.map((msg, idx) => {
                         const activeThrust = msg.role === 'model' ? detectThrust(msg.text) : null;
                         const thrustInfo = activeThrust ? THRUST_MAP.find(t => t.id === activeThrust) : null;
 
                         return (
-                            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
-                                <div className={`flex gap-4 max-w-[85%] md:max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-sm border ${msg.role === 'user' ? 'bg-white dark:bg-earth-800 text-earth-400 border-earth-200' : 'bg-agro-600 text-white border-agro-500'}`}>
-                                        {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
+                            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-3 duration-700`}>
+                                <div className={`flex gap-8 max-w-[90%] lg:max-w-[80%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                                    <div className={`w-14 h-14 rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-strategic border-2 transition-all duration-1000 ${msg.role === 'user' ? 'bg-slate-900 border-slate-700 text-white' : 'bg-blue-600 border-blue-400 text-white'}`}>
+                                        {msg.role === 'user' ? <User size={28} /> : <Bot size={28} />}
                                     </div>
 
-                                    <div className="flex flex-col gap-2">
-                                        <div className={`p-5 rounded-[2rem] shadow-sm leading-relaxed text-sm md:text-base ${
+                                    <div className="flex flex-col gap-4">
+                                        <div className={`p-10 rounded-[3.5rem] shadow-strategic leading-relaxed text-lg md:text-xl font-medium transition-all duration-700 ring-1 ring-white/5 ${
                                             msg.role === 'user' 
-                                            ? 'bg-agro-900 text-white rounded-tr-none' 
-                                            : 'bg-white dark:bg-earth-800 text-earth-800 dark:text-earth-100 rounded-tl-none border border-earth-100 dark:border-earth-700'
+                                            ? 'bg-slate-900/80 text-white rounded-tr-none border border-slate-700' 
+                                            : 'bg-white dark:bg-slate-900/80 text-slate-800 dark:text-slate-100 rounded-tl-none border border-white/10 backdrop-blur-xl'
                                         }`}>
                                             {msg.text || (isLoading && idx === messages.length - 1 ? (
-                                                <div className="flex items-center gap-2 text-agro-600">
-                                                    <Loader2 className="animate-spin" size={18} />
-                                                    <span className="text-[10px] font-black uppercase tracking-widest animate-pulse">Calculating Stability...</span>
+                                                <div className="flex items-center gap-6 text-blue-500">
+                                                    <Loader2 className="animate-spin" size={24} />
+                                                    <span className="text-[11px] font-black uppercase tracking-[0.5em] animate-pulse">SYNTHESIZING_INTELLIGENCE...</span>
                                                 </div>
                                             ) : '')}
                                         </div>
-                                        
                                         {thrustInfo && (
-                                            <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-500">
-                                                <div className="flex items-center gap-1.5 px-3 py-1 bg-agro-50 dark:bg-agro-900/40 text-agro-700 dark:text-agro-400 rounded-full border border-agro-100 dark:border-agro-800 text-[10px] font-black uppercase tracking-widest">
-                                                    {thrustInfo.icon} {thrustInfo.label} Thrust Alignment
-                                                </div>
+                                            <div className="flex items-center gap-3 px-6 py-2 bg-blue-500/10 rounded-full border border-blue-500/20 w-fit animate-in fade-in">
+                                               <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">
+                                                  <Sparkles size={12} fill="currentColor" /> Context detected: {thrustInfo.label}
+                                               </span>
                                             </div>
                                         )}
                                     </div>
@@ -209,53 +226,59 @@ export const AiAdvisor: React.FC = () => {
                             </div>
                         );
                     })}
-                    {error && (
-                        <div className="flex justify-center my-4">
-                            <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border border-red-100 dark:border-red-900/50">
-                                <AlertCircle size={16} /> {error}
-                            </div>
-                        </div>
-                    )}
                     <div ref={messagesEndRef} />
                 </div>
 
-                {/* Input Controls */}
-                <div className="p-6 bg-white dark:bg-earth-900 border-t border-earth-100 dark:border-earth-800">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="relative flex items-center bg-earth-50 dark:bg-earth-800 rounded-2xl border border-earth-200 dark:border-earth-700 focus-within:ring-4 focus-within:ring-agro-500/10 transition-all">
-                            <input 
-                                type="text" 
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                onKeyDown={handleKeyPress}
-                                placeholder="Query the framework (e.g. 'Optimize my EA scores')..."
-                                className="w-full bg-transparent px-6 py-5 focus:outline-none text-earth-900 dark:text-white placeholder-earth-400"
-                                disabled={isLoading}
-                            />
-                            <button 
-                                onClick={() => handleSend()}
-                                disabled={isLoading || !input.trim()}
-                                className="p-3 mr-3 bg-agro-600 text-white rounded-xl hover:bg-agro-700 disabled:opacity-50 disabled:scale-95 transition-all shadow-lg shadow-agro-600/20"
-                            >
-                                {isLoading ? <Loader2 className="animate-spin" size={24} /> : <Send size={24} />}
-                            </button>
+                {/* Uplink Deck */}
+                <div className="p-10 bg-[#050a14]/80 border-t border-white/10 shrink-0">
+                    <div className="max-w-6xl mx-auto space-y-8">
+                        <div className="relative group">
+                            <div className="relative flex items-center bg-black/40 rounded-[2.5rem] border border-white/10 focus-within:border-blue-500/50 focus-within:ring-8 focus-within:ring-blue-500/5 transition-all shadow-inner">
+                                <div className="pl-10 text-slate-600 group-focus-within:text-blue-500 transition-colors">
+                                   <Terminal size={24} />
+                                </div>
+                                <input 
+                                    type="text" 
+                                    value={input}
+                                    onChange={(e) => setInput(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                                    placeholder="Execute strategic query..."
+                                    className="w-full bg-transparent px-8 py-7 focus:outline-none text-white placeholder-slate-700 font-bold text-xl"
+                                    disabled={isLoading}
+                                />
+                                <button 
+                                    onClick={() => handleSend()}
+                                    disabled={isLoading || !input.trim()}
+                                    className="p-4 mr-3 bg-blue-600 text-white rounded-3xl hover:bg-blue-500 disabled:opacity-30 transition-all shadow-glow-blue active:scale-90 group/btn"
+                                >
+                                    {isLoading ? <Loader2 size={28} className="animate-spin" /> : <Send size={28} />}
+                                </button>
+                            </div>
                         </div>
 
-                        <div className="mt-4 flex flex-wrap gap-2 justify-center">
-                            {SUGGESTIONS.map((suggestion, index) => (
+                        <div className="flex flex-wrap gap-4 justify-center">
+                            {SUGGESTIONS.map((hint, i) => (
                                 <button
-                                    key={index}
-                                    onClick={() => handleSend(suggestion)}
+                                    key={i}
+                                    onClick={() => handleSend(hint)}
                                     disabled={isLoading}
-                                    className="text-[10px] font-black uppercase tracking-widest bg-white dark:bg-earth-800 text-earth-500 dark:text-earth-400 border border-earth-100 dark:border-earth-700 px-3 py-2 rounded-full hover:bg-agro-50 dark:hover:bg-agro-900/40 hover:text-agro-700 transition-all disabled:opacity-50 flex items-center gap-2 shadow-sm"
+                                    className="text-[10px] font-black uppercase tracking-[0.2em] bg-white/5 text-slate-500 hover:text-blue-400 border border-white/5 hover:border-blue-500/30 px-8 py-4 rounded-2xl transition-all shadow-xl active:scale-95 hover:bg-white/10"
                                 >
-                                    <MessageSquare size={12} className="opacity-70" /> {suggestion}
+                                    {hint}
                                 </button>
                             ))}
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center px-12 pt-6 border-t border-white/5 opacity-40 text-[9px] font-black uppercase tracking-[0.6em] text-slate-500">
+           <span className="flex items-center gap-5"><Globe size={16}/> Integrated Resilience Protocol v4.2.2</span>
+           <div className="flex gap-16">
+              <span className="hover:text-blue-500 cursor-pointer transition-colors">End-to-End Encryption</span>
+              <span className="hover:text-blue-500 cursor-pointer transition-colors">Sovereign Data Storage</span>
+           </div>
         </div>
     </div>
   );

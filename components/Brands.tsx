@@ -709,40 +709,46 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
         ))}
       </div>
 
-      {/* Brand Portal Modal */}
+      {/* Brand Portal Modal - MINIMIZED HEADER */}
       {selectedBrand && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/90 backdrop-blur-xl animate-in fade-in duration-300 overflow-y-auto" onClick={() => setSelectedBrand(null)}>
               <div 
-                  className="w-full max-w-2xl rounded-[5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 bg-white dark:bg-earth-950 border-4 border-earth-100 dark:border-earth-900 my-8"
+                  className="w-full max-w-3xl rounded-[5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 bg-white dark:bg-earth-950 border-4 border-earth-100 dark:border-earth-900 my-8 flex flex-col relative"
                   onClick={(e) => e.stopPropagation()}
               >
-                  <div className={`p-14 ${selectedBrand.color} dark:bg-agro-900/20 border-b border-earth-100 dark:border-earth-800 relative`}>
-                      <button 
-                          onClick={() => setSelectedBrand(null)}
-                          className="absolute top-10 right-10 bg-white/80 dark:bg-black/30 hover:bg-white p-3 rounded-full transition-all text-earth-600 dark:text-white shadow-xl hover:rotate-90 active:scale-90"
-                      >
-                          <X size={28} />
-                      </button>
-                      
-                      <div className="flex flex-col items-center text-center">
-                          <div className="bg-white dark:bg-earth-800 p-8 rounded-[3.5rem] shadow-2xl mb-10 ring-[15px] ring-white/30 dark:ring-black/20 border border-black/5">
-                             {React.cloneElement(selectedBrand.icon as React.ReactElement, { size: 64 })}
-                          </div>
-                          <h2 className="text-5xl font-serif font-bold text-earth-900 dark:text-white mb-3 tracking-tighter">{selectedBrand.name}</h2>
-                          <p className="text-[10px] font-black text-agro-700 dark:text-agro-400 uppercase tracking-[0.5em]">{selectedBrand.tagline}</p>
-                      </div>
-                  </div>
+                  {/* Discreet Close Button */}
+                  <button 
+                      onClick={() => setSelectedBrand(null)}
+                      className="absolute top-10 right-10 z-20 bg-earth-50 dark:bg-earth-800 hover:bg-white dark:hover:bg-earth-700 p-4 rounded-full transition-all text-earth-400 dark:text-white shadow-xl hover:rotate-90 active:scale-90 border border-earth-100 dark:border-earth-700"
+                  >
+                      <X size={28} />
+                  </button>
 
-                  <div className="p-14">
-                      <p className="text-xl text-earth-500 dark:text-earth-400 mb-14 text-center leading-relaxed font-medium">
+                  <div className="p-14 md:p-20">
+                      {/* Integrated Minimal Brand ID */}
+                      <div className="flex items-center gap-6 mb-12">
+                          <div className={`${selectedBrand.color} p-5 rounded-[1.8rem] shadow-sm border border-black/5 flex items-center justify-center`}>
+                             {React.cloneElement(selectedBrand.icon as React.ReactElement<any>, { size: 32 })}
+                          </div>
+                          <div>
+                             <h2 className="text-4xl font-serif font-bold text-earth-900 dark:text-white tracking-tighter leading-none">{selectedBrand.name}</h2>
+                             <p className="text-[9px] font-black text-agro-700 dark:text-agro-400 uppercase tracking-[0.4em] mt-2">{selectedBrand.tagline}</p>
+                          </div>
+                      </div>
+
+                      <p className="text-xl text-earth-500 dark:text-earth-400 mb-14 leading-relaxed font-medium">
                           {selectedBrand.description}
                       </p>
                       
                       <div className="bg-earth-50 dark:bg-earth-900/50 p-12 rounded-[4rem] border-2 border-earth-100 dark:border-earth-800 shadow-inner relative overflow-hidden">
                           <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/grid.png')]"></div>
+                          
                           <h4 className="font-black text-earth-300 dark:text-earth-600 mb-12 text-[10px] uppercase tracking-[0.6em] text-center flex items-center justify-center gap-8 relative z-10">
-                             <span className="w-16 h-px bg-earth-200 dark:bg-earth-800"></span> LIVE PORTAL EXPERIENCE <span className="w-16 h-px bg-earth-200 dark:bg-earth-800"></span>
+                             <span className="w-16 h-px bg-earth-200 dark:bg-earth-800"></span> 
+                             <span className="flex items-center gap-3"><Monitor size={14} className="animate-pulse" /> LIVE PORTAL EXPERIENCE</span> 
+                             <span className="w-16 h-px bg-earth-200 dark:bg-earth-800"></span>
                           </h4>
+
                           <div className="relative z-10">
                             {renderPortalContent(selectedBrand)}
                           </div>
@@ -750,7 +756,7 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
                   </div>
                   
                   <div className="p-10 bg-earth-50 dark:bg-earth-900/30 text-center border-t border-earth-100 dark:border-earth-800">
-                      <p className="text-[10px] text-earth-400 dark:text-earth-600 font-black uppercase tracking-[0.4em]">Powered by EnvirosAgro Unified Framework</p>
+                      <p className="text-[10px] text-earth-400 dark:text-earth-600 font-black uppercase tracking-[0.4em]">Powered by EnvirosAgro Unified Framework v4.2</p>
                   </div>
               </div>
           </div>
