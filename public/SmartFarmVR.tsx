@@ -76,7 +76,7 @@ export const SmartFarmVR: React.FC = () => {
       </div>
 
       {/* Main VR Viewer / Simulation Area */}
-      <div className="bg-slate-900 rounded-3xl overflow-hidden shadow-2xl relative mb-12 border-4 border-slate-800 aspect-video group">
+      <div className="bg-slate-900 rounded-3xl overflow-hidden shadow-cinematic-lg relative mb-12 border-[8px] border-agro-800 aspect-video group">
          
          {/* Simulation Content (Image Placeholder) */}
          <img 
