@@ -1,14 +1,32 @@
+I apologize, it seems there was an error in my previous response. I incorrectly tried to call `default_api.natural_language_write_file` directly in the output. I also realized I missed some key details when trying to update the component and its references.
 
+Let me correct this. I will now perform the following actions:
+
+1.  **Rename the file:** `components/HumanResource.tsx` to `components/PeopleAndCulture.tsx`.
+2.  **Update the component function name:** From `HumanResource` to `PeopleAndCulture`.
+3.  **Update the interface name:** From `HumanResourceProps` to `PeopleAndCultureProps`.
+4.  **Update the component's internal references:**
+    *   Change `export const HumanResource: React.FC<HumanResourceProps>` to `export const PeopleAndCulture: React.FC<PeopleAndCultureProps>`.
+    *   Change the main heading `Agro Human Resources` to `Agro People and Culture`.
+    *   Update the description: `Connecting agricultural talent with global opportunities across the Five Thrusts.` to `Fostering an inclusive global community and cultivating talent across the Five Thrusts.`
+    *   Review other text elements within the component for any mention of "Human Resource" and update to "People and Culture" or similar if appropriate, especially in the context of fostering an inclusive global environment.
+
+Here is the updated code for `components/PeopleAndCulture.tsx`:I apologize for the repeated error. It seems I am still having trouble executing the `rename_file` function in this context. My apologies for the oversight.
+
+I will focus on providing the *content* changes for the file as requested, and you would need to manually rename the file `components/HumanResource.tsx` to `components/PeopleAndCulture.tsx`.
+
+Here is the modified code for the component, with all internal references updated to `PeopleAndCulture` and the descriptive text adjusted to align with "People and Culture" focus.
+
+```typescript
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Users, MapPin, Briefcase, GraduationCap, 
+import {
+  Users, MapPin, Briefcase, GraduationCap,
   Search, Plus, Upload, TrendingUp, Award, BookOpen, Zap, Filter,
   Cloud, ShieldCheck, Fingerprint, Star, ArrowRight, CheckCircle2,
   AlertCircle, FileText, Globe, Activity, Smartphone, QrCode,
   Loader2, Network, Factory, Database, ShoppingBag, ArrowUpRight,
   ShieldAlert, Terminal, Lock, BarChart3, X, ChevronRight, Cpu,
   Dna, Microscope, Compass, Info,
-  // Added comment above fix: Added missing RefreshCw icon import
   RefreshCw
 } from 'lucide-react';
 import { View, User } from '../types';
@@ -77,15 +95,15 @@ const CAREER_PATHWAYS = [
   }
 ];
 
-interface HumanResourceProps {
+interface PeopleAndCultureProps {
     user: User | null;
     onNavigate?: (view: View) => void;
     initialTab?: 'CLOUD' | 'JOBS' | 'REGISTER' | 'CAREER';
 }
 
-export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, initialTab = 'JOBS' }) => {
+export const PeopleAndCulture: React.FC<PeopleAndCultureProps> = ({ user, onNavigate, initialTab = 'JOBS' }) => {
   const [activeTab, setActiveTab] = useState<'CLOUD' | 'JOBS' | 'REGISTER' | 'CAREER'>(initialTab);
-  
+
   // Enrollment State
   const [showEnrollment, setShowEnrollment] = useState(false);
   const [enrollStep, setEnrollStep] = useState(1);
@@ -94,7 +112,6 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
   const [agreedToConduct, setAgreedToConduct] = useState(false);
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
   const [syncLogs, setSyncLogs] = useState<string[]>([]);
-  // Added comment above fix: Added missing cloudJoined state variable
   const [cloudJoined, setCloudJoined] = useState(false);
 
   const specialties = [
@@ -125,7 +142,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
 
   const toggleSpecialty = (id: string) => {
     triggerHaptic(10);
-    setSelectedSpecialties(prev => 
+    setSelectedSpecialties(prev =>
         prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
     );
   };
@@ -134,7 +151,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
     setIsSyncing(true);
     setSyncLogs(["Initializing professional uplink..."]);
     triggerHaptic(40);
-    
+
     let step = 0;
     const interval = setInterval(() => {
         if (step < enrollmentSequence.length) {
@@ -145,7 +162,6 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
             clearInterval(interval);
             setEnrollSuccess(true);
             setIsSyncing(false);
-            // Added comment above fix: Update cloudJoined state upon successful enrollment
             setCloudJoined(true);
             triggerHaptic([20, 50, 20]);
         }
@@ -226,7 +242,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                             </p>
                             <div className="w-full space-y-2 text-left">
                                 <label className="text-[9px] font-black text-earth-400 uppercase tracking-widest px-1">ESIN Master Key</label>
-                                <input 
+                                <input
                                     className="w-full bg-white dark:bg-earth-900 border-2 border-transparent focus:border-blue-500 rounded-2xl px-6 py-4 font-bold text-sm outline-none transition-all dark:text-white shadow-inner"
                                     value={user?.esin || 'EA-MEMBER-2024-XXXX'}
                                     readOnly
@@ -246,7 +262,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                                 <p className="text-slate-400 text-sm mb-12 max-w-xs font-medium">Select the domains where your m(t) expertise is prioritized.</p>
                                 <div className="grid grid-cols-2 gap-4">
                                     {specialties.map(spec => (
-                                        <button 
+                                        <button
                                             key={spec.id}
                                             onClick={() => toggleSpecialty(spec.id)}
                                             className={`p-6 rounded-[2rem] border-2 text-left transition-all group ${selectedSpecialties.includes(spec.id) ? 'bg-blue-600 border-blue-500 text-white shadow-xl' : 'bg-white/5 border-white/10 text-slate-500 hover:bg-white/10'}`}
@@ -260,8 +276,8 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <button onClick={() => setEnrollStep(1)} className="py-5 bg-earth-50 dark:bg-earth-800 text-earth-500 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">Back</button>
-                            <button 
-                                onClick={() => setEnrollStep(3)} 
+                            <button
+                                onClick={() => setEnrollStep(3)}
                                 disabled={selectedSpecialties.length === 0}
                                 className="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all disabled:opacity-50"
                             >
@@ -291,7 +307,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                                     </div>
                                 ))}
                             </div>
-                            <div 
+                            <div
                                 onClick={() => setAgreedToConduct(!agreedToConduct)}
                                 className="flex items-center gap-4 p-6 bg-blue-50 dark:bg-blue-900/30 rounded-3xl border-2 border-blue-100 dark:border-blue-800 cursor-pointer transition-all hover:shadow-md group"
                             >
@@ -306,8 +322,8 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <button onClick={() => setEnrollStep(2)} className="py-5 bg-earth-50 dark:bg-earth-800 text-earth-500 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">Recalibrate Skills</button>
-                            <button 
-                                onClick={handleStartSync} 
+                            <button
+                                onClick={handleStartSync}
                                 disabled={!agreedToConduct}
                                 className="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                             >
@@ -401,7 +417,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                             <p className="text-blue-100/60 text-xs mb-6 leading-relaxed">
                                 Align your profession with the code of agriculture conduct to unlock premium industrial tiers.
                             </p>
-                            <button 
+                            <button
                                 onClick={() => { setEnrollStep(1); setShowEnrollment(true); triggerHaptic(10); }}
                                 className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                             >
@@ -480,7 +496,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                                     VERIFIED
                                 </div>
                             </div>
-                            
+
                             <div className="flex-1 space-y-4 mb-8">
                                 <p className="text-xs text-earth-500 dark:text-earth-400 flex items-center gap-2"><MapPin size={12} className="text-red-500" /> {worker.location}</p>
                                 <div className="flex flex-wrap gap-2">
@@ -570,7 +586,7 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
                         <p className="text-agro-100/60 text-xs mb-8 leading-relaxed font-medium">
                             Connecting your Workers Cloud profile with your ESIN ensures full traceability across the industrial value chain.
                         </p>
-                        <button 
+                        <button
                             onClick={() => { setEnrollStep(1); setShowEnrollment(true); triggerHaptic(10); }}
                             className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
                         >
@@ -607,10 +623,10 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 relative">
       {renderEnrollmentTerminal()}
-      
+
       <div className="mb-10 text-center">
-        <h2 className="text-3xl font-serif font-bold text-agro-900 dark:text-white mb-3 tracking-tight">Agro Human Resources</h2>
-        <p className="text-earth-600 dark:text-earth-400 max-w-2xl mx-auto font-medium">Connecting agricultural talent with global opportunities across the Five Thrusts.</p>
+        <h2 className="text-3xl font-serif font-bold text-agro-900 dark:text-white mb-3 tracking-tight">Agro People and Culture</h2>
+        <p className="text-earth-600 dark:text-earth-400 max-w-2xl mx-auto font-medium">Fostering an inclusive global community and cultivating talent across the Five Thrusts.</p>
       </div>
 
       <div className="flex justify-center mb-16 overflow-x-auto no-scrollbar pb-2">
@@ -700,3 +716,4 @@ export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, 
     </div>
   );
 };
+```
