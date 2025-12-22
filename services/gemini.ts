@@ -18,17 +18,26 @@ export const createAgroChat = (): Chat => {
 };
 
 export const analyzeIndustrialGaps = async (metrics: any) => {
+  if (!process.env.API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const prompt = `Perform a high-level scientific gap analysis for an industrial agricultural supply chain with the following metrics:
   Cost Control: ${metrics.cost}%, Quality: ${metrics.quality}%, Resources: ${metrics.resources}%, Relations: ${metrics.relations}%, Market Timing: ${metrics.market}%.
   Output a technical assessment (3 sentences) identifying the most critical 'Process Disconnect' and suggesting a specific 'Technical Agriculture' intervention.`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: prompt,
-    config: { temperature: 0.3 }
-  });
-  return response.text;
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-flash-preview',
+      contents: prompt,
+      config: { temperature: 0.3 }
+    });
+    return response.text;
+  } catch (error) {
+    console.error("Error generating industrial gaps analysis:", error);
+    throw new Error(`Failed to get industrial gaps analysis from AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 };
 
 export const generateFarmVision = async (prompt: string) => {
@@ -78,21 +87,30 @@ export const generateRoadmap = async (params: {
   region: string,
   crops: string
 }) => {
+  if (!process.env.API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   const prompt = `Based on the following farm status, generate a structured 12-month sustainability roadmap.
   Region: ${params.region} | Crops: ${params.crops}
   Scores: SA:${params.thrustScores.SA}, EA:${params.thrustScores.EA}, HA:${params.thrustScores.HA}, TA:${params.thrustScores.TA}, IA:${params.thrustScores.IA}`;
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
-    contents: prompt,
-    config: {
-      temperature: 0.4,
-      systemInstruction: "You are a professional agricultural strategist. Output in clear Markdown.",
-    }
-  });
-  
-  return response.text;
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-3-pro-preview',
+      contents: prompt,
+      config: {
+        temperature: 0.4,
+        systemInstruction: "You are a professional agricultural strategist. Output in clear Markdown.",
+      }
+    });
+    
+    return response.text;
+  } catch (error) {
+    console.error("Error generating roadmap:", error);
+    throw new Error(`Failed to generate roadmap from AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 };
 
 export const summarizeResearch = async (articles: any[]) => {
