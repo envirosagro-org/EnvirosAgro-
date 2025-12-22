@@ -27,7 +27,7 @@ import { Community } from './components/Community';
 import { UserProfile } from './components/UserProfile';
 import { Podcast } from './components/Podcast';
 import { HeritageForum } from './components/HeritageForum';
-import { Webinar } => from './components/Webinar';
+import { Webinar } from './components/Webinar';
 import { SmartFarmVR } from './components/SmartFarmVR';
 import { PlanetWatch } from './components/PlanetWatch';
 import { GreenLens } from './components/GreenLens';
