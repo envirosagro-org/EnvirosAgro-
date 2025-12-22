@@ -1,3 +1,4 @@
+tsx
 import React, { useState, useMemo } from 'react';
 import { View } from '../types';
 import { 
@@ -154,7 +155,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                        </div>
                        <div className="text-[11px] font-black text-agro-500 uppercase tracking-[0.8em] mt-10 flex items-center justify-center gap-8">
                           <span className="w-20 h-px bg-white/10"></span>
-                          m(t) RESILIENCE
+                          GLOBAL_CALCULATION_SYNCED
                           <span className="w-20 h-px bg-white/10"></span>
                        </div>
                    </div>
@@ -192,7 +193,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                    
                    <div className="mt-14 flex items-center gap-4 text-[10px] font-black text-slate-600 uppercase tracking-[0.6em]">
                       <div className="w-2 h-2 bg-agro-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
-                      LOCALIZED_CALCULATION_SYNCED
+                      GLOBAL_CALCULATION_SYNCED
                    </div>
                 </div>
              </div>
