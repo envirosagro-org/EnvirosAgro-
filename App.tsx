@@ -14,7 +14,7 @@ import { Information } from './components/Information';
 import { Products } from './components/Products';
 import { Services } from './components/Services';
 import { Database } from './components/Database';
-import { HumanResource } from './components/HumanResource';
+import { PeopleAndCulture } from './components/PeopleAndCulture';
 import { SustainabilityFramework } from './components/SustainabilityFramework';
 import { Brands } from './components/Brands';
 import { Trademarks } from './components/Trademarks';
@@ -27,7 +27,7 @@ import { Community } from './components/Community';
 import { UserProfile } from './components/UserProfile';
 import { Podcast } from './components/Podcast';
 import { HeritageForum } from './components/HeritageForum';
-import { Webinar } from './components/Webinar';
+import { Webinar } => from './components/Webinar';
 import { SmartFarmVR } from './components/SmartFarmVR';
 import { PlanetWatch } from './components/PlanetWatch';
 import { GreenLens } from './components/GreenLens';
@@ -204,7 +204,7 @@ const App: React.FC = () => {
       label: 'Operations Center',
       icon: <Settings size={16} className="text-slate-600" />,
       items: [
-        { id: View.AGRO_WORKERS_CLOUD, label: 'Agro Workers Cloud', icon: <Cloud size={18}/>, desc: 'Professional registry' },
+        { id: View.AGRO_WORKERS_CLOUD, label: 'People & Culture', icon: <Cloud size={18}/>, desc: 'Professional registry' },
         { id: View.TRANSMISSION_GATEWAY, label: 'Transmission Gateway', icon: <Mail size={18}/>, desc: 'Direct secure uplink' },
         { id: View.INTRANET_DASHBOARD, label: 'Internal Intranet', icon: <ShieldCheck size={18}/>, desc: 'Organizational control' },
         { id: View.SIX_SIGMA_RCA, label: 'Quality Audit (RCA)', icon: <AlertOctagon size={18}/>, desc: 'Zero-defect methodology' }
@@ -320,8 +320,8 @@ const ViewHandler = ({ currentView, handleNavClick, user, setUser, awardEac, glo
       case View.PRODUCTS: return <Products />;
       case View.SERVICES: return <Services onNavigate={handleNavClick} />;
       case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
-      case View.HUMAN_RESOURCE: return <HumanResource user={user} onNavigate={handleNavClick} />;
-      case View.AGRO_WORKERS_CLOUD: return <HumanResource user={user} onNavigate={handleNavClick} initialTab="CLOUD" />;
+      case View.HUMAN_RESOURCE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
+      case View.AGRO_WORKERS_CLOUD: return <PeopleAndCulture user={user} onNavigate={handleNavClick} initialTab="CLOUD" />;
       case View.KNOWLEDGE: return <KnowledgeHub onNavigate={handleNavClick} initialSearch={globalSearchQuery} />;
       case View.DASHBOARD: return <Dashboard onNavigate={handleNavClick} />;
       case View.AI_ADVISOR: return <AiAdvisor />;
