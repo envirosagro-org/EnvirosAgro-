@@ -49,11 +49,12 @@ import { FutureVision } from './components/FutureVision';
 import { SixSigmaRCA } from './components/SixSigmaRCA';
 import { Footer } from './components/Footer';
 import { Logo } from './components/Logo';
-import { 
-  LayoutDashboard, BookOpen, Menu, X, LogOut, Users, Layers, 
-  MonitorPlay, Wallet, Coins, ArrowLeft, BrainCircuit, ShieldCheck, 
-  Box, Grid3X3, Activity, Globe, Maximize2, Minimize2, Zap, Radio, 
-  Mic, Microscope, Calculator, Heart, Fingerprint, Sparkles, Video, 
+import { CurrencyProvider } from '../context/CurrencyContext'; // Import CurrencyProvider
+import {
+  LayoutDashboard, BookOpen, Menu, X, LogOut, Users, Layers,
+  MonitorPlay, Wallet, Coins, ArrowLeft, BrainCircuit, ShieldCheck,
+  Box, Grid3X3, Activity, Globe, Maximize2, Minimize2, Zap, Radio,
+  Mic, Microscope, Calculator, Heart, Fingerprint, Sparkles, Video,
   TrendingUp, Database as DbIcon, Mail, Settings, Cpu, Cloud,
   Server, Network, ClipboardCheck, AlertOctagon, Info
 } from 'lucide-react';
@@ -66,6 +67,7 @@ const App: React.FC = () => {
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [currency, setCurrency] = useState('USD'); // Add currency state
   
   const [isPartnerIntegrated, setIsPartnerIntegrated] = useState(() => {
     return localStorage.getItem('ea_partner_integrated') === 'true';
@@ -215,109 +217,123 @@ const App: React.FC = () => {
   const backInfo = getBackTarget(currentView);
 
   return (
-    <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-500 flex flex-col">
-      <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-in-out isolate ${scrolled ? 'mt-3 mx-4 md:mx-10 rounded-[2.5rem] bg-white/70 dark:bg-earth-900/80 backdrop-blur-3xl border border-white/40 dark:border-white/5 py-1.5 shadow-xl' : 'bg-white/40 dark:bg-earth-950/40 backdrop-blur-xl border-b border-earth-100/10 py-5'}`}>
-        <div className="max-w-[1900px] mx-auto px-8 flex items-center justify-between gap-6">
-          <div className="flex items-center gap-10">
-            <div className="flex items-center gap-2 cursor-pointer group shrink-0 transition-transform active:scale-95" onClick={() => handleNavClick(View.HOME)}>
-              <Logo size={scrolled ? 34 : 42} variant="horizontal" useGradient={true} />
+    <CurrencyProvider> {/* Wrap the entire application with CurrencyProvider */}
+      <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-500 flex flex-col">
+        <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-in-out isolate ${scrolled ? 'mt-3 mx-4 md:mx-10 rounded-[2.5rem] bg-white/70 dark:bg-earth-900/80 backdrop-blur-3xl border border-white/40 dark:border-white/5 py-1.5 shadow-xl' : 'bg-white/40 dark:bg-earth-950/40 backdrop-blur-xl border-b border-earth-100/10 py-5'}`}>
+          <div className="max-w-[1900px] mx-auto px-8 flex items-center justify-between gap-6">
+            <div className="flex items-center gap-10">
+              <div className="flex items-center gap-2 cursor-pointer group shrink-0 transition-transform active:scale-95" onClick={() => handleNavClick(View.HOME)}>
+                <Logo size={scrolled ? 34 : 42} variant="horizontal" useGradient={true} />
+              </div>
+              <div className="hidden xl:flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.4em] text-earth-400">
+                 <div className="flex items-center gap-3 bg-earth-50/50 dark:bg-earth-800/40 px-4 py-2 rounded-xl border border-black/5 dark:border-white/5">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
+                    <span>Pulse: 8.54m(t)</span>
+                 </div>
+                 <div className="flex items-center gap-3 bg-earth-50/50 dark:bg-earth-800/40 px-4 py-2 rounded-xl border border-black/5 dark:border-white/5">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                    <span>Sync: Global_Ok</span>
+                 </div>
+              </div>
             </div>
-            <div className="hidden xl:flex items-center gap-8 text-[9px] font-black uppercase tracking-[0.4em] text-earth-400">
-               <div className="flex items-center gap-3 bg-earth-50/50 dark:bg-earth-800/40 px-4 py-2 rounded-xl border border-black/5 dark:border-white/5">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
-                  <span>Pulse: 8.54m(t)</span>
-               </div>
-               <div className="flex items-center gap-3 bg-earth-50/50 dark:bg-earth-800/40 px-4 py-2 rounded-xl border border-black/5 dark:border-white/5">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                  <span>Sync: Global_Ok</span>
-               </div>
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-1 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
+                  <button onClick={() => handleNavClick(View.DASHBOARD)} className={`p-2.5 rounded-xl transition-all ${currentView === View.DASHBOARD ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}><LayoutDashboard size={20} /></button>
+                  <button onClick={toggleFullscreen} className={`p-2.5 rounded-xl transition-all ${isFullscreen ? 'bg-blue-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}>{isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}</button>
+              </div>
+              <div className="flex items-center gap-2 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
+                {user ? (
+                    <div className="flex items-center gap-1.5 px-1.5">
+                        <div className="hidden lg:flex items-center gap-3 bg-amber-500/10 px-4 py-2 rounded-xl border border-amber-500/20 group cursor-default">
+                            <Coins size={16} className="text-amber-500" />
+                            <span className="text-[10px] font-black text-amber-700 dark:text-amber-400 uppercase tracking-widest">{user.eacBalance} EAC</span>
+                        </div>
+                        <button onClick={() => handleNavClick(View.PROFILE)} className="flex items-center gap-3 p-1 rounded-xl hover:bg-white dark:hover:bg-earth-700 transition-all group">
+                            <div className="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-earth-600 shadow-sm">{user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-agro-100 flex items-center justify-center text-agro-600 font-black text-xs">{user.name.charAt(0)}</div>}</div>
+                        </button>
+                        <button onClick={handleLogout} className="p-2.5 text-earth-400 hover:text-red-500 hover:bg-white dark:hover:bg-earth-700 rounded-xl transition-all"><LogOut size={20} /></button>
+                    </div>
+                ) : (
+                    <button onClick={() => handleNavClick(View.SIGN_UP)} className="bg-agro-600 text-white px-7 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.25em] shadow-lg hover:bg-agro-500 active:scale-95 transition-all ml-2">Sync ID</button>
+                )}
+              </div>
+              <button className={`p-3 rounded-2xl transition-all active:scale-90 shadow-xl border-4 border-white dark:border-earth-800 ${isMenuOpen ? 'bg-red-600 text-white border-red-500' : 'bg-agro-900 text-white border-agro-800'}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-1 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
-                <button onClick={() => handleNavClick(View.DASHBOARD)} className={`p-2.5 rounded-xl transition-all ${currentView === View.DASHBOARD ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}><LayoutDashboard size={20} /></button>
-                <button onClick={toggleFullscreen} className={`p-2.5 rounded-xl transition-all ${isFullscreen ? 'bg-blue-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}>{isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}</button>
-            </div>
-            <div className="flex items-center gap-2 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
-              {user ? (
-                  <div className="flex items-center gap-1.5 px-1.5">
-                      <div className="hidden lg:flex items-center gap-3 bg-amber-500/10 px-4 py-2 rounded-xl border border-amber-500/20 group cursor-default">
-                          <Coins size={16} className="text-amber-500" />
-                          <span className="text-[10px] font-black text-amber-700 dark:text-amber-400 uppercase tracking-widest">{user.eacBalance} EAC</span>
-                      </div>
-                      <button onClick={() => handleNavClick(View.PROFILE)} className="flex items-center gap-3 p-1 rounded-xl hover:bg-white dark:hover:bg-earth-700 transition-all group">
-                          <div className="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-earth-600 shadow-sm">{user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-agro-100 flex items-center justify-center text-agro-600 font-black text-xs">{user.name.charAt(0)}</div>}</div>
-                      </button>
-                      <button onClick={handleLogout} className="p-2.5 text-earth-400 hover:text-red-500 hover:bg-white dark:hover:bg-earth-700 rounded-xl transition-all"><LogOut size={20} /></button>
-                  </div>
-              ) : (
-                  <button onClick={() => handleNavClick(View.SIGN_UP)} className="bg-agro-600 text-white px-7 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.25em] shadow-lg hover:bg-agro-500 active:scale-95 transition-all ml-2">Sync ID</button>
-              )}
-            </div>
-            <button className={`p-3 rounded-2xl transition-all active:scale-90 shadow-xl border-4 border-white dark:border-earth-800 ${isMenuOpen ? 'bg-red-600 text-white border-red-500' : 'bg-agro-900 text-white border-agro-800'}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>
-          </div>
-        </div>
-      </header>
+        </header>
 
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-[110] bg-white/95 dark:bg-earth-950/95 backdrop-blur-[60px] animate-in fade-in duration-500 overflow-y-auto">
-           <div className="p-8 pb-32 max-w-7xl mx-auto relative z-10">
-              <div className="flex flex-col md:flex-row justify-between items-center mb-20 gap-10">
-                 <Logo size={48} variant="horizontal" useGradient={true} />
-                 <button onClick={() => setIsMenuOpen(false)} className="p-4 bg-agro-900 text-white rounded-full shadow-2xl transition-all border-4 border-white/20"><X size={32} /></button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10 items-start">
-                 {MENU_SECTIONS.map((section) => (
-                    <section key={section.id} className="space-y-8 group/sec">
-                       <h3 className="text-[11px] font-black uppercase tracking(0.5em] text-earth-400 flex items-center gap-4 pb-4 border-b border-earth-100 dark:border-white/5">{section.icon} {section.label}</h3>
-                       <div className="grid gap-3">
-                          {section.items.map(item => (
-                            <button key={item.id} onClick={() => handleNavClick(item.id)} className={`flex items-start gap-5 p-4 rounded-[1.5rem] text-left transition-all border border-transparent group relative overflow-hidden ${currentView === item.id ? 'bg-agro-600 text-white shadow-xl' : 'hover:bg-agro-500/5 dark:hover:bg-white/5 hover:border-agro-500/10'}`}>
-                               <div className={`p-3 rounded-2xl shadow-sm shrink-0 ${currentView === item.id ? 'bg-white text-agro-600' : 'bg-white dark:bg-earth-800 text-earth-400 group-hover:text-agro-600 shadow-inner'}`}>{item.icon}</div>
-                               <div>
-                                  <span className={`text-[11px] font-black uppercase tracking-widest mb-1.5 block ${currentView === item.id ? 'text-white' : 'text-earth-800 dark:text-earth-100'}`}>{item.label}</span>
-                                  <p className={`text-[9px] font-medium leading-relaxed opacity-60 ${currentView === item.id ? 'text-white' : 'text-earth-400'}`}>{item.desc}</p>
-                               </div>
-                            </button>
-                          ))}
-                       </div>
-                    </section>
-                 ))}
-              </div>
-           </div>
-        </div>
-      )}
-
-      <main className="flex-1 min-h-screen pt-28 lg:pt-36 pb-20">
-        <div className="mx-auto max-w-[1900px]">
-          {currentView !== View.HOME && (
-            <div className="px-8 mb-6 animate-in slide-in-from-left-4 duration-500">
-              <button 
-                onClick={() => handleNavClick(backInfo.target)}
-                className="flex items-center gap-3 text-earth-400 hover:text-agro-600 font-black text-[10px] uppercase tracking-[0.3em] transition-all group"
-              >
-                <div className="p-2.5 bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-earth-100 dark:border-earth-800 group-hover:bg-agro-50 transition-colors">
-                  <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+        {isMenuOpen && (
+          <div className="fixed inset-0 z-[110] bg-white/95 dark:bg-earth-950/95 backdrop-blur-[60px] animate-in fade-in duration-500 overflow-y-auto">
+             <div className="p-8 pb-32 max-w-7xl mx-auto relative z-10">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-20 gap-10">
+                   <Logo size={48} variant="horizontal" useGradient={true} />
+                   <button onClick={() => setIsMenuOpen(false)} className="p-4 bg-agro-900 text-white rounded-full shadow-2xl transition-all border-4 border-white/20"><X size={32} /></button>
                 </div>
-                <span>Back to {backInfo.label}</span>
-              </button>
-            </div>
-          )}
-          
-          <ViewHandler currentView={currentView} handleNavClick={handleNavClick} user={user} setUser={setUser} awardEac={awardEac} globalSearchQuery={globalSearchQuery} isPartnerIntegrated={isPartnerIntegrated} setIsPartnerIntegrated={setIsPartnerIntegrated} partnerData={partnerData} setPartnerData={setPartnerData} />
-        </div>
-      </main>
-      <AiConsultantFloating onOpenFull={() => handleNavClick(View.AI_ADVISOR)} />
-      {currentView === View.HOME && <Footer onNavigate={handleNavClick} />}
-    </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10 items-start">
+                   {MENU_SECTIONS.map((section) => (
+                      <section key={section.id} className="space-y-8 group/sec">
+                         <h3 className="text-[11px] font-black uppercase tracking(0.5em] text-earth-400 flex items-center gap-4 pb-4 border-b border-earth-100 dark:border-white/5">{section.icon} {section.label}</h3>
+                         <div className="grid gap-3">
+                            {section.items.map(item => (
+                              <button key={item.id} onClick={() => handleNavClick(item.id)} className={`flex items-start gap-5 p-4 rounded-[1.5rem] text-left transition-all border border-transparent group relative overflow-hidden ${currentView === item.id ? 'bg-agro-600 text-white shadow-xl' : 'hover:bg-agro-500/5 dark:hover:bg-white/5 hover:border-agro-500/10'}`}>
+                                 <div className={`p-3 rounded-2xl shadow-sm shrink-0 ${currentView === item.id ? 'bg-white text-agro-600' : 'bg-white dark:bg-earth-800 text-earth-400 group-hover:text-agro-600 shadow-inner'}`}>{item.icon}</div>
+                                 <div>
+                                    <span className={`text-[11px] font-black uppercase tracking-widest mb-1.5 block ${currentView === item.id ? 'text-white' : 'text-earth-800 dark:text-earth-100'}`}>{item.label}</span>
+                                    <p className={`text-[9px] font-medium leading-relaxed opacity-60 ${currentView === item.id ? 'text-white' : 'text-earth-400'}`}>{item.desc}</p>
+                                 </div>
+                              </button>
+                            ))}
+                         </div>
+                      </section>
+                   ))}
+                </div>
+             </div>
+          </div>
+        )}
+
+        <main className="flex-1 min-h-screen pt-28 lg:pt-36 pb-20">
+          <div className="mx-auto max-w-[1900px]">
+            {currentView !== View.HOME && (
+              <div className="px-8 mb-6 animate-in slide-in-from-left-4 duration-500">
+                <button 
+                  onClick={() => handleNavClick(backInfo.target)}
+                  className="flex items-center gap-3 text-earth-400 hover:text-agro-600 font-black text-[10px] uppercase tracking-[0.3em] transition-all group"
+                >
+                  <div className="p-2.5 bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-earth-100 dark:border-earth-800 group-hover:bg-agro-50 transition-colors">
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+                  </div>
+                  <span>Back to {backInfo.label}</span>
+                </button>
+              </div>
+            )}
+            
+            <ViewHandler 
+              currentView={currentView} 
+              handleNavClick={handleNavClick} 
+              user={user} 
+              setUser={setUser} 
+              awardEac={awardEac} 
+              globalSearchQuery={globalSearchQuery} 
+              isPartnerIntegrated={isPartnerIntegrated} 
+              setIsPartnerIntegrated={setIsPartnerIntegrated} 
+              partnerData={partnerData} 
+              setPartnerData={setPartnerData} 
+              setCurrency={setCurrency} // Pass setCurrency to ViewHandler
+            />
+          </div>
+        </main>
+        <AiConsultantFloating onOpenFull={() => handleNavClick(View.AI_ADVISOR)} />
+        {currentView === View.HOME && <Footer onNavigate={handleNavClick} />}
+      </div>
+    </CurrencyProvider> // Close CurrencyProvider
   );
 };
 
-const ViewHandler = ({ currentView, handleNavClick, user, setUser, awardEac, globalSearchQuery, isPartnerIntegrated, setIsPartnerIntegrated, partnerData, setPartnerData }) => {
+const ViewHandler = ({ currentView, handleNavClick, user, setUser, awardEac, globalSearchQuery, isPartnerIntegrated, setIsPartnerIntegrated, partnerData, setPartnerData, setCurrency }) => {
     switch (currentView) {
       case View.HOME: return <Hero onNavigate={handleNavClick} />;
       case View.INFORMATION: return <Information onNavigate={handleNavClick} />;
-      case View.PRODUCTS: return <Products />;
+      case View.PRODUCTS: return <Products setCurrency={setCurrency} />; // Pass setCurrency to Products
       case View.SERVICES: return <Services onNavigate={handleNavClick} />;
       case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
       case View.HUMAN_RESOURCE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
