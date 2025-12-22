@@ -228,7 +228,7 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
               <div className="hidden lg:block absolute -bottom-16 left-[10%] right-[10%] h-32 border-x-4 border-b-4 border-dashed border-agro-500/20 rounded-b-[5rem] pointer-events-none">
                  <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-agro-50 dark:bg-agro-900/40 px-6 py-2 rounded-full border border-agro-100 dark:border-agro-800">
                     <span className="text-[10px] font-black text-agro-600 uppercase tracking-[0.4em] flex items-center gap-3">
-                       <RefreshCw size={14} className="animate-spin-slow" /> Continuous Improvement Loop (Process 05 -> 02)
+                       <RefreshCw size={14} className="animate-spin-slow" /> {"Continuous Improvement Loop (Process 05 -> 02)"}
                     </span>
                  </div>
               </div>
