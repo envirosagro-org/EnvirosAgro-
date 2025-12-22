@@ -37,10 +37,10 @@ const translations: Record<Language, Record<string, string>> = {
     'nav.ai_advisor': 'IA Stratégique',
     'hero.title': 'Stabilité Prédictive',
     'hero.subtitle': 'Le premier réseau interdisciplinaire normalisant la résilience agricole.',
-    'dashboard.title': 'Tableau de Bord d\'Intelligence',
+    'dashboard.title': 'Tableau de Bord de l\'Intelligence',
     'dashboard.ai_vision': 'Laboratoire de Vision Future IA',
     'dashboard.strategic_prediction': 'Prédiction Stratégique',
-  }
+  },
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
