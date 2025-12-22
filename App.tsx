@@ -49,7 +49,7 @@ import { FutureVision } from './components/FutureVision';
 import { SixSigmaRCA } from './components/SixSigmaRCA';
 import { Footer } from './components/Footer';
 import { Logo } from './components/Logo';
-import { CurrencyProvider } from '../context/CurrencyContext'; // Import CurrencyProvider
+import { CurrencyProvider } from './context/CurrencyContext'; // Fixed path
 import {
   LayoutDashboard, BookOpen, Menu, X, LogOut, Users, Layers,
   MonitorPlay, Wallet, Coins, ArrowLeft, BrainCircuit, ShieldCheck,
@@ -67,7 +67,7 @@ const App: React.FC = () => {
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currency, setCurrency] = useState('USD'); // Add currency state
+  const [, setCurrency] = useState('USD'); // Keep for now as state
   
   const [isPartnerIntegrated, setIsPartnerIntegrated] = useState(() => {
     return localStorage.getItem('ea_partner_integrated') === 'true';
@@ -217,7 +217,7 @@ const App: React.FC = () => {
   const backInfo = getBackTarget(currentView);
 
   return (
-    <CurrencyProvider> {/* Wrap the entire application with CurrencyProvider */}
+    <CurrencyProvider>
       <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-500 flex flex-col">
         <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-in-out isolate ${scrolled ? 'mt-3 mx-4 md:mx-10 rounded-[2.5rem] bg-white/70 dark:bg-earth-900/80 backdrop-blur-3xl border border-white/40 dark:border-white/5 py-1.5 shadow-xl' : 'bg-white/40 dark:bg-earth-950/40 backdrop-blur-xl border-b border-earth-100/10 py-5'}`}>
           <div className="max-w-[1900px] mx-auto px-8 flex items-center justify-between gap-6">
@@ -249,7 +249,7 @@ const App: React.FC = () => {
                             <span className="text-[10px] font-black text-amber-700 dark:text-amber-400 uppercase tracking-widest">{user.eacBalance} EAC</span>
                         </div>
                         <button onClick={() => handleNavClick(View.PROFILE)} className="flex items-center gap-3 p-1 rounded-xl hover:bg-white dark:hover:bg-earth-700 transition-all group">
-                            <div className="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-earth-600 shadow-sm">{user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-agro-100 flex items-center justify-center text-agro-600 font-black text-xs">{user.name.charAt(0)}</div>}</div>
+                            <div className="w-8 h-8 rounded-lg overflow-hidden border-2 border-white dark:border-earth-600 shadow-sm">{user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" alt="Avatar" /> : <div className="w-full h-full bg-agro-100 flex items-center justify-center text-agro-600 font-black text-xs">{user.name.charAt(0)}</div>}</div>
                         </button>
                         <button onClick={handleLogout} className="p-2.5 text-earth-400 hover:text-red-500 hover:bg-white dark:hover:bg-earth-700 rounded-xl transition-all"><LogOut size={20} /></button>
                     </div>
@@ -318,14 +318,14 @@ const App: React.FC = () => {
               setIsPartnerIntegrated={setIsPartnerIntegrated} 
               partnerData={partnerData} 
               setPartnerData={setPartnerData} 
-              setCurrency={setCurrency} // Pass setCurrency to ViewHandler
+              setCurrency={setCurrency}
             />
           </div>
         </main>
         <AiConsultantFloating onOpenFull={() => handleNavClick(View.AI_ADVISOR)} />
         {currentView === View.HOME && <Footer onNavigate={handleNavClick} />}
       </div>
-    </CurrencyProvider> // Close CurrencyProvider
+    </CurrencyProvider>
   );
 };
 
@@ -333,7 +333,7 @@ const ViewHandler = ({ currentView, handleNavClick, user, setUser, awardEac, glo
     switch (currentView) {
       case View.HOME: return <Hero onNavigate={handleNavClick} />;
       case View.INFORMATION: return <Information onNavigate={handleNavClick} />;
-      case View.PRODUCTS: return <Products setCurrency={setCurrency} />; // Pass setCurrency to Products
+      case View.PRODUCTS: return <Products setCurrency={setCurrency} />;
       case View.SERVICES: return <Services onNavigate={handleNavClick} />;
       case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
       case View.HUMAN_RESOURCE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
