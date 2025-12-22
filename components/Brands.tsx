@@ -158,8 +158,8 @@ const BRANDS = [
   },
   {
     id: 8,
-    name: "ChildsLabour",
-    tagline: "CHILD GROWTH & DEVELOPMENT",
+    name: "ChildsGrowth",
+    tagline: "CHILD DEVELOPMENT & EMPOWERMENT",
     description: "Empowering the next generation through agricultural education, discipline, and growth.",
     icon: <Smile size={32} className="text-yellow-600" />,
     color: "bg-yellow-50/50",
@@ -201,7 +201,7 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [learningProgress, setLearningProgress] = useState(84);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [plantFrequencies, setPlantFrequencies] = useState<number[]>(new Array(30).fill(10));
+  const [plantFrequencies, setPlantFrequencies] = new Array(30).fill(10));
 
   // Auto-running simulation for Agroboto
   useEffect(() => {
@@ -553,7 +553,7 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
                               </div>
                           </div>
                       </div>
-                      <button onClick={() => onNavigate?.(View.SUPPLY)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-5 rounded-[2rem] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 transition-all hover:-translate-y-1 shadow-lg shadow-emerald-600/20">
+                      <button onClick={() => onNavigate?.(View.SUPPLY)} className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-5 rounded-[2rem] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-1">
                           <Warehouse size={20} /> Enter Inventory Vault
                       </button>
                   </div>
@@ -630,7 +630,7 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
                         </button>
                     </div>
                 );
-            case 8: // ChildsLabour
+            case 8: // ChildsGrowth
                  return (
                     <div className="space-y-6">
                          <div className="bg-yellow-50 dark:bg-yellow-950/20 p-8 rounded-[3.5rem] text-center border-2 border-dashed border-yellow-200 dark:border-yellow-800 relative overflow-hidden group">
