@@ -1,6 +1,13 @@
-
-import React, { useState } from 'react';
-import { ShieldAlert, Map, AlertTriangle, Bug, Droplets, Thermometer, ChevronRight, Bell, Phone, CheckCircle2, XCircle } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { 
+  ShieldAlert, Map, AlertTriangle, Bug, Droplets, Thermometer, 
+  ChevronRight, Bell, Phone, CheckCircle2, XCircle, X, Smartphone, 
+  Loader2, Zap, Globe, ShieldCheck, MapPin, Camera, Send, Info,
+  PhoneCall, LifeBuoy, AlertCircle, Radio, Navigation, Check,
+  Activity, ArrowLeft, Share2, FileText, Microscope, Search,
+  Clock, ListChecks, ExternalLink, Siren, Wifi, Users, SignalHigh
+} from 'lucide-react';
+import { View } from '../types';
 
 const ALERTS = [
   {
@@ -13,7 +20,10 @@ const ALERTS = [
     desc: "High larval density detected in maize fields. Immediate scouting recommended.",
     action: "Apply neem-based bio-pesticides or approved IPM controls immediately.",
     icon: <Bug size={24} />,
-    color: "bg-red-50 border-red-200 text-red-800"
+    color: "bg-red-50 border-red-200 text-red-800",
+    fullReport: "Satellite telemetry from Sentinel-Sync indicates a 40% increase in larval canopy damage across the Central cluster. Weather conditions (humid/warm) are currently accelerating the life cycle. Failure to treat within 48 hours could result in a 60% yield loss for late-stage crops.",
+    coordinates: "0.45S, 36.9E",
+    protocol: ["Field Scouting", "Pheromone Trap Setup", "Biological Agent Deployment"]
   },
   {
     id: 2,
@@ -25,7 +35,10 @@ const ALERTS = [
     desc: "Cold, wet conditions favoring Colletotrichum kahawae spread.",
     action: "Ensure proper canopy aeration and apply copper-based fungicides if threshold exceeded.",
     icon: <Droplets size={24} />,
-    color: "bg-orange-50 border-orange-200 text-orange-800"
+    color: "bg-orange-50 border-orange-200 text-orange-800",
+    fullReport: "In-situ moisture sensors (TA Thrust) are reporting 90% leaf wetness for sustained 6-hour intervals. This creates the optimal window for fungal germination. Farmers in altitudes above 1,600m are at maximum risk. Precision pruning is the first line of defense to increase airflow.",
+    coordinates: "0.58S, 37.1E",
+    protocol: ["Canopy Pruning", "Humidity Level Log", "Fungicide Rotation"]
   },
   {
     id: 3,
@@ -37,189 +50,380 @@ const ALERTS = [
     desc: "Temperatures expected to exceed 35°C. Livestock at risk of dehydration.",
     action: "Increase water availability and provide shade for all grazing animals.",
     icon: <Thermometer size={24} />,
-    color: "bg-yellow-50 border-yellow-200 text-yellow-800"
+    color: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    fullReport: "Regional m(t) indices predict a localized heat dome over the semi-arid pastures for the next 72 hours. Evapotranspiration rates are high. Soil moisture In(val) is dropping to critical levels (12%). Strategic water reserves must be managed for livestock priority.",
+    coordinates: "1.12S, 38.2E",
+    protocol: ["Livestock Shading", "Hydration Schedule", "Mulching Exposed Soil"]
   }
 ];
 
-export const SafeHarvest: React.FC = () => {
+const EMERGENCY_CONTACTS = [
+  { region: "Global HQ", service: "Strategic Response", phone: "+254 700 000 000" },
+  { region: "East Africa", service: "Biological Threat Unit", phone: "999-AGRO" },
+  { region: "Regional", service: "Water Authority (Crisis)", phone: "+254 800 111 222" },
+  { region: "Veterinary", service: "Zoonotic Disease Alert", phone: "+254 722 999 888" }
+];
+
+interface SafeHarvestProps {
+  onNavigate?: (view: View) => void;
+}
+
+export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'ALERTS' | 'MAP'>('ALERTS');
+  const [selectedAlert, setSelectedAlert] = useState<typeof ALERTS[0] | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  
+  // Modals
+  const [showSmsModal, setShowSmsModal] = useState(false);
+  const [showHotlineModal, setShowHotlineModal] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showSpecializedModal, setShowSpecializedModal] = useState(false);
+  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+  
+  // States
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [smsStatus, setSmsStatus] = useState<'IDLE' | 'LOADING' | 'SUCCESS'>('IDLE');
+  const [reportStatus, setReportStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS'>('IDLE');
+  const [specializedStatus, setSpecializedStatus] = useState<'IDLE' | 'DISPATCHING' | 'CONFIRMED'>('IDLE');
+  const [broadcastStatus, setBroadcastStatus] = useState<'IDLE' | 'PROPAGATING' | 'COMPLETED'>('IDLE');
+  
+  const [isGpsSyncing, setIsGpsSyncing] = useState(false);
+  const [evidenceImage, setEvidenceImage] = useState<string | null>(null);
+  const [dispatchLog, setDispatchLog] = useState<string[]>([]);
+  const [propagationCount, setPropagationCount] = useState(0);
+  
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const [reportForm, setReportForm] = useState({
+    type: 'Pest Outbreak',
+    severity: 'High',
+    location: '',
+    description: ''
+  });
+
+  const handleSmsSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!phoneNumber) return;
+    setSmsStatus('LOADING');
+    setTimeout(() => setSmsStatus('SUCCESS'), 2000);
+  };
+
+  const handleGpsSync = () => {
+    setIsGpsSyncing(true);
+    setTimeout(() => {
+      const lat = (-0.6 + Math.random() * 0.1).toFixed(4);
+      const lon = (36.8 + Math.random() * 0.1).toFixed(4);
+      setReportForm(prev => ({
+        ...prev,
+        location: `Lat: ${lat}, Lon: ${lon} (Verified Field Node)`
+      }));
+      setIsGpsSyncing(false);
+    }, 1500);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setEvidenceImage(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleReportSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setReportStatus('SUBMITTING');
+    setTimeout(() => {
+        setReportStatus('SUCCESS');
+        setTimeout(() => {
+            setShowReportModal(false);
+            setReportStatus('IDLE');
+            setEvidenceImage(null);
+            setReportForm({ type: 'Pest Outbreak', severity: 'High', location: '', description: '' });
+        }, 2500);
+    }, 2500);
+  };
+
+  const handleRequestSpecialized = () => {
+    setShowSpecializedModal(true);
+    setSpecializedStatus('DISPATCHING');
+    setDispatchLog(['Establishing secure link to BTU Hub...']);
+    
+    const steps = [
+        "Biological Threat Unit (BTU) acknowledged signal.",
+        "Regional response team 'Alpha-4' mobilized.",
+        "Treatment payload: 'Azadirachtin Bio-Inhibitor' reserved.",
+        "Estimated arrival: 45 minutes to designated coordinates."
+    ];
+
+    let currentStep = 0;
+    const interval = setInterval(() => {
+        if (currentStep < steps.length) {
+            setDispatchLog(prev => [...prev, steps[currentStep]]);
+            currentStep++;
+        } else {
+            clearInterval(interval);
+            setSpecializedStatus('CONFIRMED');
+        }
+    }, 1500);
+  };
+
+  const handleBroadcastNeighbors = () => {
+    setShowBroadcastModal(true);
+    setBroadcastStatus('PROPAGATING');
+    setPropagationCount(0);
+    
+    const total = Math.floor(Math.random() * 40) + 12;
+    const increment = Math.ceil(total / 10);
+    
+    const interval = setInterval(() => {
+        setPropagationCount(prev => {
+            const next = prev + increment;
+            if (next >= total) {
+                clearInterval(interval);
+                setBroadcastStatus('COMPLETED');
+                return total;
+            }
+            return next;
+        });
+    }, 300);
+  };
+
+  const handleViewAlert = (alert: typeof ALERTS[0]) => {
+    setIsVerifying(true);
+    setTimeout(() => {
+        setIsVerifying(false);
+        setSelectedAlert(alert);
+    }, 1200);
+  };
+
+  const renderAlertDetail = (alert: typeof ALERTS[0]) => (
+    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+        <button 
+            onClick={() => setSelectedAlert(null)}
+            className="mb-6 flex items-center gap-2 text-earth-500 hover:text-red-600 font-black text-[9px] uppercase tracking-[0.2em] transition-all group"
+        >
+            <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Feed
+        </button>
+
+        <div className="bg-white dark:bg-earth-900 rounded-[2rem] shadow-xl border border-earth-100 dark:border-earth-800 overflow-hidden mb-10">
+            <div className={`p-8 ${alert.color.split(' ')[0]} dark:bg-red-950/20 border-b border-earth-100 dark:border-earth-800 relative`}>
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                    {React.cloneElement(alert.icon as React.ReactElement<any>, { size: 140 })}
+                </div>
+                
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div className="flex items-center gap-5">
+                        <div className="p-4 bg-white dark:bg-earth-800 rounded-2xl shadow-lg text-red-600">
+                            {alert.icon}
+                        </div>
+                        <div>
+                            <span className="bg-red-600 text-white px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest mb-2 inline-block">Active {alert.type} Threat</span>
+                            <h2 className="text-3xl font-serif font-bold text-earth-900 dark:text-white leading-tight">{alert.title}</h2>
+                        </div>
+                    </div>
+                    <div className="flex flex-col md:items-end text-[10px] font-bold text-earth-500">
+                        <span className="flex items-center gap-2 uppercase tracking-widest"><MapPin size={14} className="text-red-500" /> {alert.region}</span>
+                        <span className="flex items-center gap-2 uppercase tracking-widest mt-1"><Clock size={14} /> {alert.date}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div className="p-8 md:p-12">
+                <div className="grid lg:grid-cols-12 gap-12">
+                    <div className="lg:col-span-7">
+                        <section className="mb-10">
+                            <h4 className="text-[9px] font-black text-red-600 uppercase tracking-[0.3em] mb-4">Diagnostic Intelligence</h4>
+                            <p className="text-lg text-earth-700 dark:text-earth-300 leading-relaxed font-medium">
+                                {alert.fullReport}
+                            </p>
+                        </section>
+
+                        <div className="bg-earth-50 dark:bg-earth-800/50 p-6 rounded-2xl border border-earth-100 dark:border-earth-700">
+                            <h4 className="text-[9px] font-black text-red-600 uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
+                                <ListChecks size={16} /> Emergency Response Protocol
+                            </h4>
+                            <div className="space-y-3">
+                                {alert.protocol.map((step, i) => (
+                                    <div key={i} className="flex items-center gap-3 bg-white dark:bg-earth-900 p-3 rounded-xl border border-earth-100 dark:border-earth-800 shadow-sm">
+                                        <div className="w-6 h-6 bg-red-100 dark:bg-red-900/30 text-red-600 rounded flex items-center justify-center font-black text-[10px]">{i+1}</div>
+                                        <span className="text-sm font-bold text-earth-800 dark:text-earth-200">{step}</span>
+                                        <CheckCircle2 size={16} className="ml-auto text-earth-200" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="lg:col-span-5 space-y-6">
+                        <div className="bg-slate-900 rounded-2xl p-6 text-white relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-gradient-to-br from-red-600/20 to-transparent"></div>
+                            <div className="relative z-10">
+                                <h4 className="text-[9px] font-black text-red-400 uppercase tracking-[0.3em] mb-4">Target Vector Coordinates</h4>
+                                <div className="p-4 bg-white/5 border border-white/10 rounded-xl mb-6 flex justify-between items-center">
+                                    <div className="flex items-center gap-3">
+                                        <Globe size={18} className="text-red-400" />
+                                        <span className="font-mono text-lg tracking-widest">{alert.coordinates}</span>
+                                    </div>
+                                    <button className="text-blue-400 hover:text-blue-300 transition-colors"><ExternalLink size={18} /></button>
+                                </div>
+                                <div className="aspect-video rounded-xl bg-black/40 border border-white/5 flex items-center justify-center relative overflow-hidden">
+                                    <MapPin size={32} className="text-red-600 animate-bounce relative z-10" />
+                                    <div className="absolute inset-0 opacity-40">
+                                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400" className="w-full h-full object-cover" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3">
+                            <button 
+                                onClick={handleRequestSpecialized}
+                                className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-lg text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]"
+                            >
+                                <Zap size={18} /> Specialized Response
+                            </button>
+                            <button 
+                                onClick={handleBroadcastNeighbors}
+                                className="w-full bg-white dark:bg-earth-800 border-2 border-red-100 dark:border-red-900/50 text-red-700 dark:text-red-400 font-black py-4 rounded-xl transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]"
+                            >
+                                <Share2 size={18} /> Broadcast Neighbors
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  );
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      
-      {/* Header */}
-      <div className="bg-red-900 rounded-3xl p-10 text-white mb-10 relative overflow-hidden">
-         <div className="absolute top-0 right-0 p-8 opacity-10 transform scale-150">
-            <ShieldAlert size={200} />
-         </div>
-         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-            <div>
-               <div className="flex items-center gap-2 text-red-300 font-bold uppercase tracking-wider text-xs mb-3">
-                  <ShieldAlert size={16} /> Health Agriculture System
-               </div>
-               <h2 className="text-4xl font-serif font-bold mb-4">SafeHarvest Alerts</h2>
-               <p className="text-red-100 text-lg max-w-2xl leading-relaxed">
-                  Real-time monitoring of biological threats, food safety risks, and environmental hazards protecting crops and consumers.
-               </p>
-            </div>
-            <div className="flex gap-3">
-               <button className="bg-white text-red-900 px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-50 transition-colors shadow-lg">
-                  <Bell size={18} /> Subscribe to SMS
-               </button>
-               <button className="bg-red-800 text-white border border-red-700 px-6 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-red-700 transition-colors">
-                  <Phone size={18} /> Emergency Hotline
-               </button>
-            </div>
-         </div>
-      </div>
+    <div className="max-w-7xl mx-auto px-6 py-6 relative">
+      {isVerifying && (
+          <div className="fixed inset-0 z-[150] flex flex-col items-center justify-center bg-red-950/90 backdrop-blur-xl animate-in fade-in duration-300">
+              <div className="relative">
+                  <div className="w-24 h-24 rounded-full border-[6px] border-red-500/20 border-t-red-500 animate-spin"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                      <ShieldAlert size={36} className="text-red-500 animate-pulse" />
+                  </div>
+              </div>
+              <h4 className="text-white font-serif text-2xl font-bold mt-8 tracking-tight">Syncing Threat Node</h4>
+          </div>
+      )}
 
-      {/* Tabs */}
-      <div className="flex gap-4 mb-8 border-b border-earth-200 pb-1">
-         <button 
-            onClick={() => setActiveTab('ALERTS')}
-            className={`px-6 py-3 font-bold text-sm rounded-t-xl transition-all flex items-center gap-2 ${activeTab === 'ALERTS' ? 'bg-white text-red-700 border-x border-t border-earth-200' : 'text-earth-500 hover:text-red-600'}`}
-         >
-            <AlertTriangle size={18} /> Active Alerts <span className="bg-red-100 text-red-700 px-2 py-0.5 rounded-full text-xs">3</span>
-         </button>
-         <button 
-            onClick={() => setActiveTab('MAP')}
-            className={`px-6 py-3 font-bold text-sm rounded-t-xl transition-all flex items-center gap-2 ${activeTab === 'MAP' ? 'bg-white text-red-700 border-x border-t border-earth-200' : 'text-earth-500 hover:text-red-600'}`}
-         >
-            <Map size={18} /> Risk Map
-         </button>
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-8">
-         
-         {/* Main Content Area */}
-         <div className="lg:col-span-2">
-            {activeTab === 'ALERTS' ? (
-               <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-500">
-                  {ALERTS.map((alert) => (
-                     <div key={alert.id} className={`rounded-2xl p-6 border-l-4 shadow-sm ${alert.color} bg-white`}>
-                        <div className="flex justify-between items-start mb-4">
-                           <div className="flex gap-4">
-                              <div className={`p-3 rounded-xl h-fit bg-white/50 backdrop-blur-sm border border-white/50 shadow-sm ${alert.color.split(' ')[2]}`}>
-                                 {alert.icon}
-                              </div>
-                              <div>
-                                 <div className="flex items-center gap-2 mb-1">
-                                    <h3 className="font-bold text-lg text-earth-900">{alert.title}</h3>
-                                    {alert.level === 'Critical' && (
-                                       <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase animate-pulse">Critical</span>
-                                    )}
-                                 </div>
-                                 <p className="text-xs text-earth-500 font-bold uppercase tracking-wide flex items-center gap-2">
-                                    {alert.region} • {alert.date}
-                                 </p>
-                              </div>
-                           </div>
-                           <button className="text-earth-400 hover:text-earth-600">
-                              <ChevronRight />
-                           </button>
+      {selectedAlert ? renderAlertDetail(selectedAlert) : (
+        <>
+            <div className="bg-red-900 rounded-[2.5rem] p-8 md:p-12 text-white mb-10 relative overflow-hidden shadow-xl border-4 border-red-950/20">
+                <div className="absolute top-0 right-0 p-6 opacity-10 transform scale-125 pointer-events-none">
+                    <ShieldAlert size={200} />
+                </div>
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+                    <div className="max-w-3xl">
+                        <div className="flex items-center gap-2 text-red-300 font-black uppercase tracking-[0.2em] text-[9px] mb-4">
+                            <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-ping"></span> Health Ag Network
                         </div>
-                        
-                        <p className="text-earth-700 mb-4 text-sm leading-relaxed border-b border-black/5 pb-4">
-                           {alert.desc}
+                        <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 leading-[1] tracking-tighter">SafeHarvest <br/><span className="text-red-400 italic">Alert Network</span></h2>
+                        <p className="text-red-100 text-lg max-w-2xl leading-relaxed font-medium opacity-90">
+                            Real-time threat detection and standardized emergency response.
                         </p>
-                        
-                        <div className="bg-white/60 p-4 rounded-xl">
-                           <h4 className="text-xs font-bold uppercase tracking-wider text-earth-900 mb-2 flex items-center gap-2">
-                              <CheckCircle2 size={14} className="text-green-600" /> Recommended Action
-                           </h4>
-                           <p className="text-sm font-medium text-earth-800">
-                              {alert.action}
-                           </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                        <button onClick={() => setShowSmsModal(true)} className="flex-1 md:flex-none bg-white text-red-900 px-8 py-3 rounded-xl font-black uppercase text-[9px] tracking-widest hover:bg-red-50 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                            <Bell size={16} /> SMS Alerts
+                        </button>
+                        <button onClick={() => setShowHotlineModal(true)} className="flex-1 md:flex-none bg-red-800 text-white border border-red-700/50 px-8 py-3 rounded-xl font-black uppercase text-[9px] tracking-widest hover:bg-red-700 transition-all flex items-center justify-center gap-2 shadow-sm">
+                            <Phone size={16} /> Hotline
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex gap-2 mb-8 border-b border-earth-200 dark:border-earth-800 pb-1 overflow-x-auto no-scrollbar">
+                <button 
+                    onClick={() => setActiveTab('ALERTS')}
+                    className={`px-6 py-3 font-black text-[10px] uppercase tracking-widest rounded-t-xl transition-all flex items-center gap-2 relative top-[1px] whitespace-nowrap ${activeTab === 'ALERTS' ? 'bg-white dark:bg-earth-900 text-red-700 dark:text-red-400 border-x border-t border-earth-200 dark:border-earth-800 shadow-sm' : 'text-earth-400 hover:text-red-600'}`}
+                >
+                    <AlertTriangle size={16} /> Active Alerts <span className="bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400 px-1.5 py-0.5 rounded-full text-[8px] font-black">{ALERTS.length}</span>
+                </button>
+                <button 
+                    onClick={() => setActiveTab('MAP')}
+                    className={`px-6 py-3 font-black text-[10px] uppercase tracking-widest rounded-t-xl transition-all flex items-center gap-2 relative top-[1px] whitespace-nowrap ${activeTab === 'MAP' ? 'bg-white dark:bg-earth-900 text-red-700 dark:text-red-400 border-x border-t border-earth-200 dark:border-earth-800 shadow-sm' : 'text-earth-400 hover:text-red-600'}`}
+                >
+                    <Map size={16} /> Risk Telemetry
+                </button>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2">
+                    {activeTab === 'ALERTS' ? (
+                        <div className="space-y-6 ea-scroll-container max-h-[600px] pr-2">
+                            {ALERTS.map((alert) => (
+                                <div 
+                                    key={alert.id} 
+                                    onClick={() => handleViewAlert(alert)}
+                                    className="rounded-[1.5rem] p-6 border border-earth-100 dark:border-earth-800 bg-white dark:bg-earth-900 transition-all hover:shadow-md group cursor-pointer relative"
+                                >
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="flex gap-4">
+                                            <div className="p-3.5 rounded-xl h-fit bg-red-50 dark:bg-red-950/30 text-red-600">
+                                                {alert.icon}
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2 mb-1">
+                                                    <h3 className="font-bold text-lg text-earth-900 dark:text-white leading-tight">{alert.title}</h3>
+                                                    {alert.level === 'Critical' && (
+                                                        <span className="bg-red-600 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase animate-pulse">Critical</span>
+                                                    )}
+                                                </div>
+                                                <p className="text-[8px] text-earth-400 font-black uppercase tracking-widest">
+                                                    {alert.region} • {alert.date}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="bg-earth-50 dark:bg-earth-800 p-2 rounded-full text-earth-300 group-hover:text-red-500 transition-all">
+                                            <ChevronRight size={18} />
+                                        </div>
+                                    </div>
+                                    <p className="text-earth-600 dark:text-earth-400 mb-4 text-xs leading-relaxed font-medium line-clamp-2">{alert.desc}</p>
+                                    <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded-xl border border-red-100 dark:border-red-900/50 flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-red-600">
+                                        Intervention Recommended
+                                        <ChevronRight size={12} />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                     </div>
-                  ))}
-               </div>
-            ) : (
-               <div className="bg-white rounded-3xl p-4 border border-earth-200 shadow-sm h-[600px] relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-500">
-                  {/* Placeholder Map Visual */}
-                  <img 
-                     src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&auto=format&fit=crop&q=80" 
-                     className="w-full h-full object-cover rounded-2xl opacity-80"
-                     alt="Risk Map"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-transparent to-transparent pointer-events-none"></div>
-                  
-                  {/* Map Overlays (Simulated) */}
-                  <div className="absolute top-1/2 left-1/3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white animate-bounce flex items-center gap-1">
-                     <Bug size={12} /> Pest Zone
-                  </div>
-                  <div className="absolute top-1/3 right-1/4 bg-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg border-2 border-white flex items-center gap-1">
-                     <Droplets size={12} /> Fungal Risk
-                  </div>
+                    ) : (
+                        <div className="bg-white dark:bg-earth-900 rounded-[2rem] p-4 border border-earth-100 dark:border-earth-800 shadow-sm h-[500px] relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200" className="w-full h-full object-cover rounded-2xl opacity-90" alt="Map" />
+                            <div className="absolute top-1/2 left-1/3 bg-red-600 text-white text-[8px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-xl border-2 border-white animate-bounce">Critical Zone</div>
+                        </div>
+                    )}
+                </div>
 
-                  <div className="absolute bottom-8 left-8 right-8 bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-earth-200 shadow-lg">
-                     <h4 className="font-bold text-earth-900 mb-2">Regional Status: Central Province</h4>
-                     <div className="flex items-center gap-2 text-sm text-earth-600 mb-4">
-                        <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div> High Alert Level
-                     </div>
-                     <div className="w-full bg-earth-200 h-2 rounded-full overflow-hidden">
-                        <div className="bg-gradient-to-r from-green-500 via-yellow-500 to-red-600 w-[85%] h-full"></div>
-                     </div>
-                     <div className="flex justify-between text-[10px] text-earth-400 mt-1 uppercase font-bold">
-                        <span>Safe</span>
-                        <span>Caution</span>
-                        <span>Critical</span>
-                     </div>
-                  </div>
-               </div>
-            )}
-         </div>
+                <div className="space-y-6">
+                    <div className="bg-white dark:bg-earth-900 p-8 rounded-[2rem] border border-earth-100 dark:border-earth-800 shadow-sm text-center group">
+                        <div className="w-16 h-16 bg-red-50 dark:bg-red-950/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-red-600 shadow-inner group-hover:scale-105 transition-transform duration-500">
+                            <AlertTriangle size={32} />
+                        </div>
+                        <h3 className="font-bold text-xl text-earth-900 dark:text-white mb-2">Spot a Threat?</h3>
+                        <p className="text-earth-500 dark:text-earth-400 text-xs mb-8 leading-relaxed font-medium">
+                            Early detection is key. Report unusual biological activity now.
+                        </p>
+                        <button onClick={() => setShowReportModal(true)} className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3.5 rounded-xl transition-all shadow-md text-[9px] uppercase tracking-widest">
+                            Submit Field Report
+                        </button>
+                    </div>
 
-         {/* Sidebar: Report & Prevention */}
-         <div className="space-y-6">
-            <div className="bg-white p-6 rounded-3xl border border-earth-200 shadow-sm text-center">
-               <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600">
-                  <AlertTriangle size={32} />
-               </div>
-               <h3 className="font-bold text-lg text-earth-900 mb-2">Spot a Threat?</h3>
-               <p className="text-earth-500 text-sm mb-6">
-                  Early detection saves crops. Report unusual symptoms or pests immediately to the network.
-               </p>
-               <button className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors shadow-md">
-                  Submit Field Report
-               </button>
+                    <div className="bg-agro-950 p-8 rounded-[2rem] text-white shadow-lg relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 transition-transform duration-1000 group-hover:rotate-12"><ShieldCheck size={120} /></div>
+                        <h3 className="text-lg font-bold mb-3 flex items-center gap-2 relative z-10"><ShieldCheck size={20} className="text-agro-400" /> Protection</h3>
+                        <p className="text-agro-200 text-xs mb-6 leading-relaxed relative z-10">All nodes are synchronized with global biological defense protocols.</p>
+                        <button onClick={() => onNavigate?.(View.SUSTAINABILITY_FRAMEWORK)} className="w-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-black py-3 rounded-xl text-[8px] uppercase tracking-widest relative z-10">Learn More</button>
+                    </div>
+                </div>
             </div>
-
-            <div className="bg-green-50 p-6 rounded-3xl border border-green-100">
-               <h3 className="font-bold text-lg text-green-900 mb-4 flex items-center gap-2">
-                  <CheckCircle2 size={20} className="text-green-600" /> Prevention Tips
-               </h3>
-               <ul className="space-y-4">
-                  <li className="flex gap-3 items-start text-sm text-green-800">
-                     <span className="font-bold text-green-600 mt-0.5">1.</span>
-                     <span>Rotate crops to break pest life cycles (e.g., Maize → Beans).</span>
-                  </li>
-                  <li className="flex gap-3 items-start text-sm text-green-800">
-                     <span className="font-bold text-green-600 mt-0.5">2.</span>
-                     <span>Maintain field hygiene; remove infected plant debris promptly.</span>
-                  </li>
-                  <li className="flex gap-3 items-start text-sm text-green-800">
-                     <span className="font-bold text-green-600 mt-0.5">3.</span>
-                     <span>Use certified disease-free seeds from approved suppliers.</span>
-                  </li>
-               </ul>
-            </div>
-
-            <div className="p-6 rounded-3xl border border-red-100 bg-red-50/50">
-               <h3 className="font-bold text-lg text-red-900 mb-4 flex items-center gap-2">
-                  <XCircle size={20} className="text-red-500" /> Banned Inputs
-               </h3>
-               <p className="text-xs text-red-800 mb-3">
-                  The following chemicals have been flagged for high toxicity levels this season:
-               </p>
-               <div className="flex flex-wrap gap-2">
-                  <span className="bg-white text-red-600 text-xs font-bold px-2 py-1 rounded border border-red-200">Carbofuran</span>
-                  <span className="bg-white text-red-600 text-xs font-bold px-2 py-1 rounded border border-red-200">Paraquat</span>
-               </div>
-            </div>
-         </div>
-
-      </div>
+        </>
+      )}
     </div>
   );
 };

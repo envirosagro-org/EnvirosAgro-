@@ -1,77 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="EnvirosAgro is a comprehensive network advancing agricultural sustainability by connecting farmers, researchers, and stakeholders through the Five Thrusts Framework." />
-    <link rel="canonical" href="https://envirosagro.org" />
-    <title>EnvirosAgro - Sustainable Agriculture Network</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EnvirosAgro | Global Strategic Agriculture Network</title>
+    <meta name="description" content="EnvirosAgro Strategic Hub: Quantifying global agricultural resilience through the Five Thrusts framework and m(t) intelligence.">
+    
+    <!-- Process Shim -->
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              serif: ['Merriweather', 'serif'],
-            },
-            colors: {
-              agro: {
-                50: '#f0fdf4',
-                100: '#dcfce7',
-                200: '#bbf7d0',
-                300: '#86efac',
-                400: '#4ade80',
-                500: '#22c55e',
-                600: '#16a34a',
-                700: '#15803d',
-                800: '#166534',
-                900: '#14532d',
-                950: '#052e16',
-              },
-              earth: {
-                50: '#fafaf9',
-                100: '#f5f5f4',
-                200: '#e7e5e4',
-                300: '#d6d3d1',
-                400: '#a8a29e',
-                500: '#78716c',
-                600: '#57534e',
-                700: '#44403c',
-                800: '#292524',
-                900: '#1c1917',
-              }
-            }
-          }
-        }
-      }
+        window.process = window.process || { env: {} };
     </script>
-    <style>
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #fafaf9; /* earth-50 */
-      }
-      h1, h2, h3, h4, h5, h6 {
-        font-family: 'Merriweather', serif;
-      }
-    </style>
-  <script type="importmap">
+
+    <!-- Optimized ESM Import Map -->
+    <script type="importmap">
 {
   "imports": {
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "vite": "https://aistudiocdn.com/vite@^7.2.6",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
+    "react": "https://esm.sh/react@19.0.0",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.475.0",
+    "@google/genai": "https://esm.sh/@google/genai@0.21.0",
+    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
   }
 }
 </script>
+
+    <!-- Tailwind & Theme Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        agro: {
+                            50: '#f0fdf4', 100: '#dcfce7', 200: '#bbf7d0', 300: '#86efac', 400: '#4ade80',
+                            500: '#22c55e', 600: '#16a34a', 700: '#15803d', 800: '#166534', 900: '#14532d', 950: '#052e16',
+                        },
+                        earth: {
+                            50: '#fdfaf9', 100: '#f7f2f0', 200: '#f1e6e1', 300: '#e8d3ca', 400: '#d9b3a3',
+                            500: '#c78d73', 600: '#b56d4f', 700: '#9c543a', 800: '#7f4430', 900: '#683727', 950: '#0a0504',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'float': 'float 8s ease-in-out infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'pulse-gentle': 'pulse-gentle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'progress': 'progress 3s ease-in-out infinite',
+                        'scan': 'scan 3s ease-in-out infinite',
+                        'fade-in': 'fade-in 0.5s ease-out forwards',
+                        'slide-in-bottom': 'slide-in-bottom 0.6s ease-out forwards',
+                        'zoom-in': 'zoom-in 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-20px) rotate(1deg)' },
+                        },
+                        'pulse-gentle': {
+                          '0%, 100%': { opacity: 1 },
+                          '50%': { opacity: 0.8 },
+                        },
+                        progress: {
+                          '0%': { transform: 'translateX(-100%)' },
+                          '100%': { transform: 'translateX(100%)' }
+                        },
+                        scan: {
+                          '0%, 100%': { transform: 'translateY(0)', opacity: 0.2 },
+                          '50%': { transform: 'translateY(100%)', opacity: 1 },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        'slide-in-bottom': {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        'zoom-in': {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        }
+                    },
+                    boxShadow: {
+                        'strategic': '0 25px 50px -12px rgba(0, 0, 0, 0.3)',
+                        'cinematic-xl': '0 40px 100px -20px rgba(0, 0, 0, 0.4)',
+                        'glow-green': '0 0 20px rgba(34, 197, 94, 0.3)',
+                        'glow-blue': '0 0 20px rgba(56, 189, 248, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
+        
+        .strategic-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .strategic-glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            border-radius: inherit;
+        }
+        
+        .dark .strategic-glass {
+            background: rgba(10, 15, 26, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ea-card {
+            @apply bg-white dark:bg-earth-950/50 border border-earth-100 dark:border-white/5 rounded-[2.5rem] shadow-sm transition-all duration-700 hover:shadow-strategic hover:-translate-y-2 overflow-hidden backdrop-blur-sm;
+        }
+
+        .ea-header-block {
+            @apply strategic-glass rounded-[3rem] p-8 md:p-12 mb-10 border border-white/10 shadow-strategic relative overflow-hidden;
+        }
+
+        .ea-btn-op {
+            @apply bg-agro-600 hover:bg-agro-500 text-white font-black uppercase text-[10px] tracking-[0.4em] py-4 px-8 rounded-2xl shadow-xl hover:scale-[1.03] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50;
+        }
+
+        .ea-label-meta {
+            @apply text-[9px] font-black uppercase tracking-[0.5em] text-agro-500 mb-4 flex items-center gap-2;
+        }
+
+        .ea-label {
+            @apply text-[10px] font-bold text-earth-500 flex items-center gap-2;
+        }
+
+        .ea-scroll-area {
+            @apply overflow-y-auto pr-2;
+        }
+
+        .ea-scroll-area::-webkit-scrollbar { width: 4px; }
+        .ea-scroll-area::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 10px; }
+        .ea-scroll-area::-webkit-scrollbar-thumb { @apply bg-agro-500/20 rounded-full hover:bg-agro-500/40 transition-colors; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .animate-in { animation: fade-in 0.5s ease-out; }
+        .fade-in { animation: fade-in 0.5s ease-out forwards; }
+        .zoom-in { animation: zoom-in 0.3s ease-out forwards; }
+        .slide-in-from-left-4 { animation: slide-in-from-left 0.5s ease-out forwards; }
+        .slide-in-from-top-2 { animation: slide-in-from-top 0.4s ease-out forwards; }
+
+        @keyframes slide-in-from-left {
+            0% { transform: translateX(-20px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slide-in-from-top {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 640px) {
+            .ea-card { @apply rounded-3xl p-6; }
+            .ea-header-block { @apply rounded-[2.5rem] p-6 mb-6; }
+        }
+    </style>
 </head>
-  <body>
+<body class="bg-[#fafaf9] dark:bg-[#020617] text-slate-900 dark:text-slate-100 selection:bg-agro-500 selection:text-white antialiased overflow-x-hidden transition-colors duration-500">
     <div id="root"></div>
-  </body>
+    <script type="module" src="./index.tsx"></script>
+</body>
 </html>

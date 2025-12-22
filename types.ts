@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export enum View {
@@ -11,6 +10,11 @@ export enum View {
   DASHBOARD = 'DASHBOARD',
   KNOWLEDGE = 'KNOWLEDGE',
   AI_ADVISOR = 'AI_ADVISOR',
+  ROADMAP_AI = 'ROADMAP_AI',
+  CROP_DOCTOR = 'CROP_DOCTOR',
+  SUSTAINABILITY_CALCULATOR = 'SUSTAINABILITY_CALCULATOR',
+  FARM_SCOUT = 'FARM_SCOUT',
+  CARBON_LEDGER = 'CARBON_LEDGER',
   SIGN_UP = 'SIGN_UP',
   PROFILE = 'PROFILE',
   SUSTAINABILITY_FRAMEWORK = 'SUSTAINABILITY_FRAMEWORK',
@@ -33,6 +37,17 @@ export enum View {
   AGBIZ_WEEKLY = 'AGBIZ_WEEKLY',
   INVESTOR_PORTAL = 'INVESTOR_PORTAL',
   SCALEUP_SUMMIT = 'SCALEUP_SUMMIT',
+  LIVE_HOST = 'LIVE_HOST',
+  INTRANET_DASHBOARD = 'INTRANET_DASHBOARD',
+  EXTRANET_DASHBOARD = 'EXTRANET_DASHBOARD',
+  COMMUNITY_GUIDELINES = 'COMMUNITY_GUIDELINES',
+  PRIVACY_POLICY = 'PRIVACY_POLICY',
+  SUPPLY_CHAIN_AUDIT = 'SUPPLY_CHAIN_AUDIT',
+  NETWORK_INPUT_HUB = 'NETWORK_INPUT_HUB',
+  AGRO_WORKERS_CLOUD = 'AGRO_WORKERS_CLOUD',
+  TRANSMISSION_GATEWAY = 'TRANSMISSION_GATEWAY',
+  FUTURE_VISION = 'FUTURE_VISION',
+  SIX_SIGMA_RCA = 'SIX_SIGMA_RCA'
 }
 
 export interface NavItem {
@@ -49,12 +64,7 @@ export interface Article {
   date: string;
   imageUrl: string;
   category: 'Research' | 'Practice' | 'Technology';
-}
-
-export interface ChartDataPoint {
-  name: string;
-  value: number;
-  secondary?: number;
+  fullContent?: string;
 }
 
 export interface ChatMessage {
@@ -68,8 +78,9 @@ export interface User {
   email: string;
   role: 'Farmer' | 'Researcher' | 'Stakeholder' | 'Other';
   location?: string;
-  esin?: string; // EnvirosAgro Social ID
+  esin?: string;
   bio?: string;
   avatar?: string;
   joinedDate?: string;
+  eacBalance?: number;
 }

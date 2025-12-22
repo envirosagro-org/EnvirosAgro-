@@ -1,193 +1,368 @@
-
-import React, { useState } from 'react';
-import { TrendingUp, PieChart, ArrowUpRight, DollarSign, Leaf, Globe, ShieldCheck, Download, Plus, Coins, CreditCard, X, Smartphone } from 'lucide-react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { 
+  TrendingUp, PieChart, ArrowUpRight, ArrowRight, DollarSign, Leaf, Globe, 
+  ShieldCheck, Download, Plus, Coins, CreditCard, X, Smartphone, Loader2, 
+  CheckCircle2, ArrowDownLeft, Clock, Activity, Trash2, BarChart3, Target, 
+  Shield, Filter, Search, Zap, Info, Briefcase, ChevronRight, Cpu, Factory,
+  Lock, ShieldAlert, FileCheck, Server, QrCode, Layers, History, RefreshCcw,
+  FileText, ExternalLink
+} from 'lucide-react';
 import { PieChart as RePie, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { View } from '../types';
 
-const PORTFOLIO_DATA = [
-  // Empty State
+interface InvestorPortalProps {
+  onNavigate?: (view: View) => void;
+}
+
+const OPPORTUNITIES = [
+  {
+    id: 'op1',
+    title: "Kiriaini Carbon Seq Bond",
+    thrust: "EA",
+    thrustName: "Environmental",
+    target: "$500,000",
+    raised: 425000,
+    yield: "5.5% p.a.",
+    minInvest: 1000,
+    risk: "Low",
+    daysLeft: 12,
+    image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=800&auto=format&fit=crop&q=60"
+  },
+  {
+    id: 'op2',
+    title: "Youth Ag-Tech Accelerator",
+    thrust: "TA",
+    thrustName: "Technical",
+    target: "$250,000",
+    raised: 85000,
+    yield: "8.2% (Est)",
+    minInvest: 5000,
+    risk: "High",
+    daysLeft: 4,
+    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&auto=format&fit=crop&q=60"
+  },
+  {
+    id: 'op3',
+    title: "Regional Cold-Chain Link",
+    thrust: "IA",
+    target: "$1.2M",
+    raised: 600000,
+    thrustName: "Industrial",
+    yield: "4.8% p.a.",
+    minInvest: 10000,
+    risk: "Medium",
+    daysLeft: 28,
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&auto=format&fit=crop&q=60"
+  },
+  {
+      id: 'op4',
+      title: "Bio-Corridor Restoration",
+      thrust: "EA",
+      thrustName: "Environmental",
+      target: "$300,000",
+      raised: 280000,
+      yield: "6.1% p.a.",
+      minInvest: 500,
+      risk: "Low",
+      daysLeft: 2,
+      image: "https://images.unsplash.com/photo-1448375240586-dfd8f37933ff?w=400"
+  }
 ];
 
-const OPPORTUNITIES: any[] = [
-  // Empty State
-];
-
-export const InvestorPortal: React.FC = () => {
+export const InvestorPortal: React.FC<InvestorPortalProps> = ({ onNavigate }) => {
   const [showDepositModal, setShowDepositModal] = useState(false);
+  const [showInsuranceModal, setShowInsuranceModal] = useState(false);
+  const [showDeployModal, setShowDeployModal] = useState(false);
+  const [showRebalanceModal, setShowRebalanceModal] = useState(false);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
+  
+  const [selectedOpportunity, setSelectedOpportunity] = useState<typeof OPPORTUNITIES[0] | null>(null);
   const [depositMethod, setDepositMethod] = useState<'TOKENZ' | 'FIAT'>('TOKENZ');
+  const [riskFilter, setRiskFilter] = useState('All');
+  
+  const [portfolioValue, setPortfolioValue] = useState(12450.00);
+  const [totalImpact, setTotalImpact] = useState(28.4);
+  const [allocations, setAllocations] = useState({
+    bonds: 45,
+    equity: 35,
+    carbon: 20
+  });
+  
+  const [insuranceStatus, setInsuranceStatus] = useState<'IDLE' | 'VERIFYING' | 'VERIFIED'>('IDLE');
+  const [verificationStep, setVerificationStep] = useState(0);
+
+  const [deploymentStatus, setDeploymentStatus] = useState<'IDLE' | 'DEPLOYING' | 'SUCCESS'>('IDLE');
+  const [deployAmount, setDeployAmount] = useState('');
+  const [deployStep, setDeployStep] = useState(0);
+
+  const [rebalanceStatus, setRebalanceStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
+  const [tempAllocations, setTempAllocations] = useState({ ...allocations });
+
+  const verificationSteps = [
+    "Establishing Node Handshake...",
+    "Validating Audit Trail...",
+    "Syncing Liquidity Reserve...",
+    "Verifying Asset Backing..."
+  ];
+
+  const deploymentSteps = [
+    "Initializing Asset Lock...",
+    "Syncing Benchmarks...",
+    "Validating Resilience Delta...",
+    "Finalizing Node Entry..."
+  ];
+
+  const rebalanceSteps = [
+    "Calculating Spread...",
+    "Executing Liquidity Swap...",
+    "Updating Smart Contracts...",
+    "Re-calibrating Portfolio..."
+  ];
+
+  const [transactions, setTransactions] = useState<any[]>([
+    { id: 1, type: 'Yield Payment', amount: 142.50, method: 'Carbon Bond G2', date: 'May 01, 10:24 AM', currency: 'USD', status: 'Received' },
+    { id: 2, type: 'Asset Purchase', amount: -2500.00, method: 'Eco-Reforest Fund', date: 'Apr 15, 02:45 PM', currency: 'USD', status: 'Completed' },
+    { id: 3, type: 'Deposit', amount: 5000.00, method: 'Bank Transfer', date: 'Apr 02, 09:12 AM', currency: 'USD', status: 'Completed' }
+  ]);
+  
+  const [amount, setAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'CARD' | 'MOBILE'>('CARD');
+  const [depositStatus, setDepositStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
+
+  const filteredOpportunities = useMemo(() => {
+    if (riskFilter === 'All') return OPPORTUNITIES;
+    return OPPORTUNITIES.filter(op => op.risk === riskFilter);
+  }, [riskFilter]);
+
+  const handleDeposit = () => {
+      const val = parseFloat(amount);
+      if (!amount || isNaN(val) || val <= 0) return;
+      setDepositStatus('PROCESSING');
+      setTimeout(() => {
+          setPortfolioValue(prev => prev + val);
+          setTransactions(prev => [{
+              id: Date.now(),
+              type: 'Deposit',
+              amount: val,
+              method: depositMethod === 'TOKENZ' ? 'Tokenz Wallet' : (paymentMethod === 'CARD' ? 'Visa' : 'Mobile'),
+              date: 'Just Now',
+              currency: depositMethod === 'TOKENZ' ? 'TKZ' : 'USD',
+              status: 'Completed'
+          }, ...prev]);
+          setDepositStatus('SUCCESS');
+          setTimeout(() => { setShowDepositModal(false); setDepositStatus('IDLE'); setAmount(''); }, 2000);
+      }, 2000);
+  };
+
+  const handleVerifyInsurance = () => {
+    setInsuranceStatus('VERIFYING');
+    setVerificationStep(0);
+    const interval = setInterval(() => {
+        setVerificationStep(prev => (prev >= verificationSteps.length - 1 ? (clearInterval(interval), prev) : prev + 1));
+    }, 1000);
+    setTimeout(() => setInsuranceStatus('VERIFIED'), 5000);
+  };
+
+  const handleDeployAssets = () => {
+    const val = parseFloat(deployAmount);
+    if (!selectedOpportunity || val < selectedOpportunity.minInvest || val > portfolioValue) return;
+    setDeploymentStatus('DEPLOYING');
+    setDeployStep(0);
+    const interval = setInterval(() => {
+        setDeployStep(prev => (prev >= deploymentSteps.length - 1 ? (clearInterval(interval), prev) : prev + 1));
+    }, 1000);
+    setTimeout(() => {
+        setPortfolioValue(prev => prev - val);
+        setTransactions(prev => [{
+            id: Date.now(),
+            type: 'Asset Deployment',
+            amount: -val,
+            method: selectedOpportunity.title,
+            date: 'Just Now',
+            currency: 'USD',
+            status: 'Completed'
+        }, ...prev]);
+        setDeploymentStatus('SUCCESS');
+    }, 5000);
+  };
+
+  const handleRebalance = () => {
+    const total = tempAllocations.bonds + tempAllocations.equity + tempAllocations.carbon;
+    if (total !== 100) return;
+    setRebalanceStatus('PROCESSING');
+    setVerificationStep(0);
+    const interval = setInterval(() => {
+        setVerificationStep(prev => (prev >= rebalanceSteps.length - 1 ? (clearInterval(interval), prev) : prev + 1));
+    }, 800);
+    setTimeout(() => {
+        setAllocations({ ...tempAllocations });
+        setRebalanceStatus('SUCCESS');
+    }, 4000);
+  };
+
+  const pieData = [
+    { name: 'Regenerative Bonds', value: portfolioValue * (allocations.bonds / 100), fill: '#16a34a' },
+    { name: 'Ag-Tech Equity', value: portfolioValue * (allocations.equity / 100), fill: '#3b82f6' },
+    { name: 'Carbon Credits', value: portfolioValue * (allocations.carbon / 100), fill: '#9333ea' },
+  ];
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 relative">
+    <div className="max-w-7xl mx-auto px-6 py-6 relative animate-in fade-in duration-1000">
       
-      {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-        <div>
-           <div className="flex items-center gap-3 mb-4">
-              <div className="bg-blue-50 p-3 rounded-2xl border border-blue-100">
-                  <TrendingUp className="text-blue-600" size={32} />
-              </div>
-              <h2 className="text-4xl font-serif font-bold text-agro-900">Investor Portal</h2>
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-10 gap-6">
+        <div className="max-w-3xl">
+           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-[8px] font-black uppercase tracking-widest mb-4">
+              <ShieldCheck size={12} /> Official Portal v2.4
            </div>
-           <p className="text-xl text-earth-600 max-w-2xl">
-             Track your impact investments, analyze portfolio performance, and discover vetted sustainable opportunities.
+           <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-4 tracking-tight leading-[1]">
+              Capital for <span className="text-blue-600 italic">Resilience</span>
+           </h1>
+           <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+             Deploying impact capital benchmarked against the m(t) Sustainability Constant.
            </p>
         </div>
-        <div className="flex gap-4">
-            <button className="bg-white border border-earth-200 text-earth-600 px-6 py-3 rounded-full font-bold hover:bg-earth-50 transition-colors flex items-center gap-2">
-                <Download size={18} /> Quarterly Report
-            </button>
+        
+        <div className="flex gap-2 w-full md:w-auto">
             <button 
                 onClick={() => setShowDepositModal(true)}
-                className="bg-blue-600 text-white px-6 py-3 rounded-full font-bold hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg"
+                className="flex-1 md:flex-none bg-blue-600 text-white px-6 py-2.5 rounded-xl font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-all shadow-lg active:scale-95"
             >
-                <Plus size={18} /> Deposit Funds
+                <Plus size={16} className="mr-1" /> Add Capital
             </button>
         </div>
       </div>
 
-      {/* Portfolio Overview - Empty State */}
-      <div className="grid lg:grid-cols-3 gap-8 mb-12">
+      <div className="grid lg:grid-cols-12 gap-6 mb-12">
          
-         {/* Stats Cards */}
-         <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
-            <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm flex flex-col justify-center">
-                <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-bold text-earth-500 text-sm uppercase tracking-wider">Total Asset Value</h3>
-                </div>
-                <div className="text-4xl font-serif font-bold text-earth-900 mb-2">$0.00</div>
-                <p className="text-earth-400 text-xs">Waiting for initial deposit...</p>
-            </div>
-            
-            <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm flex flex-col justify-center">
-                <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-bold text-earth-500 text-sm uppercase tracking-wider">Total Impact Generated</h3>
-                    <Leaf size={16} className="text-green-600" />
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-earth-400">
-                    <div>
-                        <div className="text-2xl font-bold">--</div>
-                        <div className="text-xs">CO2 Offset</div>
+         <div className="lg:col-span-8 space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+                <div className="bg-white dark:bg-earth-900 p-8 rounded-[2rem] border border-earth-100 dark:border-earth-800 shadow-sm relative overflow-hidden">
+                    <div className="relative z-10">
+                        <div className="flex justify-between items-center mb-4">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-earth-400">Portfolio Value</span>
+                            <Activity size={16} className="text-blue-600" />
+                        </div>
+                        <div className="text-4xl font-serif font-bold text-slate-900 dark:text-white mb-2">
+                            ${portfolioValue.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded text-[8px] font-black">+4.24%</span>
+                        </div>
                     </div>
-                    <div>
-                        <div className="text-2xl font-bold">--</div>
-                        <div className="text-xs">Jobs Supported</div>
+                </div>
+
+                <div className="bg-agro-900 p-8 rounded-[2rem] text-white shadow-lg relative overflow-hidden">
+                    <div className="relative z-10">
+                        <span className="text-[9px] font-black uppercase tracking-widest text-agro-300 mb-4 block">Verified Impact</span>
+                        <div className="text-4xl font-serif font-bold mb-1">{totalImpact.toFixed(1)} <span className="text-sm font-sans font-black opacity-40 uppercase">Tons</span></div>
+                        <p className="text-[8px] font-black text-agro-400 uppercase tracking-widest">CO2 Sequestration</p>
                     </div>
                 </div>
             </div>
 
-            {/* Asset Allocation Chart - Empty State */}
-            <div className="bg-white p-6 rounded-3xl border border-earth-100 shadow-sm md:col-span-2 flex items-center justify-center text-center h-64">
-                <div>
-                    <PieChart size={48} className="mx-auto text-earth-200 mb-4" />
-                    <h3 className="text-earth-500 font-bold mb-1">No Active Investments</h3>
-                    <p className="text-xs text-earth-400">Deposit funds to start building your green portfolio.</p>
+            <div className="bg-white dark:bg-earth-900 p-8 rounded-[2rem] border border-earth-100 dark:border-earth-800 shadow-sm">
+                <div className="flex flex-col md:flex-row items-center gap-8">
+                    <div className="w-48 h-48 relative shrink-0">
+                         <ResponsiveContainer width="100%" height="100%">
+                            <RePie>
+                                <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={5} stroke="none">
+                                    {pieData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.fill} />)}
+                                </Pie>
+                                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', fontSize: '10px' }} />
+                            </RePie>
+                         </ResponsiveContainer>
+                    </div>
+                    
+                    <div className="flex-1 w-full">
+                        <div className="flex justify-between items-end mb-4">
+                            <h3 className="font-bold text-slate-900 dark:text-white text-sm uppercase tracking-widest">Asset Mix</h3>
+                            <button onClick={() => setShowRebalanceModal(true)} className="text-[8px] font-black text-blue-600 uppercase tracking-widest hover:underline">Rebalance</button>
+                        </div>
+                        <div className="space-y-2">
+                            {pieData.map((item, i) => (
+                                <div key={i} className="flex items-center justify-between p-2.5 bg-earth-50 dark:bg-earth-800/50 rounded-xl">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-2 h-6 rounded-full" style={{backgroundColor: item.fill}}></div>
+                                        <span className="text-[10px] font-bold text-slate-700 dark:text-white uppercase">{item.name}</span>
+                                    </div>
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white font-mono">${item.value.toLocaleString(undefined, {maximumFractionDigits: 0})}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
          </div>
 
-         {/* Right Sidebar: Quick Actions */}
-         <div className="space-y-6">
-             <div className="bg-agro-900 text-white p-8 rounded-3xl relative overflow-hidden">
-                 <div className="relative z-10">
-                     <ShieldCheck size={48} className="mb-4 text-agro-300" />
-                     <h3 className="text-2xl font-bold mb-2">Impact Verification</h3>
-                     <p className="text-agro-200 text-sm mb-6">
-                         Your investments are audited quarterly using the <strong>Sustainability Coefficient C(a)</strong>.
-                     </p>
-                     <button disabled className="w-full bg-white/10 text-agro-200 font-bold py-3 rounded-xl cursor-not-allowed">
-                         No Logs Available
-                     </button>
-                 </div>
-             </div>
+         <div className="lg:col-span-4 flex flex-col gap-6">
+            <div className="bg-white dark:bg-earth-900 p-6 rounded-[2rem] border border-earth-100 dark:border-earth-800 shadow-sm flex-1 flex flex-col min-h-0">
+                <h3 className="font-bold text-sm text-slate-900 dark:text-white flex items-center gap-2 mb-4">
+                    <BarChart3 size={16} className="text-blue-600" /> Recent Ledger
+                </h3>
+                <div className="flex-1 ea-scroll-container max-h-[340px] space-y-2">
+                    {transactions.map((tx) => (
+                        <div key={tx.id} className="p-3 bg-earth-50/50 dark:bg-earth-800/30 rounded-xl flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className={`p-1.5 rounded-lg ${tx.amount > 0 ? 'bg-green-50 text-green-600' : 'bg-blue-50 text-blue-600'}`}>
+                                    {tx.amount > 0 ? <ArrowDownLeft size={14} /> : <ArrowUpRight size={14} />}
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-[10px] text-slate-900 dark:text-white">{tx.type}</h4>
+                                    <p className="text-[8px] text-earth-400 font-bold uppercase">{tx.method}</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className={`text-[11px] font-black ${tx.amount > 0 ? 'text-green-600' : 'text-slate-900 dark:text-white'}`}>{tx.amount > 0 ? '+' : ''}{tx.amount.toLocaleString()}</p>
+                                <p className="text-[7px] text-earth-400 font-bold uppercase">{tx.date}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
          </div>
       </div>
 
-      {/* Opportunities Marketplace - Empty State */}
-      <div>
-          <div className="flex justify-between items-center mb-8">
-              <h3 className="text-2xl font-bold text-earth-900">Open Opportunities</h3>
-              <button disabled className="text-earth-400 font-bold text-sm cursor-default">View All</button>
+      <div className="mb-12">
+          <div className="flex justify-between items-end mb-6">
+              <div>
+                  <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">Vetted Opportunities</h2>
+                  <p className="text-xs text-slate-500 font-medium">Standardized project pipelines.</p>
+              </div>
           </div>
 
-          <div className="bg-earth-50 rounded-3xl border border-earth-100 py-16 text-center">
-              <Globe size={48} className="mx-auto text-earth-300 mb-4" />
-              <h3 className="text-xl font-bold text-earth-600 mb-2">No Opportunities Matched</h3>
-              <p className="text-sm text-earth-500 mb-6">There are currently no open projects matching your profile settings.</p>
-              <button className="bg-white text-earth-600 border border-earth-200 px-6 py-2 rounded-full font-bold hover:bg-earth-100 transition-colors text-sm">
-                  Update Preferences
-              </button>
+          <div className="ea-scroll-container max-h-[500px] grid md:grid-cols-2 lg:grid-cols-3 gap-6 pr-2">
+              {filteredOpportunities.map((opp) => (
+                    <div key={opp.id} className="bg-white dark:bg-earth-900 rounded-[1.5rem] overflow-hidden border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-md transition-all group flex flex-col">
+                        <div className="h-40 overflow-hidden relative">
+                            <img src={opp.image} className="w-full h-full object-cover group-hover:scale-105 transition-transform" alt={opp.title} />
+                            <div className="absolute top-3 left-3 bg-white/95 px-2 py-0.5 rounded-full text-[7px] font-black uppercase text-blue-600 shadow">
+                                {opp.risk} Risk
+                            </div>
+                        </div>
+                        <div className="p-5 flex-1 flex flex-col">
+                            <div className="flex justify-between items-start mb-4">
+                                <h4 className="text-base font-bold text-slate-900 dark:text-white leading-tight group-hover:text-blue-600 transition-colors pr-2 truncate">
+                                    {opp.title}
+                                </h4>
+                                <span className="text-lg font-bold text-agro-700 dark:text-agro-400 font-serif leading-none">{opp.yield}</span>
+                            </div>
+                            <div className="w-full bg-earth-100 dark:bg-earth-800 h-1 rounded-full overflow-hidden mb-4">
+                                <div className="bg-blue-600 h-full" style={{width: `${Math.round((opp.raised / parseFloat(opp.target.replace('$', '').replace('M', '1000000').replace(',', ''))) * 100)}%`}}></div>
+                            </div>
+                            <div className="mt-auto flex justify-between items-center">
+                                <span className="text-[9px] font-mono text-earth-400 uppercase tracking-widest">Min: ${opp.minInvest}</span>
+                                <button 
+                                    onClick={() => { setSelectedOpportunity(opp); setDeployAmount(opp.minInvest.toString()); setShowDeployModal(true); }}
+                                    className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-black text-[8px] uppercase tracking-widest shadow-sm hover:bg-blue-700"
+                                >
+                                    Invest
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+              ))}
           </div>
       </div>
-
-      {/* DEPOSIT MODAL */}
-      {showDepositModal && (
-         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-               <div className="p-6 border-b border-earth-100 flex justify-between items-center bg-blue-50">
-                  <h3 className="font-bold text-xl text-blue-900 flex items-center gap-2">
-                     <Plus className="text-blue-600" /> Fund Investment Wallet
-                  </h3>
-                  <button onClick={() => setShowDepositModal(false)} className="text-blue-400 hover:text-blue-700 transition-colors">
-                     <X size={24} />
-                  </button>
-               </div>
-               
-               <div className="p-6">
-                  <div className="flex gap-2 mb-6 bg-earth-50 p-1 rounded-xl">
-                      <button 
-                        onClick={() => setDepositMethod('TOKENZ')}
-                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'TOKENZ' ? 'bg-white text-amber-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
-                      >
-                          <Coins size={16} /> Pay with Tokenz
-                      </button>
-                      <button 
-                        onClick={() => setDepositMethod('FIAT')}
-                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2 ${depositMethod === 'FIAT' ? 'bg-white text-blue-600 shadow-sm' : 'text-earth-500 hover:text-earth-800'}`}
-                      >
-                          <CreditCard size={16} /> Fiat Deposit
-                      </button>
-                  </div>
-
-                  {depositMethod === 'TOKENZ' ? (
-                      <div className="space-y-4">
-                          <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 flex justify-between items-center">
-                              <div>
-                                  <p className="text-xs font-bold text-amber-700 uppercase">Available Balance</p>
-                                  <p className="text-xl font-bold text-amber-900">250.00 TKZ</p>
-                              </div>
-                              <Coins className="text-amber-400" size={32} />
-                          </div>
-                          <div>
-                              <label className="text-sm font-bold text-earth-700 block mb-1">Transfer Amount (TKZ)</label>
-                              <input type="number" className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 font-mono text-lg" placeholder="0.00" />
-                          </div>
-                          <button className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">
-                              Transfer to Portfolio
-                          </button>
-                      </div>
-                  ) : (
-                      <div className="space-y-4">
-                          <div>
-                              <label className="text-sm font-bold text-earth-700 block mb-1">Deposit Amount (USD)</label>
-                              <input type="number" className="w-full border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-lg" placeholder="0.00" />
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                              <button className="flex items-center justify-center gap-2 border border-earth-200 rounded-xl py-3 hover:bg-earth-50 font-bold text-sm text-earth-700">
-                                  <CreditCard size={16} /> Card
-                              </button>
-                              <button className="flex items-center justify-center gap-2 border border-earth-200 rounded-xl py-3 hover:bg-earth-50 font-bold text-sm text-earth-700">
-                                  <Smartphone size={16} /> Mobile Money
-                              </button>
-                          </div>
-                          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md">
-                              Process Deposit
-                          </button>
-                      </div>
-                  )}
-               </div>
-            </div>
-         </div>
-      )}
-
     </div>
   );
 };

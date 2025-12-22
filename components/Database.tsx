@@ -1,26 +1,43 @@
-
-import React, { useState } from 'react';
-import { Database as DbIcon, Search, Download, FileText, Globe, Filter, ChevronRight, Droplets, Wind, Sprout, Cat, UploadCloud, X, ClipboardList, FileSpreadsheet, CheckCircle2, Plus, Calculator, BarChart3, Activity } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { 
+  Database as DbIcon, Search, Download, FileText, Globe, Filter, ChevronRight, 
+  Droplets, Wind, Sprout, Cat, UploadCloud, X, Calculator, BarChart3, 
+  Activity, Lock, Zap, ArrowUp, ChevronDown, CheckCircle2, Loader2,
+  FileUp, MapPin, Tag, Terminal, ShieldCheck, FileType, Paperclip
+} from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-import { THRUSTS, DATASETS, RESOURCE_TYPES, COLLECTION_TOOLS } from '../data';
+import { THRUSTS, DATASETS, RESOURCE_TYPES } from './data';
+import { User } from '../types';
 
-export const Database: React.FC = () => {
+interface DatabaseProps {
+    user?: User | null;
+    onAwardEac?: (amount: number) => void;
+}
+
+export const Database: React.FC<DatabaseProps> = ({ user, onAwardEac }) => {
   const [activeThrustId, setActiveThrustId] = useState('SA');
   const [activeResourceType, setActiveResourceType] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [showContributeModal, setShowContributeModal] = useState(false);
-  const [activeModalTab, setActiveModalTab] = useState<'SUBMIT' | 'TOOLS'>('SUBMIT');
-  const [activeViewTab, setActiveViewTab] = useState<'DATASETS' | 'HEALTH'>('DATASETS');
+  const [activeViewTab, setActiveViewTab] = useState<'DATASETS' | 'HEALTH' | 'MY_PORTAL'>('DATASETS');
+  
+  // Contribution Form State
+  const [contributionStep, setContributionStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Sustainability Feedback State
-  const [sustainScore, setSustainScore] = useState<number | null>(null);
-  const [sustainParams, setSustainParams] = useState({
-      dn: 5, // Data Depth (1-10)
-      in_val: 5, // Integrity (1-10)
-      ca: 1.0, // Adoption/Application Coefficient (1-5)
-      s: 2 // Obsolescence Rate (1-10, lower is slower decay)
+  const [attachedFile, setAttachedFile] = useState<File | null>(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    thrust: 'SA',
+    domain: 'Sociological & Anthropological',
+    region: '',
+    category: 'Plants',
+    type: 'Research Report',
+    description: ''
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const activeThrust = THRUSTS.find(t => t.id === activeThrustId) || THRUSTS[0];
   
@@ -30,234 +47,239 @@ export const Database: React.FC = () => {
     (
       d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       d.domain.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
       d.region.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
-  const calculateSustainability = () => {
-      // Formula: m = sqrt[ ((Dn * In) * C(a)) / S ]
-      // Dn = Data Depth (Volume)
-      // In = Integrity (Standardization)
-      // C(a) = Application Coefficient (Thrust Alignment)
-      // S = Obsolescence Rate (Demand/Decay)
-      
-      const { dn, in_val, ca, s } = sustainParams;
-      const numerator = (dn * in_val) * ca;
-      const m = Math.sqrt(numerator / s);
-      setSustainScore(parseFloat(m.toFixed(2)));
+  const dbHealthData = [
+      { name: 'Social', ca: 3.2, volume: 38 },
+      { name: 'Env', ca: 4.1, volume: 30 },
+      { name: 'Health', ca: 2.8, volume: 14 },
+      { name: 'Tech', ca: 3.9, volume: 16 },
+      { name: 'Ind', ca: 2.5, volume: 12 },
+  ];
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const handleScroll = () => setShowScrollTop(container.scrollTop > 200);
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [activeViewTab]);
+
+  const scrollToTop = () => {
+    scrollContainerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        setAttachedFile(file);
+        // Map common extensions to standardized type labels
+        const ext = file.name.split('.').pop()?.toUpperCase();
+        let typeLabel = `${ext} Dataset`;
+        if (ext === 'PDF') typeLabel = 'PDF Report';
+        if (ext === 'TXT') typeLabel = 'TXT Log';
+        if (ext === 'DOCX' || ext === 'DOC') typeLabel = 'DOCX Protocol';
+        if (ext === 'XLSX' || ext === 'CSV') typeLabel = 'XLSX Telemetry';
+        
+        setFormData(prev => ({ ...prev, type: typeLabel }));
+    }
   };
 
   const handleContributeSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      setIsSubmitting(true);
-      setTimeout(() => {
-          setIsSubmitting(false);
-          setShowContributeModal(false);
-          alert(`Thank you! Your dataset has been submitted. Calculated Sustainability Score (m): ${sustainScore || 'Pending Review'}\nYou earned 50 EAC for this contribution!`);
-          setSustainScore(null); // Reset
-      }, 1500);
+    e.preventDefault();
+    setIsSubmitting(true);
+    setTimeout(() => {
+        setIsSubmitting(false);
+        setContributionStep(3);
+        if (onAwardEac) onAwardEac(50);
+    }, 2500);
   };
 
-  const dbHealthData = [
-      { name: 'Social (SA)', ca: 3.2, volume: 38 },
-      { name: 'Env (EA)', ca: 4.1, volume: 30 },
-      { name: 'Health (HA)', ca: 2.8, volume: 14 },
-      { name: 'Tech (TA)', ca: 3.9, volume: 16 },
-      { name: 'Ind (IA)', ca: 2.5, volume: 12 },
-  ];
+  const resetContribute = () => {
+    setShowContributeModal(false);
+    setContributionStep(1);
+    setAttachedFile(null);
+    setFormData({ name: '', thrust: 'SA', domain: 'Sociological', region: '', category: 'Plants', type: 'Research Report', description: '' });
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 relative">
+    <div className="max-w-7xl mx-auto px-6 py-4 relative animate-in fade-in duration-700">
       
-      {/* Header */}
-      <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-        <div>
-            <h2 className="text-3xl font-bold text-agro-900 flex items-center gap-3 mb-2">
-            <DbIcon className="text-agro-600" /> EnvirosAgro Data Base
-            </h2>
-            <p className="text-earth-600">
-                A comprehensive repository organized by the Five Thrusts Framework.
-            </p>
-        </div>
-        <div className="flex gap-3">
-             <div className="bg-earth-100 p-1 rounded-xl flex gap-1">
+      {/* Translucent Unified Header Block */}
+      <div className="ea-header-block p-4 md:p-6 mb-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <div className="ea-label mb-1">
+                <DbIcon size={12} /> Global Intelligence Node
+                </div>
+                <h2 className="text-2xl md:text-3xl font-serif font-bold text-agro-900 dark:text-white leading-tight">
+                EnvirosAgro <span className="text-blue-600 italic">Data Registry</span>
+                </h2>
+            </div>
+            <div className="flex gap-2 flex-wrap items-center">
+                <div className="agro-glass p-1 rounded-2xl flex gap-1 border border-earth-200 dark:border-white/5 backdrop-blur-xl bg-white/40 dark:bg-slate-900/40 shadow-sm">
+                    <button 
+                    onClick={() => setActiveViewTab('DATASETS')}
+                    className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${activeViewTab === 'DATASETS' ? 'bg-white dark:bg-earth-700 shadow-sm text-agro-700 dark:text-white' : 'text-earth-400 hover:text-earth-800'}`}
+                    >
+                    Dossiers
+                    </button>
+                    <button 
+                    onClick={() => setActiveViewTab('HEALTH')}
+                    className={`px-4 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeViewTab === 'HEALTH' ? 'bg-white dark:bg-earth-700 shadow-sm text-agro-700 dark:text-white' : 'text-earth-400 hover:text-earth-800'}`}
+                    >
+                    Telemetry
+                    </button>
+                </div>
+                
                 <button 
-                   onClick={() => setActiveViewTab('DATASETS')}
-                   className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${activeViewTab === 'DATASETS' ? 'bg-white shadow-sm text-agro-700' : 'text-earth-500 hover:text-earth-800'}`}
+                    onClick={() => setShowContributeModal(true)}
+                    className="ea-btn-op nature-gradient px-6 py-2 h-10 text-[9px]"
                 >
-                   Datasets
+                    <UploadCloud size={16} /> Contribute Intelligence
                 </button>
-                <button 
-                   onClick={() => setActiveViewTab('HEALTH')}
-                   className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${activeViewTab === 'HEALTH' ? 'bg-white shadow-sm text-agro-700' : 'text-earth-500 hover:text-earth-800'}`}
-                >
-                   <Activity size={16} /> Database Health
-                </button>
-             </div>
-             <button 
-                onClick={() => { setActiveModalTab('SUBMIT'); setShowContributeModal(true); }}
-                className="bg-agro-600 text-white px-5 py-2 rounded-xl font-bold shadow-md hover:bg-agro-700 transition-colors flex items-center gap-2"
-             >
-                <UploadCloud size={18} /> Contribute Data
-             </button>
-        </div>
+            </div>
+          </div>
       </div>
 
-      {activeViewTab === 'DATASETS' ? (
+      {activeViewTab === 'DATASETS' && (
         <>
-            {/* Navigation Tabs */}
-            <div className="flex flex-wrap gap-2 mb-8 border-b border-earth-200 pb-1">
+            <div className="flex flex-wrap gap-1 mb-4 border-b border-earth-100 dark:border-earth-800">
                 {THRUSTS.map((thrust) => (
                     <button
                         key={thrust.id}
-                        onClick={() => setActiveThrustId(thrust.id)}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-t-xl font-bold text-sm transition-all relative top-[1px] ${
+                        onClick={() => { setActiveThrustId(thrust.id); scrollToTop(); }}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl font-black text-[9px] uppercase tracking-widest transition-all relative top-[1px] border-x border-t ${
                             activeThrustId === thrust.id 
-                            ? `bg-white text-agro-900 border-x border-t border-earth-200 shadow-[0_-2px_10px_rgba(0,0,0,0.02)]` 
-                            : 'text-earth-500 hover:text-agro-700 hover:bg-earth-50'
+                            ? `bg-white dark:bg-earth-900 text-agro-950 dark:text-white border-earth-100 dark:border-earth-800 shadow-sm` 
+                            : 'text-earth-400 hover:text-earth-700 dark:hover:text-earth-200 border-transparent bg-transparent'
                         }`}
                     >
                         {thrust.icon}
-                        <span className="hidden md:inline">{thrust.title}</span>
-                        <span className="md:hidden">{thrust.id}</span>
+                        <span>{thrust.title}</span>
                     </button>
                 ))}
             </div>
 
-            <div className="grid lg:grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                
-                {/* Sidebar / Info Panel */}
-                <div className="lg:col-span-1">
-                    <div className={`rounded-2xl p-6 border ${activeThrust.color.replace('text', 'border').replace('700', '200')} bg-opacity-30 h-full`}>
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${activeThrust.color} bg-white shadow-sm`}>
+            <div className="grid lg:grid-cols-12 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                <div className="lg:col-span-3">
+                    <div className="ea-card p-6 h-full border border-earth-100 dark:border-earth-800 flex flex-col">
+                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-4 ${activeThrust.color} bg-white dark:bg-earth-800 shadow-md border border-black/5`}>
                             {activeThrust.icon}
                         </div>
-                        <h3 className="text-xl font-bold text-earth-900 mb-3">{activeThrust.title}</h3>
-                        <p className="text-earth-600 text-sm mb-6 leading-relaxed">
+                        <h3 className="text-lg font-serif font-bold text-earth-900 dark:text-white mb-2 leading-tight">{activeThrust.title}</h3>
+                        <p className="text-[11px] text-earth-500 dark:text-earth-400 leading-relaxed mb-6">
                             {activeThrust.description}
                         </p>
                         
-                        <h4 className="font-bold text-xs uppercase tracking-wider text-earth-400 mb-3">Key Domains</h4>
-                        <ul className="space-y-3">
+                        <h4 className="ea-label-meta text-[8px] mb-2">Thrust Domains</h4>
+                        <div className="ea-scroll-area max-h-[220px] space-y-1.5 pr-1 no-scrollbar">
                             {activeThrust.domains.map((domain, idx) => (
-                                <li key={idx} className="text-xs text-earth-600 flex items-start gap-2 bg-white/50 p-2 rounded-lg">
-                                    <ChevronRight size={14} className="mt-0.5 shrink-0 text-agro-500" />
+                                <div key={idx} className="text-[9px] font-bold text-earth-600 dark:text-earth-400 flex items-start gap-2 bg-earth-50/50 dark:bg-earth-950/40 p-2.5 rounded-lg border border-earth-100/50 dark:border-white/5 transition-all hover:bg-white dark:hover:bg-earth-800">
+                                    <ChevronRight size={10} className="mt-0.5 shrink-0 text-agro-500" />
                                     {domain}
-                                </li>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                 </div>
 
-                {/* Dataset List */}
-                <div className="lg:col-span-3">
-                    <div className="bg-white rounded-2xl shadow-sm border border-earth-100 overflow-hidden">
-                        
-                        {/* Search & Filter Bar */}
-                        <div className="p-6 border-b border-earth-100 flex flex-col space-y-4 bg-earth-50/50">
+                <div className="lg:col-span-9 relative">
+                    <div className="ea-card overflow-hidden flex flex-col h-[calc(100vh-320px)] min-h-[450px]">
+                        <div className="p-4 border-b border-earth-50 dark:border-earth-800 flex flex-col space-y-4 bg-earth-50/30 dark:bg-earth-950/30 shrink-0">
                             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                                <h3 className="font-bold text-earth-700 flex items-center gap-2">
-                                    Available Datasets <span className="bg-agro-100 text-agro-700 px-2 py-0.5 rounded-full text-xs">{filteredDatasets.length}</span>
+                                <h3 className="font-bold text-earth-900 dark:text-white flex items-center gap-2 text-xs">
+                                    Regional Node Assets <span className="bg-agro-600 text-white px-2 py-0.5 rounded-full text-[8px] font-black">{filteredDatasets.length}</span>
                                 </h3>
-                                <div className="relative w-full md:w-auto">
-                                    <Search className="absolute left-3 top-2.5 text-earth-400" size={18} />
+                                <div className="relative w-full md:w-auto group">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-earth-300 group-focus-within:text-agro-600 transition-colors" size={14} />
                                     <input 
                                         type="text" 
-                                        placeholder={`Search ${activeThrust.title} by name, domain, region...`}
+                                        placeholder="Execute query..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
-                                        className="pl-10 pr-4 py-2 rounded-lg border border-earth-200 focus:outline-none focus:ring-2 focus:ring-agro-500 w-full md:w-64 text-sm"
+                                        className="pl-9 pr-4 py-1.5 bg-white dark:bg-earth-800 border border-earth-100 dark:border-earth-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-agro-500/20 w-full md:w-56 text-[11px] font-medium transition-all"
                                     />
                                 </div>
                             </div>
                             
-                            {/* Element Filter */}
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-1">
                                 {RESOURCE_TYPES.map((type) => (
                                     <button
                                         key={type.id}
                                         onClick={() => setActiveResourceType(type.id)}
-                                        className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors ${
+                                        className={`px-3 py-1.5 rounded-lg text-[8px] font-black uppercase tracking-widest flex items-center gap-1.5 transition-all border ${
                                             activeResourceType === type.id
-                                            ? 'bg-agro-600 text-white'
-                                            : 'bg-white border border-earth-200 text-earth-500 hover:border-agro-400 hover:text-agro-600'
+                                            ? 'bg-agro-600 border-agro-600 text-white shadow-md'
+                                            : 'bg-white dark:bg-earth-900 border-earth-100 dark:border-earth-800 text-earth-400 hover:border-agro-100 hover:text-agro-600'
                                         }`}
                                     >
-                                        {type.icon}
+                                        {type.icon && <span className="scale-75">{type.icon}</span>}
                                         {type.label}
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Table */}
-                        <div className="overflow-x-auto">
+                        <div 
+                          ref={scrollContainerRef}
+                          className="overflow-x-auto ea-scroll-area relative scroll-smooth flex-1"
+                        >
                             <table className="w-full text-left">
-                                <thead className="bg-earth-50 text-xs font-bold text-earth-400 uppercase tracking-wider">
+                                <thead className="bg-earth-50 dark:bg-earth-950/90 text-[7px] font-black text-earth-400 uppercase tracking-[0.3em] border-b border-earth-50 dark:border-earth-800 sticky top-0 z-20 backdrop-blur-md">
                                     <tr>
-                                        <th className="p-6">Dataset Name</th>
-                                        <th className="p-6">Domain & Element</th>
-                                        <th className="p-6">Type</th>
-                                        <th className="p-6">Access</th>
-                                        <th className="p-6">Action</th>
+                                        <th className="px-6 py-3">Dossier / Asset Name</th>
+                                        <th className="px-6 py-3">Node Origin</th>
+                                        <th className="px-6 py-3">Metric Type</th>
+                                        <th className="px-6 py-3 text-right">Access</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-earth-100">
+                                <tbody className="divide-y divide-earth-50 dark:divide-earth-800">
                                     {filteredDatasets.length > 0 ? (
                                         filteredDatasets.map((data) => (
-                                            <tr key={data.id} className="hover:bg-earth-50/50 transition-colors group">
-                                                <td className="p-6">
-                                                    <div className="font-bold text-agro-900 group-hover:text-agro-600 transition-colors">{data.name}</div>
-                                                    <div className="flex items-center gap-2 text-xs text-earth-500 mt-1">
-                                                        <Globe size={12} /> {data.region} • {data.date}
+                                            <tr key={data.id} className="hover:bg-earth-50/50 dark:hover:bg-earth-800/30 transition-all group">
+                                                <td className="px-6 py-3">
+                                                    <div className="font-bold text-earth-900 dark:text-white text-xs group-hover:text-agro-600 transition-colors leading-tight mb-0.5 truncate max-w-[280px]">{data.name}</div>
+                                                    <div className="flex items-center gap-2 text-[8px] font-bold text-earth-400 uppercase tracking-widest">
+                                                        <Terminal size={8} className="text-blue-500" /> {data.id} <span className="w-0.5 h-0.5 bg-earth-200 rounded-full"></span> {data.type}
                                                     </div>
                                                 </td>
-                                                <td className="p-6">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="text-xs font-medium text-earth-600 bg-earth-100 px-2 py-1 rounded w-fit">
-                                                            {data.domain.split(':')[0]}
-                                                        </span>
-                                                        <span className="text-[10px] font-bold uppercase tracking-wider text-agro-600 flex items-center gap-1">
-                                                            {/* Icon Logic for Element */}
-                                                            {data.category === 'Plants' && <Sprout size={10} />}
-                                                            {data.category === 'Animals' && <Cat size={10} />}
-                                                            {data.category === 'Water' && <Droplets size={10} />}
-                                                            {data.category === 'Soil' && <DbIcon size={10} />}
-                                                            {data.category === 'Air' && <Wind size={10} />}
-                                                            {data.category}
-                                                        </span>
+                                                <td className="px-6 py-3">
+                                                    <div className="flex items-center gap-1.5 text-[9px] font-bold text-earth-600 dark:text-earth-400">
+                                                        <Globe size={12} className="text-blue-500" />
+                                                        {data.region}
                                                     </div>
                                                 </td>
-                                                <td className="p-6">
-                                                    <div className="flex items-center gap-1 text-sm text-earth-600">
-                                                        <FileText size={16} className="text-earth-400" />
-                                                        {data.type}
-                                                        <span className="text-xs text-earth-400">({data.size})</span>
+                                                <td className="px-6 py-3">
+                                                    <div className="flex items-center gap-1.5 text-[9px] font-bold text-earth-600 dark:text-earth-400">
+                                                        <FileText size={12} className="text-earth-200" />
+                                                        {data.type.split(' ')[0]}
                                                     </div>
                                                 </td>
-                                                <td className="p-6">
-                                                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${
-                                                        data.access === 'Public' 
-                                                        ? 'bg-green-100 text-green-700' 
-                                                        : 'bg-amber-100 text-amber-700'
-                                                    }`}>
-                                                        {data.access}
-                                                    </span>
-                                                </td>
-                                                <td className="p-6">
-                                                    <button className="text-agro-600 hover:bg-agro-50 p-2 rounded-lg transition-colors" title="Download">
-                                                        <Download size={20} />
+                                                <td className="px-6 py-3 text-right">
+                                                    <button className="p-2 bg-earth-50 dark:bg-earth-800 text-earth-400 hover:text-agro-600 rounded-lg transition-all" title="Downlink Intelligence">
+                                                        <Download size={14} />
                                                     </button>
                                                 </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
-                                            <td colSpan={5} className="p-12 text-center text-earth-500">
+                                            <td colSpan={5} className="py-20 text-center text-earth-300">
                                                 <div className="flex flex-col items-center gap-3">
-                                                    <Filter size={32} className="text-earth-300" />
-                                                    <p>No datasets found for this criteria.</p>
+                                                    <Filter size={32} className="opacity-10" />
+                                                    <p className="text-xs font-serif italic uppercase tracking-widest">No matching datasets in this cluster.</p>
+                                                    <button onClick={() => setSearchTerm('')} className="text-agro-600 font-black uppercase text-[8px] tracking-widest hover:underline">Reset Node Filter</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -265,58 +287,63 @@ export const Database: React.FC = () => {
                                 </tbody>
                             </table>
                         </div>
+
+                        {showScrollTop && (
+                            <button 
+                                onClick={scrollToTop}
+                                className="absolute bottom-4 right-4 z-30 p-2.5 bg-agro-600 text-white rounded-xl shadow-lg hover:bg-agro-700 transition-all active:scale-95 animate-in slide-in-from-bottom-2"
+                            >
+                                <ArrowUp size={16} />
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>
         </>
-      ) : (
-          /* DATABASE HEALTH DASHBOARD */
-          <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-              <div className="grid lg:grid-cols-2 gap-8 mb-8">
-                 <div className="bg-white p-8 rounded-3xl border border-earth-100 shadow-sm">
-                     <h3 className="text-2xl font-bold text-agro-900 mb-6 flex items-center gap-2">
-                         <Calculator className="text-agro-600" /> Data Sustainability Equation
+      )}
+
+      {activeViewTab === 'HEALTH' && (
+          <div className="animate-in fade-in slide-in-from-top-2 duration-500 space-y-6 pb-6 h-[calc(100vh-280px)] overflow-y-auto ea-scroll-area pr-2 no-scrollbar">
+              <div className="grid lg:grid-cols-2 gap-6">
+                 <div className="ea-card p-6">
+                     <h3 className="text-xl font-serif font-bold text-earth-900 dark:text-white mb-4 flex items-center gap-3">
+                         <div className="p-2 bg-agro-50 dark:bg-agro-900/40 rounded-xl text-agro-600 shadow-sm"><Calculator size={20} /></div>
+                         m(t) Resilience Matrix
                      </h3>
-                     <div className="bg-earth-50 p-6 rounded-2xl mb-6">
-                         <div className="font-serif text-2xl text-center text-agro-800 font-bold mb-4">
+                     <div className="bg-earth-900 text-white p-6 rounded-[2rem] mb-6 shadow-lg relative overflow-hidden group">
+                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:rotate-12 transition-transform duration-1000"><Zap size={100}/></div>
+                         <div className="font-mono text-xl text-center text-agro-400 font-black mb-4 tracking-widest bg-black/40 py-4 rounded-xl border border-white/5">
                              m = √[((Dn × In) × C(a)) / S]
                          </div>
-                         <div className="grid grid-cols-2 gap-4 text-sm">
-                             <div className="p-3 bg-white rounded-lg border border-earth-100">
-                                 <strong className="block text-agro-700">Dn (Depth)</strong>
-                                 <span className="text-earth-500">Volume of data records</span>
-                             </div>
-                             <div className="p-3 bg-white rounded-lg border border-earth-100">
-                                 <strong className="block text-agro-700">In (Integrity)</strong>
-                                 <span className="text-earth-500">Standardization Level</span>
-                             </div>
-                             <div className="p-3 bg-white rounded-lg border border-earth-100">
-                                 <strong className="block text-agro-700">C(a) (Coefficient)</strong>
-                                 <span className="text-earth-500">Alignment with 5 Thrusts</span>
-                             </div>
-                             <div className="p-3 bg-white rounded-lg border border-earth-100">
-                                 <strong className="block text-agro-700">S (Obsolescence)</strong>
-                                 <span className="text-earth-500">Data Decay Rate</span>
-                             </div>
+                         <div className="grid grid-cols-2 gap-2">
+                             {[
+                               { l: 'Dn (Depth)', d: 'Regional data weight' },
+                               { l: 'In (Integrity)', d: 'Standardization fidelity' },
+                               { l: 'C(a) (Coeff)', d: 'Thrust alignment score' },
+                               { l: 'S (Decay)', d: 'Information obsolescence' }
+                             ].map((item, idx) => (
+                                <div key={idx} className="p-3 bg-white/5 rounded-lg border border-white/5 group-hover:border-agro-500/20 transition-all">
+                                   <strong className="block text-agro-400 text-[8px] font-black uppercase tracking-widest mb-0.5">{item.l}</strong>
+                                   <span className="text-[9px] text-slate-400 font-medium">{item.d}</span>
+                                </div>
+                             ))}
                          </div>
                      </div>
-                     <p className="text-earth-600 leading-relaxed text-sm">
-                         We use this formula to measure the health of our knowledge base. A high <strong>m-score</strong> means our data is deep, standardized, highly relevant to sustainability goals, and durable over time.
-                     </p>
                  </div>
 
-                 <div className="bg-white p-8 rounded-3xl border border-earth-100 shadow-sm">
-                     <h3 className="text-xl font-bold text-earth-900 mb-6 flex items-center gap-2">
-                         <BarChart3 className="text-blue-600" /> Knowledge Base Health by Thrust
+                 <div className="ea-card p-6 flex flex-col h-full">
+                     <h3 className="text-xl font-serif font-bold text-earth-900 dark:text-white mb-6 flex items-center gap-3">
+                        <div className="p-2 bg-blue-50 dark:bg-blue-900/40 rounded-xl text-blue-600 shadow-sm"><BarChart3 size={20} /></div>
+                        Global Registry Health
                      </h3>
-                     <div className="h-[250px] w-full">
+                     <div className="flex-1 min-h-[200px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={dbHealthData}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                <XAxis dataKey="name" fontSize={12} tickLine={false} />
-                                <YAxis fontSize={12} />
-                                <Tooltip cursor={{fill: 'transparent'}} />
-                                <Bar dataKey="ca" name="Sustainability C(a)" fill="#16a34a" radius={[4, 4, 0, 0]}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.05} />
+                                <XAxis dataKey="name" fontSize={8} fontWeight={900} tickLine={false} axisLine={false} />
+                                <YAxis fontSize={8} fontWeight={900} axisLine={false} tickLine={false} />
+                                <Tooltip cursor={{fill: 'transparent'}} contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 5px 20px rgba(0,0,0,0.1)', fontSize: '9px'}} />
+                                <Bar dataKey="ca" name="Maturity C(a)" radius={[6, 6, 0, 0]}>
                                     {dbHealthData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.ca > 3.5 ? '#16a34a' : '#fbbf24'} />
                                     ))}
@@ -324,186 +351,217 @@ export const Database: React.FC = () => {
                             </BarChart>
                         </ResponsiveContainer>
                      </div>
-                     <div className="flex gap-4 justify-center mt-4 text-xs text-earth-500">
-                         <div className="flex items-center gap-1"><div className="w-3 h-3 bg-green-600 rounded-sm"></div> High Resilience</div>
-                         <div className="flex items-center gap-1"><div className="w-3 h-3 bg-amber-400 rounded-sm"></div> Moderate Resilience</div>
+                     <div className="flex gap-4 justify-center mt-4">
+                         <div className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest text-agro-600">
+                           <div className="w-2 h-2 bg-agro-600 rounded-full"></div> Verified Resilience
+                         </div>
+                         <div className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-widest text-amber-500">
+                           <div className="w-2 h-2 bg-amber-400 rounded-full"></div> Growth Delta
+                         </div>
                      </div>
                  </div>
-              </div>
-
-              <div className="bg-agro-900 text-white p-10 rounded-3xl text-center">
-                  <h3 className="text-2xl font-serif font-bold mb-4">Improve Our Database Health</h3>
-                  <p className="text-agro-100 max-w-2xl mx-auto mb-8">
-                      By contributing standardized data using our tools, you directly increase the <strong>Integrity (In)</strong> and <strong>Depth (Dn)</strong> variables, boosting the global resilience score.
-                  </p>
-                  <button 
-                    onClick={() => { setActiveModalTab('TOOLS'); setShowContributeModal(true); }}
-                    className="bg-white text-agro-900 px-8 py-3 rounded-full font-bold hover:bg-agro-100 transition-colors"
-                  >
-                      Download Standardization Tools
-                  </button>
               </div>
           </div>
       )}
 
-      {/* CONTRIBUTE MODAL */}
+      {/* Contribution Modal */}
       {showContributeModal && (
-         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 max-h-[90vh] flex flex-col">
-               
-               {/* Modal Header */}
-               <div className="p-6 border-b border-earth-100 flex justify-between items-center bg-agro-50">
-                  <div>
-                      <h3 className="font-bold text-xl text-agro-900 flex items-center gap-2">
-                         <UploadCloud className="text-agro-600" /> Data Collection & Contribution
-                      </h3>
-                      <p className="text-xs text-agro-700 mt-1">Help us improve the EnvirosAgro database.</p>
+          <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 bg-earth-950/90 backdrop-blur-xl animate-in fade-in duration-300">
+              <div className="bg-white dark:bg-earth-900 w-full max-w-2xl rounded-[3.5rem] shadow-cinematic border border-white/10 overflow-hidden flex flex-col max-h-[90vh]">
+                  <div className="bg-blue-900 p-8 text-white flex justify-between items-center shrink-0 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12"><UploadCloud size={200}/></div>
+                      <div className="relative z-10 flex items-center gap-6">
+                          <div className="p-4 bg-white/10 rounded-2xl border border-white/20 shadow-xl backdrop-blur-md">
+                            <FileUp size={28} className="text-blue-300" />
+                          </div>
+                          <div>
+                            <h3 className="text-2xl font-serif font-bold tracking-tight">Intelligence Contribution</h3>
+                            <p className="text-xs text-blue-300 font-bold uppercase tracking-widest mt-1">Direct Node Registry Interface</p>
+                          </div>
+                      </div>
+                      <button onClick={resetContribute} className="relative z-10 p-2 hover:bg-white/10 rounded-full transition-all">
+                        <X size={24} />
+                      </button>
                   </div>
-                  <button onClick={() => setShowContributeModal(false)} className="text-agro-400 hover:text-agro-700 transition-colors p-2 hover:bg-agro-100 rounded-full">
-                     <X size={24} />
-                  </button>
-               </div>
 
-               {/* Modal Tabs */}
-               <div className="flex border-b border-earth-100 bg-white px-6">
-                   <button 
-                      onClick={() => setActiveModalTab('SUBMIT')}
-                      className={`px-4 py-3 text-sm font-bold border-b-2 transition-all ${activeModalTab === 'SUBMIT' ? 'border-agro-600 text-agro-700' : 'border-transparent text-earth-500 hover:text-earth-800'}`}
-                   >
-                      Submit & Analyze
-                   </button>
-                   <button 
-                      onClick={() => setActiveModalTab('TOOLS')}
-                      className={`px-4 py-3 text-sm font-bold border-b-2 transition-all ${activeModalTab === 'TOOLS' ? 'border-blue-600 text-blue-700' : 'border-transparent text-earth-500 hover:text-earth-800'}`}
-                   >
-                      Download Collection Tools
-                   </button>
-               </div>
-               
-               {/* Modal Content */}
-               <div className="p-8 overflow-y-auto flex-1">
-                   {activeModalTab === 'SUBMIT' ? (
-                       <form onSubmit={handleContributeSubmit} className="space-y-6">
-                          
-                          {/* Metadata Section */}
-                          <div className="grid md:grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Dataset Name</label>
-                                 <input required type="text" className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm" placeholder="e.g. Local Rainfall Log 2024" />
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Region / Location</label>
-                                 <input required type="text" className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm" placeholder="e.g. Kiriaini, Kenya" />
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Primary Thrust</label>
-                                 <select className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm bg-white">
-                                     {THRUSTS.map(t => <option key={t.id} value={t.id}>{t.title}</option>)}
-                                 </select>
-                              </div>
-                              <div className="space-y-1">
-                                 <label className="text-xs font-bold text-earth-600 uppercase">Resource Type</label>
-                                 <select className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500 text-sm bg-white">
-                                     {RESOURCE_TYPES.filter(r => r.id !== 'All').map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
-                                 </select>
-                              </div>
-                          </div>
+                  <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                      {contributionStep === 1 && (
+                          <form className="space-y-6 animate-in slide-in-from-right-4 duration-300">
+                             <div className="grid md:grid-cols-2 gap-6">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 px-1">Asset Nomenclature</label>
+                                    <input 
+                                        required 
+                                        className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-blue-500 rounded-2xl px-5 py-3 text-sm font-bold transition-all outline-none" 
+                                        placeholder="e.g. Q2 Soil Health Dossier" 
+                                        value={formData.name}
+                                        onChange={e => setFormData({...formData, name: e.target.value})}
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 px-1">Network Thrust</label>
+                                    <select 
+                                        className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-blue-500 rounded-2xl px-5 py-3 text-sm font-bold transition-all appearance-none outline-none"
+                                        value={formData.thrust}
+                                        onChange={e => setFormData({...formData, thrust: e.target.value})}
+                                    >
+                                        {THRUSTS.map(t => <option key={t.id} value={t.id}>{t.title}</option>)}
+                                    </select>
+                                </div>
+                             </div>
 
-                          {/* Data Sustainability Calculator */}
-                          <div className="bg-earth-50 border border-earth-200 rounded-2xl p-5">
-                              <div className="flex justify-between items-center mb-4">
-                                  <h4 className="font-bold text-agro-800 text-sm flex items-center gap-2">
-                                      <Calculator size={16} /> Data Impact Calculator
-                                  </h4>
-                                  {sustainScore !== null ? (
-                                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Score: {sustainScore}</span>
-                                  ) : (
-                                      <span className="text-xs text-earth-400">Calculate below</span>
-                                  )}
-                              </div>
-                              
-                              <div className="grid grid-cols-2 gap-4 mb-4">
-                                  <div>
-                                      <label className="text-[10px] font-bold text-earth-500 uppercase block mb-1">Data Volume (Dn)</label>
-                                      <input 
-                                        type="range" min="1" max="10" 
-                                        value={sustainParams.dn}
-                                        onChange={(e) => setSustainParams({...sustainParams, dn: parseInt(e.target.value)})}
-                                        className="w-full h-1 bg-earth-200 rounded-lg appearance-none cursor-pointer accent-agro-600"
-                                      />
-                                      <div className="flex justify-between text-[10px] text-earth-400"><span>Low</span><span>High</span></div>
-                                  </div>
-                                  <div>
-                                      <label className="text-[10px] font-bold text-earth-500 uppercase block mb-1">Standardization (In)</label>
-                                      <input 
-                                        type="range" min="1" max="10" 
-                                        value={sustainParams.in_val}
-                                        onChange={(e) => setSustainParams({...sustainParams, in_val: parseInt(e.target.value)})}
-                                        className="w-full h-1 bg-earth-200 rounded-lg appearance-none cursor-pointer accent-agro-600"
-                                      />
-                                      <div className="flex justify-between text-[10px] text-earth-400"><span>Poor</span><span>Perfect</span></div>
-                                  </div>
-                              </div>
-                              <button 
+                             <div className="grid md:grid-cols-2 gap-6">
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 px-1">Region Node</label>
+                                    <div className="relative">
+                                        <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500" size={16} />
+                                        <input 
+                                            required 
+                                            className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-blue-500 rounded-2xl pl-12 pr-4 py-3 text-sm font-bold transition-all outline-none" 
+                                            placeholder="e.g. Murang'a Cluster" 
+                                            value={formData.region}
+                                            onChange={e => setFormData({...formData, region: e.target.value})}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 px-1">Asset Category</label>
+                                    <select 
+                                        className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-blue-500 rounded-2xl px-5 py-3 text-sm font-bold transition-all appearance-none outline-none"
+                                        value={formData.category}
+                                        onChange={e => setFormData({...formData, category: e.target.value})}
+                                    >
+                                        {RESOURCE_TYPES.filter(r => r.id !== 'All').map(r => <option key={r.id} value={r.id}>{r.label}</option>)}
+                                    </select>
+                                </div>
+                             </div>
+
+                             {/* File Upload Section */}
+                             <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 px-1">Scientific Data Attachment (PDF, TXT, DOCX, XLSX)</label>
+                                <div 
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className={`w-full border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer bg-earth-50/50 dark:bg-earth-800/50 ${attachedFile ? 'border-blue-500 bg-blue-50/20' : 'border-earth-200 dark:border-earth-700 hover:border-blue-400'}`}
+                                >
+                                    <input 
+                                        type="file" 
+                                        ref={fileInputRef} 
+                                        className="hidden" 
+                                        accept=".pdf,.txt,.docx,.doc,.xlsx,.xls,.json"
+                                        onChange={handleFileChange}
+                                    />
+                                    {attachedFile ? (
+                                        <div className="text-center">
+                                            <div className="p-4 bg-blue-100 dark:bg-blue-900/40 rounded-2xl text-blue-600 mb-3 mx-auto w-fit shadow-lg">
+                                                <FileType size={32} />
+                                            </div>
+                                            <p className="text-sm font-bold text-slate-800 dark:text-white truncate max-w-[300px]">{attachedFile.name}</p>
+                                            <p className="text-[10px] font-black text-blue-500 uppercase mt-1 tracking-widest">{formatFileSize(attachedFile.size)}</p>
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); setAttachedFile(null); }}
+                                                className="text-[9px] font-black text-red-500 uppercase mt-4 flex items-center gap-1 hover:underline"
+                                            >
+                                                <X size={10} /> Remove Attachment
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="text-center">
+                                            <UploadCloud size={40} className="text-earth-300 dark:text-earth-600 mb-4 mx-auto" />
+                                            <p className="text-sm font-bold text-earth-700 dark:text-earth-300">Downlink from Local Station</p>
+                                            <p className="text-[10px] text-earth-400 font-bold uppercase tracking-widest mt-1">Select Document to Standardize</p>
+                                        </div>
+                                    )}
+                                </div>
+                             </div>
+
+                             <div className="space-y-1.5">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-earth-400 px-1">Technical Summary</label>
+                                <textarea 
+                                    className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-blue-500 rounded-[2rem] px-6 py-4 text-sm font-medium transition-all outline-none min-h-[120px] resize-none" 
+                                    placeholder="Outline the parameters, m(t) deltas, and research methodology..."
+                                    value={formData.description}
+                                    onChange={e => setFormData({...formData, description: e.target.value})}
+                                />
+                             </div>
+
+                             <button 
                                 type="button"
-                                onClick={calculateSustainability}
-                                className="w-full bg-white border border-earth-200 text-agro-600 font-bold py-2 rounded-xl text-xs hover:bg-earth-50 transition-colors"
-                              >
-                                  Calculate Resilience Score (m)
-                              </button>
+                                onClick={() => setContributionStep(2)}
+                                disabled={!formData.name || !formData.region || !attachedFile}
+                                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all disabled:opacity-50"
+                             >
+                                Finalize Specifications
+                             </button>
+                          </form>
+                      )}
+
+                      {contributionStep === 2 && (
+                          <div className="space-y-8 animate-in slide-in-from-right-4 duration-300">
+                             <div className="bg-earth-50 dark:bg-earth-800 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-700 flex flex-col items-center text-center">
+                                <div className="w-20 h-20 bg-white dark:bg-earth-900 rounded-[1.5rem] flex items-center justify-center mb-6 shadow-xl border border-black/5">
+                                    <FileUp size={40} className="text-blue-500" />
+                                </div>
+                                <h4 className="text-xl font-serif font-bold text-earth-900 dark:text-white mb-2">Technical Validation</h4>
+                                <p className="text-xs text-earth-500 max-w-sm mb-10 leading-relaxed font-medium">
+                                    By submitting, you verify that this intelligence follows the EnvirosAgro v4.2 standardization protocols. Your node (ESIN) will be credited upon validation.
+                                </p>
+                                
+                                <div className="w-full grid grid-cols-2 gap-4">
+                                    <div className="p-4 bg-white dark:bg-earth-900 rounded-2xl border border-earth-100 dark:border-earth-800 text-left">
+                                        <p className="text-[8px] font-black text-earth-400 uppercase tracking-widest mb-1">EAC REWARD</p>
+                                        <p className="text-xl font-bold text-agro-600">+50 EAC</p>
+                                    </div>
+                                    <div className="p-4 bg-white dark:bg-earth-900 rounded-2xl border border-earth-100 dark:border-earth-800 text-left">
+                                        <p className="text-[8px] font-black text-earth-400 uppercase tracking-widest mb-1">DATA TRUST</p>
+                                        <p className="text-xl font-bold text-blue-600">VERIFIED</p>
+                                    </div>
+                                </div>
+
+                                {attachedFile && (
+                                    <div className="mt-8 w-full p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/50 rounded-2xl flex items-center gap-4">
+                                        <Paperclip size={18} className="text-blue-500" />
+                                        <div className="text-left">
+                                            <p className="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[250px]">{attachedFile.name}</p>
+                                            <p className="text-[9px] font-black text-blue-500 uppercase tracking-widest">{formData.type}</p>
+                                        </div>
+                                    </div>
+                                )}
+                             </div>
+
+                             <div className="flex gap-4">
+                                <button onClick={() => setContributionStep(1)} className="flex-1 py-4 bg-earth-50 dark:bg-earth-800 text-earth-400 rounded-2xl font-black text-[10px] uppercase tracking-widest">Edit Details</button>
+                                <button 
+                                    onClick={handleContributeSubmit}
+                                    disabled={isSubmitting}
+                                    className="flex-[2] py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                                >
+                                    {isSubmitting ? <><Loader2 size={18} className="animate-spin" /> SYNCHRONIZING NODE...</> : <><Terminal size={18}/> Commit to Global Registry</>}
+                                </button>
+                             </div>
                           </div>
+                      )}
 
-                          <div className="border-2 border-dashed border-earth-200 rounded-xl p-6 text-center cursor-pointer hover:bg-earth-50 transition-colors">
-                              <Plus className="mx-auto text-earth-400 mb-2" />
-                              <p className="text-sm text-earth-600 font-bold">Upload File (CSV, XLSX, PDF)</p>
-                              <p className="text-xs text-earth-400">Max size: 50MB</p>
+                      {contributionStep === 3 && (
+                          <div className="py-12 text-center animate-in zoom-in duration-500">
+                             <div className="w-24 h-24 bg-green-50 dark:bg-green-900/30 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 text-green-600 shadow-inner">
+                                <CheckCircle2 size={56} />
+                             </div>
+                             <h3 className="text-3xl font-serif font-bold text-earth-900 dark:text-white mb-4">Transmission Successful</h3>
+                             <p className="text-earth-600 dark:text-earth-400 mb-10 max-w-xs mx-auto leading-relaxed font-medium">
+                                Your intelligence asset has been hashed and submitted to the Global Resilience Ledger for peer-review.
+                             </p>
+                             <button onClick={resetContribute} className="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-900/20 active:scale-95 transition-all">Return to Registry</button>
                           </div>
+                      )}
+                  </div>
 
-                          <button 
-                            type="submit" 
-                            disabled={isSubmitting}
-                            className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-                          >
-                             {isSubmitting ? 'Uploading...' : <><CheckCircle2 size={18} /> Submit Contribution</>}
-                          </button>
-                       </form>
-                   ) : (
-                       <div className="space-y-6">
-                           <div className="text-center mb-6">
-                              <ClipboardList className="mx-auto text-blue-600 mb-2" size={32} />
-                              <h4 className="font-bold text-lg text-earth-900">Standardized Data Collection Tools</h4>
-                              <p className="text-sm text-earth-600">Download these templates to maximize your <strong>Integrity (In)</strong> score.</p>
-                           </div>
-
-                           <div className="grid gap-4">
-                               {COLLECTION_TOOLS.map((tool, idx) => (
-                                   <div key={idx} className="bg-white border border-earth-200 p-4 rounded-xl flex items-center justify-between hover:shadow-md transition-shadow group">
-                                       <div className="flex items-start gap-3">
-                                           <div className="bg-earth-100 p-2 rounded-lg text-earth-600 group-hover:bg-blue-50 group-hover:text-blue-600 transition-colors">
-                                               <FileSpreadsheet size={20} />
-                                           </div>
-                                           <div>
-                                               <h5 className="font-bold text-earth-900 text-sm">{tool.name}</h5>
-                                               <p className="text-xs text-earth-500">{tool.desc}</p>
-                                               <div className="flex gap-2 mt-1">
-                                                   <span className="text-[10px] bg-earth-100 text-earth-600 px-1.5 rounded font-mono">{tool.type}</span>
-                                                   <span className="text-[10px] bg-earth-100 text-earth-600 px-1.5 rounded font-mono">{tool.size}</span>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <button className="text-blue-600 hover:bg-blue-50 p-2 rounded-lg transition-colors">
-                                           <Download size={20} />
-                                       </button>
-                                   </div>
-                               ))}
-                           </div>
-                       </div>
-                   )}
-               </div>
-            </div>
-         </div>
+                  <div className="p-8 bg-earth-50 dark:bg-earth-950/50 text-center border-t border-earth-100 dark:border-earth-800 flex items-center justify-center gap-3 shrink-0">
+                      <ShieldCheck size={18} className="text-blue-600" />
+                      <p className="text-[9px] text-earth-500 dark:text-earth-400 font-black uppercase tracking-[0.4em]">Sovereign Data Storage • SHA-256 Verified Uplink</p>
+                  </div>
+              </div>
+          </div>
       )}
-
     </div>
   );
 };

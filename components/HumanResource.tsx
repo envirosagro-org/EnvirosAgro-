@@ -1,15 +1,68 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
-  User, Users, MapPin, Briefcase, GraduationCap, ChevronRight, 
-  Search, Plus, Upload, CheckCircle, X, Filter, FileText, Send,
-  TrendingUp, Award, BookOpen, Zap
+  Users, MapPin, Briefcase, GraduationCap, 
+  Search, Plus, Upload, TrendingUp, Award, BookOpen, Zap, Filter,
+  Cloud, ShieldCheck, Fingerprint, Star, ArrowRight, CheckCircle2,
+  AlertCircle, FileText, Globe, Activity, Smartphone, QrCode,
+  Loader2, Network, Factory, Database, ShoppingBag, ArrowUpRight,
+  ShieldAlert, Terminal, Lock, BarChart3, X, ChevronRight, Cpu,
+  Dna, Microscope, Compass, Info,
+  // Added comment above fix: Added missing RefreshCw icon import
+  RefreshCw
 } from 'lucide-react';
+import { View, User } from '../types';
 
-// Mock Data
-const WORKERS_CLOUD: any[] = [];
+const WORKERS_CLOUD = [
+  {
+    id: 1,
+    name: "Dr. Elena Rossi",
+    role: "Senior Agronomist",
+    type: "Researcher",
+    location: "Nairobi, Kenya",
+    available: true,
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=60",
+    skills: ["Soil Chemistry", "Crop Genetics", "IPM"],
+    esin: "EA-RES-2024-8842"
+  },
+  {
+    id: 2,
+    name: "Samuel Kweli",
+    role: "Precision Ag Operator",
+    type: "Technical Specialist",
+    location: "Kampala, Uganda",
+    available: true,
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=60",
+    skills: ["Drone Piloting", "IoT Systems", "GIS Mapping"],
+    esin: "EA-TEC-2024-9102"
+  }
+];
 
-const JOBS_LIST: any[] = [];
+const VALUE_CHAIN_LINKS = [
+  { id: 'registry', label: 'Cloud Registry', icon: <Fingerprint size={20} />, status: 'ACTIVE', desc: 'Verified professional identity node.' },
+  { id: 'telemetry', label: 'Field Telemetry', icon: <Smartphone size={20} />, status: 'LINKED', desc: 'Direct input to Farm Scout networks.' },
+  { id: 'supply', label: 'Supply Audit', icon: <Factory size={20} />, status: 'AUTHORIZED', desc: 'Verify batches for industrial maturity.' },
+  { id: 'capital', label: 'Capital Exchange', icon: <Zap size={20} />, status: 'ELIGIBLE', desc: 'Access Tokenz™ micro-grant tiers.' }
+];
+
+const PROFESSIONAL_LEDGER = [
+  { id: 'TX-884', type: 'BATCH_VERIFY', asset: 'Kiriaini Arabica Lot #4', date: '2h ago', points: '+15 XP' },
+  { id: 'TX-901', type: 'DATA_CONTRIBUTE', asset: 'Q2 Soil Integrity Log', date: '5h ago', points: '+25 XP' },
+  { id: 'TX-772', type: 'SECURITY_AUDIT', asset: 'Zone A-4 Node Sync', date: 'Yesterday', points: '+10 XP' }
+];
+
+const JOBS_LIST = [
+  {
+    id: 1,
+    title: "Regional Sustainability Lead",
+    org: "GreenEarth Co-op",
+    location: "Kiriaini, Kenya",
+    type: "Full-Time",
+    salary: "$2,500 - $3,500",
+    posted: "2 days ago",
+    description: "Seeking a visionary leader to oversee the implementation of the EA thrust across 500 smallholder farms."
+  }
+];
 
 const CAREER_PATHWAYS = [
   {
@@ -21,386 +74,629 @@ const CAREER_PATHWAYS = [
     icon: <Award size={32} className="text-amber-600" />,
     color: "bg-amber-50 border-amber-100",
     desc: "Master the principles of the Five Thrusts and soil regeneration techniques."
-  },
-  {
-    id: 2,
-    title: "AgTech Leadership Bootcamp",
-    provider: "TechHarvest Institute",
-    duration: "4 Weeks",
-    level: "Intermediate",
-    icon: <Zap size={32} className="text-blue-600" />,
-    color: "bg-blue-50 border-blue-100",
-    desc: "Intensive training for managing modern, data-driven agricultural operations."
-  },
-  {
-    id: 3,
-    title: "Regenerative Mentorship Program",
-    provider: "Global Farmers Network",
-    duration: "Ongoing",
-    level: "All Levels",
-    icon: <Users size={32} className="text-green-600" />,
-    color: "bg-green-50 border-green-100",
-    desc: "One-on-one guidance from experienced sustainable farming pioneers."
-  },
-  {
-    id: 4,
-    title: "Cooperative Management Certification",
-    provider: "Social Ag Alliance",
-    duration: "3 Months",
-    level: "Beginner",
-    icon: <BookOpen size={32} className="text-rose-600" />,
-    color: "bg-rose-50 border-rose-100",
-    desc: "Learn legal, financial, and social governance for agricultural societies."
   }
 ];
 
-type Tab = 'CLOUD' | 'JOBS' | 'REGISTER' | 'CAREER';
+interface HumanResourceProps {
+    user: User | null;
+    onNavigate?: (view: View) => void;
+    initialTab?: 'CLOUD' | 'JOBS' | 'REGISTER' | 'CAREER';
+}
 
-export const HumanResource: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<Tab>('CLOUD');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedJob, setSelectedJob] = useState<any>(null); // For Application Modal
-  const [isApplying, setIsApplying] = useState(false); // Application submission state
+export const HumanResource: React.FC<HumanResourceProps> = ({ user, onNavigate, initialTab = 'JOBS' }) => {
+  const [activeTab, setActiveTab] = useState<'CLOUD' | 'JOBS' | 'REGISTER' | 'CAREER'>(initialTab);
+  
+  // Enrollment State
+  const [showEnrollment, setShowEnrollment] = useState(false);
+  const [enrollStep, setEnrollStep] = useState(1);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [enrollSuccess, setEnrollSuccess] = useState(false);
+  const [agreedToConduct, setAgreedToConduct] = useState(false);
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
+  const [syncLogs, setSyncLogs] = useState<string[]>([]);
+  // Added comment above fix: Added missing cloudJoined state variable
+  const [cloudJoined, setCloudJoined] = useState(false);
 
-  // Filter Logic
-  const filteredWorkers = WORKERS_CLOUD.filter(w => 
-    w.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    w.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    w.skills.some((s: string) => s.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const specialties = [
+    { id: 'soil', label: 'Soil Metagenomics', icon: <Database size={14}/> },
+    { id: 'drone', label: 'Fleet Logistics', icon: <Cpu size={14}/> },
+    { id: 'hydro', label: 'Hydro-Sync Systems', icon: <Activity size={14}/> },
+    { id: 'community', label: 'Social Resilience', icon: <Users size={14}/> }
+  ];
 
-  const filteredJobs = JOBS_LIST.filter(j => 
-    j.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    j.org.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const enrollmentSequence = [
+    "Establishing Node Handshake...",
+    "Validating ESIN Credentials...",
+    "Mapping Skill Topology...",
+    "Hashing Ethical Alignment...",
+    "Minting Professional Node..."
+  ];
 
-  const handleApplySubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsApplying(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsApplying(false);
-      setSelectedJob(null);
-      alert("Application Submitted Successfully!");
-    }, 1500);
+  const triggerHaptic = (pattern: number | number[]) => {
+    if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(pattern);
+    }
   };
+
+  const handleApply = (title: string) => {
+    alert(`Starting application for: ${title}. Redirecting to enrollment...`);
+    if(onNavigate) onNavigate(View.SIGN_UP);
+  };
+
+  const toggleSpecialty = (id: string) => {
+    triggerHaptic(10);
+    setSelectedSpecialties(prev => 
+        prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
+    );
+  };
+
+  const handleStartSync = () => {
+    setIsSyncing(true);
+    setSyncLogs(["Initializing professional uplink..."]);
+    triggerHaptic(40);
+    
+    let step = 0;
+    const interval = setInterval(() => {
+        if (step < enrollmentSequence.length) {
+            setSyncLogs(prev => [...prev, enrollmentSequence[step]]);
+            triggerHaptic(20);
+            step++;
+        } else {
+            clearInterval(interval);
+            setEnrollSuccess(true);
+            setIsSyncing(false);
+            // Added comment above fix: Update cloudJoined state upon successful enrollment
+            setCloudJoined(true);
+            triggerHaptic([20, 50, 20]);
+        }
+    }, 1200);
+  };
+
+  const resetEnrollment = () => {
+    setShowEnrollment(false);
+    setEnrollStep(1);
+    setEnrollSuccess(false);
+    setIsSyncing(false);
+    setAgreedToConduct(false);
+    setSelectedSpecialties([]);
+    setSyncLogs([]);
+  };
+
+  const renderEnrollmentTerminal = () => {
+    if (!showEnrollment) return null;
+
+    const renderEnrollContent = () => {
+        if (enrollSuccess) {
+            return (
+                <div className="py-10 text-center animate-in zoom-in duration-500">
+                    <div className="w-24 h-24 bg-agro-500/20 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 border border-agro-500/30 shadow-inner">
+                        <CheckCircle2 size={56} className="text-agro-500" />
+                    </div>
+                    <h3 className="text-3xl font-serif font-black text-earth-900 dark:text-white uppercase mb-4 tracking-tight">Node Synchronized</h3>
+                    <p className="text-earth-500 dark:text-earth-400 mb-10 max-w-sm mx-auto leading-relaxed font-medium italic">
+                        Your professional profile is now live on the Workers Cloud. Your industrial maturity score (C(a)) has been calibrated.
+                    </p>
+                    <div className="bg-earth-50 dark:bg-earth-800 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-700 inline-block min-w-[300px] mb-12">
+                        <p className="text-[10px] font-black text-agro-600 uppercase tracking-[0.4em] mb-2">New Reward Balance</p>
+                        <p className="text-4xl font-serif font-bold text-earth-900 dark:text-white">+100 <span className="text-sm font-sans font-black opacity-40">EAC</span></p>
+                    </div>
+                    <button onClick={resetEnrollment} className="w-full bg-agro-900 text-white font-black py-6 rounded-[2.5rem] text-xs uppercase tracking-[0.3em] shadow-xl hover:bg-agro-950 transition-all active:scale-95">Enter Professional Dashboard</button>
+                </div>
+            );
+        }
+
+        if (isSyncing) {
+            return (
+                <div className="py-20 flex flex-col items-center justify-center gap-12">
+                    <div className="relative">
+                        <div className="w-40 h-40 rounded-full border-4 border-blue-500/10 border-t-blue-500 animate-spin"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <Cloud size={48} className="text-blue-500 animate-pulse" />
+                        </div>
+                    </div>
+                    <div className="w-full max-w-md bg-slate-950 p-8 rounded-[2.5rem] border border-white/5 shadow-inner">
+                         <div className="flex justify-between items-center mb-6">
+                            <span className="text-[9px] font-black text-blue-400 uppercase tracking-[0.4em]">Propagating Node...</span>
+                            <span className="text-[10px] font-mono text-slate-500">{Math.round((syncLogs.length / (enrollmentSequence.length + 1)) * 100)}%</span>
+                         </div>
+                         <div className="space-y-2 max-h-32 overflow-y-auto ea-scroll-area pr-2">
+                             {syncLogs.map((log, i) => (
+                                 <div key={i} className="flex gap-3 text-[10px] font-mono text-slate-400 animate-in slide-in-from-left-2">
+                                     <span className="text-blue-600">[{new Date().toLocaleTimeString()}]</span>
+                                     <span className="uppercase">{log}</span>
+                                 </div>
+                             ))}
+                         </div>
+                    </div>
+                </div>
+            );
+        }
+
+        switch(enrollStep) {
+            case 1:
+                return (
+                    <div className="space-y-10 animate-in slide-in-from-right-4 duration-500">
+                        <div className="bg-earth-50 dark:bg-earth-800 p-8 rounded-[3.5rem] border border-earth-100 dark:border-earth-700 flex flex-col items-center text-center group">
+                            <div className="w-20 h-20 bg-white dark:bg-earth-900 rounded-[1.8rem] flex items-center justify-center mb-8 shadow-xl border border-black/5 group-hover:rotate-12 transition-all">
+                                <Fingerprint size={40} className="text-blue-600" />
+                            </div>
+                            <h4 className="text-2xl font-serif font-bold text-earth-900 dark:text-white mb-2">Identify Professional Node</h4>
+                            <p className="text-xs text-earth-500 dark:text-earth-400 max-w-xs leading-relaxed font-medium mb-10">
+                                Verify your EnvirosAgro Social Identification Number (ESIN) to synchronize with the industrial cloud.
+                            </p>
+                            <div className="w-full space-y-2 text-left">
+                                <label className="text-[9px] font-black text-earth-400 uppercase tracking-widest px-1">ESIN Master Key</label>
+                                <input 
+                                    className="w-full bg-white dark:bg-earth-900 border-2 border-transparent focus:border-blue-500 rounded-2xl px-6 py-4 font-bold text-sm outline-none transition-all dark:text-white shadow-inner"
+                                    value={user?.esin || 'EA-MEMBER-2024-XXXX'}
+                                    readOnly
+                                />
+                            </div>
+                        </div>
+                        <button onClick={() => setEnrollStep(2)} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-6 rounded-[2.5rem] text-xs uppercase tracking-[0.3em] shadow-xl active:scale-95 transition-all">Start Skill Mapping</button>
+                    </div>
+                );
+            case 2:
+                return (
+                    <div className="space-y-10 animate-in slide-in-from-right-4 duration-500">
+                        <div className="bg-slate-900 p-10 rounded-[3.5rem] border border-white/5 shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-5 text-blue-400"><Compass size={250}/></div>
+                            <div className="relative z-10">
+                                <h4 className="text-2xl font-serif font-bold text-white mb-2">Technical Specialties</h4>
+                                <p className="text-slate-400 text-sm mb-12 max-w-xs font-medium">Select the domains where your m(t) expertise is prioritized.</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {specialties.map(spec => (
+                                        <button 
+                                            key={spec.id}
+                                            onClick={() => toggleSpecialty(spec.id)}
+                                            className={`p-6 rounded-[2rem] border-2 text-left transition-all group ${selectedSpecialties.includes(spec.id) ? 'bg-blue-600 border-blue-500 text-white shadow-xl' : 'bg-white/5 border-white/10 text-slate-500 hover:bg-white/10'}`}
+                                        >
+                                            <div className="mb-6">{spec.icon}</div>
+                                            <p className="text-[11px] font-black uppercase tracking-widest leading-tight">{spec.label}</p>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <button onClick={() => setEnrollStep(1)} className="py-5 bg-earth-50 dark:bg-earth-800 text-earth-500 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">Back</button>
+                            <button 
+                                onClick={() => setEnrollStep(3)} 
+                                disabled={selectedSpecialties.length === 0}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all disabled:opacity-50"
+                            >
+                                Continue to Ethics
+                            </button>
+                        </div>
+                    </div>
+                );
+            case 3:
+                return (
+                    <div className="space-y-10 animate-in slide-in-from-right-4 duration-500">
+                        <div className="bg-white dark:bg-earth-800 p-10 rounded-[3.5rem] border border-earth-100 dark:border-earth-800 shadow-sm relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-8 opacity-5"><ShieldCheck size={200}/></div>
+                            <h4 className="text-2xl font-serif font-bold text-earth-900 dark:text-white mb-6 flex items-center gap-3">
+                                <ShieldCheck size={32} className="text-blue-600" /> Code of Conduct
+                            </h4>
+                            <div className="space-y-6 mb-12">
+                                {[
+                                    "I commit to m(t) data integrity and honesty.",
+                                    "I will prioritize environmental regeneration in my nodes.",
+                                    "I respect communal heritage and Social Ag values.",
+                                    "I uphold global health and safety HA standards."
+                                ].map((rule, i) => (
+                                    <div key={i} className="flex gap-4 items-start bg-earth-50/50 dark:bg-earth-900/50 p-4 rounded-2xl">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0"></div>
+                                        <p className="text-sm text-earth-600 dark:text-earth-400 font-medium leading-relaxed">{rule}</p>
+                                    </div>
+                                ))}
+                            </div>
+                            <div 
+                                onClick={() => setAgreedToConduct(!agreedToConduct)}
+                                className="flex items-center gap-4 p-6 bg-blue-50 dark:bg-blue-900/30 rounded-3xl border-2 border-blue-100 dark:border-blue-800 cursor-pointer transition-all hover:shadow-md group"
+                            >
+                                <div className={`w-8 h-8 rounded-xl border-2 flex items-center justify-center transition-all ${agreedToConduct ? 'bg-blue-600 border-blue-600' : 'bg-white dark:bg-earth-900 border-earth-200 dark:border-earth-700'}`}>
+                                    {agreedToConduct && <CheckCircle2 size={20} className="text-white" />}
+                                </div>
+                                <div>
+                                    <p className="text-sm font-black text-blue-900 dark:text-blue-100 uppercase tracking-widest">I Bind my ESIN to the Code</p>
+                                    <p className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">SHA-256 Ethical Verification Node</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <button onClick={() => setEnrollStep(2)} className="py-5 bg-earth-50 dark:bg-earth-800 text-earth-500 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">Recalibrate Skills</button>
+                            <button 
+                                onClick={handleStartSync} 
+                                disabled={!agreedToConduct}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                            >
+                                <Zap size={18} /> Finalize Sync
+                            </button>
+                        </div>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    };
+
+    return (
+      <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 bg-earth-950/90 backdrop-blur-3xl animate-in fade-in duration-300">
+          <div className="bg-white dark:bg-earth-900 w-full max-w-3xl rounded-[4.5rem] shadow-cinematic border border-white/10 overflow-hidden flex flex-col max-h-[90vh]">
+              {/* Terminal Header */}
+              <div className="bg-slate-900 p-10 text-white flex justify-between items-center shrink-0 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-5 rotate-12"><Cpu size={300} /></div>
+                  <div className="relative z-10 flex items-center gap-6">
+                      <div className="p-4 bg-white/10 rounded-2xl border border-white/20 shadow-xl backdrop-blur-md text-blue-400">
+                        {isSyncing ? <RefreshCw className="animate-spin" size={32} /> : enrollSuccess ? <CheckCircle2 size={32} className="text-agro-500" /> : <Network size={32} />}
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-serif font-black tracking-tight">{isSyncing ? 'Synchronizing Node' : enrollSuccess ? 'Registry Active' : 'Professional Enrollment'}</h3>
+                        <p className="text-xs text-slate-400 font-bold uppercase tracking-[0.4em] mt-1">{isSyncing ? 'MINTING_ID_HASH_EA' : 'CREDENTIALS_VERIFICATION_V4.2'}</p>
+                      </div>
+                  </div>
+                  {!isSyncing && (
+                      <button onClick={resetEnrollment} className="relative z-10 p-3 hover:bg-white/10 rounded-2xl transition-all hover:rotate-90">
+                        <X size={28} />
+                      </button>
+                  )}
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-12 custom-scrollbar bg-earth-50/20 dark:bg-earth-950/20">
+                  {renderEnrollContent()}
+              </div>
+
+              <div className="p-8 bg-earth-50 dark:bg-earth-950/50 text-center border-t border-earth-100 dark:border-earth-800 flex items-center justify-center gap-3 shrink-0">
+                  <ShieldCheck size={18} className="text-blue-500" />
+                  <p className="text-[9px] text-earth-500 dark:text-earth-400 font-black uppercase tracking-[0.4em]">Global Node Sovereignty • Blockchain Hashed Credentials</p>
+              </div>
+          </div>
+      </div>
+    );
+  };
+
+  const renderAgroWorkersCloud = () => (
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-6 duration-700">
+        {/* Cloud Welcome & Branding */}
+        <div className="bg-blue-900 rounded-[3rem] p-10 md:p-16 text-white relative overflow-hidden shadow-2xl border-4 border-blue-950/20">
+            <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-[5s]">
+                <Cloud size={400} className="text-white" />
+            </div>
+            <div className="relative z-10 grid lg:grid-cols-12 gap-12 items-center">
+                <div className="lg:col-span-8">
+                    <div className="flex items-center gap-3 text-blue-300 font-black uppercase tracking-[0.4em] text-[10px] mb-6">
+                        <div className="w-8 h-px bg-blue-400"></div>
+                        <Globe size={14} /> Professional Registry Node
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 tracking-tight">Agro Workers <span className="text-blue-400 italic">Cloud</span></h1>
+                    <p className="text-blue-100 text-lg leading-relaxed mb-8 font-medium max-w-xl">
+                        The global professional ledger for agricultural practitioners. Verifiable status, network-wide credentials, and ethical conduct tracking.
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                        <button onClick={() => onNavigate?.(View.DASHBOARD)} className="bg-white/10 hover:bg-white/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 flex items-center gap-3 transition-all group">
+                            <BarChart3 size={18} className="text-blue-400 group-hover:scale-110 transition-transform" />
+                            <span className="text-xs font-black uppercase tracking-widest">Live Cloud Analytics</span>
+                        </button>
+                        <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+                            <Activity size={18} className="text-green-400" />
+                            <span className="text-xs font-black uppercase tracking-widest">Live Sync OK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="lg:col-span-4 flex flex-col items-center">
+                    {cloudJoined ? (
+                        <div className="bg-white/95 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl border border-blue-100 text-slate-900 w-full text-center animate-in zoom-in">
+                            <CheckCircle2 size={48} className="text-green-600 mx-auto mb-4" />
+                            <h3 className="font-bold text-xl mb-2">Cloud Credentials Active</h3>
+                            <p className="text-xs text-slate-500 uppercase font-black tracking-widest mb-6">Linked to {user?.esin || 'EA-MEMBER'}</p>
+                            <button onClick={() => onNavigate?.(View.PROFILE)} className="w-full bg-blue-600 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl">View Professional ID</button>
+                        </div>
+                    ) : (
+                        <div className="bg-black/20 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 w-full">
+                            <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                                <Zap size={18} className="text-blue-400" /> Join the Registry
+                            </h3>
+                            <p className="text-blue-100/60 text-xs mb-6 leading-relaxed">
+                                Align your profession with the code of agriculture conduct to unlock premium industrial tiers.
+                            </p>
+                            <button 
+                                onClick={() => { setEnrollStep(1); setShowEnrollment(true); triggerHaptic(10); }}
+                                className="w-full bg-blue-500 hover:bg-blue-400 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                            >
+                                <ShieldCheck size={18} /> Initialize Enrollment
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+
+        {/* Value Chain Connectivity Map Section */}
+        <div className="bg-white dark:bg-earth-900 p-10 rounded-[3.5rem] border border-earth-100 dark:border-earth-800 shadow-sm relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/grid.png')] opacity-[0.02] pointer-events-none"></div>
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-6 relative z-10">
+                <div>
+                   <h3 className="text-2xl font-serif font-bold text-earth-900 dark:text-white">Value Chain Connectivity</h3>
+                   <p className="text-sm text-earth-500 dark:text-earth-400 font-medium">Visualizing your professional nodes across the EnvirosAgro network.</p>
+                </div>
+                <div className="flex gap-4">
+                   <div className="bg-blue-50 dark:bg-blue-900/30 px-4 py-2 rounded-xl text-[10px] font-black uppercase text-blue-600 border border-blue-100 dark:border-blue-800 flex items-center gap-2">
+                       <Database size={14} /> ESIN Sync: ACTIVE
+                   </div>
+                   <div className="bg-agro-50 dark:bg-agro-900/30 px-4 py-2 rounded-xl text-[10px] font-black uppercase text-agro-600 border border-agro-100 dark:border-agro-800 flex items-center gap-2">
+                       <Zap size={14} /> Power Level: LVL 4
+                   </div>
+                </div>
+            </div>
+
+            <div className="relative">
+                <div className="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-agro-500 to-amber-500 opacity-20 hidden lg:block -translate-y-1/2"></div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+                    {VALUE_CHAIN_LINKS.map((link) => (
+                        <div key={link.id} className="bg-white dark:bg-earth-800 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-700 shadow-sm hover:shadow-xl transition-all group flex flex-col items-center text-center">
+                            <div className={`w-16 h-16 rounded-2xl bg-earth-50 dark:bg-earth-900 flex items-center justify-center mb-6 shadow-inner border border-black/5 transition-transform duration-700 group-hover:rotate-12 ${link.status === 'ACTIVE' ? 'text-blue-600' : link.status === 'LINKED' ? 'text-agro-600' : 'text-amber-500'}`}>
+                                {link.icon}
+                            </div>
+                            <h4 className="font-bold text-earth-900 dark:text-white mb-2">{link.label}</h4>
+                            <span className={`text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-widest mb-4 border ${link.status === 'ACTIVE' ? 'bg-blue-50 text-blue-600 border-blue-100' : link.status === 'LINKED' ? 'bg-agro-50 text-agro-600 border-agro-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                                {link.status}
+                            </span>
+                            <p className="text-xs text-earth-500 dark:text-earth-400 font-medium leading-relaxed">{link.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        <div className="grid lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-8 space-y-8">
+                <div className="flex justify-between items-center mb-2 px-2">
+                    <h3 className="text-xl font-serif font-bold text-earth-900 dark:text-white">Professional Directory</h3>
+                    <div className="flex gap-2">
+                         <div className="relative">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-earth-300" size={14} />
+                            <input type="text" placeholder="Search professionals..." className="pl-9 pr-4 py-2 bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all dark:text-white" />
+                         </div>
+                         <button className="p-2 bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-xl text-earth-400"><Filter size={16} /></button>
+                    </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                    {WORKERS_CLOUD.map(worker => (
+                        <div key={worker.id} className="bg-white dark:bg-earth-900 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-xl transition-all group flex flex-col">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-16 h-16 rounded-[1.5rem] overflow-hidden border-2 border-blue-50 dark:border-blue-900 shadow-md">
+                                        <img src={worker.image} className="w-full h-full object-cover" alt={worker.name} />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-lg text-earth-900 dark:text-white leading-tight">{worker.name}</h4>
+                                        <p className="text-[10px] text-blue-600 font-black uppercase tracking-widest mt-1">{worker.type}</p>
+                                    </div>
+                                </div>
+                                <div className="bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-lg text-[8px] font-black text-green-600 border border-green-100 dark:border-green-800">
+                                    VERIFIED
+                                </div>
+                            </div>
+                            
+                            <div className="flex-1 space-y-4 mb-8">
+                                <p className="text-xs text-earth-500 dark:text-earth-400 flex items-center gap-2"><MapPin size={12} className="text-red-500" /> {worker.location}</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {worker.skills.map(skill => (
+                                        <span key={skill} className="px-3 py-1 bg-earth-50 dark:bg-earth-800 rounded-full text-[9px] font-bold text-earth-500">{skill}</span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="pt-6 border-t border-earth-50 dark:border-earth-800 flex justify-between items-center">
+                                <div>
+                                    <p className="text-[8px] font-black text-earth-300 uppercase">Linked ESIN</p>
+                                    <p className="font-mono text-[9px] text-slate-500">{worker.esin}</p>
+                                </div>
+                                <button className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-sm">
+                                    <ArrowRight size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="bg-white dark:bg-earth-900 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 shadow-sm overflow-hidden flex flex-col">
+                    <div className="p-8 border-b border-earth-100 dark:border-earth-800 flex justify-between items-center bg-earth-50/30 dark:bg-earth-950/30">
+                        <h3 className="font-bold text-lg text-earth-900 dark:text-white flex items-center gap-3">
+                            <Terminal size={20} className="text-blue-500" /> Professional Action Ledger
+                        </h3>
+                        <div className="flex gap-4 text-[8px] font-black uppercase text-earth-400">
+                           <span className="flex items-center gap-2"><div className="w-2 h-2 bg-agro-500 rounded-full"></div> Synchronized</span>
+                           <span className="flex items-center gap-2"><div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div> Broadcast</span>
+                        </div>
+                    </div>
+                    <div className="p-4">
+                        <table className="w-full text-left">
+                            <thead className="bg-earth-50 dark:bg-earth-950/90 text-[7px] font-black text-earth-400 uppercase tracking-[0.3em] border-b border-earth-50 dark:border-earth-800">
+                                <tr>
+                                    <th className="px-6 py-3">Transmission ID</th>
+                                    <th className="px-6 py-3">Action Type</th>
+                                    <th className="px-6 py-3">Impact Points</th>
+                                    <th className="px-6 py-3 text-right">Timecode</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-earth-50 dark:divide-earth-800">
+                                {PROFESSIONAL_LEDGER.map(tx => (
+                                    <tr key={tx.id} className="hover:bg-earth-50/50 dark:hover:bg-earth-800/30 transition-all group">
+                                        <td className="px-6 py-4 font-mono text-[10px] text-blue-600">{tx.id}</td>
+                                        <td className="px-6 py-4">
+                                            <span className="bg-earth-100 dark:bg-earth-800 px-2 py-0.5 rounded text-[8px] font-black text-earth-600 dark:text-earth-400 uppercase">{tx.type.replace('_', ' ')}</span>
+                                        </td>
+                                        <td className="px-6 py-4 font-bold text-[10px] text-agro-600">{tx.points}</td>
+                                        <td className="px-6 py-4 text-right text-[10px] text-earth-400 font-bold uppercase">{tx.date}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div className="lg:col-span-4 space-y-8">
+                <div className="bg-white dark:bg-earth-900 p-10 rounded-[3rem] border border-earth-100 dark:border-earth-800 shadow-sm relative overflow-hidden">
+                    <h3 className="font-black text-earth-900 dark:text-white text-xs uppercase tracking-widest mb-8 flex items-center gap-3">
+                        <FileText size={18} className="text-blue-600" /> Professional Conduct
+                    </h3>
+                    <div className="space-y-6 mb-10">
+                        {[
+                            "Maintain m(t) data integrity and honesty.",
+                            "Prioritize environmental regeneration.",
+                            "Respect communal heritage and social SA values.",
+                            "Uphold health and safety HA standards."
+                        ].map((rule, i) => (
+                            <div key={i} className="flex gap-4 items-start">
+                                <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></div>
+                                <div className="text-xs text-earth-600 dark:text-earth-400 font-medium leading-relaxed">{rule}</div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-agro-950 p-10 rounded-[3rem] text-white shadow-xl relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-5 rotate-12 group-hover:rotate-45 transition-transform duration-1000"><Fingerprint size={150} /></div>
+                    <div className="relative z-10">
+                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center mb-6 border border-white/10">
+                            <Smartphone size={24} className="text-agro-400" />
+                        </div>
+                        <h4 className="text-2xl font-serif font-bold mb-4 tracking-tight">Sync EnvirosAgro ID</h4>
+                        <p className="text-agro-100/60 text-xs mb-8 leading-relaxed font-medium">
+                            Connecting your Workers Cloud profile with your ESIN ensures full traceability across the industrial value chain.
+                        </p>
+                        <button 
+                            onClick={() => { setEnrollStep(1); setShowEnrollment(true); triggerHaptic(10); }}
+                            className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
+                        >
+                            Connect Hub ID
+                        </button>
+                    </div>
+                </div>
+
+                <div className="bg-white dark:bg-earth-900 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 flex items-center gap-6 group hover:shadow-lg transition-all cursor-pointer">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-900/30 rounded-2xl text-blue-600 transition-transform group-hover:rotate-12 shadow-inner">
+                        <QrCode size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-earth-900 dark:text-white text-sm">Offline Registry</h4>
+                        <p className="text-[10px] text-earth-400 uppercase font-black tracking-widest">Generate Scan Code</p>
+                    </div>
+                </div>
+
+                <div className="bg-slate-900 p-8 rounded-[2.5rem] border border-white/5 shadow-2xl relative group overflow-hidden">
+                    <div className="absolute top-0 right-0 p-4 opacity-5"><Activity size={100} /></div>
+                    <div className="flex items-center gap-4 mb-6 relative z-10">
+                        <div className="p-2 bg-blue-600/20 rounded-xl text-blue-400 border border-blue-500/20"><ShieldAlert size={18} /></div>
+                        <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Security Clearance</span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 leading-relaxed relative z-10 font-bold">
+                        Access to Process 04 (Industrial Audit) and Process 05 (Value Outcome) is restricted to Verified Professional Cloud Nodes only.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 relative">
+      {renderEnrollmentTerminal()}
       
-      {/* Header */}
       <div className="mb-10 text-center">
-        <h2 className="text-3xl font-serif font-bold text-agro-900 mb-3">Agro Human Resources</h2>
-        <p className="text-earth-600 max-w-2xl mx-auto">
-          The central hub for connecting agricultural talent with opportunities. 
-          Browse the global worker cloud, find your next role, or register your expertise.
-        </p>
+        <h2 className="text-3xl font-serif font-bold text-agro-900 dark:text-white mb-3 tracking-tight">Agro Human Resources</h2>
+        <p className="text-earth-600 dark:text-earth-400 max-w-2xl mx-auto font-medium">Connecting agricultural talent with global opportunities across the Five Thrusts.</p>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex justify-center mb-10 overflow-x-auto">
-        <div className="bg-white p-1.5 rounded-full border border-earth-200 shadow-sm inline-flex whitespace-nowrap">
-          <button 
-            onClick={() => setActiveTab('CLOUD')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'CLOUD' ? 'bg-agro-600 text-white shadow-md' : 'text-earth-600 hover:bg-earth-50'}`}
-          >
-            <Users size={18} /> Agro-Workers Cloud
-          </button>
-          <button 
-            onClick={() => setActiveTab('JOBS')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'JOBS' ? 'bg-agro-600 text-white shadow-md' : 'text-earth-600 hover:bg-earth-50'}`}
-          >
-            <Briefcase size={18} /> Available Jobs
-          </button>
-          <button 
-            onClick={() => setActiveTab('CAREER')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'CAREER' ? 'bg-agro-600 text-white shadow-md' : 'text-earth-600 hover:bg-earth-50'}`}
-          >
-            <TrendingUp size={18} /> Career Advancement
-          </button>
-          <button 
-            onClick={() => setActiveTab('REGISTER')}
-            className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all flex items-center gap-2 ${activeTab === 'REGISTER' ? 'bg-agro-600 text-white shadow-md' : 'text-earth-600 hover:bg-earth-50'}`}
-          >
-            <Plus size={18} /> Register as Worker
-          </button>
+      <div className="flex justify-center mb-16 overflow-x-auto no-scrollbar pb-2">
+        <div className="agro-glass p-1.5 rounded-[2rem] border border-earth-200 dark:border-white/5 backdrop-blur-xl inline-flex whitespace-nowrap shadow-sm">
+          <button onClick={() => setActiveTab('CLOUD')} className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === 'CLOUD' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}><Cloud size={16} /> Workers Cloud</button>
+          <button onClick={() => setActiveTab('JOBS')} className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === 'JOBS' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}><Briefcase size={16} /> Open Jobs</button>
+          <button onClick={() => setActiveTab('CAREER')} className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === 'CAREER' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}><TrendingUp size={16} /> Career Track</button>
+          <button onClick={() => setActiveTab('REGISTER')} className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-3 ${activeTab === 'REGISTER' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}><Plus size={16} /> New Profile</button>
         </div>
       </div>
 
-      {/* Search Bar (Shared for Cloud and Jobs) */}
-      {(activeTab === 'CLOUD' || activeTab === 'JOBS') && (
-        <div className="max-w-2xl mx-auto mb-10 relative">
-          <Search className="absolute left-4 top-3.5 text-earth-400" size={20} />
-          <input 
-            type="text" 
-            placeholder={activeTab === 'CLOUD' ? "Search workers by name, role, or skill..." : "Search jobs by title or company..."}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border border-earth-200 rounded-2xl pl-12 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500 shadow-sm"
-          />
-        </div>
-      )}
+      {activeTab === 'CLOUD' && renderAgroWorkersCloud()}
 
-      {/* VIEW 1: AGRO-WORKERS CLOUD */}
-      {activeTab === 'CLOUD' && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="flex justify-between items-center mb-6">
-             <h3 className="font-bold text-xl text-earth-900">Registered Professionals ({filteredWorkers.length})</h3>
-             <button className="text-agro-600 text-sm font-bold flex items-center gap-1 hover:underline">
-               <Filter size={16} /> Advanced Filter
-             </button>
-          </div>
-          
-          {filteredWorkers.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredWorkers.map((worker) => (
-                <div key={worker.id} className="bg-white p-6 rounded-2xl shadow-sm border border-earth-100 hover:shadow-md transition-all group">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-4">
-                      <img src={worker.image} alt={worker.name} className="w-16 h-16 rounded-full object-cover border-2 border-agro-100" />
-                      <div>
-                        <h4 className="font-bold text-lg text-agro-900 leading-tight">{worker.name}</h4>
-                        <p className="text-earth-500 text-sm">{worker.role}</p>
-                      </div>
-                    </div>
-                    {worker.available && (
-                      <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">
-                        Available
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-xs text-earth-500 mb-4">
-                    <MapPin size={14} /> {worker.location}
-                    <span className="text-earth-300">|</span>
-                    <GraduationCap size={14} /> {worker.type}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {worker.skills.map((skill: string) => (
-                      <span key={skill} className="text-xs bg-earth-50 text-earth-600 px-2 py-1 rounded-lg border border-earth-100">
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-
-                  <button className="w-full border border-agro-200 text-agro-700 font-bold py-2 rounded-xl hover:bg-agro-50 transition-colors">
-                    View Profile
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16 bg-earth-50 rounded-2xl border border-earth-100">
-               <Users size={48} className="mx-auto text-earth-300 mb-4" />
-               <h3 className="text-lg font-bold text-earth-600">No Professionals Found</h3>
-               <p className="text-earth-500 text-sm mb-6">The database is currently updating. Be the first to register!</p>
-               <button 
-                 onClick={() => setActiveTab('REGISTER')}
-                 className="bg-agro-600 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-agro-700 transition-colors"
-               >
-                 Register Now
-               </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* VIEW 2: AVAILABLE JOB LISTS */}
       {activeTab === 'JOBS' && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-           {filteredJobs.length > 0 ? (
-             <div className="grid lg:grid-cols-1 gap-6">
-                {filteredJobs.map((job) => (
-                  <div key={job.id} className="bg-white p-6 rounded-2xl shadow-sm border border-earth-100 hover:border-agro-200 transition-all flex flex-col md:flex-row justify-between gap-6">
-                     <div className="flex-1">
-                        <div className="flex flex-wrap items-center gap-3 mb-2">
-                          <h4 className="font-bold text-xl text-earth-900">{job.title}</h4>
-                          <span className="bg-blue-50 text-blue-700 text-xs font-bold px-2 py-1 rounded border border-blue-100">{job.type}</span>
+        <div className="grid gap-8 animate-in slide-in-from-right-10 duration-700">
+          {JOBS_LIST.map((job) => (
+            <div key={job.id} className="bg-white dark:bg-earth-900 p-10 rounded-[3rem] border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-xl transition-all flex flex-col md:flex-row justify-between items-center gap-10 group">
+                <div className="flex-1">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="p-3 bg-earth-50 dark:bg-earth-800 rounded-xl text-earth-400"><Briefcase size={24} /></div>
+                        <div>
+                            <h4 className="font-bold text-2xl text-earth-900 dark:text-white group-hover:text-agro-700 transition-colors">{job.title}</h4>
+                            <p className="text-[10px] text-earth-400 font-black uppercase tracking-widest">{job.org} • {job.posted}</p>
                         </div>
-                        <div className="flex items-center gap-4 text-sm text-earth-500 mb-4">
-                           <span className="font-semibold text-agro-700 flex items-center gap-1"><Briefcase size={14} /> {job.org}</span>
-                           <span className="flex items-center gap-1"><MapPin size={14} /> {job.location}</span>
-                           <span className="flex items-center gap-1 text-green-600 font-bold">{job.salary}</span>
-                        </div>
-                        <p className="text-earth-600 mb-2">{job.description}</p>
-                        <p className="text-xs text-earth-400">Posted {job.posted}</p>
-                     </div>
-                     
-                     <div className="flex flex-col justify-center min-w-[150px]">
-                        <button 
-                          onClick={() => setSelectedJob(job)}
-                          className="bg-agro-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-agro-700 transition-colors shadow-lg shadow-agro-100"
-                        >
-                          Apply Now
-                        </button>
-                     </div>
-                  </div>
-                ))}
-             </div>
-           ) : (
-             <div className="text-center py-16 bg-earth-50 rounded-2xl border border-earth-100">
-               <Briefcase size={48} className="mx-auto text-earth-300 mb-4" />
-               <h3 className="text-lg font-bold text-earth-600">No Jobs Available</h3>
-               <p className="text-earth-500 text-sm">There are currently no open positions listed. Please check back later.</p>
-             </div>
-           )}
+                    </div>
+                    <p className="text-earth-600 dark:text-earth-400 text-sm leading-relaxed font-medium mb-6">{job.description}</p>
+                    <div className="flex flex-wrap gap-4 text-xs font-bold text-earth-500">
+                        <span className="flex items-center gap-2"><MapPin size={14} className="text-red-500" /> {job.location}</span>
+                        <span className="flex items-center gap-2 font-mono text-agro-600 bg-agro-50 dark:bg-agro-900/30 px-2 py-0.5 rounded">{job.salary}</span>
+                    </div>
+                </div>
+                <div className="flex items-center">
+                    <button onClick={() => handleApply(job.title)} className="w-full md:w-auto bg-agro-900 hover:bg-agro-800 text-white font-black py-4 px-12 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl transition-all active:scale-95">Apply Session</button>
+                </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* VIEW 3: CAREER ADVANCEMENT */}
       {activeTab === 'CAREER' && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-           <div className="bg-agro-900 rounded-3xl p-8 mb-10 text-white flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                 <h3 className="text-2xl font-serif font-bold mb-2">Accelerate Your Agricultural Career</h3>
-                 <p className="text-agro-100 max-w-xl">
-                    Gain new skills, earn recognized certifications, and connect with industry mentors to lead the future of sustainable farming.
-                 </p>
-              </div>
-              <button className="bg-white text-agro-900 font-bold px-6 py-3 rounded-full hover:bg-agro-100 transition-colors">
-                 Explore All Courses
-              </button>
-           </div>
-
-           <h3 className="text-xl font-bold text-earth-900 mb-6">Pathways to Success</h3>
-           <div className="grid md:grid-cols-2 gap-6 mb-12">
-              {CAREER_PATHWAYS.map((path) => (
-                 <div key={path.id} className={`p-6 rounded-2xl border ${path.color} bg-white hover:shadow-lg transition-all flex gap-4`}>
-                    <div className="bg-white p-3 rounded-xl shadow-sm h-fit">
-                       {path.icon}
-                    </div>
-                    <div>
-                       <h4 className="font-bold text-lg text-earth-900 mb-1">{path.title}</h4>
-                       <p className="text-xs font-bold text-agro-600 uppercase tracking-wide mb-2">
-                          {path.provider} • {path.level}
-                       </p>
-                       <p className="text-earth-600 text-sm mb-4">
-                          {path.desc}
-                       </p>
-                       <div className="flex items-center justify-between">
-                          <span className="text-xs bg-earth-100 text-earth-600 px-2 py-1 rounded font-medium">
-                             Duration: {path.duration}
-                          </span>
-                          <button className="text-agro-700 font-bold text-sm hover:underline">
-                             View Details
-                          </button>
-                       </div>
-                    </div>
-                 </div>
-              ))}
-           </div>
-
-           <div className="bg-white rounded-3xl p-8 border border-earth-200 shadow-sm text-center">
-              <h3 className="text-xl font-bold text-earth-900 mb-2">Need Career Guidance?</h3>
-              <p className="text-earth-600 mb-6 max-w-lg mx-auto">
-                 Our HR specialists can review your profile and suggest the best path for your professional growth within the EnvirosAgro ecosystem.
-              </p>
-              <button className="border-2 border-earth-200 text-earth-700 font-bold px-8 py-3 rounded-full hover:border-agro-600 hover:text-agro-600 transition-all">
-                 Request Career Counseling
-              </button>
-           </div>
+        <div className="grid md:grid-cols-2 gap-8 animate-in slide-in-from-right-10 duration-700">
+          {CAREER_PATHWAYS.map((path) => (
+            <div key={path.id} className={`p-10 rounded-[3.5rem] border ${path.color} bg-white dark:bg-earth-900 shadow-sm hover:shadow-xl transition-all group flex flex-col md:flex-row gap-10`}>
+                <div className="bg-white dark:bg-earth-800 p-6 rounded-[2rem] shadow-sm h-fit shrink-0 group-hover:rotate-12 transition-transform">{path.icon}</div>
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <h4 className="font-bold text-2xl text-earth-900 dark:text-white leading-tight">{path.title}</h4>
+                    <span className="bg-agro-600 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase">{path.level}</span>
+                  </div>
+                  <p className="text-[10px] text-earth-400 font-black uppercase tracking-widest mb-6">Provider: {path.provider} • {path.duration}</p>
+                  <p className="text-sm text-earth-600 dark:text-earth-400 font-medium leading-relaxed mb-8">{path.desc}</p>
+                  <button onClick={() => onNavigate && onNavigate(View.KNOWLEDGE)} className="text-agro-700 dark:text-agro-400 font-black text-xs uppercase tracking-widest hover:underline flex items-center gap-2">Initialize Course <ArrowRight size={16}/></button>
+                </div>
+            </div>
+          ))}
         </div>
       )}
 
-      {/* VIEW 4: AGRO-WORKER REGISTRATION INTERFACE */}
       {activeTab === 'REGISTER' && (
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-2xl mx-auto">
-           <div className="bg-white p-8 rounded-3xl shadow-lg border border-earth-100">
-              <h3 className="text-2xl font-bold text-earth-900 mb-2">Join the Agro-Workers Cloud</h3>
-              <p className="text-earth-600 mb-8">Create your professional profile to be discovered by employers and partners worldwide.</p>
-              
-              <form className="space-y-6">
-                 <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                       <label className="text-sm font-bold text-earth-700">Full Name</label>
-                       <input type="text" className="w-full bg-earth-50 border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500" placeholder="John Doe" />
-                    </div>
-                    <div className="space-y-2">
-                       <label className="text-sm font-bold text-earth-700">Role / Specialty</label>
-                       <input type="text" className="w-full bg-earth-50 border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500" placeholder="e.g. Soil Scientist" />
-                    </div>
-                 </div>
-
-                 <div className="space-y-2">
-                    <label className="text-sm font-bold text-earth-700">Location</label>
-                    <input type="text" className="w-full bg-earth-50 border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500" placeholder="City, Country" />
-                 </div>
-
-                 <div className="space-y-2">
-                    <label className="text-sm font-bold text-earth-700">Skills (comma separated)</label>
-                    <input type="text" className="w-full bg-earth-50 border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500" placeholder="Irrigation, Drone Piloting, Organic Farming..." />
-                 </div>
-
-                 <div className="space-y-2">
-                    <label className="text-sm font-bold text-earth-700">Professional Bio</label>
-                    <textarea rows={4} className="w-full bg-earth-50 border border-earth-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-agro-500" placeholder="Tell us about your experience..."></textarea>
-                 </div>
-
-                 <div className="p-4 border-2 border-dashed border-earth-200 rounded-xl text-center hover:bg-earth-50 transition-colors cursor-pointer">
-                    <Upload className="mx-auto text-earth-400 mb-2" />
-                    <span className="text-sm text-earth-500 font-medium">Upload Resume / CV (PDF)</span>
-                 </div>
-
-                 <button type="button" className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all">
-                    Register Profile
-                 </button>
-              </form>
-           </div>
+        <div className="max-w-2xl mx-auto animate-in zoom-in-95 duration-500">
+           <form className="bg-white dark:bg-earth-900 p-12 rounded-[4rem] shadow-xl border border-earth-100 dark:border-earth-800 space-y-10">
+              <div className="text-center mb-10">
+                <div className="w-20 h-20 bg-agro-50 dark:bg-agro-900/40 rounded-[1.8rem] flex items-center justify-center mx-auto mb-6 text-agro-600">
+                    <Users size={32} />
+                </div>
+                <h3 className="text-2xl font-serif font-bold text-earth-900 dark:text-white mb-2">Network Professional Profile</h3>
+                <p className="text-earth-50 text-xs uppercase font-black tracking-widest">Identify yourself within the global node.</p>
+              </div>
+              <div className="space-y-6">
+                <input type="text" className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-agro-500 rounded-2xl px-6 py-4 font-bold text-sm outline-none transition-all dark:text-white" placeholder="Professional Full Name" />
+                <input type="email" className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-agro-500 rounded-2xl px-6 py-4 font-bold text-sm outline-none transition-all dark:text-white" placeholder="Registry Email" />
+                <select className="w-full bg-earth-50 dark:bg-earth-800 border-2 border-transparent focus:border-agro-500 rounded-2xl px-6 py-4 font-bold text-sm outline-none transition-all dark:text-white appearance-none">
+                    <option>Select Primary Thrust</option>
+                    <option>Social Agriculture (SA)</option>
+                    <option>Environmental Agriculture (EA)</option>
+                    <option>Technical Agriculture (TA)</option>
+                    <option>Industrial Agriculture (IA)</option>
+                </select>
+              </div>
+              <button type="button" onClick={() => onNavigate && onNavigate(View.SIGN_UP)} className="w-full bg-agro-900 hover:bg-agro-950 text-white font-black py-5 rounded-2xl text-[11px] uppercase tracking-widest shadow-2xl shadow-agro-900/30 transition-all active:scale-95">Verify Node & Initialize</button>
+              <div className="flex items-center justify-center gap-3 text-[9px] font-black text-earth-300 uppercase tracking-[0.4em]">
+                  <ShieldCheck size={14} className="text-agro-600" /> Identity Secure Protocol
+              </div>
+           </form>
         </div>
       )}
-
-      {/* MODAL: JOB APPLICATION INTERFACE */}
-      {selectedJob && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-           <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-              <div className="bg-agro-50 p-6 border-b border-agro-100 flex justify-between items-start">
-                 <div>
-                    <h3 className="font-bold text-xl text-agro-900">Apply for Position</h3>
-                    <p className="text-agro-700 text-sm mt-1">{selectedJob.title} at {selectedJob.org}</p>
-                 </div>
-                 <button onClick={() => setSelectedJob(null)} className="text-agro-400 hover:text-agro-700 transition-colors">
-                    <X size={24} />
-                 </button>
-              </div>
-              
-              <div className="p-8">
-                 <form onSubmit={handleApplySubmit} className="space-y-5">
-                    <div className="space-y-1">
-                       <label className="text-sm font-bold text-earth-700">Full Name</label>
-                       <input required type="text" className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500" />
-                    </div>
-                    <div className="space-y-1">
-                       <label className="text-sm font-bold text-earth-700">Email Address</label>
-                       <input required type="email" className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500" />
-                    </div>
-                    <div className="space-y-1">
-                       <label className="text-sm font-bold text-earth-700">Cover Letter</label>
-                       <textarea required rows={4} className="w-full border border-earth-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-agro-500" placeholder="Why are you a good fit?"></textarea>
-                    </div>
-                    
-                    <div className="flex items-center gap-3 p-3 bg-earth-50 rounded-xl border border-earth-200">
-                       <FileText className="text-agro-500" />
-                       <div className="flex-1">
-                          <p className="text-sm font-bold text-earth-700">Upload Resume</p>
-                          <p className="text-xs text-earth-500">PDF, DOCX up to 5MB</p>
-                       </div>
-                       <button type="button" className="text-xs font-bold text-agro-600 hover:underline">Choose File</button>
-                    </div>
-
-                    <button 
-                        type="submit" 
-                        disabled={isApplying}
-                        className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2"
-                    >
-                        {isApplying ? 'Submitting...' : <><Send size={18} /> Submit Application</>}
-                    </button>
-                 </form>
-              </div>
-           </div>
-        </div>
-      )}
-
     </div>
   );
 };
