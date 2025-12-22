@@ -1,4 +1,5 @@
-noimport React from 'react';
+
+import React from 'react';
 
 export enum View {
   HOME = 'HOME',
@@ -65,6 +66,34 @@ export interface Article {
   imageUrl: string;
   category: 'Research' | 'Practice' | 'Technology';
   fullContent?: string;
+}
+
+export interface PlanetWatchReport {
+    id: string;
+    title: string;
+    summary: string;
+    region: string;
+    date: string;
+    threatLevel: 'Low' | 'Medium' | 'High' | 'Critical';
+    metrics: {
+        name: string;
+        value: string;
+        change: string;
+        changeType: 'increase' | 'decrease';
+    }[];
+    fullReportUrl: string;
+}
+
+export interface Documentary {
+    id: string;
+    title: string;
+    description: string;
+    director: string;
+    duration: number; // in minutes
+    releaseYear: number;
+    coverImage: string;
+    videoUrl: string;
+    tags: string[];
 }
 
 export interface ChatMessage {
