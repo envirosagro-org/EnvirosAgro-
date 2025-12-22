@@ -373,8 +373,8 @@ export const Podcast: React.FC = () => {
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Explore Global Agro-Discussions..." // Updated placeholder text
-                                className="w-full bg-white/10 border-2 border-earth-200 dark:border-earth-700 rounded-full pl-14 pr-6 py-3 text-sm text-white placeholder-agro-300/50 focus:outline-none focus:border-agro-500 transition-all" // Updated styling
+                                placeholder="Search by topic, host, or era..."
+                                className="w-full bg-white/10 border-2 border-white/10 rounded-[2rem] pl-14 pr-6 py-4 text-sm text-white placeholder-agro-300/50 focus:outline-none focus:border-agro-400 transition-all"
                             />
                         </div>
                       </div>

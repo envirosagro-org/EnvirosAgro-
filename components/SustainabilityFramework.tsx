@@ -1,15 +1,10 @@
-I apologize for the error in the previous response. I will correct the descriptions for each THRUST in `components/SustainabilityFramework.tsx` now.I apologize for the repeated error. It seems there's an issue with the tool's execution environment preventing me from directly applying the changes to the file.
-
-Here is the updated code for `components/SustainabilityFramework.tsx` with the requested descriptions for each THRUST:
-
-```typescript
 import React, { useState, useMemo } from 'react';
-import {
-  Users, Leaf, ShieldPlus, Cpu, Factory,
-  Calculator, BookOpen, Activity, Sprout,
+import { 
+  Users, Leaf, ShieldPlus, Cpu, Factory, 
+  Calculator, BookOpen, Activity, Sprout, 
   Globe, BarChart3, Droplets, TrendingUp, Settings, Scale,
   Share2, X, Copy, AlertCircle, Info, Zap, AlertTriangle,
-  Database, Network, ArrowRight, RefreshCw, Layers,
+  Database, Network, ArrowRight, RefreshCw, Layers, 
   Search, Server, Smartphone, Microscope, BrainCircuit,
   ArrowUpRight, Recycle, Box, ChevronRight, ExternalLink
 } from 'lucide-react';
@@ -22,35 +17,35 @@ const THRUSTS = [
     title: 'Social Agriculture',
     icon: <Users size={28} />,
     color: 'bg-rose-100 text-rose-700',
-    description: 'Focuses on building resilient and equitable communities, addressing societal challenges to foster collective well-being.'
+    description: 'The prerequisite for development. Diagnoses fractures like Social Influenza Disease (SI-D) to build social immunity.'
   },
   {
     id: 'EA',
     title: 'Environmental Agriculture',
     icon: <Leaf size={28} />,
     color: 'bg-green-100 text-green-700',
-    description: 'Implements practices for ecosystem health, focusing on soil vitality, water conservation, and biodiversity for a thriving planet.'
+    description: 'A proactive strategy ensuring soil regeneration, water conservation, and biodiversity preservation.'
   },
   {
     id: 'HA',
     title: 'Health Agriculture',
     icon: <ShieldPlus size={28} />,
     color: 'bg-red-100 text-red-700',
-    description: 'Ensures global food safety and human well-being by standardizing health protocols across agricultural systems and communities.'
+    description: 'Standardizing biological safety across crops, livestock, and communities.'
   },
   {
     id: 'TA',
     title: 'Technical Agriculture',
     icon: <Cpu size={28} />,
     color: 'bg-blue-100 text-blue-700',
-    description: 'Leverages advanced technologies and AI to optimize agricultural processes, enhancing efficiency and data-driven decision-making worldwide.'
+    description: 'Adopting AI diagnostics and precision tools to optimize production efficiency.'
   },
   {
     id: 'IA',
     title: 'Industrial Agriculture',
     icon: <Factory size={28} />,
     color: 'bg-slate-100 text-slate-700',
-    description: 'Develops scalable, sustainable value chains and logistics, ensuring efficient resource utilization and market access for global agricultural products.'
+    description: 'The maturity phase: achieving scale through processing, value chain development, and logistics.'
   }
 ];
 
@@ -109,7 +104,7 @@ interface SustainabilityFrameworkProps {
 
 export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'model' | 'simulation' | 'network'>('network');
-
+  
   // Simulation State
   const [params, setParams] = useState({
     x: 2.0, // Base Agricultural Factor
@@ -130,11 +125,11 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
       const fluctuation = (Math.sin(t * 2.5) * 0.1) * params.dn;
       const currentDn = Math.max(0, params.dn + fluctuation);
       const currentIn = f * currentDn;
-      const n = 1 * currentIn;
+      const n = 1 * currentIn; 
 
       // Geometric C(a) = [x * (r^n - 1)] / (r - 1) + 1
       let ca = (currentX * (Math.pow(params.r, n) - 1)) / (params.r - 1) + 1;
-
+      
       // Resilience m = sqrt[ (In * Dn * ca) / S ]
       const m = Math.sqrt((currentIn * currentDn * ca) / S);
 
@@ -155,7 +150,7 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in duration-700">
-
+      
       <div className="text-center mb-16 max-w-4xl mx-auto">
         <div className="ea-label-meta justify-center mb-4">Strategic Architecture</div>
         <h1 className="text-5xl md:text-7xl font-serif font-black text-agro-900 dark:text-white tracking-tighter mb-6">Sustainability <span className="text-blue-600 italic">Operating System</span></h1>
@@ -167,20 +162,20 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
       {/* Primary Tab Switcher - Refined Style */}
       <div className="flex justify-center mb-20 overflow-x-auto no-scrollbar pb-2">
         <div className="agro-glass p-1.5 rounded-[2rem] flex gap-1 border border-earth-200 dark:border-white/5 backdrop-blur-xl">
-           <button
-             onClick={() => setActiveTab('network')}
+           <button 
+             onClick={() => setActiveTab('network')} 
              className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === 'network' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}
            >
               <Network size={16} /> Network Process
            </button>
-           <button
-             onClick={() => setActiveTab('model')}
+           <button 
+             onClick={() => setActiveTab('model')} 
              className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'model' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}
            >
               Five Thrusts
            </button>
-           <button
-             onClick={() => setActiveTab('simulation')}
+           <button 
+             onClick={() => setActiveTab('simulation')} 
              className={`px-8 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === 'simulation' ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:text-earth-900 dark:hover:text-white'}`}
            >
               <Activity size={16} /> M(t) Simulator
@@ -193,11 +188,11 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
            {/* Immersive Flow Visualization */}
            <div className="relative">
               <div className="absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-agro-500 to-green-500 opacity-20 hidden lg:block -translate-y-1/2"></div>
-
+              
               <div className="grid lg:grid-cols-5 gap-8 relative z-10">
                  {NETWORK_PROCESSES.map((proc, i) => (
-                    <div
-                      key={proc.id}
+                    <div 
+                      key={proc.id} 
                       onClick={() => proc.target && onNavigate?.(proc.target)}
                       className={`ea-card group p-8 flex flex-col items-center text-center transition-all ${proc.target ? 'cursor-pointer hover:scale-[1.05] hover:border-blue-500/50' : 'hover:scale-[1.03]'}`}
                     >
@@ -209,7 +204,7 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
                        </div>
                        <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-3">{proc.title}</h3>
                        <p className="text-xs text-earth-500 dark:text-earth-400 font-medium leading-relaxed mb-4">{proc.desc}</p>
-
+                       
                        {proc.target && (
                          <div className="flex items-center gap-2 text-[8px] font-black text-blue-600 uppercase tracking-widest mt-2 group-hover:underline">
                             Access Module <ExternalLink size={10} />
@@ -395,7 +390,7 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
                              <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.05} />
                              <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10, fontWeight: 900}} dy={10} />
                              <YAxis axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 10}} dx={-10} />
-                             <Tooltip
+                             <Tooltip 
                                contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', background: 'rgba(255,255,255,0.95)', fontSize: '12px' }}
                                itemStyle={{ fontWeight: 900, textTransform: 'uppercase' }}
                              />
@@ -436,4 +431,3 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
     </div>
   );
 };
-```
