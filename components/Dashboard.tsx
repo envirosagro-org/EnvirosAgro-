@@ -75,7 +75,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                     <div className="ea-label-meta mb-2">
                         <Activity size={12} className="text-agro-600" /> Integrated Resilience Engine
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                    <h1 className="text-3xl md:text-5xl font-serif font-bold text-earth-900 dark:text-white leading-tight tracking-tight">
                         Analytics <span className="text-blue-600 italic">Terminal</span>
                     </h1>
                 </div>
@@ -114,7 +114,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
        {activeTab === 'RESILIENCE' ? (
            <div className="animate-in slide-in-from-left-4 duration-500">
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="nature-impact-gradient rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden group">
+                    <div className="bg-agro-900 rounded-[2rem] p-8 text-white shadow-xl relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform"><Globe2 size={100} /></div>
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-agro-200">Resilience m(t)</span>
                         <div className="text-5xl font-serif font-bold my-2 tracking-tighter">8.54</div>
@@ -152,7 +152,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                     <div className="lg:col-span-8">
                         <div className="ea-card p-10 h-full">
                             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-                                <div><h3 className="text-2xl font-serif font-bold text-slate-900 dark:text-white tracking-tight">Performance Matrix</h3></div>
+                                <div><h3 className="text-2xl font-serif font-bold text-earth-900 dark:text-white tracking-tight">Performance Matrix</h3></div>
                                 <div className="flex bg-earth-50 dark:bg-earth-900/50 p-1 rounded-2xl border border-earth-100 dark:border-earth-800">
                                     {['resilience', 'yield', 'carbon'].map(m => (
                                         <button key={m} onClick={() => setChartMetric(m as any)} className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${chartMetric === m ? 'bg-white dark:bg-earth-700 text-slate-900 dark:text-white shadow-sm' : 'text-earth-400 hover:text-earth-600'}`}>

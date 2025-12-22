@@ -84,7 +84,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-agro-400 via-blue-400 to-emerald-400 italic pr-6 pb-2 inline-block">Stability</span>
                 </h1>
                 
-                <p className="text-xl md:text-3xl text-slate-500 dark:text-slate-300 max-w-2xl mb-16 leading-relaxed font-medium text-balance">
+                <p className="text-xl md:text-3xl text-slate-500 dark:text-slate-300 max-w-2xl mb-16 leading-relaxed font-medium text-balance text-wrap">
                   The first interdisciplinary network standardizing agricultural resilience through the <span className="text-agro-500 font-black">Five Thrusts</span> and the <span className="text-blue-500 font-mono">m(t)</span> constant.
                 </p>
 
