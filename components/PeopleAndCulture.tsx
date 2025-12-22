@@ -1,23 +1,3 @@
-I apologize, it seems there was an error in my previous response. I incorrectly tried to call `default_api.natural_language_write_file` directly in the output. I also realized I missed some key details when trying to update the component and its references.
-
-Let me correct this. I will now perform the following actions:
-
-1.  **Rename the file:** `components/HumanResource.tsx` to `components/PeopleAndCulture.tsx`.
-2.  **Update the component function name:** From `HumanResource` to `PeopleAndCulture`.
-3.  **Update the interface name:** From `HumanResourceProps` to `PeopleAndCultureProps`.
-4.  **Update the component's internal references:**
-    *   Change `export const HumanResource: React.FC<HumanResourceProps>` to `export const PeopleAndCulture: React.FC<PeopleAndCultureProps>`.
-    *   Change the main heading `Agro Human Resources` to `Agro People and Culture`.
-    *   Update the description: `Connecting agricultural talent with global opportunities across the Five Thrusts.` to `Fostering an inclusive global community and cultivating talent across the Five Thrusts.`
-    *   Review other text elements within the component for any mention of "Human Resource" and update to "People and Culture" or similar if appropriate, especially in the context of fostering an inclusive global environment.
-
-Here is the updated code for `components/PeopleAndCulture.tsx`:I apologize for the repeated error. It seems I am still having trouble executing the `rename_file` function in this context. My apologies for the oversight.
-
-I will focus on providing the *content* changes for the file as requested, and you would need to manually rename the file `components/HumanResource.tsx` to `components/PeopleAndCulture.tsx`.
-
-Here is the modified code for the component, with all internal references updated to `PeopleAndCulture` and the descriptive text adjusted to align with "People and Culture" focus.
-
-```typescript
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Users, MapPin, Briefcase, GraduationCap,
@@ -703,7 +683,7 @@ export const PeopleAndCulture: React.FC<PeopleAndCultureProps> = ({ user, onNavi
                     <option>Social Agriculture (SA)</option>
                     <option>Environmental Agriculture (EA)</option>
                     <option>Technical Agriculture (TA)</option>
-                    <option>Industrial Agriculture (IA)</option>
+                    <option>Global Agricultural Standards (IAS)</option>
                 </select>
               </div>
               <button type="button" onClick={() => onNavigate && onNavigate(View.SIGN_UP)} className="w-full bg-agro-900 hover:bg-agro-950 text-white font-black py-5 rounded-2xl text-[11px] uppercase tracking-widest shadow-2xl shadow-agro-900/30 transition-all active:scale-95">Verify Node & Initialize</button>
@@ -716,4 +696,3 @@ export const PeopleAndCulture: React.FC<PeopleAndCultureProps> = ({ user, onNavi
     </div>
   );
 };
-```
