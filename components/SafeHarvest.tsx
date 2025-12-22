@@ -1,3 +1,4 @@
+tsx
 import React, { useState, useRef } from 'react';
 import { 
   ShieldAlert, Map, AlertTriangle, Bug, Droplets, Thermometer, 
@@ -13,12 +14,12 @@ const ALERTS = [
   {
     id: 1,
     title: "Fall Armyworm Outbreak",
-    region: "Central & Eastern Zones",
+    region: "Global Monitoring Zones",
     level: "Critical",
     type: "Pest",
     date: "2 hours ago",
-    desc: "High larval density detected in maize fields. Immediate scouting recommended.",
-    action: "Apply neem-based bio-pesticides or approved IPM controls immediately.",
+    desc: "Global monitoring systems report widespread Fall Armyworm activity. Immediate international collaboration and surveillance are recommended.",
+    action: "Implement integrated pest management (IPM) strategies, including biological controls and sustainable practices.",
     icon: <Bug size={24} />,
     color: "bg-red-50 border-red-200 text-red-800",
     fullReport: "Satellite telemetry from Sentinel-Sync indicates a 40% increase in larval canopy damage across the Central cluster. Weather conditions (humid/warm) are currently accelerating the life cycle. Failure to treat within 48 hours could result in a 60% yield loss for late-stage crops.",
@@ -28,12 +29,12 @@ const ALERTS = [
   {
     id: 2,
     title: "Coffee Berry Disease (CBD)",
-    region: "High Altitude Areas",
+    region: "Global Coffee Belts",
     level: "High",
     type: "Fungal",
     date: "Today, 08:00 AM",
-    desc: "Cold, wet conditions favoring Colletotrichum kahawae spread.",
-    action: "Ensure proper canopy aeration and apply copper-based fungicides if threshold exceeded.",
+    desc: "Reports indicate increased Coffee Berry Disease incidence in high-altitude coffee-growing regions worldwide. Proactive measures are crucial.",
+    action: "Apply preventative fungicides and enhance cultural practices to mitigate spread.",
     icon: <Droplets size={24} />,
     color: "bg-orange-50 border-orange-200 text-orange-800",
     fullReport: "In-situ moisture sensors (TA Thrust) are reporting 90% leaf wetness for sustained 6-hour intervals. This creates the optimal window for fungal germination. Farmers in altitudes above 1,600m are at maximum risk. Precision pruning is the first line of defense to increase airflow.",
@@ -43,12 +44,12 @@ const ALERTS = [
   {
     id: 3,
     title: "Heat Stress Warning",
-    region: "Lowland Pastures",
+    region: "Vulnerable Global Agricultural Regions",
     level: "Moderate",
     type: "Weather",
     date: "Yesterday",
-    desc: "Temperatures expected to exceed 35°C. Livestock at risk of dehydration.",
-    action: "Increase water availability and provide shade for all grazing animals.",
+    desc: "Rising global temperatures are increasing heat stress risks in vulnerable agricultural areas. Adaptive management is essential.",
+    action: "Ensure adequate water supply and provide shade for crops and livestock.",
     icon: <Thermometer size={24} />,
     color: "bg-yellow-50 border-yellow-200 text-yellow-800",
     fullReport: "Regional m(t) indices predict a localized heat dome over the semi-arid pastures for the next 72 hours. Evapotranspiration rates are high. Soil moisture In(val) is dropping to critical levels (12%). Strategic water reserves must be managed for livestock priority.",
@@ -58,10 +59,10 @@ const ALERTS = [
 ];
 
 const EMERGENCY_CONTACTS = [
-  { region: "Global HQ", service: "Strategic Response", phone: "+254 700 000 000" },
-  { region: "East Africa", service: "Biological Threat Unit", phone: "999-AGRO" },
-  { region: "Regional", service: "Water Authority (Crisis)", phone: "+254 800 111 222" },
-  { region: "Veterinary", service: "Zoonotic Disease Alert", phone: "+254 722 999 888" }
+  { region: "Global HQ", service: "Global Agri-Emergency Response", phone: "+1-800-AGRO-HLP" },
+  { region: "Regional Desk", service: "Regional Agricultural Hotlines", phone: "+1-800-REG-AGRO" },
+  { region: "Disease Control", service: "Global Health & Crop Protection", phone: "+1-800-DIS-EASE" },
+  { region: "Climate Impact", service: "Climate Resilience Support", phone: "+1-800-CLI-MATE" }
 ];
 
 interface SafeHarvestProps {
