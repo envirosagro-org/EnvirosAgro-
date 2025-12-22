@@ -1,4 +1,4 @@
-import React from 'react';
+noimport React from 'react';
 
 export enum View {
   HOME = 'HOME',
