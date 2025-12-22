@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Gamepad2, Glasses, CheckCircle, Lock, Play, RotateCcw, Info, Battery, Wifi, MousePointer2, Box, Loader2, Move, Hand, Menu } from 'lucide-react';
 
@@ -50,11 +49,6 @@ export const SmartFarmVR: React.FC = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  /**
-   * Triggers subtle haptic feedback via the Web Vibration API.
-   * @param duration Milliseconds for the vibration burst or a vibration pattern array.
-   */
-  // Fix: Changed type of duration from number to number | number[] to support vibration patterns.
   const triggerHaptic = (duration: number | number[] = 10) => {
     if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
       window.navigator.vibrate(duration);
@@ -62,20 +56,18 @@ export const SmartFarmVR: React.FC = () => {
   };
 
   const handleEnterSimulation = () => {
-    triggerHaptic(40); // Stronger burst for entering simulation
+    triggerHaptic(40);
     setIsLoading(true);
-    // Simulate asset loading delay
     setTimeout(() => {
         setIsLoading(false);
         setIsSimulating(true);
-        // Fix: This call is now valid as triggerHaptic accepts number[].
-        triggerHaptic([10, 30, 10]); // Multi-burst signal for "Ready"
+        triggerHaptic([10, 30, 10]);
     }, 2500);
   };
 
   const handleModuleSelect = (module: typeof VR_MODULES[0]) => {
     if (module.status !== 'Locked' && !isSimulating && !isLoading) {
-        triggerHaptic(15); // Light click feedback
+        triggerHaptic(15);
         setActiveModule(module);
     }
   };
@@ -86,8 +78,7 @@ export const SmartFarmVR: React.FC = () => {
   };
 
   const handleReset = () => {
-    // Fix: This call is now valid as triggerHaptic accepts number[].
-    triggerHaptic([10, 10, 10]); // Rapid triple tap for reset
+    triggerHaptic([10, 10, 10]);
   };
 
   return (

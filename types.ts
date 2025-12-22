@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 export enum View {
@@ -47,6 +46,8 @@ export enum View {
   NETWORK_INPUT_HUB = 'NETWORK_INPUT_HUB',
   AGRO_WORKERS_CLOUD = 'AGRO_WORKERS_CLOUD',
   TRANSMISSION_GATEWAY = 'TRANSMISSION_GATEWAY',
+  FUTURE_VISION = 'FUTURE_VISION',
+  SIX_SIGMA_RCA = 'SIX_SIGMA_RCA'
 }
 
 export interface NavItem {

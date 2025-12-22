@@ -7,7 +7,7 @@ import {
   Activity, X, Terminal, ArrowRight, ShieldAlert,
   Maximize2, Monitor, Settings, Globe, Command, Radio
 } from 'lucide-react';
-import { Chat, GenerateContentResponse } from "@google/genai";
+import type { Chat, GenerateContentResponse } from "@google/genai";
 
 const SUGGESTIONS = [
   "Calculate regional m(t) resilience",

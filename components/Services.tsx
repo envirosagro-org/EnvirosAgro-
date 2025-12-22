@@ -6,7 +6,6 @@ import {
   ChevronRight, ArrowUpRight, BarChart3, FlaskConical, Droplet,
   Dna, Cpu, Factory, Users, ShieldAlert, Sparkles, Loader2,
   Telescope, Beaker, Binary, Atom,
-  // Added missing icons: Leaf and TrendingUp
   Leaf, TrendingUp
 } from 'lucide-react';
 import { View } from '../types';
@@ -87,14 +86,13 @@ const SERVICES = [
       "Industrial safety m-score calculation"
     ],
     deliverables: "Certified Industrial Integrity Certificate + Optimization Roadmap",
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&auto=format&fit=crop&q=60"
   }
 ];
 
 const THRUST_TAGS = [
   { id: 'All', icon: <Layers size={14}/> },
   { id: 'SA', icon: <Users size={14}/> },
-  // Fix: Leaf icon is now defined via import
   { id: 'EA', icon: <Leaf size={14}/> },
   { id: 'HA', icon: <ShieldAlert size={14}/> },
   { id: 'TA', icon: <Cpu size={14}/> },
@@ -255,7 +253,7 @@ export const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
                
                <div className="flex-1 flex flex-col justify-center">
                   <div className="flex justify-between items-start mb-6">
-                     <div className="bg-earth-50 dark:bg-earth-800 p-4 rounded-2xl text-agro-600 dark:text-agro-400 shadow-sm border border-black/5 group-hover:rotate-12 transition-transform">
+                     <div className="p-4 bg-earth-50 dark:bg-earth-800 rounded-2xl text-agro-600 dark:text-agro-400 shadow-sm border border-black/5 group-hover:rotate-12 transition-transform">
                         {service.icon}
                      </div>
                      <span className="bg-agro-50 dark:bg-agro-900/40 text-agro-600 dark:text-agro-400 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-agro-100 dark:border-agro-800">
@@ -307,7 +305,6 @@ export const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
                    { label: 'Institutional Sync', val: '24 Nodes', icon: <Globe size={20}/> },
                    { label: 'Data Integrity', val: '99.8%', icon: <Activity size={20}/> },
                    { label: 'Network Reach', val: '2.5M+', icon: <Users size={20}/> },
-                   // Fix: TrendingUp icon is now defined via import
                    { label: 'Maturity C(a)', val: '8.4 Avg', icon: <TrendingUp size={20}/> }
                  ].map(stat => (
                    <div key={stat.label} className="bg-white/5 backdrop-blur-3xl p-8 rounded-[2.5rem] border border-white/10 shadow-inner group cursor-default hover:bg-white/10 transition-all">

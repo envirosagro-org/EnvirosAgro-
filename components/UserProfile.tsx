@@ -14,7 +14,7 @@ interface UserProfileProps {
 
 const getCroppedImg = (imageSrc: string, pixelCrop: { x: number, y: number, width: number, height: number }): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const image = new Image();
+    const image = document.createElement('img');
     image.src = imageSrc;
     image.onload = () => {
       const canvas = document.createElement('canvas');
@@ -72,7 +72,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
     if (!tempImage) return;
     setIsProcessing(true);
     try {
-        const img = new Image();
+        const img = document.createElement('img');
         img.src = tempImage;
         await new Promise(r => img.onload = r);
         const size = Math.min(img.width, img.height);
@@ -281,8 +281,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
                         <label className="text-[10px] font-black uppercase text-earth-400 tracking-widest px-1">Identity Visual</label>
                         <div className="flex items-center gap-8 bg-earth-50 dark:bg-earth-800 p-8 rounded-3xl border border-earth-100 dark:border-earth-700">
                            <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                                <div className="w-24 h-24 bg-white dark:bg-earth-900 rounded-full overflow-hidden border-4 border-white dark:border-earth-700 shadow-xl group-hover:brightness-75 transition-all">
-                                    {formData.avatar ? <img src={formData.avatar} className="w-full h-full object-cover" alt="Avatar" /> : <div className="w-full h-full flex items-center justify-center text-earth-300"><ImageIcon size={40}/></div>}
+                                <div className="w-24 h-24 bg-white dark:bg-earth-800 rounded-full overflow-hidden border-4 border-white dark:border-earth-700 shadow-xl group-hover:brightness-75 transition-all">
+                                    {formData.avatar ? <img src={formData.avatar} className="w-full h-full object-cover rounded-full" alt="Avatar" /> : <div className="w-full h-full flex items-center justify-center text-earth-300"><ImageIcon size={40}/></div>}
                                 </div>
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Upload size={24} className="text-white" /></div>
                            </div>
@@ -292,7 +292,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser }) 
                                <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
                                <button type="button" onClick={() => fileInputRef.current?.click()} className="text-[10px] font-black uppercase tracking-widest text-agro-600 hover:text-agro-700 transition-colors flex items-center gap-2">
                                   <Camera size={14} /> Open Image Studio
-                               </button>
+                                </button>
                            </div>
                         </div>
                     </div>

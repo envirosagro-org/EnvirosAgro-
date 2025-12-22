@@ -3,10 +3,10 @@ import { View } from '../types';
 import { 
   ArrowRight, Globe, Sprout, Database, Zap, 
   ShieldCheck, Search, Layers, 
-  Droplets, Sun, ChevronDown, 
-  Leaf, Users, Cpu, Wallet, Microscope, Signal, ChevronRight, Activity,
+  Droplets, Sun, ChevronDown, ChevronRight,
+  Leaf, Users, Cpu, Wallet, Microscope, Signal, Activity,
   Handshake, Target, Terminal, Satellite, Wifi, Fingerprint, Network,
-  BarChart3, Box
+  BarChart3, Box, Sparkles, Send
 } from 'lucide-react';
 
 interface HeroProps {
@@ -36,71 +36,34 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
     }
   };
 
+  const trendingTags = ["Soil Resilience", "EA Thrust", "Carbon Ledger", "SI-D Diagnostic"];
+
   const thrusts = [
     { 
-      id: 'SA', 
-      label: "Social", 
-      icon: <Users size={24} />, 
-      title: "Social Immunity",
-      desc: "Diagnosing fractures like SI-D to build durable communal bonds.",
-      color: "text-rose-500", 
-      bg: "bg-rose-500/5", 
-      border: "border-rose-500/20",
-      target: View.COMMUNITY
+      id: 'SA', label: "Social", icon: <Users size={24} />, title: "Social Immunity", desc: "Diagnosing fractures like SI-D to build durable communal bonds.",
+      color: "text-rose-500", bg: "bg-rose-500/5", border: "border-rose-500/20", target: View.COMMUNITY
     },
     { 
-      id: 'EA', 
-      label: "Environmental", 
-      icon: <Leaf size={24} />, 
-      title: "Resource Integrity",
-      desc: "Regenerating soil health and localized biomass reserves.",
-      color: "text-green-500", 
-      bg: "bg-green-500/5", 
-      border: "border-green-500/20",
-      target: View.CARBON_LEDGER
+      id: 'EA', label: "Environmental", icon: <Leaf size={24} />, title: "Resource Integrity", desc: "Regenerating soil health and localized biomass reserves.",
+      color: "text-green-500", bg: "bg-green-500/5", border: "border-green-500/20", target: View.CARBON_LEDGER
     },
     { 
-      id: 'HA', 
-      label: "Health", 
-      icon: <ShieldCheck size={24} />, 
-      title: "Biological Safety",
-      desc: "Standardizing safety protocols for human and plant health.",
-      color: "text-red-500", 
-      bg: "bg-red-500/5", 
-      border: "border-red-500/20",
-      target: View.SAFE_HARVEST
+      id: 'HA', label: "Health", icon: <ShieldCheck size={24} />, title: "Biological Safety", desc: "Standardizing safety protocols for human and plant health.",
+      color: "text-red-500", bg: "bg-red-500/5", border: "border-red-500/20", target: View.SAFE_HARVEST
     },
     { 
-      id: 'TA', 
-      label: "Technical", 
-      icon: <Cpu size={24} />, 
-      title: "AI Precision",
-      desc: "Optimizing efficiency through diagnostic neural networks.",
-      color: "text-blue-500", 
-      bg: "bg-blue-500/5", 
-      border: "border-blue-500/20",
-      target: View.ROADMAP_AI
+      id: 'TA', label: "Technical", icon: <Cpu size={24} />, title: "AI Precision", desc: "Optimizing efficiency through diagnostic neural networks.",
+      color: "text-blue-500", bg: "bg-blue-500/5", border: "border-blue-500/20", target: View.ROADMAP_AI
     },
     { 
-      id: 'IA', 
-      label: "Industrial", 
-      icon: <Layers size={24} />, 
-      title: "Value Maturity",
-      desc: "Scaling supply chains to global industrial standards.",
-      color: "text-slate-400", 
-      bg: "bg-slate-500/5", 
-      border: "border-slate-500/20",
-      target: View.SCALEUP_SUMMIT
+      id: 'IA', label: "Industrial", icon: <Layers size={24} />, title: "Value Maturity", desc: "Scaling supply chains to global industrial standards.",
+      color: "text-slate-400", bg: "bg-slate-500/5", border: "border-slate-500/20", target: View.SCALEUP_SUMMIT
     }
   ];
 
   return (
     <div className="flex flex-col w-full bg-[#fafaf9] dark:bg-[#020617] transition-colors duration-700 overflow-hidden">
-      
-      {/* 1. STRATEGIC CINEMATIC HERO */}
       <section className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden">
-        
-        {/* Ops Center Background Textures */}
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
            <div className="absolute top-[-10%] left-[-10%] w-[100%] h-[100%] bg-agro-900/10 blur-[200px] rounded-full animate-pulse-gentle"></div>
            <div className="absolute bottom-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-900/10 blur-[180px] rounded-full animate-float" style={{animationDelay: '-4s'}}></div>
@@ -109,8 +72,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
 
         <div className="relative z-10 w-full grid lg:grid-cols-12 gap-24 items-center pt-32 pb-40 max-w-[1800px]">
-          
-          {/* Main Hero Message */}
           <div className="lg:col-span-7 text-left animate-in fade-in slide-in-from-left-20 duration-1000">
             <div className="ea-header-block bg-white/5 backdrop-blur-3xl border-white/10 p-10 md:p-14 mb-8 shadow-cinematic-xl ring-1 ring-white/10 rounded-[4rem]">
                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-agro-500/10 border border-agro-500/20 text-agro-500 text-[10px] font-black uppercase tracking-[0.5em] mb-12 shadow-sm">
@@ -129,10 +90,10 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
 
                 <div className="flex flex-wrap gap-6 mb-16">
                   <button 
-                      onClick={() => onNavigate(View.SUSTAINABILITY_FRAMEWORK)}
-                      className="nature-impact-gradient text-white font-black py-7 px-16 rounded-[2.5rem] shadow-cinematic-xl hover:scale-105 active:scale-95 transition-all text-xs uppercase tracking-[0.4em] flex items-center gap-6 group"
+                      onClick={() => onNavigate(View.FUTURE_VISION)}
+                      className="bg-purple-600 hover:bg-purple-700 text-white font-black py-7 px-16 rounded-[2.5rem] shadow-[0_20px_50px_-12px_rgba(147,51,234,0.4)] hover:scale-105 active:scale-95 transition-all text-xs uppercase tracking-[0.4em] flex items-center gap-6 group"
                   >
-                      The Resilience Framework <ArrowRight size={24} className="group-hover:translate-x-1.5 transition-transform" />
+                      Future Vision Lab <Sparkles size={24} fill="currentColor" className="group-hover:rotate-12 transition-transform" />
                   </button>
                   <button 
                       onClick={() => onNavigate(View.NETWORK_INPUT_HUB)}
@@ -142,25 +103,42 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                   </button>
                 </div>
 
-                <form onSubmit={handleSearchSubmit} className="relative group max-w-2xl">
-                    <div className="absolute left-10 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-agro-500 transition-colors">
-                      <Terminal size={28} />
-                    </div>
-                    <input 
-                        type="text" 
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        placeholder="Query Global Intelligence Ledger..." 
-                        className="w-full bg-white/5 border border-white/10 rounded-[3rem] py-9 pl-24 pr-12 text-slate-900 dark:text-white placeholder-slate-600 focus:outline-none focus:ring-[12px] focus:ring-agro-500/5 transition-all font-bold text-2xl shadow-inner backdrop-blur-md"
-                    />
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-agro-600 text-white rounded-2xl shadow-lg opacity-0 group-focus-within:opacity-100 transition-all hover:bg-agro-500 cursor-pointer">
-                      <Search size={24} />
-                    </div>
-                </form>
+                <div className="max-w-2xl">
+                  <form onSubmit={handleSearchSubmit} className="relative group mb-6">
+                      <div className="absolute left-10 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-agro-500 transition-colors">
+                        <Terminal size={28} />
+                      </div>
+                      <input 
+                          type="text" 
+                          value={searchValue}
+                          onChange={(e) => setSearchValue(e.target.value)}
+                          placeholder="Query Global Intelligence Ledger..." 
+                          className="w-full bg-white/5 border border-white/10 rounded-[3rem] py-9 pl-24 pr-40 text-slate-900 dark:text-white placeholder-slate-600 focus:outline-none focus:ring-[12px] focus:ring-agro-500/5 transition-all font-bold text-2xl shadow-inner backdrop-blur-md"
+                      />
+                      <button 
+                        type="submit"
+                        disabled={!searchValue.trim()}
+                        className="absolute right-6 top-1/2 -translate-y-1/2 bg-agro-600 hover:bg-agro-500 disabled:bg-slate-800 text-white p-5 rounded-full shadow-2xl transition-all active:scale-90"
+                      >
+                        <Send size={24} />
+                      </button>
+                  </form>
+                  <div className="flex flex-wrap items-center gap-4 px-10">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Trending:</span>
+                    {trendingTags.map((tag) => (
+                      <button 
+                        key={tag}
+                        onClick={() => onNavigate(View.KNOWLEDGE, tag)}
+                        className="text-[10px] font-black text-agro-500 hover:text-agro-400 uppercase tracking-widest transition-colors"
+                      >
+                        #{tag.replace(/\s/g, '_').toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
+                </div>
             </div>
           </div>
 
-          {/* 2. THE RESILIENCE COMMAND ENGINE */}
           <div className="lg:col-span-5 hidden lg:block animate-in fade-in zoom-in-95 duration-1000 delay-300">
              <div className="bg-slate-900/60 dark:bg-black/60 backdrop-blur-[100px] rounded-[6rem] p-20 shadow-[0_80px_150px_rgba(0,0,0,0.8)] relative overflow-hidden group border-4 border-white/5 ring-1 ring-white/10">
                 <div className="absolute top-0 right-0 p-12 opacity-[0.04] text-agro-500 pointer-events-none group-hover:scale-110 transition-transform duration-[20s]"><Satellite size={450} /></div>
@@ -222,10 +200,9 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* 3. GLOBAL IMPACT RIBBON */}
+      {/* Global Impact Ribbon */}
       <div className="relative z-20 -mt-32 mb-40 px-12">
         <div className="w-full bg-white dark:bg-slate-900 rounded-[4rem] border border-white/10 shadow-cinematic-xl py-14 px-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 items-center backdrop-blur-3xl relative overflow-hidden">
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/grid.png')] opacity-[0.02] pointer-events-none"></div>
             {[
                 { label: "Network Nodes", value: "12,482", icon: <Globe className="text-blue-500" />, trend: "+2.4%" },
                 { label: "Biomass Vol", value: "2.4M Tons", icon: <Layers className="text-agro-500" />, trend: "+12.1%" },
@@ -246,7 +223,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* 4. THE INTEGRATED FIVE THRUSTS MATRIX */}
       <section className="w-full mb-56 px-12 max-w-[1700px] mx-auto">
           <div className="text-center mb-32 max-w-5xl mx-auto">
               <div className="ea-label-meta justify-center mb-6">Framework Architecture</div>
@@ -276,7 +252,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                       <h4 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] leading-none mb-8">{thrust.label}</h4>
                       <p className="text-base font-bold text-slate-500 dark:text-slate-400 leading-relaxed mb-16 flex-1">{thrust.desc}</p>
                       
-                      <div className={`w-16 h-16 rounded-[1.8rem] border-2 flex items-center justify-center transition-all duration-500 ${
+                      <div className={`w-16 h-16 rounded-1.8rem border-2 flex items-center justify-center transition-all duration-500 ${
                           activeThrust === thrust.id ? `${thrust.color} border-agro-500/30 rotate-45 bg-agro-500/10` : 'border-slate-200 dark:border-white/5 text-slate-300'
                       }`}>
                           <ChevronRight size={28} />
@@ -285,86 +261,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
               ))}
           </div>
       </section>
-      
-      {/* 5. STRATEGIC ENTRY TERMINALS */}
-      <section className="bg-slate-100 dark:bg-white/5 py-56 px-12 relative overflow-hidden mb-48 border-y border-white/5">
-          <div className="absolute inset-0 z-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]"></div>
-          
-          <div className="w-full relative z-10 max-w-[1700px] mx-auto">
-              <div className="flex flex-col xl:flex-row justify-between items-start xl:items-end mb-32 gap-16">
-                  <div className="max-w-4xl">
-                      <div className="ea-label-meta mb-6">Network Access Infrastructure</div>
-                      <h3 className="text-6xl md:text-[10rem] font-serif font-bold text-slate-900 dark:text-white tracking-tighter leading-[0.8]">Global <br/>Gateways</h3>
-                  </div>
-                  <button onClick={() => onNavigate(View.SERVICES)} className="flex items-center gap-6 px-16 py-8 rounded-[3rem] bg-white dark:bg-slate-900 border-4 border-slate-200 dark:border-white/10 font-black text-sm uppercase tracking-[0.4em] hover:border-agro-600 hover:text-agro-600 transition-all group shadow-cinematic-lg whitespace-nowrap active:scale-95">
-                      View Regional Nodes <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
-                  </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  {[
-                      { id: View.CUSTOMER, title: "Producers & Collectives", sub: "Production Node", desc: "Access verified inputs, diagnostic neural networks, and peer-to-peer markets.", icon: <Sprout size={48} />, color: "rose" },
-                      { id: View.KNOWLEDGE, title: "Intelligence & Research", sub: "Data Node", desc: "Contribute to and query the global database of standardized agricultural intelligence.", icon: <Microscope size={48} />, color: "blue" },
-                      { id: View.PARTNERSHIPS, title: "Strategic Alliances", sub: "Collaborative Node", desc: "Integration pathways for industrial, governmental, and NGO organizations.", icon: <Handshake size={48} />, color: "emerald" },
-                      { id: View.INVESTOR_PORTAL, title: "Institutional Capital", sub: "Financial Node", desc: "Direct investment opportunities in m(t) verified ag-tech infrastructure.", icon: <Wallet size={48} />, color: "amber" }
-                  ].map((portal, i) => (
-                      <div 
-                        key={i}
-                        onClick={() => onNavigate(portal.id)}
-                        className="ea-card p-14 md:p-20 flex flex-col xl:flex-row items-start gap-14 cursor-pointer group bg-white/80 dark:bg-slate-900/80 hover:bg-white dark:hover:bg-slate-900 rounded-[4rem] border-earth-100 dark:border-white/5"
-                      >
-                          <div className={`p-12 rounded-[3rem] transition-all duration-1000 group-hover:scale-110 group-hover:rotate-6 bg-${portal.color}-500/10 text-${portal.color}-500 shadow-inner border border-white/10 shrink-0`}>
-                              {portal.icon}
-                          </div>
-                          <div className="flex-1 pt-4">
-                              <span className={`text-[10px] font-black uppercase tracking-[0.5em] mb-6 block text-${portal.color}-500`}>{portal.sub}</span>
-                              <h4 className="text-5xl font-serif font-bold text-slate-900 dark:text-white mb-8 tracking-tight leading-none group-hover:text-agro-600 transition-colors">{portal.title}</h4>
-                              <p className="text-xl text-slate-500 dark:text-slate-400 font-medium leading-relaxed mb-12 opacity-90">{portal.desc}</p>
-                              <div className={`flex items-center gap-6 font-black text-[11px] uppercase tracking-[0.5em] text-${portal.color}-500 opacity-100 md:opacity-0 group-hover:opacity-100 group-hover:gap-10 transition-all duration-1000`}>
-                                  Connect Terminal <ArrowRight size={24} />
-                              </div>
-                          </div>
-                      </div>
-                  ))}
-              </div>
-          </div>
-      </section>
-
-      {/* 6. CALL TO ACTION - COMMAND CENTER STYLE */}
-      <section className="px-12 mb-48 max-w-[1800px] mx-auto">
-          <div className="w-full py-56 bg-[#050a14] rounded-[8rem] relative overflow-hidden shadow-cinematic-xl flex flex-col items-center text-center border-8 border-white/5 group/cta">
-              <div className="absolute inset-0 z-0 opacity-[0.04] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/diagonal-stripes.png')] group-hover/cta:scale-110 transition-transform duration-[20s]"></div>
-              <div className="absolute top-0 right-0 w-[80rem] h-[80rem] bg-blue-600/10 blur-[250px] rounded-full -translate-y-1/2 translate-x-1/2"></div>
-              
-              <div className="relative z-10 max-w-[1000px] px-12">
-                  <div className="w-32 h-32 bg-agro-600 rounded-[4rem] flex items-center justify-center mx-auto mb-16 shadow-[0_0_80px_rgba(34,197,94,0.4)] border-8 border-white/10 animate-float ring-[16px] ring-white/5">
-                      <Signal size={56} className="text-white" />
-                  </div>
-                  <h3 className="text-6xl md:text-[10rem] font-serif font-bold text-white mb-16 tracking-tighter leading-[0.8] text-balance">The Pulse of <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-agro-400 via-blue-400 to-agro-400 animate-shimmer" style={{backgroundSize: '200% 100%'}}>Global Progress</span></h3>
-                  <p className="text-2xl md:text-4xl text-agro-200/60 mb-24 leading-relaxed font-light max-w-4xl mx-auto px-4 text-balance">
-                      Synchronize your operations with the most advanced agricultural infrastructure ever built. Verifiable, standardized, and designed for long-term planetary resilience.
-                  </p>
-                  <div className="flex flex-col sm:flex-row justify-center gap-10 w-full max-w-3xl mx-auto">
-                      <button onClick={() => onNavigate(View.SIGN_UP)} className="flex-1 bg-white text-[#050a14] px-16 py-8 rounded-full font-black uppercase text-sm tracking-[0.5em] shadow-2xl hover:scale-105 active:scale-95 transition-all">Identify Node</button>
-                      <button onClick={() => onNavigate(View.PARTNERSHIPS)} className="flex-1 bg-white/5 text-white border-4 border-white/10 px-16 py-8 rounded-full font-black uppercase text-sm tracking-[0.5em] hover:bg-white/10 transition-all backdrop-blur-xl">Partner Access</button>
-                  </div>
-              </div>
-          </div>
-      </section>
-
-      {/* Strategic Bottom Visual */}
-      <div className="w-full pb-32 pt-20 flex flex-col items-center gap-16 px-12">
-          <div className="flex items-center gap-10 opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-[3s]">
-             <Globe size={48} className="text-slate-400" />
-             <span className="font-serif font-black text-6xl text-slate-400 tracking-tighter">EnvirosAgro Strategic Hub</span>
-          </div>
-          <div className="flex flex-wrap justify-center gap-20 text-[11px] font-black uppercase tracking-[0.6em] text-slate-500">
-             <span className="hover:text-agro-600 cursor-pointer transition-colors">Protocol v4.2.2-STABLE</span>
-             <span className="hover:text-agro-600 cursor-pointer transition-colors">m(t) Verified Node</span>
-             <span className="hover:text-agro-600 cursor-pointer transition-colors">Digital Sovereignty Layer</span>
-             <span className="hover:text-agro-600 cursor-pointer transition-colors">Strategic Ops_Ok</span>
-          </div>
-      </div>
     </div>
   );
 };

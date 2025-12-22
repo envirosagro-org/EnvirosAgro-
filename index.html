@@ -6,23 +6,30 @@
     <title>EnvirosAgro | Global Strategic Agriculture Network</title>
     <meta name="description" content="EnvirosAgro Strategic Hub: Quantifying global agricultural resilience through the Five Thrusts framework and m(t) intelligence.">
     
-    <!-- ESM Import Map -->
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@^19.2.3",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-        "react/": "https://esm.sh/react@^19.2.3/",
-        "vite": "https://esm.sh/vite@^7.3.0",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
-        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-        "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-        "recharts": "https://esm.sh/recharts@^3.6.0"
-      }
-    }
+    <!-- Process Shim -->
+    <script>
+        window.process = window.process || { env: {} };
     </script>
 
-    <!-- Tailwind & Theme Config -->
+    <!-- Optimized ESM Import Map -->
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react/": "https://esm.sh/react@19.0.0/",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/": "https://esm.sh/react-dom@19.0.0/",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.475.0",
+    "@google/genai": "https://esm.sh/@google/genai@0.21.0",
+    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
+    "vite": "https://esm.sh/vite@^7.3.0",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+  }
+}
+</script>
+
+    <!-- Tailwind & Global Theme Engine -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -37,11 +44,6 @@
                         earth: {
                             50: '#fdfaf9', 100: '#f7f2f0', 200: '#f1e6e1', 300: '#e8d3ca', 400: '#d9b3a3',
                             500: '#c78d73', 600: '#b56d4f', 700: '#9c543a', 800: '#7f4430', 900: '#683727', 950: '#0a0504',
-                        },
-                        strategic: {
-                            blue: '#0f172a',
-                            slate: '#1e293b',
-                            accent: '#38bdf8'
                         }
                     },
                     fontFamily: {
@@ -54,8 +56,10 @@
                         'spin-slow': 'spin 20s linear infinite',
                         'pulse-gentle': 'pulse-gentle 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'progress': 'progress 3s ease-in-out infinite',
-                        'shimmer': 'shimmer 2.5s linear infinite',
                         'scan': 'scan 3s ease-in-out infinite',
+                        'fade-in': 'fade-in 0.5s ease-out forwards',
+                        'slide-in-bottom': 'slide-in-bottom 0.6s ease-out forwards',
+                        'zoom-in': 'zoom-in 0.3s ease-out forwards',
                     },
                     keyframes: {
                         float: {
@@ -66,13 +70,25 @@
                           '0%, 100%': { opacity: 1 },
                           '50%': { opacity: 0.8 },
                         },
-                        shimmer: {
-                          '0%': { backgroundPosition: '-200% 0' },
-                          '100%': { backgroundPosition: '200% 0' },
+                        progress: {
+                          '0%': { transform: 'translateX(-100%)' },
+                          '100%': { transform: 'translateX(100%)' }
                         },
                         scan: {
                           '0%, 100%': { transform: 'translateY(0)', opacity: 0.2 },
                           '50%': { transform: 'translateY(100%)', opacity: 1 },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        'slide-in-bottom': {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        'zoom-in': {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
                         }
                     },
                     boxShadow: {
@@ -91,12 +107,22 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
         
-        /* High Fidelity Overlays */
         .strategic-glass {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .strategic-glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            border-radius: inherit;
         }
         
         .dark .strategic-glass {
@@ -106,15 +132,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .op-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        }
-
-        .nature-impact-gradient {
-            background: linear-gradient(135deg, #15803d 0%, #0369a1 100%);
-        }
-
-        /* High Precision Components */
         .ea-card {
             @apply bg-white dark:bg-earth-950/50 border border-earth-100 dark:border-white/5 rounded-[2.5rem] shadow-sm transition-all duration-700 hover:shadow-strategic hover:-translate-y-2 overflow-hidden backdrop-blur-sm;
         }
@@ -131,7 +148,10 @@
             @apply text-[9px] font-black uppercase tracking-[0.5em] text-agro-500 mb-4 flex items-center gap-2;
         }
 
-        /* Custom Scrollbar for Hubs */
+        .ea-label {
+            @apply text-[10px] font-bold text-earth-500 flex items-center gap-2;
+        }
+
         .ea-scroll-area {
             @apply overflow-y-auto pr-2;
         }
@@ -143,17 +163,20 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .text-balance { text-wrap: balance; }
+        .animate-in { animation: fade-in 0.5s ease-out; }
+        .fade-in { animation: fade-in 0.5s ease-out forwards; }
+        .zoom-in { animation: zoom-in 0.3s ease-out forwards; }
+        .slide-in-from-left-4 { animation: slide-in-from-left 0.5s ease-out forwards; }
+        .slide-in-from-top-2 { animation: slide-in-from-top 0.4s ease-out forwards; }
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+        @keyframes slide-in-from-left {
+            0% { transform: translateX(-20px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
 
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        @keyframes slide-in-from-top {
+            0% { transform: translateY(-20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
         @media (max-width: 640px) {
@@ -164,5 +187,6 @@
 </head>
 <body class="bg-[#fafaf9] dark:bg-[#020617] text-slate-900 dark:text-slate-100 selection:bg-agro-500 selection:text-white antialiased overflow-x-hidden transition-colors duration-500">
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>

@@ -1,6 +1,4 @@
-
 import React, { useState, useMemo } from 'react';
-/* Added missing FileText import from lucide-react */
 import { ClipboardCheck, ArrowRight, ShieldCheck, AlertCircle, TrendingUp, DollarSign, Package, Users, Clock, Zap, Target, HelpCircle, Loader2, FileText } from 'lucide-react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -34,10 +32,9 @@ export const SupplyChainAudit: React.FC = () => {
   const runAudit = () => {
     setIsAuditing(true);
     setTimeout(() => {
-        // Fix: Explicitly cast Object.values(scores) to number[] to ensure the reduce result is a number for arithmetic division.
         const values = Object.values(scores) as number[];
-        const total = values.reduce((a: number, b: number) => a + b, 0);
-        const avg = total / 5;
+        const total = values.reduce((acc: number, curr: number) => acc + curr, 0);
+        const avg = total / values.length;
         let verdict = "MODERATE EFFICIENCY";
         let recommendation = "Your performance aligns with current regional 'Know-How' benchmarks. Focus on digitizing resource allocation to reduce haphazard distribution.";
         

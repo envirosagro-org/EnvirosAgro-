@@ -3,9 +3,6 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  define: {
-    'process.env': {} // Shim process.env for browser compatibility
-  },
   build: {
     outDir: 'dist',
     sourcemap: false,

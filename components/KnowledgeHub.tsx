@@ -8,7 +8,13 @@ import {
   ArrowUpRight, ArrowUp, ChevronDown, ListFilter, Info, Clock,
   History, Settings2, BarChart3, ShieldAlert, GraduationCap, Award, PlayCircle,
   User,
-  Heart
+  Heart,
+  Video,
+  Mic,
+  Volume2,
+  Users,
+  Radio,
+  LogOut
 } from 'lucide-react';
 import { DATASETS } from './data';
 import { View } from '../types';
@@ -34,6 +40,12 @@ interface LearningModule {
     fullContent?: string;
 }
 
+const MASTERCLASSES = [
+  { id: 'mc1', title: 'Diagnosing SI-D in Post-Conflict Clusters', instructor: 'Dr. Elena Rossi', date: 'May 22, 2024', time: '14:00 UTC', status: 'Registration Open', attendees: 450, icon: <Users size={18}/> },
+  { id: 'mc2', title: 'Advanced m(t) Modeling for Societies', instructor: 'Lead Strategic Advisor', date: 'May 25, 2024', time: '10:00 UTC', status: 'Limited Spots', attendees: 128, icon: <Activity size={18}/> },
+  { id: 'mc3', title: 'Biomass Hashing & Tokenz™ Liquidity', instructor: 'EA Finance Node', date: 'June 01, 2024', time: '16:30 UTC', status: 'Waitlist', attendees: 890, icon: <Zap size={18}/> }
+];
+
 interface KnowledgeHubProps {
     onNavigate?: (view: View) => void;
     initialSearch?: string;
@@ -51,6 +63,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
   const [isSummarizing, setIsSummarizing] = useState(false);
   const [aiSummary, setAiSummary] = useState<string | null>(null);
   const [showAiModal, setShowAiModal] = useState(false);
+  const [showMasterclassModal, setShowMasterclassModal] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -135,6 +148,19 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
     scrollToTop();
   };
 
+  const handleStartSidTrack = () => {
+    setActiveCategory('Social');
+    setReadingId(null);
+    setSearchTerm('SI-D');
+    scrollToTop();
+    if (window.navigator.vibrate) window.navigator.vibrate(20);
+  };
+
+  const handleOpenMasterclasses = () => {
+    setShowMasterclassModal(true);
+    if (window.navigator.vibrate) window.navigator.vibrate(10);
+  };
+
   if (readingId && activeModule) {
     return (
       <div className="max-w-[1600px] mx-auto px-6 py-4 animate-in fade-in duration-500 h-[calc(100vh-140px)] flex flex-col">
@@ -212,7 +238,7 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
         <div className="ea-header-block p-10 flex flex-col xl:flex-row justify-between items-center gap-10 bg-slate-900/5 dark:bg-white/5 border border-black/5 dark:border-white/5 shadow-inner backdrop-blur-3xl">
             <div className="flex-1 text-center xl:text-left">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-lg bg-agro-600 text-white text-[9px] font-black uppercase tracking-widest mb-4 shadow-lg shadow-agro-600/20">
-                    <GraduationCap size={14} /> Knowledge Hub
+                    <LogOut size={14} className="rotate-180" /> Knowledge Hub
                 </div>
                 <h1 className="text-4xl md:text-5xl font-serif font-black text-earth-900 dark:text-white tracking-tighter leading-none mb-2">Sustainable <span className="text-blue-600 italic">Academy</span></h1>
                 <p className="text-earth-500 dark:text-earth-400 font-medium text-lg leading-relaxed max-w-2xl">Standardized agricultural know-how and curriculum modules for regional resilient development.</p>
@@ -269,18 +295,30 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
                       <ShieldAlert size={16} /> Social Integrity
                   </h4>
                   <p className="text-sm text-rose-100 font-medium leading-relaxed mb-8 relative z-10">
-                      Learn to identify and treat **Social Influenza Disease (SI-D)** in your cluster to stabilize the **m(t)** constant.
+                      Learn to identify and treat **Social Influenza Disease (SI-D)** in your cluster to stabilize the **m(t) constant**.
                   </p>
-                  <button className="w-full py-3.5 bg-white text-rose-950 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl relative z-10 hover:bg-rose-50 transition-all">Start SI-D Track</button>
+                  <button 
+                    onClick={handleStartSidTrack}
+                    className="w-full py-3.5 bg-white text-rose-950 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl relative z-10 hover:bg-rose-50 transition-all active:scale-95"
+                  >
+                    Start SI-D Track
+                  </button>
               </div>
 
               <div className="bg-blue-900 p-8 rounded-[3rem] text-white relative overflow-hidden shadow-2xl group">
                   <div className="absolute top-0 right-0 p-6 opacity-10 rotate-12"><Activity size={200} /></div>
-                  <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-blue-300 mb-6">Expert Sessions</h4>
+                  <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-blue-300 mb-6 flex items-center gap-3">
+                    <Radio size={16} className="animate-pulse" /> Expert Sessions
+                  </h4>
                   <p className="text-sm text-blue-100 font-medium leading-relaxed mb-8">
                       Access live masterclasses from lead EnvirosAgro engineers on m(t) calibration.
                   </p>
-                  <button className="w-full py-3.5 bg-white text-blue-950 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl relative z-10 hover:bg-blue-50 transition-all">View Masterclass Schedule</button>
+                  <button 
+                    onClick={handleOpenMasterclasses}
+                    className="w-full py-3.5 bg-white text-blue-950 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-xl relative z-10 hover:bg-blue-50 transition-all active:scale-95"
+                  >
+                    View Masterclass Schedule
+                  </button>
               </div>
           </aside>
 
@@ -444,6 +482,69 @@ export const KnowledgeHub: React.FC<KnowledgeHubProps> = ({ onNavigate, initialS
                   </div>
               </div>
           </div>
+      )}
+
+      {/* MASTERCLASS SCHEDULE MODAL */}
+      {showMasterclassModal && (
+        <div className="fixed inset-0 z-[160] flex items-center justify-center p-4 bg-earth-950/95 backdrop-blur-3xl animate-in fade-in duration-300">
+           <div className="bg-white dark:bg-earth-900 w-full max-w-3xl rounded-[4rem] shadow-cinematic border border-white/10 flex flex-col max-h-[85vh] animate-in zoom-in-95">
+              <div className="bg-blue-900 p-10 text-white flex justify-between items-center shrink-0 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12"><Video size={300} /></div>
+                  <div className="relative z-10 flex items-center gap-6">
+                      <div className="p-4 bg-white/10 rounded-2xl border border-white/20 shadow-xl backdrop-blur-md text-blue-300">
+                         <Radio size={32} className="animate-pulse" />
+                      </div>
+                      <div>
+                        <h3 className="text-3xl font-serif font-black tracking-tight">Masterclass Schedule</h3>
+                        <p className="text-xs text-blue-200 font-bold uppercase tracking-[0.4em] mt-1">Live Technical Sessions v4.2</p>
+                      </div>
+                  </div>
+                  <button onClick={() => setShowMasterclassModal(false)} className="relative z-10 p-3 hover:bg-white/10 rounded-2xl transition-all hover:rotate-90">
+                     <X size={28} />
+                  </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-10 space-y-6 bg-earth-50/20 dark:bg-earth-950/20">
+                 {MASTERCLASSES.map((session) => (
+                    <div key={session.id} className="bg-white dark:bg-earth-900 p-8 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 shadow-sm hover:shadow-xl transition-all group">
+                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+                          <div className="flex gap-6 items-start">
+                             <div className="p-4 bg-earth-50 dark:bg-earth-800 rounded-2xl text-blue-600 shadow-inner group-hover:scale-110 transition-transform">
+                                {session.icon}
+                             </div>
+                             <div>
+                                <div className="flex items-center gap-3 mb-2">
+                                   <span className={`text-[8px] font-black px-2 py-0.5 rounded uppercase tracking-widest border ${session.status === 'Registration Open' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
+                                      {session.status}
+                                   </span>
+                                   <span className="text-[10px] font-black text-earth-400 uppercase tracking-widest flex items-center gap-2"><Users size={12} /> {session.attendees} Linked</span>
+                                </div>
+                                <h4 className="text-xl font-bold text-earth-900 dark:text-white mb-2 leading-tight group-hover:text-blue-600 transition-colors">{session.title}</h4>
+                                <p className="text-xs text-earth-500 dark:text-earth-400 font-medium">Instructor: {session.instructor}</p>
+                             </div>
+                          </div>
+                          <div className="flex flex-col md:items-end gap-2 w-full md:w-auto">
+                             <div className="flex items-center gap-3 bg-earth-50 dark:bg-earth-800 px-4 py-2 rounded-xl text-[10px] font-black text-earth-600 dark:text-earth-400 border border-earth-100 dark:border-earth-700">
+                                <Calendar size={14} className="text-blue-500" /> {session.date}
+                             </div>
+                             <div className="flex items-center gap-3 bg-earth-50 dark:bg-earth-800 px-4 py-2 rounded-xl text-[10px] font-black text-earth-600 dark:text-earth-400 border border-earth-100 dark:border-earth-700">
+                                <Clock size={14} className="text-blue-500" /> {session.time}
+                             </div>
+                          </div>
+                       </div>
+                       <button className="w-full mt-10 bg-blue-600 hover:bg-blue-500 text-white font-black py-4 rounded-[1.5rem] text-[10px] uppercase tracking-[0.3em] shadow-lg shadow-blue-600/20 active:scale-95 transition-all flex items-center justify-center gap-3">
+                          <Bookmark size={16} /> Secure Access Token
+                       </button>
+                    </div>
+                 ))}
+              </div>
+
+              <div className="p-8 bg-earth-50 dark:bg-earth-950/50 text-center border-t border-earth-100 dark:border-earth-800 flex items-center justify-center gap-3 shrink-0">
+                  <ShieldCheck size={18} className="text-blue-500" />
+                  <p className="text-[9px] text-earth-500 dark:text-earth-400 font-black uppercase tracking-[0.4em]">Live Stream Synchronized with m(t) Global Clock</p>
+              </div>
+           </div>
+        </div>
       )}
     </div>
   );
