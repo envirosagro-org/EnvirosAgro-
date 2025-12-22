@@ -480,7 +480,7 @@ export const Podcast: React.FC = () => {
             onClick={() => setShowArchive(true)}
             className="bg-agro-900 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-agro-900/20 transition-all hover:scale-105 active:scale-95"
           >
-              Start Intelligent Discovery
+              Global Discovery
           </button>
       </div>
     </div>

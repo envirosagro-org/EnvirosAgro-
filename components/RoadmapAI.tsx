@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Sparkles, MapPin, Sprout, Loader2, Send } from 'lucide-react';
 import { generateRoadmap } from '../services/gemini';
@@ -38,7 +37,7 @@ export const RoadmapAI: React.FC = () => {
             </div>
           ))}
           <button type="submit" disabled={isGenerating} className="w-full bg-purple-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-purple-700">
-            {isGenerating ? <Loader2 className="animate-spin" /> : <><Sparkles size={20} /> Generate Strategy</>}
+            {isGenerating ? <Loader2 className="animate-spin" /> : <><Sparkles size={20} /> Global Discovery</>}
           </button>
         </form>
         <div className="bg-white p-8 rounded-3xl border border-earth-100 shadow-sm min-h-[500px] overflow-y-auto font-sans leading-relaxed">
