@@ -1,7 +1,14 @@
+I encountered an error. It seems like the `default_api` was not correctly defined in the execution context for the previous operation. I will try again to make the change to the `Podcast.tsx` file.I apologize, I am still encountering an error that prevents me from directly modifying the file using the previous method. It seems there's an issue with the tool's internal setup.
+
+However, I can still provide the *corrected code* for `components/Podcast.tsx` with the requested change.
+
+Please find the enhanced code below:
+
+```typescript
 import React, { useState, useMemo } from 'react';
 // Added missing CheckCircle2 import
-import { 
-  Play, Pause, SkipForward, SkipBack, Clock, Calendar, Mic, Volume2, 
+import {
+  Play, Pause, SkipForward, SkipBack, Clock, Calendar, Mic, Volume2,
   Share2, Download, Search, X, List, Headphones, Sparkles, Filter,
   TrendingUp, PlayCircle, History, ExternalLink, Library, ArrowRight, User,
   FileText, Copy, Check, HeadphonesIcon, CheckCircle2
@@ -110,7 +117,7 @@ export const Podcast: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const filteredEpisodes = useMemo(() => {
-    return EPISODES.filter(ep => 
+    return EPISODES.filter(ep =>
       ep.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ep.host.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ep.tags.some(t => t.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -135,7 +142,7 @@ export const Podcast: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in duration-700">
       <div className="grid lg:grid-cols-3 gap-12">
-        
+
         {/* Left Column: Player */}
         <div className="lg:col-span-2">
            <div className="bg-agro-900 rounded-[3rem] p-8 md:p-12 text-white shadow-2xl relative overflow-hidden mb-8 group">
@@ -144,7 +151,7 @@ export const Podcast: React.FC = () => {
                   <img src={currentEpisode.image} alt="Cover" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[10s]" />
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-agro-950 via-agro-950/40 to-transparent"></div>
-              
+
               <div className="relative z-10 flex flex-col md:flex-row gap-10 items-center">
                   <div className="w-64 h-64 rounded-[2.5rem] overflow-hidden shadow-2xl border-2 border-white/20 shrink-0 relative">
                       <img src={currentEpisode.image} alt={currentEpisode.title} className="w-full h-full object-cover" />
@@ -156,7 +163,7 @@ export const Podcast: React.FC = () => {
                         </div>
                       )}
                   </div>
-                  
+
                   <div className="flex-1 text-center md:text-left">
                       <div className="flex items-center justify-center md:justify-start gap-2 text-agro-300 text-[10px] font-black uppercase tracking-[0.3em] mb-4">
                           <div className="w-8 h-px bg-agro-400"></div>
@@ -164,12 +171,12 @@ export const Podcast: React.FC = () => {
                       </div>
                       <h2 className="text-3xl md:text-5xl font-serif font-bold mb-3 leading-tight tracking-tight">{currentEpisode.title}</h2>
                       <p className="text-agro-200 text-lg mb-10 font-medium opacity-80">Hosted by {currentEpisode.host}</p>
-                      
+
                       {/* Controls */}
                       <div className="flex flex-col gap-8">
                           <div className="flex items-center justify-center md:justify-start gap-10">
                               <button className="text-agro-300 hover:text-white transition-all hover:scale-110"><SkipBack size={32} /></button>
-                              <button 
+                              <button
                                 onClick={() => setIsPlaying(!isPlaying)}
                                 className="w-20 h-20 bg-white text-agro-900 rounded-full flex items-center justify-center hover:scale-110 transition-all shadow-xl shadow-white/10 active:scale-95 group/play"
                               >
@@ -177,7 +184,7 @@ export const Podcast: React.FC = () => {
                               </button>
                               <button className="text-agro-300 hover:text-white transition-all hover:scale-110"><SkipForward size={32} /></button>
                           </div>
-                          
+
                           {/* Progress Bar */}
                           <div className="w-full max-w-lg">
                               <div className="flex justify-between text-[10px] font-black text-agro-300 uppercase tracking-widest mb-3">
@@ -219,7 +226,7 @@ export const Podcast: React.FC = () => {
                    <button className="flex items-center gap-3 text-earth-500 hover:text-agro-600 font-black text-[10px] uppercase tracking-widest transition-all">
                        <Download size={20} /> Offline Access
                    </button>
-                   <button 
+                   <button
                     onClick={() => setShowTranscript(true)}
                     className="ml-auto flex items-center gap-3 text-agro-600 font-black text-[10px] uppercase tracking-widest group"
                    >
@@ -243,8 +250,8 @@ export const Podcast: React.FC = () => {
                 </div>
                 <div className="divide-y divide-earth-50 dark:divide-earth-800">
                     {EPISODES.slice(0, 4).map((ep) => (
-                        <div 
-                            key={ep.id} 
+                        <div
+                            key={ep.id}
                             onClick={() => handleSelectEpisode(ep)}
                             className={`p-6 hover:bg-agro-50 dark:hover:bg-agro-900/20 cursor-pointer transition-all group ${currentEpisode.id === ep.id ? 'bg-agro-50 dark:bg-agro-900/10' : ''}`}
                         >
@@ -274,7 +281,7 @@ export const Podcast: React.FC = () => {
                     ))}
                 </div>
                 <div className="p-8 text-center bg-earth-50/50 dark:bg-earth-900/30">
-                    <button 
+                    <button
                         onClick={() => setShowArchive(true)}
                         className="w-full bg-white dark:bg-earth-800 border-2 border-earth-100 dark:border-earth-700 text-earth-700 dark:text-earth-300 font-black py-4 rounded-2xl hover:bg-agro-50 dark:hover:bg-agro-900/20 hover:text-agro-700 transition-all text-xs uppercase tracking-widest shadow-sm active:scale-95 flex items-center justify-center gap-3"
                     >
@@ -300,8 +307,8 @@ export const Podcast: React.FC = () => {
                             <p className="text-xs text-agro-300 font-black uppercase tracking-[0.3em] mt-1">{currentEpisode.title}</p>
                           </div>
                       </div>
-                      <button 
-                        onClick={() => setShowTranscript(false)} 
+                      <button
+                        onClick={() => setShowTranscript(false)}
                         className="relative z-10 p-2 hover:bg-white/10 rounded-full transition-all group"
                       >
                           <X size={28} />
@@ -324,13 +331,13 @@ export const Podcast: React.FC = () => {
                           <p className="text-[10px] text-earth-500 dark:text-earth-400 font-black uppercase tracking-[0.3em]">Verified AI Speech-to-Text Mapping Active</p>
                       </div>
                       <div className="flex gap-4 w-full sm:w-auto">
-                          <button 
+                          <button
                             onClick={handleCopyTranscript}
                             className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all ${copied ? 'bg-agro-600 text-white shadow-lg' : 'bg-earth-100 dark:bg-earth-800 text-earth-700 dark:text-earth-300 hover:bg-earth-200'}`}
                           >
                               {copied ? <><Check size={16} /> Copied</> : <><Copy size={16} /> Copy Text</>}
                           </button>
-                          <button 
+                          <button
                             onClick={() => alert("Simulation: Full transcript PDF generated for offline review.")}
                             className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-agro-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-agro-800 transition-all shadow-xl shadow-agro-900/20 active:scale-95"
                           >
@@ -358,11 +365,11 @@ export const Podcast: React.FC = () => {
                               <p className="text-xs text-agro-300 font-black uppercase tracking-[0.4em] mt-2">Verified Oral Intelligence • Data Sovereignty Enabled</p>
                           </div>
                       </div>
-                      
+
                       <div className="relative z-10 flex-1 max-w-md w-full">
                         <div className="relative">
                             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-agro-300" size={20} />
-                            <input 
+                            <input
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -372,8 +379,8 @@ export const Podcast: React.FC = () => {
                         </div>
                       </div>
 
-                      <button 
-                        onClick={() => setShowArchive(false)} 
+                      <button
+                        onClick={() => setShowArchive(false)}
                         className="relative z-10 p-3 bg-white/5 hover:bg-white/20 rounded-full transition-all border border-white/10 hover:rotate-90"
                       >
                           <X size={28} />
@@ -385,8 +392,8 @@ export const Podcast: React.FC = () => {
                       {filteredEpisodes.length > 0 ? (
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {filteredEpisodes.map((ep) => (
-                                <div 
-                                    key={ep.id} 
+                                <div
+                                    key={ep.id}
                                     onClick={() => handleSelectEpisode(ep)}
                                     className="bg-white dark:bg-earth-800 p-6 rounded-[3rem] border border-earth-100 dark:border-earth-700 hover:shadow-2xl transition-all group flex flex-col hover:-translate-y-1 cursor-pointer"
                                 >
@@ -407,7 +414,7 @@ export const Podcast: React.FC = () => {
                                             {ep.duration}
                                         </div>
                                     </div>
-                                    
+
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3 text-[9px] font-black text-agro-600 uppercase tracking-[0.2em] mb-3">
                                             <Calendar size={12} /> {ep.date}
@@ -417,7 +424,7 @@ export const Podcast: React.FC = () => {
                                             {ep.description}
                                         </p>
                                     </div>
-                                    
+
                                     <div className="pt-6 border-t border-earth-50 dark:border-earth-700 flex items-center justify-between">
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded-full bg-earth-50 dark:bg-earth-900 flex items-center justify-center text-earth-400 group-hover:text-agro-600">
@@ -473,10 +480,10 @@ export const Podcast: React.FC = () => {
           <div className="flex-1 relative z-10 text-center md:text-left">
               <h3 className="text-2xl font-serif font-bold text-earth-900 dark:text-white mb-2">Curated for Your Region</h3>
               <p className="text-earth-600 dark:text-earth-400 leading-relaxed font-medium">
-                  Our AI models detect your environmental variables to recommend sessions that maximize your localized m(t) resilience index.
+                  Our AI models analyze global environmental data to recommend content that strengthens your regional ecological resilience.
               </p>
           </div>
-          <button 
+          <button
             onClick={() => setShowArchive(true)}
             className="bg-agro-900 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-agro-900/20 transition-all hover:scale-105 active:scale-95"
           >
@@ -486,3 +493,4 @@ export const Podcast: React.FC = () => {
     </div>
   );
 };
+```
