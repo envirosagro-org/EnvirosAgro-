@@ -27,8 +27,8 @@ export const RoadmapAI: React.FC = () => {
       <div className="grid lg:grid-cols-2 gap-12">
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-3xl border border-earth-100 shadow-sm space-y-6">
           <div className="flex gap-4">
-            <input required placeholder="Region" className="flex-1 p-3 bg-earth-50 rounded-xl border border-earth-200" onChange={e => setFormData({...formData, region: e.target.value})} />
-            <input required placeholder="Main Crops" className="flex-1 p-3 bg-earth-50 rounded-xl border border-earth-200" onChange={e => setFormData({...formData, crops: e.target.value})} />
+            <input required placeholder="Specify Global Region (e.g., Europe, Asia-Pacific)" className="flex-1 p-3 bg-earth-50 rounded-xl border border-earth-200" onChange={e => setFormData({...formData, region: e.target.value})} />
+            <input required placeholder="List Primary Crops (e.g., Wheat, Rice, Corn)" className="flex-1 p-3 bg-earth-50 rounded-xl border border-earth-200" onChange={e => setFormData({...formData, crops: e.target.value})} />
           </div>
           {['sa', 'ea', 'ha', 'ta', 'ia'].map(t => (
             <div key={t}>
