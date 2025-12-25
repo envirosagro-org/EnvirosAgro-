@@ -1,14 +1,13 @@
-tsx
 import React, { useState, useRef } from 'react';
 import { 
   ShieldAlert, Map, AlertTriangle, Bug, Droplets, Thermometer, 
-  ChevronRight, Bell, Phone, CheckCircle2, XCircle, X, Smartphone, 
-  Loader2, Zap, Globe, ShieldCheck, MapPin, Camera, Send, Info,
-  PhoneCall, LifeBuoy, AlertCircle, Radio, Navigation, Check,
-  Activity, ArrowLeft, Share2, FileText, Microscope, Search,
-  Clock, ListChecks, ExternalLink, Siren, Wifi, Users, SignalHigh
+  ChevronRight, Bell, Phone, CheckCircle2, X, Globe, ShieldCheck, 
+  MapPin, Zap, Clock, ListChecks, Share2, ArrowLeft, Microscope, Search
 } from 'lucide-react';
 import { View } from '../types';
+import { SafeHarvestHeader } from './safeharvest/SafeHarvestHeader';
+import { ActiveAlerts } from './safeharvest/ActiveAlerts';
+import { HealthStats } from './safeharvest/HealthStats';
 
 const ALERTS = [
   {
@@ -58,13 +57,6 @@ const ALERTS = [
   }
 ];
 
-const EMERGENCY_CONTACTS = [
-  { region: "Global HQ", service: "Global Agri-Emergency Response", phone: "+1-800-AGRO-HLP" },
-  { region: "Regional Desk", service: "Regional Agricultural Hotlines", phone: "+1-800-REG-AGRO" },
-  { region: "Disease Control", service: "Global Health & Crop Protection", phone: "+1-800-DIS-EASE" },
-  { region: "Climate Impact", service: "Climate Resilience Support", phone: "+1-800-CLI-MATE" }
-];
-
 interface SafeHarvestProps {
   onNavigate?: (view: View) => void;
 }
@@ -73,122 +65,6 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'ALERTS' | 'MAP'>('ALERTS');
   const [selectedAlert, setSelectedAlert] = useState<typeof ALERTS[0] | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
-  
-  // Modals
-  const [showSmsModal, setShowSmsModal] = useState(false);
-  const [showHotlineModal, setShowHotlineModal] = useState(false);
-  const [showReportModal, setShowReportModal] = useState(false);
-  const [showSpecializedModal, setShowSpecializedModal] = useState(false);
-  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
-  
-  // States
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [smsStatus, setSmsStatus] = useState<'IDLE' | 'LOADING' | 'SUCCESS'>('IDLE');
-  const [reportStatus, setReportStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS'>('IDLE');
-  const [specializedStatus, setSpecializedStatus] = useState<'IDLE' | 'DISPATCHING' | 'CONFIRMED'>('IDLE');
-  const [broadcastStatus, setBroadcastStatus] = useState<'IDLE' | 'PROPAGATING' | 'COMPLETED'>('IDLE');
-  
-  const [isGpsSyncing, setIsGpsSyncing] = useState(false);
-  const [evidenceImage, setEvidenceImage] = useState<string | null>(null);
-  const [dispatchLog, setDispatchLog] = useState<string[]>([]);
-  const [propagationCount, setPropagationCount] = useState(0);
-  
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  const [reportForm, setReportForm] = useState({
-    type: 'Pest Outbreak',
-    severity: 'High',
-    location: '',
-    description: ''
-  });
-
-  const handleSmsSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!phoneNumber) return;
-    setSmsStatus('LOADING');
-    setTimeout(() => setSmsStatus('SUCCESS'), 2000);
-  };
-
-  const handleGpsSync = () => {
-    setIsGpsSyncing(true);
-    setTimeout(() => {
-      const lat = (-0.6 + Math.random() * 0.1).toFixed(4);
-      const lon = (36.8 + Math.random() * 0.1).toFixed(4);
-      setReportForm(prev => ({
-        ...prev,
-        location: `Lat: ${lat}, Lon: ${lon} (Verified Field Node)`
-      }));
-      setIsGpsSyncing(false);
-    }, 1500);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setEvidenceImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleReportSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setReportStatus('SUBMITTING');
-    setTimeout(() => {
-        setReportStatus('SUCCESS');
-        setTimeout(() => {
-            setShowReportModal(false);
-            setReportStatus('IDLE');
-            setEvidenceImage(null);
-            setReportForm({ type: 'Pest Outbreak', severity: 'High', location: '', description: '' });
-        }, 2500);
-    }, 2500);
-  };
-
-  const handleRequestSpecialized = () => {
-    setShowSpecializedModal(true);
-    setSpecializedStatus('DISPATCHING');
-    setDispatchLog(['Establishing secure link to BTU Hub...']);
-    
-    const steps = [
-        "Biological Threat Unit (BTU) acknowledged signal.",
-        "Regional response team 'Alpha-4' mobilized.",
-        "Treatment payload: 'Azadirachtin Bio-Inhibitor' reserved.",
-        "Estimated arrival: 45 minutes to designated coordinates."
-    ];
-
-    let currentStep = 0;
-    const interval = setInterval(() => {
-        if (currentStep < steps.length) {
-            setDispatchLog(prev => [...prev, steps[currentStep]]);
-            currentStep++;
-        } else {
-            clearInterval(interval);
-            setSpecializedStatus('CONFIRMED');
-        }
-    }, 1500);
-  };
-
-  const handleBroadcastNeighbors = () => {
-    setShowBroadcastModal(true);
-    setBroadcastStatus('PROPAGATING');
-    setPropagationCount(0);
-    
-    const total = Math.floor(Math.random() * 40) + 12;
-    const increment = Math.ceil(total / 10);
-    
-    const interval = setInterval(() => {
-        setPropagationCount(prev => {
-            const next = prev + increment;
-            if (next >= total) {
-                clearInterval(interval);
-                setBroadcastStatus('COMPLETED');
-                return total;
-            }
-            return next;
-        });
-    }, 300);
-  };
 
   const handleViewAlert = (alert: typeof ALERTS[0]) => {
     setIsVerifying(true);
@@ -266,28 +142,18 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
                                         <Globe size={18} className="text-red-400" />
                                         <span className="font-mono text-lg tracking-widest">{alert.coordinates}</span>
                                     </div>
-                                    <button className="text-blue-400 hover:text-blue-300 transition-colors"><ExternalLink size={18} /></button>
                                 </div>
                                 <div className="aspect-video rounded-xl bg-black/40 border border-white/5 flex items-center justify-center relative overflow-hidden">
                                     <MapPin size={32} className="text-red-600 animate-bounce relative z-10" />
-                                    <div className="absolute inset-0 opacity-40">
-                                        <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=400" className="w-full h-full object-cover" />
-                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         <div className="space-y-3">
-                            <button 
-                                onClick={handleRequestSpecialized}
-                                className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-lg text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]"
-                            >
+                            <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-xl transition-all shadow-lg text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]">
                                 <Zap size={18} /> Specialized Response
                             </button>
-                            <button 
-                                onClick={handleBroadcastNeighbors}
-                                className="w-full bg-white dark:bg-earth-800 border-2 border-red-100 dark:border-red-900/50 text-red-700 dark:text-red-400 font-black py-4 rounded-xl transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]"
-                            >
+                            <button className="w-full bg-white dark:bg-earth-800 border-2 border-red-100 dark:border-red-900/50 text-red-700 dark:text-red-400 font-black py-4 rounded-xl transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 active:scale-[0.98]">
                                 <Share2 size={18} /> Broadcast Neighbors
                             </button>
                         </div>
@@ -314,30 +180,7 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
 
       {selectedAlert ? renderAlertDetail(selectedAlert) : (
         <>
-            <div className="bg-red-900 rounded-[2.5rem] p-8 md:p-12 text-white mb-10 relative overflow-hidden shadow-xl border-4 border-red-950/20">
-                <div className="absolute top-0 right-0 p-6 opacity-10 transform scale-125 pointer-events-none">
-                    <ShieldAlert size={200} />
-                </div>
-                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-                    <div className="max-w-3xl">
-                        <div className="flex items-center gap-2 text-red-300 font-black uppercase tracking-[0.2em] text-[9px] mb-4">
-                            <span className="w-1.5 h-1.5 bg-red-400 rounded-full animate-ping"></span> Health Ag Network
-                        </div>
-                        <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 leading-[1] tracking-tighter">SafeHarvest <br/><span className="text-red-400 italic">Alert Network</span></h2>
-                        <p className="text-red-100 text-lg max-w-2xl leading-relaxed font-medium opacity-90">
-                            Real-time threat detection and standardized emergency response.
-                        </p>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                        <button onClick={() => setShowSmsModal(true)} className="flex-1 md:flex-none bg-white text-red-900 px-8 py-3 rounded-xl font-black uppercase text-[9px] tracking-widest hover:bg-red-50 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
-                            <Bell size={16} /> SMS Alerts
-                        </button>
-                        <button onClick={() => setShowHotlineModal(true)} className="flex-1 md:flex-none bg-red-800 text-white border border-red-700/50 px-8 py-3 rounded-xl font-black uppercase text-[9px] tracking-widest hover:bg-red-700 transition-all flex items-center justify-center gap-2 shadow-sm">
-                            <Phone size={16} /> Hotline
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <SafeHarvestHeader onSmsClick={() => {}} onHotlineClick={() => {}} />
 
             <div className="flex gap-2 mb-8 border-b border-earth-200 dark:border-earth-800 pb-1 overflow-x-auto no-scrollbar">
                 <button 
@@ -357,42 +200,7 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
                     {activeTab === 'ALERTS' ? (
-                        <div className="space-y-6 ea-scroll-container max-h-[600px] pr-2">
-                            {ALERTS.map((alert) => (
-                                <div 
-                                    key={alert.id} 
-                                    onClick={() => handleViewAlert(alert)}
-                                    className="rounded-[1.5rem] p-6 border border-earth-100 dark:border-earth-800 bg-white dark:bg-earth-900 transition-all hover:shadow-md group cursor-pointer relative"
-                                >
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="flex gap-4">
-                                            <div className="p-3.5 rounded-xl h-fit bg-red-50 dark:bg-red-950/30 text-red-600">
-                                                {alert.icon}
-                                            </div>
-                                            <div>
-                                                <div className="flex items-center gap-2 mb-1">
-                                                    <h3 className="font-bold text-lg text-earth-900 dark:text-white leading-tight">{alert.title}</h3>
-                                                    {alert.level === 'Critical' && (
-                                                        <span className="bg-red-600 text-white text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase animate-pulse">Critical</span>
-                                                    )}
-                                                </div>
-                                                <p className="text-[8px] text-earth-400 font-black uppercase tracking-widest">
-                                                    {alert.region} • {alert.date}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="bg-earth-50 dark:bg-earth-800 p-2 rounded-full text-earth-300 group-hover:text-red-500 transition-all">
-                                            <ChevronRight size={18} />
-                                        </div>
-                                    </div>
-                                    <p className="text-earth-600 dark:text-earth-400 mb-4 text-xs leading-relaxed font-medium line-clamp-2">{alert.desc}</p>
-                                    <div className="bg-red-50 dark:bg-red-950/20 p-3 rounded-xl border border-red-100 dark:border-red-900/50 flex items-center justify-between text-[8px] font-black uppercase tracking-widest text-red-600">
-                                        Intervention Recommended
-                                        <ChevronRight size={12} />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <ActiveAlerts alerts={ALERTS} onViewAlert={handleViewAlert} />
                     ) : (
                         <div className="bg-white dark:bg-earth-900 rounded-[2rem] p-4 border border-earth-100 dark:border-earth-800 shadow-sm h-[500px] relative overflow-hidden">
                             <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200" className="w-full h-full object-cover rounded-2xl opacity-90" alt="Map" />
@@ -402,6 +210,8 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
                 </div>
 
                 <div className="space-y-6">
+                    <HealthStats />
+
                     <div className="bg-white dark:bg-earth-900 p-8 rounded-[2rem] border border-earth-100 dark:border-earth-800 shadow-sm text-center group">
                         <div className="w-16 h-16 bg-red-50 dark:bg-red-950/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-red-600 shadow-inner group-hover:scale-105 transition-transform duration-500">
                             <AlertTriangle size={32} />
@@ -410,7 +220,7 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
                         <p className="text-earth-500 dark:text-earth-400 text-xs mb-8 leading-relaxed font-medium">
                             Early detection is key. Report unusual biological activity now.
                         </p>
-                        <button onClick={() => setShowReportModal(true)} className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3.5 rounded-xl transition-all shadow-md text-[9px] uppercase tracking-widest">
+                        <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3.5 rounded-xl transition-all shadow-md text-[9px] uppercase tracking-widest">
                             Submit Field Report
                         </button>
                     </div>
