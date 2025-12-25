@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Globe, Thermometer, Wind } from 'lucide-react';
-
+import { PlanetWatchHeader } from './planetwatch/PlanetWatchHeader';
+import { PlanetWatchStats } from './planetwatch/PlanetWatchStats';
 import { VideoPlayer } from './planetwatch/VideoPlayer';
 import { NewsList } from './planetwatch/NewsList';
 import { Ticker } from './planetwatch/Ticker';
 import { CategoryFilters } from './planetwatch/CategoryFilters';
 import { TranscriptModal } from './planetwatch/TranscriptModal';
 import { ArchiveModal } from './planetwatch/ArchiveModal';
+import { ReportGrid } from './planetwatch/ReportGrid';
+import { ForecastSection } from './planetwatch/ForecastSection';
 
 const NEWS_SEGMENTS = [
   {
@@ -150,24 +152,12 @@ export const PlanetWatch: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in duration-700">
 
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-8">
-        <div className="bg-green-100 dark:bg-agro-900/30 p-2 rounded-xl text-green-700 dark:text-agro-400">
-          <Globe size={32} />
-        </div>
-        <div>
-          <h2 className="text-3xl font-serif font-bold text-agro-900 dark:text-white leading-none">Planet Watch News</h2>
-          <p className="text-earth-500 dark:text-earth-400 text-sm mt-1">Daily Intelligence on Climate, Agriculture & Conservation.</p>
-        </div>
-        <div className="ml-auto flex gap-4 text-xs font-bold text-earth-500 dark:text-earth-400 bg-white dark:bg-earth-900 border border-earth-200 dark:border-earth-800 px-4 py-2 rounded-full shadow-sm hidden md:flex">
-          <span className="flex items-center gap-1"><Thermometer size={14} className="text-red-500" /> +1.2°C Global Avg</span>
-          <span className="text-earth-300 dark:text-earth-700">|</span>
-          <span className="flex items-center gap-1"><Wind size={14} className="text-blue-500" /> CO2 421ppm</span>
-        </div>
-      </div>
+      <PlanetWatchHeader />
+      
+      <PlanetWatchStats />
 
       {/* Main News Player */}
-      <div className="grid lg:grid-cols-3 gap-8 mb-12">
+      <div className="grid lg:grid-cols-3 gap-8 mb-16">
         <div className="lg:col-span-2">
           <VideoPlayer
             isBroadcasting={isBroadcasting}
@@ -199,12 +189,24 @@ export const PlanetWatch: React.FC = () => {
 
       <Ticker tickerItems={TICKER_ITEMS} />
 
-      <CategoryFilters
-        categories={CATEGORIES}
-        activeCategoryFilter={activeCategoryFilter}
-        handleCategoryClick={handleCategoryClick}
-        newsSegments={NEWS_SEGMENTS}
-      />
+      <div className="mt-20">
+        <h2 className="text-3xl font-serif font-black text-earth-900 dark:text-white mb-8">Intelligence Reports</h2>
+        <ReportGrid />
+      </div>
+
+      <div className="mt-24">
+        <ForecastSection />
+      </div>
+
+      <div className="mt-24">
+        <h2 className="text-3xl font-serif font-black text-earth-900 dark:text-white mb-8">Browse by Focus</h2>
+        <CategoryFilters
+          categories={CATEGORIES}
+          activeCategoryFilter={activeCategoryFilter}
+          handleCategoryClick={handleCategoryClick}
+          newsSegments={NEWS_SEGMENTS}
+        />
+      </div>
 
       {showTranscript && (
         <TranscriptModal
