@@ -1,39 +1,41 @@
-import { GoogleGenAI } from "@google/genai";
-import type { Chat, GenerateContentResponse } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const API_KEY = process.env.VITE_GEMINI_API_KEY || "";
+
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 /**
  * Creates a unified chat session for the EnvirosAgro AI Assistant.
  */
-export const createAgroChat = (): Chat => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  return ai.chats.create({
-    model: 'gemini-3-flash-preview',
-    config: {
-      systemInstruction: `You are the "EnvirosAgro AI Assistant", a world-class expert in sustainable agriculture and technical innovation. 
-      Your mission is to support farmers, researchers, and industrial stakeholders through the EnvirosAgro Five Thrusts Framework.
-      Help users interpret sensor data, plan crop rotations, and improve their sustainability scores.`,
+export const createAgroChat = () => {
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-1.5-flash',
+    systemInstruction: `You are the "EnvirosAgro AI Assistant", a world-class expert in sustainable agriculture and technical innovation. 
+    Your mission is to support farmers, researchers, and industrial stakeholders through the EnvirosAgro Five Thrusts Framework.
+    Help users interpret sensor data, plan crop rotations, and improve their sustainability scores.`,
+  });
+
+  return model.startChat({
+    generationConfig: {
       temperature: 0.7,
     },
   });
 };
 
 export const analyzeIndustrialGaps = async (metrics: any) => {
-  if (!process.env.API_KEY) {
+  if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
 
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   const prompt = `Perform a high-level scientific gap analysis for an industrial agricultural supply chain with the following metrics:
   Cost Control: ${metrics.cost}%, Quality: ${metrics.quality}%, Resources: ${metrics.resources}%, Relations: ${metrics.relations}%, Market Timing: ${metrics.market}%.
   Output a technical assessment (3 sentences) identifying the most critical 'Process Disconnect' and suggesting a specific 'Technical Agriculture' intervention.`;
 
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-flash-preview',
-      contents: prompt,
-      config: { temperature: 0.3 }
-    });
-    return response.text;
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
   } catch (error) {
     console.error("Error generating industrial gaps analysis:", error);
     throw new Error(`Failed to get industrial gaps analysis from AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -41,45 +43,35 @@ export const analyzeIndustrialGaps = async (metrics: any) => {
 };
 
 export const generateFarmVision = async (prompt: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const enhancedPrompt = `Architectural 3D visualization of a highly sustainable, future-optimized farm. Theme: ${prompt}. Style: Cinematic, ultra-realistic, lush vegetation, integrated technology (solar, sensors, drones), vibrant agro-green and blue color palette. High resilience m(t) constant look.`;
-
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash-image',
-    contents: [{ parts: [{ text: enhancedPrompt }] }],
-    config: {
-      imageConfig: {
-        aspectRatio: "16:9"
-      }
-    }
-  });
-
-  for (const part of response.candidates[0].content.parts) {
-    if (part.inlineData) {
-      return `data:image/png;base64,${part.inlineData.data}`;
-    }
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
   }
+  // Image generation with Gemini is usually done via Imagen, 
+  // currently GoogleGenerativeAI SDK for Gemini 1.5 doesn't directly support text-to-image like this.
+  // This is a placeholder for where that integration would go.
+  console.warn("Image generation (Imagen 3) requires different API/permissions.");
   return null;
 };
 
 export const analyzeCropHealth = async (imageData: string, mimeType: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   const prompt = "Analyze this image of a plant/crop. Identify any pests, diseases, or nutrient deficiencies. Provide a clear diagnosis and recommended sustainable treatments following the EnvirosAgro Five Thrusts framework.";
 
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: {
-      parts: [
-        { inlineData: { data: imageData.split(',')[1], mimeType } },
-        { text: prompt }
-      ]
-    },
-    config: {
-      temperature: 0.4,
+  const result = await model.generateContent([
+    prompt,
+    {
+      inlineData: {
+        data: imageData.split(',')[1],
+        mimeType
+      }
     }
-  });
+  ]);
   
-  return response.text;
+  const response = await result.response;
+  return response.text();
 };
 
 export const generateRoadmap = async (params: {
@@ -87,26 +79,23 @@ export const generateRoadmap = async (params: {
   region: string,
   crops: string
 }) => {
-  if (!process.env.API_KEY) {
+  if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
 
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const model = genAI.getGenerativeModel({ 
+    model: 'gemini-1.5-pro',
+    systemInstruction: "You are a professional agricultural strategist. Output in clear Markdown.",
+  });
+  
   const prompt = `Based on the following farm status, generate a structured 12-month sustainability roadmap.
   Region: ${params.region} | Crops: ${params.crops}
   Scores: SA:${params.thrustScores.SA}, EA:${params.thrustScores.EA}, HA:${params.thrustScores.HA}, TA:${params.thrustScores.TA}, IA:${params.thrustScores.IA}`;
 
   try {
-    const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: prompt,
-      config: {
-        temperature: 0.4,
-        systemInstruction: "You are a professional agricultural strategist. Output in clear Markdown.",
-      }
-    });
-    
-    return response.text;
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
   } catch (error) {
     console.error("Error generating roadmap:", error);
     throw new Error(`Failed to generate roadmap from AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -114,63 +103,63 @@ export const generateRoadmap = async (params: {
 };
 
 export const summarizeResearch = async (articles: any[]) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const context = articles.map(a => `${a.title}: ${a.excerpt}`).join('\n\n');
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: `Summarize this research: ${context}`,
-    config: { systemInstruction: "You are a lead researcher at EnvirosAgro." }
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const model = genAI.getGenerativeModel({ 
+    model: 'gemini-1.5-flash',
+    systemInstruction: "You are a lead researcher at EnvirosAgro." 
   });
-  return response.text;
+  const context = articles.map(a => `${a.title}: ${a.excerpt}`).join('\n\n');
+  const result = await model.generateContent(`Summarize this research: ${context}`);
+  const response = await result.response;
+  return response.text();
 };
 
 export const validateCommunityPost = async (content: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: `Analyze this community post for alignment with sustainable agriculture and community resilience. Provide a brief (1-2 sentence) validation or feedback.
-    Post: "${content}"`,
-    config: { temperature: 0.5 }
-  });
-  return response.text;
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const result = await model.generateContent(`Analyze this community post for alignment with sustainable agriculture and community resilience. Provide a brief (1-2 sentence) validation or feedback.
+    Post: "${content}"`);
+  const response = await result.response;
+  return response.text();
 };
 
 export const generateRawDataset = async (type: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: `Generate a sample CSV dataset for agricultural ${type} research. Include realistic columns and 5 rows of data.`,
-  });
-  return response.text;
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const result = await model.generateContent(`Generate a sample CSV dataset for agricultural ${type} research. Include realistic columns and 5 rows of data.`);
+  const response = await result.response;
+  return response.text();
 };
 
 export const generateScoutReport = async (tileData: any) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: `Generate a detailed agricultural scout report for a plot with these parameters:
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const result = await model.generateContent(`Generate a detailed agricultural scout report for a plot with these parameters:
     - Moisture: ${tileData.moisture}%
     - Nitrogen: ${tileData.nitrogen} ppm
     - pH: ${tileData.ph}
     - Health Index: ${tileData.health}%
-    Provide actionable insights and recommendations following the Five Thrusts framework.`,
-    config: { temperature: 0.6 }
-  });
-  return response.text;
+    Provide actionable insights and recommendations following the Five Thrusts framework.`);
+  const response = await result.response;
+  return response.text();
 };
 
 export const analyzeSatelliteScan = async (fieldName: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
-    contents: `Provide a high-level satellite analysis summary for the field block: "${fieldName}". 
+  if (!API_KEY) {
+    throw new Error("Gemini API key is not configured.");
+  }
+  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const result = await model.generateContent(`Provide a high-level satellite analysis summary for the field block: "${fieldName}". 
     Simulate NDVI (Normalized Difference Vegetation Index) data and biomass deltas. 
-    Focus on environmental resilience (EA Thrust).`,
-    config: { temperature: 0.6 }
-  });
-  return response.text;
-};
-
-export const sendMessageStream = async (chat: Chat, message: string) => {
-  return chat.sendMessageStream({ message });
+    Focus on environmental resilience (EA Thrust).`);
+  const response = await result.response;
+  return response.text();
 };
