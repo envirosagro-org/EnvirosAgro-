@@ -102,6 +102,15 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
+export interface EacTransaction {
+  id: string;
+  type: 'EARN' | 'SPEND';
+  amount: number;
+  description: string;
+  date: string;
+  thrust?: string;
+}
+
 export interface User {
   name: string;
   email: string;
@@ -112,4 +121,5 @@ export interface User {
   avatar?: string;
   joinedDate?: string;
   eacBalance?: number;
+  transactions?: EacTransaction[];
 }
