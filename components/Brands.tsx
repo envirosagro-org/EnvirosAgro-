@@ -201,7 +201,8 @@ export const Brands: React.FC<BrandsProps> = ({ onNavigate }) => {
   const [isScanning, setIsScanning] = useState(false);
   const [learningProgress, setLearningProgress] = useState(84);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [plantFrequencies, setPlantFrequencies] = new Array(30).fill(10));
+  const [plantFrequencies, setPlantFrequencies] = useState(new Array(30).fill(10));
+  
 
   // Auto-running simulation for Agroboto
   useEffect(() => {
