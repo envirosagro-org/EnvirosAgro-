@@ -4,7 +4,8 @@ import {
   BrainCircuit, Sparkles, BookOpen, Microscope, Calculator,
   Network, Database as DbIcon, Layers, Box, Grid3X3,
   MonitorPlay, Globe, Video, Mic, Users, Wallet,
-  TrendingUp, Cloud, Mail, ShieldCheck, AlertOctagon, Settings
+  TrendingUp, Cloud, Mail, ShieldCheck, AlertOctagon, Settings,
+  Server, Radio
 } from 'lucide-react';
 
 export const MENU_SECTIONS = [
@@ -23,7 +24,7 @@ export const MENU_SECTIONS = [
   {
     id: 'INFRASTRUCTURE',
     label: 'Infrastructure & Assets',
-    icon: <ServerIcon size={16} className="text-blue-600" />,
+    icon: <Server size={16} className="text-blue-600" />,
     items: [
       { id: View.NETWORK_INPUT_HUB, label: 'Network Input Hub', icon: <Network size={18}/>, desc: 'ERP, VMI & Cloud ingest' },
       { id: View.DATABASE, label: 'Data Registry', icon: <DbIcon size={18}/>, desc: 'Global intelligence node' },
@@ -35,7 +36,7 @@ export const MENU_SECTIONS = [
   {
     id: 'BROADCAST',
     label: 'Broadcast & Culture',
-    icon: <RadioIcon size={16} className="text-red-500" />,
+    icon: <Radio size={16} className="text-red-500" />,
     items: [
       { id: View.MEDIA, label: 'Media Hub', icon: <MonitorPlay size={18}/>, desc: 'Network newsroom' },
       { id: View.PLANET_WATCH, label: 'Planet Watch', icon: <Globe size={18}/>, desc: 'Daily climate reports' },
@@ -66,15 +67,6 @@ export const MENU_SECTIONS = [
     ]
   }
 ];
-
-// Helper icons for the sections that weren't in the initial import list but used in MENU_SECTIONS
-function ServerIcon({ size, className }: { size: number, className: string }) {
-  return <Settings size={size} className={className} />; // Placeholder as 'Server' was not in lucide-react list provided in App.tsx
-}
-
-function RadioIcon({ size, className }: { size: number, className: string }) {
-    return <MonitorPlay size={size} className={className} />; // Placeholder
-}
 
 export const getBackTarget = (view: View): { target: View; label: string } => {
   const mediaViews = [
