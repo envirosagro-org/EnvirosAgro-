@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "jest",
     "deploy": "npm run build && npx wrangler pages deploy dist --project-name=envirosagro"
   },
   "dependencies": {
@@ -35,9 +35,13 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
+    "@types/jest": "^30.0.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.2.0",
     "jsdom": "^27.0.1",
     "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.4.2",
     "vite": "^6.4.1",
     "vitest": "^4.0.16",
