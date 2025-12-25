@@ -49,7 +49,10 @@ import { FutureVision } from './components/FutureVision';
 import { SixSigmaRCA } from './components/SixSigmaRCA';
 import { Footer } from './components/Footer';
 import { Logo } from './components/Logo';
-import { CurrencyProvider } from './context/CurrencyContext'; // Fixed path
+import { CurrencyProvider } from './context/CurrencyContext';
+import { auth, db } from './lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import {
   LayoutDashboard, BookOpen, Menu, X, LogOut, Users, Layers,
   MonitorPlay, Wallet, Coins, ArrowLeft, BrainCircuit, ShieldCheck,
@@ -67,7 +70,8 @@ const App: React.FC = () => {
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [, setCurrency] = useState('USD'); // Keep for now as state
+  const [, setCurrency] = useState('USD');
+  const [authLoading, setAuthLoading] = useState(true);
   
   const [isPartnerIntegrated, setIsPartnerIntegrated] = useState(() => {
     return localStorage.getItem('ea_partner_integrated') === 'true';
@@ -76,6 +80,23 @@ const App: React.FC = () => {
     const saved = localStorage.getItem('ea_partner_data');
     return saved ? JSON.parse(saved) : null;
   });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setAuthLoading(true);
+      if (firebaseUser) {
+        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+        if (userDoc.exists()) {
+          setUser(userDoc.data() as User);
+        }
+      } else {
+        setUser(null);
+      }
+      setAuthLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -117,7 +138,8 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await auth.signOut();
     setUser(null);
     setCurrentView(View.HOME);
     setIsPartnerIntegrated(false);
@@ -206,7 +228,7 @@ const App: React.FC = () => {
       label: 'Operations Center',
       icon: <Settings size={16} className="text-slate-600" />,
       items: [
-        { id: View.AGRO_WORKERS_CLOUD, label: 'People & Culture', icon: <Cloud size={18}/>, desc: 'Professional registry' },
+        { id: View.PEOPLE_AND_CULTURE_CLOUD, label: 'People & Culture', icon: <Cloud size={18}/>, desc: 'Professional registry' },
         { id: View.TRANSMISSION_GATEWAY, label: 'Transmission Gateway', icon: <Mail size={18}/>, desc: 'Direct secure uplink' },
         { id: View.INTRANET_DASHBOARD, label: 'Internal Intranet', icon: <ShieldCheck size={18}/>, desc: 'Organizational control' },
         { id: View.SIX_SIGMA_RCA, label: 'Quality Audit (RCA)', icon: <AlertOctagon size={18}/>, desc: 'Zero-defect methodology' }
@@ -215,6 +237,20 @@ const App: React.FC = () => {
   ];
 
   const backInfo = getBackTarget(currentView);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-earth-950 flex flex-col items-center justify-center">
+        <Logo size={80} variant="horizontal" useGradient={true} />
+        <div className="mt-8 flex flex-col items-center gap-4">
+          <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+             <div className="h-full bg-agro-500 animate-[progress_1.5s_ease-in-out_infinite]"></div>
+          </div>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-earth-500">Syncing Node...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <CurrencyProvider>
@@ -336,8 +372,8 @@ const ViewHandler = ({ currentView, handleNavClick, user, setUser, awardEac, glo
       case View.PRODUCTS: return <Products setCurrency={setCurrency} />;
       case View.SERVICES: return <Services onNavigate={handleNavClick} />;
       case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
-      case View.HUMAN_RESOURCE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
-      case View.AGRO_WORKERS_CLOUD: return <PeopleAndCulture user={user} onNavigate={handleNavClick} initialTab="CLOUD" />;
+      case View.PEOPLE_AND_CULTURE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
+      case View.PEOPLE_AND_CULTURE_CLOUD: return <PeopleAndCulture user={user} onNavigate={handleNavClick} initialTab="CLOUD" />;
       case View.KNOWLEDGE: return <KnowledgeHub onNavigate={handleNavClick} initialSearch={globalSearchQuery} />;
       case View.DASHBOARD: return <Dashboard onNavigate={handleNavClick} />;
       case View.AI_ADVISOR: return <AiAdvisor />;
@@ -346,8 +382,8 @@ const ViewHandler = ({ currentView, handleNavClick, user, setUser, awardEac, glo
       case View.SUSTAINABILITY_CALCULATOR: return <SustainabilityCalculator />;
       case View.FARM_SCOUT: return <FarmScout onNavigate={handleNavClick} />;
       case View.CARBON_LEDGER: return <CarbonLedger user={user} onAwardEac={awardEac} onNavigate={handleNavClick} />;
-      case View.SIGN_UP: return <Auth onLogin={(u) => { setUser({...u, eacBalance: 100}); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
-      case View.PROFILE: return user ? <UserProfile user={user} onUpdateUser={(u) => setUser(u)} /> : <Auth onLogin={(u) => { setUser({...u, eacBalance: 100}); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
+      case View.SIGN_UP: return <Auth onLogin={(u) => { setUser(u); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
+      case View.PROFILE: return user ? <UserProfile user={user} onUpdateUser={(u) => setUser(u)} /> : <Auth onLogin={(u) => { setUser(u); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
       case View.SUSTAINABILITY_FRAMEWORK: return <SustainabilityFramework onNavigate={handleNavClick} />;
       case View.BRANDS: return <Brands onNavigate={handleNavClick} />;
       case View.TRADEMARKS: return <Trademarks />;

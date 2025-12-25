@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, User } from '../types';
-import { Sprout, Mail, Lock, User as UserIcon, Briefcase, ArrowRight, Check, Loader2, Globe, ShieldCheck } from 'lucide-react';
+import { Sprout, Mail, Lock, User as UserIcon, Briefcase, ArrowRight, Loader2, Globe, ShieldCheck } from 'lucide-react';
+import { auth, db } from '../lib/firebase';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword, 
+  signInWithPopup, 
+  GoogleAuthProvider 
+} from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 interface AuthProps {
   onLogin: (user: User) => void;
@@ -11,6 +19,7 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -19,51 +28,81 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
     role: 'Farmer' as User['role']
   });
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
-    
-    // Phase 1: Simulate "Opening Window" and "Fetching Accounts"
-    setTimeout(() => {
-      // Phase 2: Mock successful selection and token exchange
-      const randomId = Math.floor(1000 + Math.random() * 9000);
-      const googleUser: User = {
-        name: 'Alex G.', 
-        email: 'alex.google@gmail.com',
-        role: 'Farmer', 
-        location: 'Global Node',
-        esin: `EA-GOO-${new Date().getFullYear()}-${randomId}`,
-        joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
-        bio: 'Strategic partner authenticated via Google SSO. Focused on m(t) resilience scaling.'
-      };
+    setError(null);
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const firebaseUser = result.user;
       
-      onLogin(googleUser);
+      // Check if user exists in Firestore
+      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+      
+      let userData: User;
+      
+      if (!userDoc.exists()) {
+        // Create new user in Firestore
+        userData = {
+          name: firebaseUser.displayName || 'New User',
+          email: firebaseUser.email || '',
+          role: 'Farmer',
+          esin: `EA-GOO-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+          joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+          avatar: firebaseUser.photoURL || undefined,
+          eacBalance: 100
+        };
+        await setDoc(doc(db, 'users', firebaseUser.uid), userData);
+      } else {
+        userData = userDoc.data() as User;
+      }
+      
+      onLogin(userData);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
       setIsGoogleLoading(false);
-    }, 2500);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      if (isSignUp) {
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const firebaseUser = userCredential.user;
+        
+        const userData: User = {
+          name: formData.name,
+          email: formData.email,
+          role: formData.role,
+          esin: `EA-${formData.role.substring(0,3).toUpperCase()}-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+          joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+          eacBalance: 100
+        };
+        
+        await setDoc(doc(db, 'users', firebaseUser.uid), userData);
+        onLogin(userData);
+      } else {
+        const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+        const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
+        
+        if (userDoc.exists()) {
+          onLogin(userDoc.data() as User);
+        } else {
+          setError("User data not found.");
+        }
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
       setIsLoading(false);
-      
-      const randomId = Math.floor(1000 + Math.random() * 9000);
-      const user: User = {
-        name: isSignUp ? formData.name : 'Jane Doe',
-        email: formData.email,
-        role: isSignUp ? formData.role : 'Farmer',
-        location: isSignUp ? undefined : 'Nairobi, Kenya',
-        esin: `EA-${isSignUp ? formData.role.substring(0,3).toUpperCase() : 'FAR'}-${new Date().getFullYear()}-${randomId}`,
-        joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-        bio: isSignUp ? undefined : 'Passionate about organic farming and sustainable soil management.',
-        avatar: isSignUp ? undefined : 'https://picsum.photos/200/200?random=50'
-      };
-      
-      onLogin(user);
-    }, 1500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -73,48 +112,14 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 bg-earth-50 dark:bg-earth-950/20 transition-colors duration-500">
       
-      {/* OAuth Simulation Overlay */}
+      {/* OAuth Simulation Overlay (Simplified for actual Auth) */}
       {isGoogleLoading && (
         <div className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
-            <div className="p-8 text-center border-b border-earth-100">
-              <div className="flex justify-center mb-6">
-                <svg className="w-10 h-10" viewBox="0 0 24 24">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.26-.19-.58z" fill="#FBBC05" />
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-slate-800">Sign in with Google</h3>
-              <p className="text-sm text-slate-500 mt-1">Choose an account to continue to EnvirosAgro</p>
-            </div>
-            
-            <div className="p-6 space-y-3">
-              <div className="flex items-center gap-4 p-4 rounded-2xl border border-blue-100 bg-blue-50/30 cursor-wait">
-                <div className="w-10 h-10 rounded-full bg-slate-200 overflow-hidden shadow-sm">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 text-left">
-                  <p className="text-sm font-bold text-slate-800">Alex G.</p>
-                  <p className="text-xs text-slate-500">alex.google@gmail.com</p>
-                </div>
-                <Loader2 className="animate-spin text-blue-600" size={18} />
-              </div>
-              
-              <div className="pt-4 flex flex-col items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck size={14} className="text-green-500" /> Secure Connection Established
-                </div>
-                <p className="text-center px-4 leading-relaxed opacity-60">To continue, Google will share your name, email address, language preference, and profile picture with EnvirosAgro.</p>
-              </div>
-            </div>
-            
-            <div className="bg-slate-50 p-4 flex justify-center">
-              <div className="h-1 w-full max-w-[120px] bg-slate-200 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600 animate-[progress_2s_ease-in-out_infinite]"></div>
-              </div>
-            </div>
+             <div className="p-8 text-center">
+                <Loader2 className="animate-spin text-blue-600 mx-auto mb-4" size={48} />
+                <h3 className="text-xl font-bold text-slate-800">Authenticating with Google...</h3>
+             </div>
           </div>
         </div>
       )}
@@ -173,7 +178,12 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
                 </p>
             </div>
 
-            {/* Simulated Google Identity Button */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-2xl text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-wider">
+                {error}
+              </div>
+            )}
+
             <button
                 type="button"
                 onClick={handleGoogleLogin}
@@ -247,9 +257,6 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
                         <option value="Stakeholder">Industrial Stakeholder</option>
                         <option value="Other">External Observer</option>
                     </select>
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-earth-300">
-                        <ChevronRight size={16} className="rotate-90" />
-                    </div>
                   </div>
                 </div>
               )}
@@ -302,10 +309,3 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
     </div>
   );
 };
-
-// Helper components for Select
-const ChevronRight = ({ size, className }: { size: number, className?: string }) => (
-    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <path d="m9 18 6-6-6-6"/>
-    </svg>
-);
