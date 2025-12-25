@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Star, Filter, Users, Leaf, ShieldPlus, Cpu, Factory, Search, Tag } from 'lucide-react';
 import { SafeImage } from './SafeImage';
+import { useCart } from '../context/CartContext';
+import { toast } from 'react-hot-toast';
 
 const THRUST_FILTERS = [
   { id: 'ALL', title: 'All Products', icon: null },
@@ -67,6 +69,7 @@ const PRODUCTS = [
 export const Products: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
+  const { addToCart } = useCart();
 
   const filteredProducts = PRODUCTS.filter(product => {
     const matchesFilter = activeFilter === 'ALL' || product.thrust === activeFilter;
@@ -74,6 +77,11 @@ export const Products: React.FC = () => {
                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  const handleAddToCart = (product: any) => {
+    addToCart(product);
+    toast.success(`${product.name} added to cart!`);
+  };
 
   const getThrustBadge = (thrustId: string) => {
     const thrust = THRUST_FILTERS.find(t => t.id === thrustId);
@@ -153,7 +161,10 @@ export const Products: React.FC = () => {
                 </p>
                 <div className="mt-auto pt-4 border-t border-earth-50 dark:border-earth-800 flex items-center justify-between">
                   <span className="text-xl font-bold text-agro-900 dark:text-agro-400">{product.price}</span>
-                  <button className="bg-earth-900 dark:bg-agro-600 hover:bg-agro-600 dark:hover:bg-agro-500 text-white p-2.5 rounded-xl transition-colors shadow-sm">
+                  <button 
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-earth-900 dark:bg-agro-600 hover:bg-agro-600 dark:hover:bg-agro-500 text-white p-2.5 rounded-xl transition-colors shadow-sm"
+                  >
                     <ShoppingCart size={18} />
                   </button>
                 </div>
