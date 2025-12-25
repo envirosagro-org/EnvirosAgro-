@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Users, Leaf, Cpu, Globe, Layers } from 'lucide-react';
 import { View } from '../types';
 import { createAgroChat } from '../services/gemini';
-import { useCurrency } from '../../context/CurrencyContext';
+import { useCurrency } from '../context/CurrencyContext';
 
 import { Navigation } from './partnerships/Navigation';
 import { PartnerDirectory } from './partnerships/PartnerDirectory';
