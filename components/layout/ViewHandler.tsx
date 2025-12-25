@@ -3,6 +3,7 @@ import { View, User } from '../types';
 import { Hero } from './Hero';
 import { Information } from './Information';
 import { Products } from './Products';
+import { Cart } from './Cart';
 import { Services } from './Services';
 import { Database } from './Database';
 import { PeopleAndCulture } from './PeopleAndCulture';
@@ -78,6 +79,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.HOME: return <Hero onNavigate={handleNavClick} />;
     case View.INFORMATION: return <Information onNavigate={handleNavClick} />;
     case View.PRODUCTS: return <Products setCurrency={setCurrency} />;
+    case View.CART: return <Cart onNavigate={handleNavClick} />;
     case View.SERVICES: return <Services onNavigate={handleNavClick} />;
     case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
     case View.PEOPLE_AND_CULTURE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
