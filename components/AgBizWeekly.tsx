@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Newspaper } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Newspaper, Loader2 } from 'lucide-react';
 
 import { MarketTicker } from './agbizweekly/MarketTicker';
 import { ReportList } from './agbizweekly/ReportList';
@@ -15,7 +15,7 @@ const MARKET_TICKER = [
   { name: 'Brent Crude', price: '$82.40', change: '+0.3%', up: true },
 ];
 
-const REPORTS = [
+const FALLBACK_REPORTS = [
   {
     id: 1,
     title: "Global Supply Chain Report: Q2 2024",
@@ -78,26 +78,67 @@ const REPORTS = [
 ];
 
 export const AgBizWeekly: React.FC = () => {
+  const [reports, setReports] = useState<any[]>(FALLBACK_REPORTS);
+  const [loading, setLoading] = useState(true);
   const [selectedReport, setSelectedReport] = useState<any>(null);
   const [email, setEmail] = useState('');
   const [subStatus, setSubStatus] = useState<'IDLE' | 'LOADING' | 'SUCCESS'>('IDLE');
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await fetch('/api/reports');
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0) {
+            setReports(data);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch reports:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setSubStatus('LOADING');
-    setTimeout(() => {
-      setSubStatus('SUCCESS');
-      setEmail('');
-      setTimeout(() => setSubStatus('IDLE'), 4000);
-    }, 2000);
+    
+    try {
+      // Assuming we have a subscribers API or we use the transmission API
+      const response = await fetch('/api/transmit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'NEWSLETTER_SUBSCRIPTION',
+          email,
+          timestamp: new Date().toISOString()
+        })
+      });
+
+      if (response.ok) {
+        setSubStatus('SUCCESS');
+        setEmail('');
+        setTimeout(() => setSubStatus('IDLE'), 4000);
+      } else {
+        throw new Error('Subscription failed');
+      }
+    } catch (error) {
+      console.error('Subscription error:', error);
+      setSubStatus('IDLE');
+    }
   };
 
   if (selectedReport) {
     return (
       <ReportDetail
         report={selectedReport}
-        allReports={REPORTS}
+        allReports={reports}
         onBack={() => setSelectedReport(null)}
         onSelectReport={setSelectedReport}
       />
@@ -120,7 +161,13 @@ export const AgBizWeekly: React.FC = () => {
       <MarketTicker tickerItems={MARKET_TICKER} />
 
       <div className="grid lg:grid-cols-3 gap-12">
-        <ReportList reports={REPORTS} onSelectReport={setSelectedReport} />
+        {loading ? (
+          <div className="lg:col-span-2 flex items-center justify-center py-20">
+            <Loader2 className="w-10 h-10 text-agro-600 animate-spin" />
+          </div>
+        ) : (
+          <ReportList reports={reports} onSelectReport={setSelectedReport} />
+        )}
 
         <div className="space-y-8">
           <SubscriptionBox
