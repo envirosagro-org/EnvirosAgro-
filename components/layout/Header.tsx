@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, User } from '../../types';
 import { Logo } from '../Logo';
-import { LayoutDashboard, Minimize2, Maximize2, Coins, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Minimize2, Maximize2, Coins, LogOut, Menu, X, ShoppingCart } from 'lucide-react';
+import { useCart } from '../../context/CartContext';
 
 interface HeaderProps {
   scrolled: boolean;
@@ -26,6 +27,8 @@ export const Header: React.FC<HeaderProps> = ({
   isMenuOpen,
   setIsMenuOpen
 }) => {
+  const { totalItems } = useCart();
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-in-out isolate ${scrolled ? 'mt-3 mx-4 md:mx-10 rounded-[2.5rem] bg-white/70 dark:bg-earth-900/80 backdrop-blur-3xl border border-white/40 dark:border-white/5 py-1.5 shadow-xl' : 'bg-white/40 dark:bg-earth-950/40 backdrop-blur-xl border-b border-earth-100/10 py-5'}`}>
       <div className="max-w-[1900px] mx-auto px-8 flex items-center justify-between gap-6">
@@ -47,6 +50,14 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-1 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
               <button onClick={() => handleNavClick(View.DASHBOARD)} className={`p-2.5 rounded-xl transition-all ${currentView === View.DASHBOARD ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}><LayoutDashboard size={20} /></button>
+              <button onClick={() => handleNavClick(View.CART)} className={`p-2.5 rounded-xl transition-all relative ${currentView === View.CART ? 'bg-amber-500 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}>
+                <ShoppingCart size={20} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-earth-900 animate-in zoom-in">
+                    {totalItems}
+                  </span>
+                )}
+              </button>
               <button onClick={toggleFullscreen} className={`p-2.5 rounded-xl transition-all ${isFullscreen ? 'bg-blue-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}>{isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}</button>
           </div>
           <div className="flex items-center gap-2 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
