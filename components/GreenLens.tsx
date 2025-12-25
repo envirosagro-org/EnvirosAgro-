@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Leaf } from 'lucide-react';
-
+import { GreenLensHero } from './greenlens/GreenLensHero';
+import { GreenLensStats } from './greenlens/GreenLensStats';
+import { FilmStrip } from './greenlens/FilmStrip';
 import { HeroPlayer } from './greenlens/HeroPlayer';
-import { ImpactStats } from './greenlens/ImpactStats';
-import { DocsLibrary } from './greenlens/DocsLibrary';
 import { CatalogModal } from './greenlens/CatalogModal';
 import { DetailsModal } from './greenlens/DetailsModal';
 
@@ -131,40 +130,51 @@ export const GreenLens: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in duration-700">
 
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <div className="flex items-center gap-2 text-green-700 font-bold uppercase tracking-wider text-xs mb-2">
-            <Leaf size={16} /> Green Lens Documentaries
+      {isWatching ? (
+        <HeroPlayer
+          isWatching={isWatching}
+          activeFilm={activeFilm}
+          isPaused={isPaused}
+          progress={progress}
+          setIsWatching={setIsWatching}
+          setIsPaused={setIsPaused}
+          handleWatchNow={handleWatchNow}
+          handleOpenDetails={handleOpenDetails}
+        />
+      ) : (
+        <>
+          <GreenLensHero 
+            activeFilm={activeFilm} 
+            handleWatchNow={handleWatchNow} 
+            handleOpenDetails={handleOpenDetails} 
+          />
+
+          <GreenLensStats />
+
+          <FilmStrip 
+            title="Featured Documentaries" 
+            docs={DOCS_LIBRARY} 
+            onSelect={handleOpenDetails} 
+          />
+
+          <FilmStrip 
+            title="Award Winning Series" 
+            docs={[...DOCS_LIBRARY].reverse()} 
+            onSelect={handleOpenDetails} 
+          />
+
+          <div className="flex justify-center mt-12 mb-20">
+            <button 
+              onClick={() => setShowFullCatalog(true)}
+              className="px-12 py-5 bg-earth-900 dark:bg-earth-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-agro-600 transition-all shadow-xl active:scale-95"
+            >
+              Explore Full Cinema Catalog
+            </button>
           </div>
-          <h2 className="text-3xl font-serif font-bold text-agro-900 dark:text-white transition-colors">Cinema for the Planet</h2>
-        </div>
-        <div className="flex gap-2">
-          <span className="px-4 py-2 bg-earth-100 dark:bg-earth-900 rounded-full text-xs font-bold text-earth-600 dark:text-earth-400">Originals</span>
-          <span className="px-4 py-2 bg-earth-100 dark:bg-earth-900 rounded-full text-xs font-bold text-earth-600 dark:text-earth-400">Series</span>
-        </div>
-      </div>
-
-      <HeroPlayer
-        isWatching={isWatching}
-        activeFilm={activeFilm}
-        isPaused={isPaused}
-        progress={progress}
-        setIsWatching={setIsWatching}
-        setIsPaused={setIsPaused}
-        handleWatchNow={handleWatchNow}
-        handleOpenDetails={handleOpenDetails}
-      />
-
-      <ImpactStats />
-
-      <DocsLibrary
-        docsLibrary={DOCS_LIBRARY}
-        setShowFullCatalog={setShowFullCatalog}
-        handleOpenDetails={handleOpenDetails}
-      />
+        </>
+      )}
 
       {showFullCatalog && (
         <CatalogModal
