@@ -9,6 +9,7 @@ import { TranscriptModal } from './planetwatch/TranscriptModal';
 import { ArchiveModal } from './planetwatch/ArchiveModal';
 import { ReportGrid } from './planetwatch/ReportGrid';
 import { ForecastSection } from './planetwatch/ForecastSection';
+import { RegionalIntelligence } from './planetwatch/RegionalIntelligence';
 
 const NEWS_SEGMENTS = [
   {
@@ -189,8 +190,12 @@ export const PlanetWatch: React.FC = () => {
 
       <Ticker tickerItems={TICKER_ITEMS} />
 
-      <div className="mt-20">
-        <h2 className="text-3xl font-serif font-black text-earth-900 dark:text-white mb-8">Intelligence Reports</h2>
+      <div className="mt-24">
+        <RegionalIntelligence />
+      </div>
+
+      <div className="mt-24">
+        <h2 className="text-3xl font-serif font-black text-earth-900 dark:text-white mb-8 border-l-4 border-agro-600 pl-6">Intelligence Reports</h2>
         <ReportGrid />
       </div>
 
@@ -199,7 +204,7 @@ export const PlanetWatch: React.FC = () => {
       </div>
 
       <div className="mt-24">
-        <h2 className="text-3xl font-serif font-black text-earth-900 dark:text-white mb-8">Browse by Focus</h2>
+        <h2 className="text-3xl font-serif font-black text-earth-900 dark:text-white mb-8 border-l-4 border-agro-600 pl-6">Browse by Focus</h2>
         <CategoryFilters
           categories={CATEGORIES}
           activeCategoryFilter={activeCategoryFilter}
