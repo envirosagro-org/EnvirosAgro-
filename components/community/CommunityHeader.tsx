@@ -1,12 +1,14 @@
 import React from 'react';
+import { Users } from 'lucide-react';
 
-export const CommunityHeader: React.FC = () => {
-  return (
-    <div className="text-center mb-8">
-      <h2 className="text-3xl font-serif font-bold text-agro-900 dark:text-white mb-2">Community Network</h2>
-      <p className="text-sm text-earth-500 dark:text-earth-400 font-medium max-w-2xl mx-auto leading-relaxed">
-        Formalize participation, obtain identity, and earn rewards.
-      </p>
-    </div>
-  );
+export const CommunityHeader = () => {
+    return (
+        <div className="bg-white dark:bg-gray-800 pt-16 text-center">
+            <Users className="mx-auto h-16 w-16 text-green-600 bg-gray-100 dark:bg-gray-700 p-3 rounded-full" />
+            <h1 className="mt-4 text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">Community Hub</h1>
+            <p className="mt-4 max-w-3xl mx-auto text-xl text-gray-500 dark:text-gray-400">
+                Connect, share, and learn with fellow agricultural pioneers. A space for discussion, collaboration, and knowledge exchange.
+            </p>
+        </div>
+    );
 };

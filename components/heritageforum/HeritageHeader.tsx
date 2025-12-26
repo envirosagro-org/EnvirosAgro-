@@ -1,31 +1,32 @@
 import React from 'react';
-import { Users, Library, Heart, Globe } from 'lucide-react';
+import { Landmark, Users, Mic } from 'lucide-react';
 
-export const HeritageHeader: React.FC = () => {
+export const HeritageHeader = () => {
   return (
-    <div className="bg-rose-900 rounded-[2.5rem] p-8 md:p-12 text-white mb-10 relative overflow-hidden shadow-xl border-4 border-rose-950/20">
-      <div className="absolute top-0 right-0 p-6 opacity-10 transform scale-125 pointer-events-none">
-        <Library size={200} />
-      </div>
-      <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-        <div className="max-w-3xl">
-          <div className="flex items-center gap-2 text-rose-300 font-black uppercase tracking-[0.2em] text-[9px] mb-4">
-            <span className="w-1.5 h-1.5 bg-rose-400 rounded-full animate-pulse"></span> Social Ag Network
-          </div>
-          <h2 className="text-4xl md:text-6xl font-serif font-bold mb-6 leading-[1] tracking-tighter">Heritage <br/><span className="text-rose-400 italic">Forum</span></h2>
-          <p className="text-rose-100 text-lg max-w-2xl leading-relaxed font-medium opacity-90">
-            A digital sanctuary for oral histories, indigenous wisdom, and cross-generational agricultural storytelling.
+    <div className="bg-white dark:bg-gray-800 shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <p className="text-sm font-semibold text-green-600 uppercase tracking-wider">Wisdom of the Ages</p>
+          <h1 className="mt-2 text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">The Heritage Forum</h1>
+          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-400">
+            A living archive of traditional knowledge, oral histories, and cultural farming practices from around the world.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center gap-4">
-             <div className="p-2 bg-rose-500 rounded-lg">
-                <Globe size={20} />
-             </div>
-             <div>
-                <span className="text-[9px] font-black uppercase tracking-widest text-rose-200 block">Records</span>
-                <span className="text-xl font-bold">8,542</span>
-             </div>
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="text-center p-6 bg-gray-100 dark:bg-gray-700/50 rounded-xl">
+            <Landmark className="mx-auto h-12 w-12 text-green-600" />
+            <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">2,000+ Practices</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Documented and preserved.</p>
+          </div>
+          <div className="text-center p-6 bg-gray-100 dark:bg-gray-700/50 rounded-xl">
+            <Users className="mx-auto h-12 w-12 text-green-600" />
+            <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">150+ Communities</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Sharing their heritage.</p>
+          </div>
+          <div className="text-center p-6 bg-gray-100 dark:bg-gray-700/50 rounded-xl">
+            <Mic className="mx-auto h-12 w-12 text-green-600" />
+            <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">500+ Hours</h3>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Of oral history recorded.</p>
           </div>
         </div>
       </div>

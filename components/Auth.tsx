@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, User } from '../types';
 import { Sprout, Mail, Lock, User as UserIcon, Briefcase, ArrowRight, Loader2, Globe, ShieldCheck } from 'lucide-react';
 import { auth, db } from '../lib/firebase';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
-  signInWithPopup, 
+  signInWithRedirect, 
   GoogleAuthProvider, 
+  getRedirectResult,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
@@ -27,42 +28,56 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     role: 'Farmer' as User['role']
   });
 
+  useEffect(() => {
+    const handleRedirectResult = async () => {
+      setIsGoogleLoading(true);
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const firebaseUser = result.user;
+          const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+          let userData: User;
+
+          if (!userDoc.exists()) {
+            userData = {
+              name: firebaseUser.displayName || 'New User',
+              email: firebaseUser.email || '',
+              role: 'Farmer',
+              esin: `EA-GOO-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+              joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+              avatar: firebaseUser.photoURL || undefined,
+              eacBalance: 100
+            };
+            await setDoc(doc(db, 'users', firebaseUser.uid), userData);
+          } else {
+            userData = userDoc.data() as User;
+          }
+          onLogin(userData);
+        }
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message);
+        }
+        console.error(err);
+      } finally {
+        setIsGoogleLoading(false);
+      }
+    };
+
+    handleRedirectResult();
+  }, [onLogin]);
+
   const handleGoogleLogin = async () => {
     setIsGoogleLoading(true);
     setError(null);
     const provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(auth, provider);
-      const firebaseUser = result.user;
-      
-      // Check if user exists in Firestore
-      const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
-      
-      let userData: User;
-      
-      if (!userDoc.exists()) {
-        // Create new user in Firestore
-        userData = {
-          name: firebaseUser.displayName || 'New User',
-          email: firebaseUser.email || '',
-          role: 'Farmer',
-          esin: `EA-GOO-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
-          joinedDate: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-          avatar: firebaseUser.photoURL || undefined,
-          eacBalance: 100
-        };
-        await setDoc(doc(db, 'users', firebaseUser.uid), userData);
-      } else {
-        userData = userDoc.data() as User;
-      }
-      
-      onLogin(userData);
+      await signInWithRedirect(auth, provider);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       }
       console.error(err);
-    } finally {
       setIsGoogleLoading(false);
     }
   };
@@ -129,7 +144,6 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   return (
     <div className="min-h-[calc(100vh-80px)] flex items-center justify-center p-6 bg-earth-50 dark:bg-earth-950/20 transition-colors duration-500">
       
-      {/* OAuth Simulation Overlay (Simplified for actual Auth) */}
       {isGoogleLoading && (
         <div className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-300">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-300">
@@ -143,7 +157,6 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
 
       <div className="bg-white dark:bg-earth-900 rounded-[3rem] shadow-strategic flex overflow-hidden max-w-5xl w-full border border-earth-100 dark:border-white/5">
         
-        {/* Left Side - Visual */}
         <div className="hidden md:flex w-1/2 bg-agro-900 relative flex-col justify-between p-12 text-white">
           <div className="absolute inset-0 opacity-20">
              <img 
@@ -183,7 +196,6 @@ export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
           </div>
         </div>
 
-        {/* Right Side - Form */}
         <div className="w-full md:w-1/2 p-8 md:p-14 bg-white dark:bg-earth-900 flex flex-col justify-center">
           <div className="max-w-md mx-auto w-full">
             <div className="mb-10">

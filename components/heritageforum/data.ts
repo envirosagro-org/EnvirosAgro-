@@ -1,0 +1,55 @@
+export const TOPICS = [
+    { id: 'soil-health', title: 'Soil Health & Fertility', description: 'Traditional methods of composting, crop rotation, and natural fertilization.', icon: '🌱' },
+    { id: 'pest-management', title: 'Integrated Pest Management', description: 'Natural and biological controls for pests and diseases.', icon: '🐞' },
+    { id: 'water-conservation', title: 'Water Conservation', description: 'Ancient techniques for irrigation, rainwater harvesting, and dryland farming.', icon: '💧' },
+    { id: 'seed-saving', title: 'Seed Saving & Heirlooms', description: 'Preserving genetic diversity through traditional seed saving practices.', icon: '🌾' },
+    { id: 'agroforestry', title: 'Agroforestry Systems', description: 'Integrating trees and shrubs into agricultural landscapes.', icon: '🌳' },
+    { id: 'lunar-calendars', title: 'Lunar & Celestial Calendars', description: 'Farming practices guided by lunar cycles and celestial events.', icon: '🌔' },
+];
+
+export const STORIES = [
+    {
+        id: 1,
+        title: 'The Three Sisters: A Symbiotic Trio',
+        author: 'Kayanerenkó:wa',
+        community: 'Haudenosaunee Confederacy',
+        topic: 'agroforestry',
+        type: 'audio',
+        timestamp: '3 days ago',
+        summary: 'An elder shares the story and technique of planting corn, beans, and squash together, a practice that creates a mutually beneficial ecosystem.',
+        image: '/images/heritage/three-sisters.jpg',
+    },
+    {
+        id: 2,
+        title: 'Push-Pull: A Kenyan Innovation for Pest Control',
+        author: 'Dr. Zeyaur Khan',
+        community: 'ICIPE, Kenya',
+        topic: 'pest-management',
+        type: 'video',
+        timestamp: '5 days ago',
+        summary: 'A scientist explains the development of the push-pull system, which uses specific plants to repel pests and attract their natural enemies.',
+        image: '/images/heritage/push-pull.jpg',
+    },
+    {
+        id: 3,
+        title: 'Zai: Reviving Burkina Faso’s Degraded Lands',
+        author: 'Yacouba Sawadogo',
+        community: 'Gourga, Burkina Faso',
+        topic: 'water-conservation',
+        type: 'text',
+        timestamp: '1 week ago',
+        summary: 'The story of how a farmer’s revival of the ancient Zai technique—digging small pits to capture water—has transformed desertified land back into productive farmland.',
+        image: '/images/heritage/zai-pits.jpg',
+    },
+    {
+        id: 4,
+        title: 'Reading the Moon: Planting by Lunar Cycles in the Andes',
+        author: 'Mama Julia',
+        community: 'Quechua, Peru',
+        topic: 'lunar-calendars',
+        type: 'audio',
+        timestamp: '2 weeks ago',
+        summary: 'A respected elder explains how the phases of the moon guide the planting and harvesting of potatoes and quinoa for optimal yields.',
+        image: '/images/heritage/andes-moon.jpg',
+    }
+];

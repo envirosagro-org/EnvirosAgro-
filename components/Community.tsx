@@ -1,157 +1,40 @@
-import React, { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { View, User } from '../types';
-import { validateCommunityPost } from '../services/gemini';
-
+import React from 'react';
+import { User, View } from '../types';
 import { CommunityHeader } from './community/CommunityHeader';
-import { TabNavigation, Tab } from './community/TabNavigation';
-import { PostCard } from './community/PostCard';
-import { WalletWidget } from './community/WalletWidget';
-import { HistoryWidget } from './community/HistoryWidget';
-import { RegisterGroup } from './community/RegisterGroup';
-import { RegisterSociety } from './community/RegisterSociety';
-import { GetESIN } from './community/GetESIN';
-import { IdCard } from './community/IdCard';
+import { ForumHighlights } from './community/ForumHighlights';
+import { FeaturedMembers } from './community/FeaturedMembers';
+import { Cta } from './Cta';
 
 interface CommunityProps {
   user: User | null;
-  onNavigate?: (view: View) => void;
-  onAwardEac?: (amount: number) => void;
+  onNavigate: (view: View) => void;
+  onAwardEac: (amount: number) => void; // Although not used, it's good to keep for consistency
 }
 
-const FeedTab: React.FC<any> = ({ postContent, setPostContent, isProcessing, postCategory, setPostCategory, handlePostSubmit, children }) => {
+export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
   return (
-      <div>
-          {/* Post submission form */}
-          <div className="mb-8 p-6 bg-white dark:bg-earth-900 rounded-2xl border border-earth-100 dark:border-earth-800 shadow-sm">
-                <textarea
-                    value={postContent}
-                    onChange={(e) => setPostContent(e.target.value)}
-                    placeholder="Share a sustainable practice or ask a question..."
-                    className="w-full p-2 bg-transparent focus:outline-none dark:text-white"
-                    rows={3}
-                />
-                <div className="flex justify-between items-center mt-4">
-                    <select value={postCategory} onChange={(e) => setPostCategory(e.target.value)} className="bg-transparent dark:text-white text-xs font-bold uppercase">
-                        <option>General</option>
-                        <option>EA</option>
-                        <option>SA</option>
-                        <option>HA</option>
-                        <option>TA</option>
-                        <option>IA</option>
-                    </select>
-                    <button
-                        onClick={handlePostSubmit}
-                        disabled={isProcessing}
-                        className="px-6 py-2 bg-agro-600 text-white rounded-lg text-sm font-bold shadow-lg hover:bg-agro-700 transition-all disabled:opacity-50"
-                    >
-                        {isProcessing ? 'Analyzing...' : 'Post'}
-                    </button>
-                </div>
+    <div className="bg-gray-50 dark:bg-gray-900">
+      <CommunityHeader />
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <ForumHighlights />
             </div>
-          {children}
-      </div>
-  );
-}
-
-export const Community: React.FC<CommunityProps> = ({ user, onNavigate, onAwardEac }) => {
-  const [activeTab, setActiveTab] = useState<Tab>('FEED');
-  const [postContent, setPostContent] = useState('');
-  const [postCategory, setPostCategory] = useState('General');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [esinStep, setEsinStep] = useState(1);
-  const [, setShowRedeemModal] = useState(false);
-  const [, setShowHistoryModal] = useState(false);
-
-  const [transactions, setTransactions] = useState<any[]>([
-    { id: 101, type: 'EARN', amount: 10, source: 'Vertical Mulching Tip', date: '2h ago' },
-    { id: 102, type: 'EARN', amount: 25, source: 'Society Onboarding', date: '5h ago' },
-    { id: 103, type: 'EARN', amount: 15, source: 'Daily Login Reward', date: 'Yesterday' },
-    { id: 104, type: 'EARN', amount: 12, source: 'Research Survey', date: '2 days ago' },
-    { id: 105, type: 'SPEND', amount: 25, source: 'Seeds Pack', date: '3 days ago' },
-  ]);
-
-  const [posts, setPosts] = useState([
-    { id: 1, author: "Sarah Jenkins", role: "Farmer", time: "2h ago", content: "Successfully implemented vertical mulching in our banana plantation. Soil moisture retention has improved significantly! 🍌💧 #SoilHealth", thrust: "EA THRUST", likes: 15, reward: 10, aiAnalysis: "Verified: Strong alignment with Environmental Agriculture (EA). Impact score 9/10." },
-    { id: 2, author: "Kiriaini Youth Group", role: "Society", time: "5h ago", content: "Hosted a training session on Digital ID registration today. 50 new members onboarded to EnvirosAgro! 🚀 #CommunityGrowth", thrust: "SA THRUST", likes: 32, reward: 25, aiAnalysis: "Verified: Critical Social Agriculture (SA) milestone. Community resilience factor high." },
-    { id: 3, author: "Eng. Mark", role: "Researcher", time: "1d ago", content: "Latest TA Thrust updates: New drone path algorithms reducing battery drain by 18%. Deployment starting next week. 🛸", thrust: "TA THRUST", likes: 54, reward: 20, aiAnalysis: "Verified: Technical Agriculture (TA) optimization confirmed." }
-  ]);
-
-  const handlePostSubmit = async () => {
-    if (!postContent.trim()) return;
-    setIsProcessing(true);
-    try {
-      const analysis = await validateCommunityPost(postContent);
-      const newPost = { id: Date.now(), author: user?.name || "Anonymous", role: user?.role || "Member", time: "Just now", content: postContent, thrust: postCategory.toUpperCase() + (postCategory === 'General' ? '' : ' THRUST'), likes: 0, reward: 10, aiAnalysis: analysis };
-      setPosts([newPost, ...posts]);
-      setTransactions([{ id: Date.now(), type: 'EARN', amount: 10, source: 'Practice Log', date: 'Just now' }, ...transactions]);
-      setPostContent('');
-      if (onAwardEac) onAwardEac(10);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  const handleSharePost = async (post: any) => {
-    const shareUrl = window.location.origin;
-    const shareData = { title: `EnvirosAgro Post by ${post.author}`, text: `${post.author} shared: "${post.content}"`, url: shareUrl };
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        if (err instanceof Error && err.name !== 'AbortError') console.error(err);
-      }
-    } else {
-      navigator.clipboard.writeText(`${shareData.text} \n\nCheck it out at: ${shareData.url}`);
-      alert("Copied to clipboard!");
-    }
-  };
-
-  return (
-    <div className="bg-[#fffdfb] dark:bg-earth-950 min-h-screen font-sans transition-colors duration-500">
-      <div className="max-w-4xl mx-auto px-6 pt-4">
-        <button onClick={() => onNavigate?.(View.HOME)} className="flex items-center gap-2 text-earth-400 hover:text-agro-700 font-bold text-[8px] uppercase tracking-[0.2em] transition-all group">
-          <ArrowLeft size={12} className="group-hover:-translate-x-0.5 transition-transform" /> Back
-        </button>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-6 py-6">
-        <CommunityHeader />
-
-        <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        {activeTab === 'FEED' && (
-          <FeedTab
-            postContent={postContent}
-            setPostContent={setPostContent}
-            isProcessing={isProcessing}
-            postCategory={postCategory}
-            setPostCategory={setPostCategory}
-            handlePostSubmit={handlePostSubmit}
-          >
-            {posts.map(post => (
-              <PostCard key={post.id} post={post} handleSharePost={handleSharePost} />
-            ))}
-            <div className="space-y-10 pt-10 border-t border-earth-100 dark:border-earth-800">
-              <WalletWidget user={user} setShowRedeemModal={setShowRedeemModal} setShowHistoryModal={setShowHistoryModal} />
-              <HistoryWidget transactions={transactions} />
+            <div>
+              <FeaturedMembers />
             </div>
-          </FeedTab>
-        )}
-
-        {activeTab === 'REGISTER_GROUP' && <RegisterGroup />}
-        {activeTab === 'REGISTER_SOCIETY' && <RegisterSociety />}
-        {activeTab === 'GET_ESIN' && (
-          <GetESIN
-            esinStep={esinStep}
-            setEsinStep={setEsinStep}
-            setActiveTab={setActiveTab}
-          />
-        )}
-        {activeTab === 'ID_CARD' && <IdCard user={user} />}
+          </div>
+        </div>
       </div>
+      {!user && (
+        <Cta 
+          title="Join the Conversation"
+          subtitle="Create an account to post, comment, and connect with other members of the AgriInnovate community."
+          buttonText="Sign Up Now"
+          onClick={() => onNavigate(View.SIGN_UP)}
+        />
+      )}
     </div>
   );
 };

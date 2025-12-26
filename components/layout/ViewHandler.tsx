@@ -79,7 +79,13 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
   setCurrency
 }) => {
   switch (currentView) {
-    case View.HOME: return <Hero onNavigate={handleNavClick} />;
+    case View.HOME:
+      return (
+        <>
+          <Hero onNavigate={handleNavClick} />
+          <Community user={user} onNavigate={handleNavClick} onAwardEac={awardEac} />
+        </>
+      );
     case View.INFORMATION: return <Information onNavigate={handleNavClick} />;
     case View.PRODUCTS: return <Products setCurrency={setCurrency} />;
     case View.CART: return <Cart onNavigate={handleNavClick} />;
