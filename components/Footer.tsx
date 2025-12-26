@@ -19,6 +19,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
     { name: 'LinkedIn', icon: Linkedin, url: '#' },
   ];
 
+  const legalLinks = [
+    { view: View.PRIVACY_POLICY, label: "Privacy Sovereignty" },
+    { view: View.TRADEMARKS, label: "Legal & IP" },
+    { view: View.COMMUNITY_GUIDELINES, label: "Ethical Code" }
+  ];
+
   return (
     <footer className="bg-[#050a14] dark:bg-earth-950 text-slate-400 pt-24 pb-12 px-8 relative overflow-hidden border-t border-white/5">
       {/* Cinematic Background Elements */}
@@ -140,9 +146,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <p>© {new Date().getFullYear()} ENVIROSAGRO STRATEGIC INFRASTRUCTURE. ALL ASSETS HASHED VIA m(t) LEDGER.</p>
               
               <div className="flex gap-12">
-                  <span onClick={() => onNavigate(View.PRIVACY_POLICY)} className="hover:text-white cursor-pointer transition-colors">Privacy Sovereignty</span>
-                  <span onClick={() => onNavigate(View.TRADEMARKS)} className="hover:text-white cursor-pointer transition-colors">Legal & IP</span>
-                  <span onClick={() => onNavigate(View.COMMUNITY_GUIDELINES)} className="hover:text-white cursor-pointer transition-colors">Ethical Code</span>
+                  {legalLinks.map(link => (
+                    <span key={link.view} onClick={() => onNavigate(link.view)} className="hover:text-white cursor-pointer transition-colors">
+                      {link.label}
+                    </span>
+                  ))}
               </div>
 
               <div className="flex items-center gap-4 bg-white/5 px-8 py-3 rounded-full border border-white/10 group cursor-default">
