@@ -6,16 +6,15 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signInWithPopup, 
-  GoogleAuthProvider 
+  GoogleAuthProvider, 
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 interface AuthProps {
   onLogin: (user: User) => void;
-  onNavigate: (view: View) => void;
 }
 
-export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
+export const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -58,9 +57,11 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
       }
       
       onLogin(userData);
-    } catch (err: any) {
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
       console.error(err);
-      setError(err.message);
     } finally {
       setIsGoogleLoading(false);
     }
@@ -98,8 +99,24 @@ export const Auth: React.FC<AuthProps> = ({ onLogin, onNavigate }) => {
         }
       }
     } catch (err: any) {
-      console.error(err);
-      setError(err.message);
+        if (err.code) {
+            switch (err.code) {
+                case "auth/email-already-in-use":
+                    setError("This email address is already in use.");
+                    break;
+                case "auth/invalid-email":
+                    setError("Please enter a valid email address.");
+                    break;
+                case "auth/wrong-password":
+                    setError("Incorrect password. Please try again.");
+                    break;
+                default:
+                    setError("An unexpected error occurred. Please try again.");
+            }
+        } else if (err instanceof Error) {
+            setError(err.message);
+        }
+        console.error(err);
     } finally {
       setIsLoading(false);
     }

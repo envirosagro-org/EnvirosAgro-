@@ -18,3 +18,10 @@ View your app in AI Studio: https://ai.studio/apps/drive/1gjY2TH-XLoWLU9e2mA95hb
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Updating the App Operating System to be Functional
+
+To ensure the app operating system is functional and up-to-date, follow these steps:
+1. [Step 1 for updating OS]
+2. [Step 2 for updating OS]
+3. [Further steps as required]

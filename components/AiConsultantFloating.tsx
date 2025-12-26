@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, X, Send, Loader2, Sparkles, MessageSquare, ArrowRight, Minimize2, Maximize2, Zap, BrainCircuit, ExternalLink } from 'lucide-react';
 import { createAgroChat, sendMessageStream } from '../services/gemini';
-import { ChatMessage, View } from '../types';
+import { ChatMessage } from '../types';
 import { GenerateContentResponse, Chat } from "@google/genai";
 
 interface AiConsultantFloatingProps {

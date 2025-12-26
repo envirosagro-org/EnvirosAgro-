@@ -5,7 +5,6 @@ import { validateCommunityPost } from '../services/gemini';
 
 import { CommunityHeader } from './community/CommunityHeader';
 import { TabNavigation, Tab } from './community/TabNavigation';
-import { FeedTab } from './community/FeedTab';
 import { PostCard } from './community/PostCard';
 import { WalletWidget } from './community/WalletWidget';
 import { HistoryWidget } from './community/HistoryWidget';
@@ -18,6 +17,41 @@ interface CommunityProps {
   user: User | null;
   onNavigate?: (view: View) => void;
   onAwardEac?: (amount: number) => void;
+}
+
+const FeedTab: React.FC<any> = ({ postContent, setPostContent, isProcessing, postCategory, setPostCategory, handlePostSubmit, children }) => {
+  return (
+      <div>
+          {/* Post submission form */}
+          <div className="mb-8 p-6 bg-white dark:bg-earth-900 rounded-2xl border border-earth-100 dark:border-earth-800 shadow-sm">
+                <textarea
+                    value={postContent}
+                    onChange={(e) => setPostContent(e.target.value)}
+                    placeholder="Share a sustainable practice or ask a question..."
+                    className="w-full p-2 bg-transparent focus:outline-none dark:text-white"
+                    rows={3}
+                />
+                <div className="flex justify-between items-center mt-4">
+                    <select value={postCategory} onChange={(e) => setPostCategory(e.target.value)} className="bg-transparent dark:text-white text-xs font-bold uppercase">
+                        <option>General</option>
+                        <option>EA</option>
+                        <option>SA</option>
+                        <option>HA</option>
+                        <option>TA</option>
+                        <option>IA</option>
+                    </select>
+                    <button
+                        onClick={handlePostSubmit}
+                        disabled={isProcessing}
+                        className="px-6 py-2 bg-agro-600 text-white rounded-lg text-sm font-bold shadow-lg hover:bg-agro-700 transition-all disabled:opacity-50"
+                    >
+                        {isProcessing ? 'Analyzing...' : 'Post'}
+                    </button>
+                </div>
+            </div>
+          {children}
+      </div>
+  );
 }
 
 export const Community: React.FC<CommunityProps> = ({ user, onNavigate, onAwardEac }) => {

@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { ShieldCheck, Users, MessageCircle, Heart, Scale, AlertTriangle, CheckCircle, Handshake, Leaf, ArrowLeft } from 'lucide-react';
+import { ShieldCheck, Users, MessageCircle, Scale, AlertTriangle, CheckCircle, Handshake, Leaf, ArrowLeft } from 'lucide-react';
 import { View } from '../types';
 
 interface CommunityGuidelinesProps {

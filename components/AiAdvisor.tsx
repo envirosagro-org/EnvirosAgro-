@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { ChatMessage } from '../types';
 import { createAgroChat, sendMessageStream } from '../services/gemini';
 import { 
-  Send, Bot, User, Loader2, Sparkles, AlertCircle, MessageSquare, 
+  Send, Bot, User, Loader2, Sparkles, 
   BrainCircuit, ShieldCheck, Zap, Layers, Users, Leaf, Cpu,
-  Activity, X, Terminal, ArrowRight, ShieldAlert,
+  Activity, Terminal, 
   Maximize2, Monitor, Settings, Globe, Command, Radio
 } from 'lucide-react';
-import type { Chat, GenerateContentResponse } from "@google/genai";
+import type { ChatSession, Content } from "@google/generative-ai";
 
 const SUGGESTIONS = [
   "Calculate regional m(t) resilience",
@@ -35,7 +35,7 @@ export const AiAdvisor: React.FC = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const chatInstance = useRef<Chat | null>(null);
+  const chatInstance = useRef<ChatSession | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,14 +70,13 @@ export const AiAdvisor: React.FC = () => {
 
     try {
       setMessages(prev => [...prev, { role: 'model', text: '', timestamp: new Date() }]);
-      const result = await sendMessageStream(chatInstance.current, userMsg.text);
+      const stream = await sendMessageStream(chatInstance.current, userMsg.text);
       let fullText = '';
       
-      for await (const chunk of result) {
-          const content = chunk as GenerateContentResponse;
-          const text = content.text;
-          if (text) {
-              fullText += text;
+      for await (const chunk of stream) {
+          const chunkText = chunk.text();
+          if (chunkText) {
+              fullText += chunkText;
               setMessages(prev => {
                   const next = [...prev];
                   next[next.length - 1] = { ...next[next.length - 1], text: fullText };
@@ -156,7 +155,7 @@ export const AiAdvisor: React.FC = () => {
                           <Radio size={16} fill="currentColor" className="animate-pulse" /> Real-time Telemetry
                         </h4>
                         <p className="text-[11px] text-slate-400 leading-relaxed relative z-10 font-medium italic">
-                          "System prioritizing Soil Moisture (In) deltas for Q2 optimization path."
+                          &quot;System prioritizing Soil Moisture (In) deltas for Q2 optimization path.&quot;
                         </p>
                     </div>
                 </div>

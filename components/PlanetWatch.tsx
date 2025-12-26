@@ -64,7 +64,7 @@ const NEWS_SEGMENTS = [
     duration: "10:20",
     image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop&q=60",
     desc: "How agricultural plastic is being repurposed into durable farm infrastructure.",
-    transcript: "[00:00:30] Reporter: Recycling irrigation pipes into fencing posts is the latest win for the EA Thrust in Nairobi.\n[00:05:10] Project Lead: We've diverted 50 tons of HDPE from landfills this quarter alone.\n[00:08:45] Reporter: Scalability is high, with new processing plants coming online in Q4.",
+    transcript: "[00:00:30] Reporter: Recycling irrigation pipes into fencing posts is the latest win for the EA Thrust in Nairobi.\n[00:05:10] Project Lead: We\'ve diverted 50 tons of HDPE from landfills this quarter alone.\n[00:08:45] Reporter: Scalability is high, with new processing plants coming online in Q4.",
     tags: ["Climate Policy", "Sustainable Tech"]
   }
 ];
@@ -97,7 +97,7 @@ export const PlanetWatch: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    let interval: any;
+    let interval: number;
     if (isBroadcasting && !isPaused) {
       interval = setInterval(() => {
         setVideoProgress(prev => {

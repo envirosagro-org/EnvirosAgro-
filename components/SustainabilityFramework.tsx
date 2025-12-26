@@ -128,7 +128,7 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
       const n = 1 * currentIn; 
 
       // Geometric C(a) = [x * (r^n - 1)] / (r - 1) + 1
-      let ca = (currentX * (Math.pow(params.r, n) - 1)) / (params.r - 1) + 1;
+      const ca = (currentX * (Math.pow(params.r, n) - 1)) / (params.r - 1) + 1;
       
       // Resilience m = sqrt[ (In * Dn * ca) / S ]
       const m = Math.sqrt((currentIn * currentDn * ca) / S);

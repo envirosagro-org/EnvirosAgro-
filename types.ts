@@ -1,125 +1,117 @@
-import React from 'react';
 
 export enum View {
-  HOME = 'HOME',
-  INFORMATION = 'INFORMATION',
-  PRODUCTS = 'PRODUCTS',
-  CART = 'CART',
-  SERVICES = 'SERVICES',
-  DATABASE = 'DATABASE',
-  PEOPLE_AND_CULTURE = 'PEOPLE_AND_CULTURE',
-  DASHBOARD = 'DASHBOARD',
-  KNOWLEDGE = 'KNOWLEDGE',
-  AI_ADVISOR = 'AI_ADVISOR',
-  ROADMAP_AI = 'ROADMAP_AI',
-  CROP_DOCTOR = 'CROP_DOCTOR',
-  SUSTAINABILITY_CALCULATOR = 'SUSTAINABILITY_CALCULATOR',
-  FARM_SCOUT = 'FARM_SCOUT',
-  CARBON_LEDGER = 'CARBON_LEDGER',
-  SIGN_UP = 'SIGN_UP',
-  PROFILE = 'PROFILE',
-  SUSTAINABILITY_FRAMEWORK = 'SUSTAINABILITY_FRAMEWORK',
-  BRANDS = 'BRANDS',
-  TRADEMARKS = 'TRADEMARKS',
-  MEDIA = 'MEDIA',
-  SUPPLY = 'SUPPLY',
-  CUSTOMER = 'CUSTOMER',
-  PARTNERSHIPS = 'PARTNERSHIPS',
-  FINANCE = 'FINANCE',
-  COMMUNITY = 'COMMUNITY',
-  PODCAST = 'PODCAST',
-  HERITAGE_FORUM = 'HERITAGE_FORUM',
-  WEBINAR = 'WEBINAR',
-  SMART_FARM_VR = 'SMART_FARM_VR',
-  PLANET_WATCH = 'PLANET_WATCH',
-  GREEN_LENS = 'GREEN_LENS',
-  SAFE_HARVEST = 'SAFE_HARVEST',
-  NUTRILIFE = 'NUTRILIFE',
-  AGBIZ_WEEKLY = 'AGBIZ_WEEKLY',
-  INVESTOR_PORTAL = 'INVESTOR_PORTAL',
-  SCALEUP_SUMMIT = 'SCALEUP_SUMMIT',
-  LIVE_HOST = 'LIVE_HOST',
-  INTRANET_DASHBOARD = 'INTRANET_DASHBOARD',
-  EXTRANET_DASHBOARD = 'EXTRANET_DASHBOARD',
-  COMMUNITY_GUIDELINES = 'COMMUNITY_GUIDELINES',
-  PRIVACY_POLICY = 'PRIVACY_POLICY',
-  SUPPLY_CHAIN_AUDIT = 'SUPPLY_CHAIN_AUDIT',
-  NETWORK_INPUT_HUB = 'NETWORK_INPUT_HUB',
-  PEOPLE_AND_CULTURE_CLOUD = 'PEOPLE_AND_CULTURE_CLOUD',
-  TRANSMISSION_GATEWAY = 'TRANSMISSION_GATEWAY',
-  FUTURE_VISION = 'FUTURE_VISION',
-  SIX_SIGMA_RCA = 'SIX_SIGMA_RCA'
+    HOME = 'home',
+    AI_ADVISOR = 'ai_advisor',
+    DASHBOARD = 'dashboard',
+    OP_CENTER = 'op_center',
+    FINANCE = 'finance',
+    CARBON_LEDGER = 'carbon_ledger',
+    KNOWLEDGE_HUB = 'knowledge_hub',
+    COMMUNITY = 'community',
+    PLANET_WATCH = 'planet_watch',
+    HERITAGE_FORUM = 'heritage_forum',
+    AGBIZ_WEEKLY = 'agbiz_weekly',
+    FUTURE_VISION = 'future_vision',
+    GREEN_LENS = 'green_lens',
+    SCALE_UP_SUMMIT = 'scale_up_summit',
+    SMARTFARM_VR = 'smartfarm_vr',
+    PODCAST = 'podcast',
+    LIVE_HOST = 'live_host',
+    SAFE_HARVEST = 'safe_harvest',
+    NUTRILIFE = 'nutrilife',
+    INVESTOR_PORTAL = 'investor_portal',
+    PARTNERSHIPS = 'partnerships',
+    PEOPLE_CULTURE = 'people_culture',
+    ROADMAP_AI = 'roadmap_ai',
+    SUPPLY_CHAIN_AUDIT = 'supply_chain_audit',
+    SIX_SIGMA_RCA = 'six_sigma_rca',
+    CROP_DOCTOR = 'crop_doctor',
+    FARM_SCOUT = 'farm_scout',
+    NETWORK_INPUT_HUB = 'network_input_hub',
+    INFO_LEGAL = 'info_legal',
+    INFO_PRIVACY = 'info_privacy',
+    INFO_GUIDELINES = 'info_guidelines',
+    USER_PROFILE = 'user_profile'
 }
 
-export interface NavItem {
-  id: View;
-  label: string;
-  icon: React.ReactNode;
+export interface ThrustScore {
+    SA: number; // Social
+    EA: number; // Environment
+    HA: number; // Health
+    TA: number; // Technical
+    IA: number; // Industrial
 }
 
-export interface Article {
-  id: string;
-  title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  imageUrl: string;
-  category: 'Research' | 'Practice' | 'Technology';
-  fullContent?: string;
-}
-
-export interface PlanetWatchReport {
+export interface FarmData {
     id: string;
-    title: string;
-    summary: string;
+    name: string;
     region: string;
-    date: string;
-    threatLevel: 'Low' | 'Medium' | 'High' | 'Critical';
-    metrics: {
-        name: string;
-        value: string;
-        change: string;
-        changeType: 'increase' | 'decrease';
-    }[];
-    fullReportUrl: string;
+    country: string;
+    primary_crop: string;
+    sustainability_score: number;
+    thrust_scores: ThrustScore;
+    last_audit: string;
+    monitored_assets: number;
+    active_alerts: number;
+    latitude: number;
+    longitude: number;
 }
 
-export interface Documentary {
+export interface Post {
+    id: string;
+    author: {
+        name: string;
+        esin: string;
+        avatar: string;
+        isVerified: boolean;
+        cluster: string;
+    };
+    timestamp: string;
+    content: string;
+    practice: string;
+    likes: number;
+    comments: number;
+    image?: string;
+    isOfficial: boolean;
+}
+
+export interface CommunityMember {
+    name: string;
+    esin: string;
+    joinDate: string;
+    cluster: string;
+    avatarUrl: string;
+    isVerified: boolean;
+    role: string;
+    activeSince: string;
+    contributions: number;
+    sustainabilityScore: number;
+}
+
+export interface Transaction {
+    id: string;
+    date: string;
+    description: string;
+    amount: number;
+    currency: string;
+    type: 'credit' | 'debit';
+    status: 'completed' | 'pending' | 'failed';
+}
+
+export interface Episode {
     id: string;
     title: string;
-    description: string;
-    director: string;
-    duration: number; // in minutes
-    releaseYear: number;
-    coverImage: string;
-    videoUrl: string;
-    tags: string[];
-}
-
-export interface ChatMessage {
-  role: 'user' | 'model';
-  text: string;
-  timestamp: Date;
-}
-
-export interface EacTransaction {
-  id: string;
-  type: 'EARN' | 'SPEND';
-  amount: number;
-  description: string;
-  date: string;
-  thrust?: string;
+    image: string;
+    duration: string;
+    date: string;
 }
 
 export interface User {
-  name: string;
-  email: string;
-  role: 'Farmer' | 'Researcher' | 'Stakeholder' | 'Other';
-  location?: string;
-  esin?: string;
-  bio?: string;
-  avatar?: string;
-  joinedDate?: string;
-  eacBalance?: number;
-  transactions?: EacTransaction[];
+    uid: string;
+    email: string | null;
+    name: string | null;
+    avatar: string | null;
+    eacBalance: number;
+    esin: string;
+    cluster: string;
 }

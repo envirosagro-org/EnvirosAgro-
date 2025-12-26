@@ -1,11 +1,12 @@
 import React from 'react';
 import { TrendingUp, Clock, Library } from 'lucide-react';
+import { Episode } from '../../types';
 
 interface AudioStreamListProps {
-  episodes: any[];
-  currentEpisode: any;
+  episodes: Episode[];
+  currentEpisode: Episode;
   isPlaying: boolean;
-  handleSelectEpisode: (ep: any) => void;
+  handleSelectEpisode: (ep: Episode) => void;
   setShowArchive: (show: boolean) => void;
 }
 
@@ -40,7 +41,7 @@ export const AudioStreamList: React.FC<AudioStreamListProps> = ({
                 {currentEpisode.id === ep.id && isPlaying && (
                   <div className="absolute inset-0 bg-agro-900/60 flex items-center justify-center backdrop-blur-[2px]">
                     <div className="flex gap-1 items-end h-4">
-                      {[1, 2, 3].map(i => <div key={i} className="w-1 bg-white rounded-full animate-bounce" style={{ animationDelay: `${i * 0.1}s` }}></div>)}
+                      {[1, 2, 3].map(i => <div key={i} className={`w-1 bg-white rounded-full animate-bounce [animation-delay:${i * 0.1}s]`} ></div>)}
                     </div>
                   </div>
                 )}

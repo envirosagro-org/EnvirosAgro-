@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, ChatSession } from "@google/generative-ai";
 
 const API_KEY = process.env.VITE_GEMINI_API_KEY || "";
 
@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 /**
  * Creates a unified chat session for the EnvirosAgro AI Assistant.
  */
-export const createAgroChat = () => {
+export const createAgroChat = (): ChatSession => {
   const model = genAI.getGenerativeModel({
     model: 'gemini-1.5-flash',
     systemInstruction: `You are the "EnvirosAgro AI Assistant", a world-class expert in sustainable agriculture and technical innovation. 
@@ -21,6 +21,12 @@ export const createAgroChat = () => {
     },
   });
 };
+
+export const sendMessageStream = async (chat: ChatSession, message: string) => {
+    const result = await chat.sendMessageStream(message);
+    return result.stream;
+};
+
 
 export const analyzeIndustrialGaps = async (metrics: any) => {
   if (!API_KEY) {
