@@ -1,4 +1,3 @@
-tsx
 import React, { useState, useMemo } from 'react';
 import { View } from '../types';
 import { 
