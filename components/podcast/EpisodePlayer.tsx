@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Rewind, FastForward, Volume2, VolumeX } from 'lucide-react';
+import { Episode } from '../../types';
 
-export const EpisodePlayer = ({ episode }:any) => {
+interface EpisodePlayerProps {
+    episode: Episode;
+}
+
+export const EpisodePlayer: React.FC<EpisodePlayerProps> = ({ episode }) => {
     const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [duration, setDuration] = useState(0);
@@ -33,13 +38,13 @@ export const EpisodePlayer = ({ episode }:any) => {
         setDuration(audioRef.current?.duration || 0);
     };
 
-    const handleSeek = (e:any) => {
+    const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(audioRef.current) {
-            audioRef.current.currentTime = e.target.value;
+            audioRef.current.currentTime = parseFloat(e.target.value);
         }
     };
 
-    const formatTime = (time:any) => {
+    const formatTime = (time: number) => {
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60).toString().padStart(2, '0');
         return `${minutes}:${seconds}`;

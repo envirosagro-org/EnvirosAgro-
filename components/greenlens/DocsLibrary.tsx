@@ -1,63 +1,59 @@
 import React from 'react';
-import { ArrowRight, Play, Award } from 'lucide-react';
 
-interface DocsLibraryProps {
-  docsLibrary: any[];
-  setShowFullCatalog: (show: boolean) => void;
-  handleOpenDetails: (film: any) => void;
-}
+const documentaries = [
+  {
+    title: 'Harvest of the Future',
+    description: 'How technology is transforming the way we grow food.',
+    imageUrl: 'https://images.unsplash.com/photo-1627920769854-37a86e961440?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600'
+  },
+  {
+    title: 'Guardians of the Bees',
+    description: 'A look into the critical role of pollinators and the fight to save them.',
+    imageUrl: 'https://images.unsplash.com/photo-1533231043187-a64015688d3e?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600'
+  },
+  {
+    title: 'The Water Guardians',
+    description: 'Innovative solutions for water conservation in agriculture.',
+    imageUrl: 'https://images.unsplash.com/photo-1596649514493-a09a5286b24f?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600'
+  },
+  {
+    title: 'From Seed to Supermarket',
+    description: 'Tracing the journey of our food from the farm to your table.',
+    imageUrl: 'https://images.unsplash.com/photo-1578839017814-1b1d10a2f447?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600'
+  }
+];
 
-export const DocsLibrary: React.FC<DocsLibraryProps> = ({
-  docsLibrary,
-  setShowFullCatalog,
-  handleOpenDetails,
-}) => {
+export const DocsLibrary: React.FC = () => {
   return (
-    <>
-      <div className="flex items-center justify-between mb-8">
-        <h3 className="text-2xl font-bold text-earth-900 dark:text-white">Now Streaming</h3>
-        <button
-          onClick={() => setShowFullCatalog(true)}
-          className="text-green-700 dark:text-green-400 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all"
-        >
-          View Full Catalog <ArrowRight size={18} />
-        </button>
+    <div className="bg-white/5 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl lg:mx-0">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">From the Library</h2>
+          <p className="mt-6 text-lg leading-8 text-slate-300">
+            Explore our collection of stories about the people, ideas, and technologies shaping the future of food.
+          </p>
+        </div>
+        <div className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-4">
+          {documentaries.map((doc) => (
+            <article
+              key={doc.title}
+              className="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80"
+            >
+              <img src={doc.imageUrl} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover" />
+              <div className="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
+              <div className="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
+
+              <h3 className="mt-3 text-lg font-semibold leading-6 text-white">
+                <a href="#">
+                  <span className="absolute inset-0" />
+                  {doc.title}
+                </a>
+              </h3>
+              <p className="text-sm text-slate-400">{doc.description}</p>
+            </article>
+          ))}
+        </div>
       </div>
-
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {docsLibrary.map((doc) => (
-          <div
-            key={doc.id}
-            onClick={() => handleOpenDetails(doc)}
-            className="group cursor-pointer flex flex-col h-full"
-          >
-            <div className="relative rounded-[2rem] overflow-hidden mb-4 aspect-[3/4] border border-earth-100 dark:border-earth-800 shadow-sm">
-              <img src={doc.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={doc.title} />
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors"></div>
-
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white p-6 text-center">
-                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 backdrop-blur-xl border border-white/20">
-                  <Play size={32} fill="currentColor" />
-                </div>
-                <p className="font-bold text-sm mb-1">{doc.impact}</p>
-                <p className="text-[10px] text-gray-300 uppercase tracking-widest font-black">Verified Impact</p>
-              </div>
-
-              <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest border border-white/10">
-                {doc.duration}
-              </div>
-            </div>
-
-            <h4 className="font-bold text-lg text-earth-900 dark:text-white mb-2 group-hover:text-green-700 transition-colors leading-tight">{doc.title}</h4>
-            <div className="flex items-center gap-2 text-xs text-earth-50 dark:text-earth-400 font-medium">
-              <span>{doc.category}</span>
-              <span className="w-1 h-1 bg-earth-300 dark:bg-earth-700 rounded-full"></span>
-              <span className="flex items-center gap-1.5 text-green-600 dark:text-green-400 font-bold uppercase text-[10px] tracking-tighter"><Award size={14} /> Impact Film</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
+    </div>
   );
 };

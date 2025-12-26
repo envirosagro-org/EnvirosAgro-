@@ -1,33 +1,42 @@
-import React from 'react';
-import { Play, Pause, Headphones } from 'lucide-react';
 
-export const EpisodeList = ({ episodes, currentEpisode, onSelectEpisode }:any) => {
+import React from 'react';
+import { EPISODES } from './data';
+import { Play } from 'lucide-react';
+
+export const EpisodeList: React.FC = () => {
+  const episodes = EPISODES;
+
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg h-full">
-      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">All Episodes</h3>
-      <div className="space-y-4">
-        {episodes.map((episode:any) => {
-          const isActive = currentEpisode.id === episode.id;
-          return (
-            <button 
-              key={episode.id} 
-              onClick={() => onSelectEpisode(episode)}
-              className={`w-full text-left p-4 rounded-lg transition-all duration-200 ${isActive ? 'bg-green-100 dark:bg-green-900/50 ring-2 ring-green-500' : 'bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-700/50'}`}>
-              <div className="flex items-center">
-                  <div className="flex-shrink-0 mr-4">
-                      {isActive ? 
-                          <Pause className="h-5 w-5 text-green-600" /> : 
-                          <Play className="h-5 w-5 text-gray-500" />
-                      }
+    <div className="bg-white dark:bg-earth-950 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl lg:mx-0">
+          <h2 className="text-3xl font-bold font-serif tracking-tight text-earth-900 dark:text-white sm:text-4xl">Recent Episodes</h2>
+          <p className="mt-6 text-lg leading-8 text-earth-600 dark:text-earth-300">
+            Catch up on our latest conversations with the people shaping the future of agriculture.
+          </p>
+        </div>
+        <div className="mt-16">
+          <ul className="divide-y divide-earth-100 dark:divide-earth-800">
+            {episodes.map((episode) => (
+              <li key={episode.id} className="py-8 group">
+                <div className="md:flex items-center">
+                  <div className="md:flex-grow">
+                    <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mb-1">Guest: {episode.guest}</p>
+                    <h3 className="text-xl font-bold text-earth-900 dark:text-white group-hover:text-indigo-600 transition-colors">{episode.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-earth-600 dark:text-earth-400">{episode.description}</p>
                   </div>
-                  <div className="flex-grow">
-                      <p className={`font-semibold ${isActive ? 'text-green-800 dark:text-green-300' : 'text-gray-800 dark:text-gray-200'}`}>{episode.title}</p>
-                      <p className={`text-sm ${isActive ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'}`}>{episode.duration} &bull; {episode.guest}</p>
+                  <div className="mt-4 md:mt-0 md:ml-8 flex-shrink-0 flex flex-col items-start md:items-end">
+                    <p className="text-sm font-medium text-earth-500">Duration: {episode.duration}</p>
+                    <button className="mt-4 flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full text-sm font-semibold hover:bg-indigo-700 transition-all active:scale-95">
+                      <Play size={16} />
+                      <span>Play Episode</span>
+                    </button>
                   </div>
-              </div>
-            </button>
-          );
-        })}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,14 @@
 import React from 'react';
 import { X, PlayCircle, Award, Users } from 'lucide-react';
+import { Film } from '../../types';
 
-export const DetailsModal = ({ detailsFilm, setShowDetailsModal, handleWatchNow }: any) => {
+interface DetailsModalProps {
+    detailsFilm: Film;
+    setShowDetailsModal: (show: boolean) => void;
+    handleWatchNow: (film: Film) => void;
+}
+
+export const DetailsModal: React.FC<DetailsModalProps> = ({ detailsFilm, setShowDetailsModal, handleWatchNow }) => {
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 animate-in fade-in duration-300 flex items-center justify-center">
       <div className="relative bg-white/5 dark:bg-gray-800/20 rounded-2xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto shadow-2xl border border-white/10">
@@ -34,7 +41,7 @@ export const DetailsModal = ({ detailsFilm, setShowDetailsModal, handleWatchNow 
               <div>
                 <h3 className="font-bold text-white flex items-center gap-2 mb-2"><Users size={18} /> Crew</h3>
                 <ul className="text-sm space-y-1 pl-4">
-                  {detailsFilm.crew.map((member: any) => (
+                  {detailsFilm.crew.map((member) => (
                     <li key={member.name}><strong>{member.role}:</strong> {member.name}</li>
                   ))}
                 </ul>

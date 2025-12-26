@@ -1,7 +1,17 @@
 import React from 'react';
 import { Play, Pause, Rewind, FastForward } from 'lucide-react';
+import { Episode } from '../../types';
 
-export const PodcastPlayer = ({ episode, isPlaying, onPlayPause, progress }: any) => {
+interface PodcastPlayerProps {
+  episode: Episode;
+  isPlaying: boolean;
+  onPlayPause: () => void;
+  onRewind: () => void;
+  onFastForward: () => void;
+  progress: number;
+}
+
+export const PodcastPlayer: React.FC<PodcastPlayerProps> = ({ episode, isPlaying, onPlayPause, onRewind, onFastForward, progress }) => {
   if (!episode) return null;
 
   return (
@@ -13,16 +23,16 @@ export const PodcastPlayer = ({ episode, isPlaying, onPlayPause, progress }: any
           <div className="flex-grow">
             <h3 className="font-bold text-white">{episode.title}</h3>
             <p className="text-sm text-gray-400">
-              {episode.guests.map((g: any) => g.name).join(', ')}
+              {episode.guests.map((g) => g.name).join(', ')}
             </p>
           </div>
 
           <div className="flex items-center gap-6 text-white mx-8">
-            <button className="hidden md:block text-gray-400 hover:text-white transition-colors"><Rewind size={24} /></button>
+            <button onClick={onRewind} className="hidden md:block text-gray-400 hover:text-white transition-colors"><Rewind size={24} /></button>
             <button onClick={onPlayPause} className="bg-green-500 rounded-full p-4 text-white hover:bg-green-600 transition-colors shadow-lg">
               {isPlaying ? <Pause size={28} /> : <Play size={28} className="ml-1" />}
             </button>
-            <button className="hidden md:block text-gray-400 hover:text-white transition-colors"><FastForward size={24} /></button>
+            <button onClick={onFastForward} className="hidden md:block text-gray-400 hover:text-white transition-colors"><FastForward size={24} /></button>
           </div>
           
         </div>

@@ -1,32 +1,26 @@
 import React from 'react';
-import { PlayCircle, Mic } from 'lucide-react';
 
-export const PodcastHero = ({ episode, onPlay }: any) => {
+export const PodcastHero: React.FC = () => {
   return (
-    <div className="relative rounded-3xl overflow-hidden mb-12 shadow-2xl">
-      <img src={episode.image} alt={episode.title} className="w-full h-96 object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-      
-      <div className="absolute inset-0 flex flex-col justify-end p-10">
-        <div className="max-w-2xl text-white">
-          <p className="text-sm font-bold uppercase tracking-widest text-green-400 flex items-center gap-2">
-            <Mic size={16} /> Featured Episode
-          </p>
-          <h1 className="text-5xl font-bold font-serif my-4">{episode.title}</h1>
-          <p className="text-gray-300 text-lg mb-6">{episode.showNotes.substring(0, 150)}...</p>
-          <div className="flex items-center gap-6">
-            <button
-              onClick={onPlay}
-              className="flex items-center gap-3 bg-green-500/90 text-white font-bold py-3 px-8 rounded-full hover:bg-green-500 transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              <PlayCircle size={24} />
-              Play Episode
-            </button>
-            <div className="text-sm">
-                <p className="font-semibold">{episode.duration}</p>
-                <p className="text-gray-400">{episode.date}</p>
-            </div>
-          </div>
+    <div className="relative bg-gray-800 py-20 sm:py-32">
+      <div className="absolute inset-0">
+        <img
+          className="h-full w-full object-cover"
+          src="https://images.unsplash.com/photo-1590602847991-9d6243b17c24?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=2400"
+          alt="Podcast background"
+        />
+        <div className="absolute inset-0 bg-gray-800/80" />
+      </div>
+      <div className="relative mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">Agri-Innovators</h1>
+        <p className="mt-6 text-lg leading-8 text-gray-300">
+          Tune into conversations with the brightest minds in agriculture, exploring the trends, tech, and policies shaping our food future.
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <button className="rounded-md bg-green-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">
+            Listen to Latest Episode
+          </button>
+          <button className="text-sm font-semibold leading-6 text-white">Subscribe <span aria-hidden="true">→</span></button>
         </div>
       </div>
     </div>

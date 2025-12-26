@@ -1,13 +1,14 @@
 import React from 'react';
 import { FORUM_HIGHLIGHTS } from './communityData';
 import { MessageSquare, Flame } from 'lucide-react';
+import { CommunityPost } from '../../types';
 
 export const ForumHighlights = () => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
       <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Hot Topics in the Forum</h2>
       <div className="space-y-4">
-        {FORUM_HIGHLIGHTS.map(post => (
+        {FORUM_HIGHLIGHTS.map((post: CommunityPost) => (
           <div key={post.id} className="p-4 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
             <div className="flex items-start">
               <img src={post.authorAvatar} alt={post.author} className="h-10 w-10 rounded-full mr-4" />

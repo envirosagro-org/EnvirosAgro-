@@ -1,19 +1,23 @@
 import React from 'react';
 
-const FutureVisionWidget: React.FC = () => {
+const futureItems = [
+  { title: 'AI-Powered Insights', description: 'Automated recommendations based on your data.' },
+  { title: 'Advanced Reporting', description: 'Generate custom reports with deeper analytics.' },
+  { title: 'Mobile App', description: 'Access your dashboard on the go.' },
+];
+
+export const FutureVisionWidget: React.FC = () => {
   return (
-    <div className="bg-white dark:bg-slate-900 shadow-lg rounded-lg p-6 h-full">
-      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Future Vision</h3>
-      <p className="text-slate-500 dark:text-slate-400 mb-6">
-        Our roadmap for the next five years is focused on expanding our reach, enhancing our technology, and deepening our impact. We are committed to creating a more sustainable and equitable future for all.
-      </p>
-      <div className="flex justify-end">
-        <button className="bg-agro-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-agro-700 transition-colors">
-          View Roadmap
-        </button>
-      </div>
+    <div className="bg-white/5 rounded-lg p-6 h-96">
+      <h3 className="text-lg font-semibold text-white mb-4">Future Vision</h3>
+      <ul>
+        {futureItems.map((item, index) => (
+          <li key={index} className="mb-4">
+            <p className="text-md font-semibold text-white">{item.title}</p>
+            <p className="text-sm text-slate-400">{item.description}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
-
-export default FutureVisionWidget;

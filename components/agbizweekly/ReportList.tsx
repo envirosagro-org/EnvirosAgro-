@@ -1,9 +1,10 @@
 import React from 'react';
 import { BarChart2, ArrowRight } from 'lucide-react';
+import { AgBizWeeklyReport } from '../../types';
 
 interface ReportListProps {
-  reports: any[];
-  onSelectReport: (report: any) => void;
+  reports: AgBizWeeklyReport[];
+  onSelectReport: (report: AgBizWeeklyReport) => void;
 }
 
 export const ReportList: React.FC<ReportListProps> = ({ reports, onSelectReport }) => {

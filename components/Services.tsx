@@ -9,7 +9,7 @@ import {
   Leaf, TrendingUp
 } from 'lucide-react';
 import { View } from '../types';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const SERVICES = [
   {
@@ -123,10 +123,9 @@ export const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
     setAiRecommendation(null);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: `You are the Lead Scientific Advisor for EnvirosAgro. 
+      const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY as string);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-preview"});
+      const prompt = `You are the Lead Scientific Advisor for EnvirosAgro. 
         A user is describing a technical or operational agricultural challenge: "${aiInput}".
         
         Our current scientific service catalog includes:
@@ -138,11 +137,12 @@ export const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
         Based on their query, recommend the most appropriate scientific protocol. 
         Explain the "Why" using high-level scientific terminology aligned with our Five Thrusts. 
         Reference the Sustainable Time Constant m(t) where applicable. 
-        Keep the response to 3-4 professional, technical sentences.`,
-        config: { temperature: 0.4 }
-      });
+        Keep the response to 3-4 professional, technical sentences.`;
 
-      setAiRecommendation(response.text);
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      setAiRecommendation(text);
     } catch (err) {
       console.error("Scientific AI Error:", err);
       setAiRecommendation("Satellite uplink to the Intelligence Core interrupted. Please initiate manual service selection.");

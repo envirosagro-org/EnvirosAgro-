@@ -6,6 +6,9 @@ import { FinanceHeader } from './finance/FinanceHeader';
 import { ProductGrid } from './finance/ProductGrid';
 import { FinanceSidebar } from './finance/FinanceSidebar';
 import { DepositModal } from './finance/DepositModal';
+import { AccountStatement } from './finance/AccountStatement';
+import { TransactionHistory } from './finance/TransactionHistory';
+import { FinancialTools } from './finance/FinancialTools';
 
 const FINANCIAL_PRODUCTS = [
   {
@@ -122,6 +125,12 @@ export const Finance: React.FC<FinanceProps> = ({ user, onNavigate }) => {
           onShowDeposit={() => setShowDepositModal(true)}
           onNavigate={(view) => onNavigate?.(view)}
         />
+      </div>
+
+      <div className="mt-8">
+        <AccountStatement />
+        <TransactionHistory />
+        <FinancialTools />
       </div>
 
       {showDepositModal && (

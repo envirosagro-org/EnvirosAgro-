@@ -53,7 +53,7 @@ export const AiConsultantFloating: React.FC<AiConsultantFloatingProps> = ({ onOp
 
       for await (const chunk of stream) {
         const response = chunk as GenerateContentResponse;
-        const text = response.text;
+        const text = response.text();
         if (text) {
           fullResponse += text;
           setMessages(prev => {

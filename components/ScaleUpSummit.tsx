@@ -1,6 +1,7 @@
 import React from 'react';
 import { ScaleUpHeader } from './scaleup/ScaleUpHeader';
 import { Ticket, Users, Mic, Laptop, Coffee, Rocket, ArrowRight } from 'lucide-react';
+import { WorkshopSection } from './scaleup/WorkshopSection';
 
 export const ScaleUpSummit: React.FC = () => {
   const highlights = [
@@ -87,6 +88,7 @@ export const ScaleUpSummit: React.FC = () => {
             </div>
          </div>
       </div>
+      <WorkshopSection />
     </div>
   );
 };

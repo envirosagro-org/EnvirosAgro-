@@ -1,9 +1,10 @@
 import React from 'react';
 import { ThumbsUp, Share2, Sparkles } from 'lucide-react';
+import { CommunityPost } from '../../types';
 
 interface PostCardProps {
-  post: any;
-  handleSharePost: (post: any) => void;
+  post: CommunityPost;
+  handleSharePost: (post: CommunityPost) => void;
 }
 
 export const PostCard: React.FC<PostCardProps> = ({ post, handleSharePost }) => {

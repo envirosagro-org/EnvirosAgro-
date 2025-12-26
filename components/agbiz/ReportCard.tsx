@@ -1,7 +1,14 @@
 import React from 'react';
 import { Newspaper } from 'lucide-react';
+import { Report } from '../../types';
 
-export const ReportCard = ({ report, isSelected, onSelect }: any) => {
+interface ReportCardProps {
+  report: Report;
+  isSelected: boolean;
+  onSelect: () => void;
+}
+
+export const ReportCard: React.FC<ReportCardProps> = ({ report, isSelected, onSelect }) => {
   return (
     <div
       onClick={onSelect}

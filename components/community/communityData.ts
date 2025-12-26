@@ -40,7 +40,7 @@ export const FORUM_HIGHLIGHTS = [
         isTrending: false,
     },
     {
-        id: 5,
+        id: 6,
         topic: "DIY automated irrigation systems for small-scale farms",
         category: "DIY & Innovation",
         author: "Tom Howard",

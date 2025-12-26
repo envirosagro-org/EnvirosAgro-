@@ -4,6 +4,9 @@ import { CommunityHeader } from './community/CommunityHeader';
 import { ForumHighlights } from './community/ForumHighlights';
 import { FeaturedMembers } from './community/FeaturedMembers';
 import { Cta } from './Cta';
+import { NewsFeed } from './community/NewsFeed';
+import { UpcomingEvents } from './community/UpcomingEvents';
+import { MemberSpotlight } from './community/MemberSpotlight';
 
 interface CommunityProps {
   user: User | null;
@@ -18,11 +21,14 @@ export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
       <div className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-8">
+              <NewsFeed />
               <ForumHighlights />
+              <UpcomingEvents />
             </div>
-            <div>
+            <div className="space-y-8">
               <FeaturedMembers />
+              <MemberSpotlight />
             </div>
           </div>
         </div>

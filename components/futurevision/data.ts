@@ -34,5 +34,17 @@ export const VISIONS = [
             { label: 'Energy Source', value: 'Solar', description: 'fully renewable and off-grid capable' },
             { label: 'Arid Viability', value: 'Down to 20% humidity', description: 'operational in desert environments' },
         ]
+    },
+    {
+        id: 'urban-vertical-farms',
+        title: 'Urban Vertical Farms',
+        category: 'Controlled Environment Agriculture',
+        description: 'Skyscraper-like structures housing fully automated, soil-less farms that grow crops year-round in urban centers. These farms use advanced hydroponics, aeroponics, and LED lighting to maximize yield while minimizing land and water use, bringing food production closer to consumers.',
+        videoUrl: 'https://www.youtube.com/embed/c_t8i9Gz_F4?autoplay=1&mute=1&controls=0&loop=1&playlist=c_t8i9Gz_F4',
+        stats: [
+            { label: 'Land Use Efficiency', value: '100x', description: 'more produce per square foot than traditional farms' },
+            { label: 'Water Savings', value: '-90%', description: 'compared to conventional agriculture' },
+            { label: 'Food Miles', value: '-95%', description: 'reduction by growing within cities' },
+        ]
     }
 ];

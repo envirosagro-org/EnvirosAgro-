@@ -1,7 +1,12 @@
 import React from 'react';
 import { User, Calendar, Tag } from 'lucide-react';
+import { Report } from '../../types';
 
-export const ReportView = ({ report }: any) => {
+interface ReportViewProps {
+  report: Report | null;
+}
+
+export const ReportView: React.FC<ReportViewProps> = ({ report }) => {
   if (!report) {
     return (
       <div className="p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg flex justify-center items-center h-full">

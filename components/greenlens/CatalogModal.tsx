@@ -1,7 +1,20 @@
 import React from 'react';
 import { X, Search, PlayCircle, Info } from 'lucide-react';
+import { Film } from '../../types';
 
-export const CatalogModal = ({
+interface CatalogModalProps {
+    catalogSearch: string;
+    setCatalogSearch: (search: string) => void;
+    setShowFullCatalog: (show: boolean) => void;
+    activeCategory: string;
+    setActiveCategory: (category: string) => void;
+    categories: string[];
+    filteredCatalog: Film[];
+    handleOpenDetails: (film: Film) => void;
+    handleWatchNow: (film: Film) => void;
+}
+
+export const CatalogModal: React.FC<CatalogModalProps> = ({
   catalogSearch,
   setCatalogSearch,
   setShowFullCatalog,
@@ -11,7 +24,7 @@ export const CatalogModal = ({
   filteredCatalog,
   handleOpenDetails,
   handleWatchNow,
-}: any) => {
+}) => {
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-lg z-50 animate-in fade-in duration-500">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -54,7 +67,7 @@ export const CatalogModal = ({
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 h-[calc(100vh-250px)] overflow-y-auto pr-2">
-          {filteredCatalog.map((doc: any) => (
+          {filteredCatalog.map((doc: Film) => (
             <div key={doc.id} className="group relative rounded-xl overflow-hidden bg-white/5 shadow-lg">
               <img src={doc.image} alt={doc.title} className="w-full h-64 object-cover group-hover:opacity-30 transition-opacity" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex flex-col justify-end">

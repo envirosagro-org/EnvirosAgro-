@@ -1,40 +1,24 @@
 import React from 'react';
-import { Users, Globe, Film, Award } from 'lucide-react';
 
 const stats = [
-  {
-    value: "2M+",
-    label: "Global Viewers",
-    icon: <Users size={32} />
-  },
-  {
-    value: "15",
-    label: "Countries Featured",
-    icon: <Globe size={32} />
-  },
-  {
-    value: "50+",
-    label: "Impact Stories Told",
-    icon: <Film size={32} />
-  },
-  {
-    value: "12",
-    label: "International Awards",
-    icon: <Award size={32} />
-  },
+  { value: '100+', label: 'Documentaries' },
+  { value: '5M+', label: 'Viewers' },
+  { value: '50+', label: 'Countries' },
+  { value: '20+', label: 'Awards Won' },
 ];
 
-export const GreenLensStats = () => {
+export const GreenLensStats: React.FC = () => {
   return (
-    <div className="bg-white/5 dark:bg-gray-800/20 rounded-3xl border border-white/10 shadow-lg mb-20 backdrop-blur-md">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-px">
-        {stats.map((stat, index) => (
-          <div key={index} className="py-10 px-6 text-center text-white">
-            <div className="flex justify-center text-green-400 mb-4">{stat.icon}</div>
-            <p className="text-4xl font-bold tracking-tighter">{stat.value}</p>
-            <p className="text-sm uppercase text-gray-400 font-semibold tracking-wider mt-1">{stat.label}</p>
-          </div>
-        ))}
+    <div className="bg-white/5 py-12 sm:py-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-16 text-center lg:grid-cols-4">
+          {stats.map((stat) => (
+            <div key={stat.label} className="mx-auto flex max-w-xs flex-col gap-y-4">
+              <dt className="text-base leading-7 text-slate-400">{stat.label}</dt>
+              <dd className="order-first text-3xl font-semibold tracking-tight text-white sm:text-5xl">{stat.value}</dd>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
