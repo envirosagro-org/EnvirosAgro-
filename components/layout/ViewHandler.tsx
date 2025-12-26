@@ -47,6 +47,9 @@ import { NetworkInputHub } from '../NetworkInputHub';
 import { TransmissionGateway } from '../TransmissionGateway';
 import { FutureVision } from '../FutureVision';
 import { SixSigmaRCA } from '../SixSigmaRCA';
+import { FrameworkDistinctions } from '../FrameworkDistinctions';
+import { DataRegistry } from '../DataRegistry';
+import { Portfolio } from '../Portfolio';
 
 interface ViewHandlerProps {
   currentView: View;
@@ -84,7 +87,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
     case View.PEOPLE_AND_CULTURE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
     case View.PEOPLE_AND_CULTURE_CLOUD: return <PeopleAndCulture user={user} onNavigate={handleNavClick} initialTab="CLOUD" />;
-    case View.KNOWLEDGE: return <KnowledgeHub onNavigate={handleNavClick} initialSearch={globalSearchQuery} />;
+    case View.KNOWLEDGE: return <Information onNavigate={handleNavClick} />;
     case View.DASHBOARD: return <Dashboard onNavigate={handleNavClick} />;
     case View.AI_ADVISOR: return <AiAdvisor />;
     case View.ROADMAP_AI: return <RoadmapAI />;
@@ -124,6 +127,9 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.TRANSMISSION_GATEWAY: return <TransmissionGateway onNavigate={handleNavClick} />;
     case View.FUTURE_VISION: return <FutureVision />;
     case View.SIX_SIGMA_RCA: return <SixSigmaRCA />;
+    case View.FRAMEWORK_DISTINCTIONS: return <FrameworkDistinctions />;
+    case View.DATA_REGISTRY: return <DataRegistry />;
+    case View.PORTFOLIO: return <Portfolio user={user} />;
     default: return <Hero onNavigate={handleNavClick} />;
   }
 };
