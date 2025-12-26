@@ -169,3 +169,39 @@ export const analyzeSatelliteScan = async (fieldName: string) => {
   const response = await result.response;
   return response.text();
 };
+
+export const searchKnowledgeBase = async (query: string, category: string) => {
+    if (!API_KEY) {
+        throw new Error("Gemini API key is not configured.");
+    }
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const prompt = `You are a world-class agricultural research assistant for EnvirosAgro.
+    Search the EnvirosAgro knowledge base for information related to: "${query}".
+    Filter the results to fit the category: "${category}". If the category is "All", search across all categories.
+    Return a JSON array of the top 5 most relevant documents.
+    Each JSON object must have the following structure and data types:
+    {
+      "id": "string (unique identifier)",
+      "title": "string",
+      "excerpt": "string (1-2 sentence summary)",
+      "category": "string (Social, Environment, Health, Technical, or Industrial)",
+      "complexity": "string ('Beginner', 'Intermediate', or 'Expert')",
+      "duration": "string (e.g., '3 Weeks')",
+      "instructor": "string (a plausible instructor name, e.g., 'Dr. Jane Doe')",
+      "fullContent": "string (the full text of the module)",
+      "image": "string (a relevant Unsplash or similar placeholder image URL)"
+    }
+    Ensure the output is a valid JSON array string only. Do not include any other text or markdown formatting.`;
+
+    try {
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        // Clean the response to ensure it's a valid JSON string
+        const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        return JSON.parse(text);
+    } catch (error) {
+        console.error("Error searching knowledge base:", error);
+        throw new Error(`Failed to search knowledge base: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+};

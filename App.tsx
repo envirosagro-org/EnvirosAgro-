@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { View, User } from './types';
 import { Header } from './components/layout/Header';
@@ -9,6 +10,7 @@ import { Logo } from './components/Logo';
 import { AiConsultantFloating } from './components/AiConsultantFloating';
 import { CurrencyProvider } from './context/CurrencyContext';
 import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { auth, db } from './lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -19,7 +21,6 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>(View.HOME);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
-  const [isDarkMode] = useState(true);
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -56,11 +57,6 @@ const App: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (isDarkMode) document.documentElement.classList.add('dark');
-    else document.documentElement.classList.remove('dark');
-  }, [isDarkMode]);
 
   useEffect(() => {
     const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -122,65 +118,67 @@ const App: React.FC = () => {
   }
 
   return (
-    <CurrencyProvider>
-      <CartProvider>
-        <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-500 flex flex-col">
-          <Toaster position="top-right" />
-          <Header 
-            scrolled={scrolled}
-            currentView={currentView}
-            handleNavClick={handleNavClick}
-            toggleFullscreen={toggleFullscreen}
-            isFullscreen={isFullscreen}
-            user={user}
-            handleLogout={handleLogout}
-            isMenuOpen={isMenuOpen}
-            setIsMenuOpen={setIsMenuOpen}
-          />
+    <ThemeProvider>
+      <CurrencyProvider>
+        <CartProvider>
+          <div className="min-h-screen bg-[#fafaf9] dark:bg-earth-950 text-earth-900 dark:text-earth-50 font-sans transition-colors duration-500 flex flex-col">
+            <Toaster position="top-right" />
+            <Header 
+              scrolled={scrolled}
+              currentView={currentView}
+              handleNavClick={handleNavClick}
+              toggleFullscreen={toggleFullscreen}
+              isFullscreen={isFullscreen}
+              user={user}
+              handleLogout={handleLogout}
+              isMenuOpen={isMenuOpen}
+              setIsMenuOpen={setIsMenuOpen}
+            />
 
-          <MenuOverlay 
-            isMenuOpen={isMenuOpen}
-            setIsMenuOpen={setIsMenuOpen}
-            handleNavClick={handleNavClick}
-            currentView={currentView}
-          />
+            <MenuOverlay 
+              isMenuOpen={isMenuOpen}
+              setIsMenuOpen={setIsMenuOpen}
+              handleNavClick={handleNavClick}
+              currentView={currentView}
+            />
 
-          <main className="flex-1 min-h-screen pt-28 lg:pt-36 pb-20">
-            <div className="mx-auto max-w-[1900px]">
-              {currentView !== View.HOME && (
-                <div className="px-8 mb-6 animate-in slide-in-from-left-4 duration-500">
-                  <button 
-                    onClick={() => handleNavClick(backInfo.target)}
-                    className="flex items-center gap-3 text-earth-400 hover:text-agro-600 font-black text-[10px] uppercase tracking-[0.3em] transition-all group"
-                  >
-                    <div className="p-2.5 bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-earth-100 dark:border-earth-800 group-hover:bg-agro-50 transition-colors">
-                      <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
-                    </div>
-                    <span>Back to {backInfo.label}</span>
-                  </button>
-                </div>
-              )}
-              
-              <ViewHandler 
-                currentView={currentView} 
-                handleNavClick={handleNavClick} 
-                user={user} 
-                setUser={setUser} 
-                awardEac={awardEac} 
-                globalSearchQuery={globalSearchQuery} 
-                isPartnerIntegrated={isPartnerIntegrated} 
-                setIsPartnerIntegrated={setIsPartnerIntegrated} 
-                partnerData={partnerData} 
-                setPartnerData={setPartnerData} 
-                setCurrency={setCurrency}
-              />
-            </div>
-          </main>
-          <AiConsultantFloating onOpenFull={() => handleNavClick(View.AI_ADVISOR)} />
-          {currentView === View.HOME && <Footer onNavigate={handleNavClick} />}
-        </div>
-      </CartProvider>
-    </CurrencyProvider>
+            <main className="flex-1 min-h-screen pt-28 lg:pt-36 pb-20">
+              <div className="mx-auto max-w-[1900px]">
+                {currentView !== View.HOME && (
+                  <div className="px-8 mb-6 animate-in slide-in-from-left-4 duration-500">
+                    <button 
+                      onClick={() => handleNavClick(backInfo.target)}
+                      className="flex items-center gap-3 text-earth-400 hover:text-agro-600 font-black text-[10px] uppercase tracking-[0.3em] transition-all group"
+                    >
+                      <div className="p-2.5 bg-white dark:bg-earth-900 rounded-xl shadow-sm border border-earth-100 dark:border-earth-800 group-hover:bg-agro-50 transition-colors">
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
+                      </div>
+                      <span>Back to {backInfo.label}</span>
+                    </button>
+                  </div>
+                )}
+                
+                <ViewHandler 
+                  currentView={currentView} 
+                  handleNavClick={handleNavClick} 
+                  user={user} 
+                  setUser={setUser} 
+                  awardEac={awardEac} 
+                  globalSearchQuery={globalSearchQuery} 
+                  isPartnerIntegrated={isPartnerIntegrated} 
+                  setIsPartnerIntegrated={setIsPartnerIntegrated} 
+                  partnerData={partnerData} 
+                  setPartnerData={setPartnerData} 
+                  setCurrency={setCurrency}
+                />
+              </div>
+            </main>
+            <AiConsultantFloating onOpenFull={() => handleNavClick(View.AI_ADVISOR)} />
+            {currentView === View.HOME && <Footer onNavigate={handleNavClick} />}
+          </div>
+        </CartProvider>
+      </CurrencyProvider>
+    </ThemeProvider>
   );
 };
 
