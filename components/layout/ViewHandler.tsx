@@ -50,6 +50,7 @@ import { SixSigmaRCA } from '../SixSigmaRCA';
 import { FrameworkDistinctions } from '../FrameworkDistinctions';
 import { DataRegistry } from '../DataRegistry';
 import { Portfolio } from '../Portfolio';
+import { AiConsultantFloating } from '../AiConsultantFloating';
 
 interface ViewHandlerProps {
   currentView: View;
@@ -136,6 +137,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.FRAMEWORK_DISTINCTIONS: return <FrameworkDistinctions />;
     case View.DATA_REGISTRY: return <DataRegistry />;
     case View.PORTFOLIO: return <Portfolio user={user} />;
+    case View.AI_CONSULTANT_FLOATING: return <AiConsultantFloating />;
     default: return <Hero onNavigate={handleNavClick} />;
   }
 };

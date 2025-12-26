@@ -1,16 +1,16 @@
+
 import React from 'react';
 
 interface ViewPlaceholderProps {
-  view: string;
+  viewName: string;
 }
 
-export const ViewPlaceholder: React.FC<ViewPlaceholderProps> = ({ view }) => {
+export const ViewPlaceholder: React.FC<ViewPlaceholderProps> = ({ viewName }) => {
   return (
-    <div className="h-screen flex items-center justify-center text-white text-4xl bg-[#050a14] pt-24">
-      <div className="text-center">
-        <h1 className="font-black uppercase tracking-[0.5em] text-lg mb-4">{view.replace(/_/g, ' ')}</h1>
-        <p className="text-sm text-slate-400">Content for this view is under construction.</p>
-      </div>
+    <div className="h-screen flex items-center justify-center">
+      <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+        {viewName}
+      </h1>
     </div>
   );
 };

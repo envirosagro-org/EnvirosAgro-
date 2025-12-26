@@ -1,9 +1,9 @@
 import React from 'react';
-import { GreenLensHero } from './GreenLensHero';
-import { GreenLensStats } from './GreenLensStats';
-import { FeaturedDoc } from './FeaturedDoc';
-import { DocsLibrary } from './DocsLibrary';
-import { FilmStrip } from './FilmStrip';
+import { GreenLensHero } from './greenlens/GreenLensHero';
+import { GreenLensStats } from './greenlens/GreenLensStats';
+import { FeaturedDoc } from './greenlens/FeaturedDoc';
+import { DocsLibrary } from './greenlens/DocsLibrary';
+import { FilmStrip } from './greenlens/FilmStrip';
 
 export const GreenLens: React.FC = () => {
   return (

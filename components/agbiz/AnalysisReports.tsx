@@ -23,7 +23,7 @@ const reports = [
   },
   {
     title: 'EU Green Deal: Impact on US Agriculture',
-    description: 'A breakdown of the EU's new sustainability policies and what they mean for American farmers.',
+    description: "A breakdown of the EU's new sustainability policies and what they mean for American farmers.",
     category: { title: 'Policy', href: '#' },
     author: {
       name: 'David Miller',
@@ -77,7 +77,8 @@ export const AnalysisReports: React.FC = () => {
                     <p className="text-gray-600 dark:text-gray-400">{report.author.role}</p>
                   </div>
                 </div>
-              </article>
+              </div>
+            </article>
           ))}
         </div>
       </div>

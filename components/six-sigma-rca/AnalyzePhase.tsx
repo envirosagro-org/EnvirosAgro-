@@ -1,32 +1,6 @@
 import React, { useState } from 'react';
 import { Binary, FileSearch, BarChart3, ChevronRight } from 'lucide-react';
-
-const FISHBONE_CATEGORIES = [
-  { 
-    label: 'Personnel', 
-    causes: ['Configuration oversight', 'Deployment sync lag', 'Manual build steps'] 
-  },
-  { 
-    label: 'Machine', 
-    causes: ['Browser ESM limitations', 'Node-only dependency leak', 'Memory pressure'] 
-  },
-  { 
-    label: 'Method', 
-    causes: ['Vite build mismatch', 'Importmap pollution', 'Race condition'] 
-  },
-  { 
-    label: 'Material', 
-    causes: ['Incompatible npm packages', 'Corrupt cache', 'Manifest errors'] 
-  }
-];
-
-const whys = [
-  { q: "Problem: The app fails to load with a script error.", a: "The browser encountered an 'Uncaught TypeError' on entry." },
-  { q: "Why did the TypeError occur?", a: "The module loader couldn't resolve 'vite' and '@vitejs/plugin-react' exports." },
-  { q: "Why were these modules being requested?", a: "They were erroneously included in the index.html <script type='importmap'>." },
-  { q: "Why were development tools in the production importmap?", a: "The build configuration didn't strictly separate Node-only dev dependencies from browser-native ESM." },
-  { q: "Root Cause: Why was there no separation?", a: "Missing automated validation node in the transmission gateway to strip non-standard browser modules." }
-];
+import { FISHBONE_CATEGORIES, whys } from './constants';
 
 export const AnalyzePhase: React.FC = () => {
   const [whyStep, setWhyStep] = useState(0);

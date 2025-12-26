@@ -5,9 +5,18 @@ interface GetESINProps {
   esinStep: number;
   setEsinStep: (step: number) => void;
   setActiveTab: (tab: any) => void;
+  onEsinGenerated: (esin: string) => void;
 }
 
-export const GetESIN: React.FC<GetESINProps> = ({ esinStep, setEsinStep, setActiveTab }) => {
+export const GetESIN: React.FC<GetESINProps> = ({ esinStep, setEsinStep, setActiveTab, onEsinGenerated }) => {
+  const generatedEsin = `EA-FAR-2024-${Math.floor(1000 + Math.random() * 9000)}`;
+
+  const handleIssueEsin = () => {
+    onEsinGenerated(generatedEsin);
+    setEsinStep(1); 
+    setActiveTab('ID_CARD');
+  }
+
   return (
     <div className="max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="bg-white dark:bg-earth-900 rounded-[2rem] shadow-sm border border-earth-100 dark:border-earth-800 overflow-hidden">
@@ -44,8 +53,8 @@ export const GetESIN: React.FC<GetESINProps> = ({ esinStep, setEsinStep, setActi
             <div className="text-center py-4 animate-in zoom-in">
               <CheckCircle2 size={40} className="text-green-500 mx-auto mb-3" />
               <h4 className="text-xl font-bold text-slate-900 dark:text-white mb-1">ESIN Issued</h4>
-              <p className="font-mono text-base text-agro-600 font-bold mb-6">EA-FAR-2024-8842</p>
-              <button onClick={() => { setEsinStep(1); setActiveTab('ID_CARD'); }} className="w-full bg-agro-900 text-white font-black py-3 rounded-xl text-[9px] uppercase tracking-widest">View Digital ID</button>
+              <p className="font-mono text-base text-agro-600 font-bold mb-6">{generatedEsin}</p>
+              <button onClick={handleIssueEsin} className="w-full bg-agro-900 text-white font-black py-3 rounded-xl text-[9px] uppercase tracking-widest">View Digital ID</button>
             </div>
           )}
         </div>

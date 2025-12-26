@@ -33,7 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-700 ease-in-out isolate ${scrolled ? 'mt-3 mx-4 md:mx-10 rounded-[2.5rem] bg-white/70 dark:bg-earth-900/80 backdrop-blur-3xl border border-white/40 dark:border-white/5 py-1.5 shadow-xl' : 'bg-white/40 dark:bg-earth-950/40 backdrop-blur-xl border-b border-earth-100/10 py-5'}`}>
-      <div className="max-w-[1900px] mx-auto px-8 flex items-center justify-between gap-6">
+      <div className="max-w-6xl mx-auto px-8 flex items-center justify-between gap-6">
         <div className="flex items-center gap-10">
           <div className="flex items-center gap-2 cursor-pointer group shrink-0 transition-transform active:scale-95" onClick={() => handleNavClick(View.HOME)}>
             <Logo size={scrolled ? 34 : 42} variant="horizontal" useGradient={true} />
@@ -76,7 +76,17 @@ export const Header: React.FC<HeaderProps> = ({
                     <button onClick={handleLogout} className="p-2.5 text-earth-400 hover:text-red-500 hover:bg-white dark:hover:bg-earth-700 rounded-xl transition-all"><LogOut size={20} /></button>
                 </div>
             ) : (
-                <button onClick={() => handleNavClick(View.SIGN_UP)} className="bg-agro-600 text-white px-7 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.25em] shadow-lg hover:bg-agro-500 active:scale-95 transition-all ml-2">Sync ID</button>
+                 <div className="flex items-center gap-2">
+                    <button onClick={() => handleNavClick(View.SIGN_UP)} className="bg-agro-600 text-white px-7 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.25em] shadow-lg hover:bg-agro-500 active:scale-95 transition-all">Sync ID</button>
+                    <button onClick={() => handleNavClick(View.CART)} className={`p-2.5 rounded-xl transition-all relative sm:hidden ${currentView === View.CART ? 'bg-amber-500 text-white shadow-lg' : 'text-earth-400 bg-earth-50/50 dark:bg-earth-800/40'}`}>
+                        <ShoppingCart size={20} />
+                        {totalItems > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[8px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white dark:border-earth-900 animate-in zoom-in">
+                            {totalItems}
+                        </span>
+                        )}
+                    </button>
+                </div>
             )}
           </div>
           <button className={`p-3 rounded-2xl transition-all active:scale-90 shadow-xl border-4 border-white dark:border-earth-800 ${isMenuOpen ? 'bg-red-600 text-white border-red-500' : 'bg-agro-900 text-white border-agro-800'}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>{isMenuOpen ? <X size={28} /> : <Menu size={28} />}</button>

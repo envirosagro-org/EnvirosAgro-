@@ -1,14 +1,7 @@
 import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Gauge } from 'lucide-react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-
-const DPMO_DATA = [
-  { week: 'W1', dpmo: 1240, sigma: 4.8 },
-  { week: 'W2', dpmo: 980, sigma: 4.9 },
-  { week: 'W3', dpmo: 3400, sigma: 4.2 }, // Regression point
-  { week: 'W4', dpmo: 450, sigma: 5.4 },
-  { week: 'W5', dpmo: 12, sigma: 6.2 }, // Target state
-];
+import { DPMO_DATA } from './constants';
 
 export const MeasurePhase: React.FC = () => (
   <div className="ea-card p-12 space-y-10 animate-in slide-in-from-left-4">
