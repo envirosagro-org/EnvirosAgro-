@@ -12,6 +12,13 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+
+  const socialLinks = [
+    { name: 'Twitter', icon: Twitter, url: '#' },
+    { name: 'Facebook', icon: Facebook, url: '#' },
+    { name: 'LinkedIn', icon: Linkedin, url: '#' },
+  ];
+
   return (
     <footer className="bg-[#050a14] dark:bg-earth-950 text-slate-400 pt-24 pb-12 px-8 relative overflow-hidden border-t border-white/5">
       {/* Cinematic Background Elements */}
@@ -34,10 +41,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                    "To ensure agriculture and its environ is smooth, reliable and safe."
                 </div>
                 <div className="flex gap-4">
-                    {[Twitter, Facebook, Linkedin].map((Icon, i) => (
-                        <div key={i} className="w-10 h-10 bg-white/5 hover:bg-blue-600 hover:text-white rounded-xl flex items-center justify-center transition-all cursor-pointer text-slate-500 border border-white/10 group shadow-lg">
-                            <Icon size={18} className="group-hover:scale-110 transition-transform" />
-                        </div>
+                    {socialLinks.map(social => (
+                        <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-white/5 hover:bg-blue-600 hover:text-white rounded-xl flex items-center justify-center transition-all cursor-pointer text-slate-500 border border-white/10 group shadow-lg">
+                            <social.icon size={18} className="group-hover:scale-110 transition-transform" />
+                        </a>
                     ))}
                 </div>
             </div>
@@ -49,12 +56,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </h4>
                 <ul className="space-y-4">
                     {[
-                      { label: 'Network Ingest Hub', view: View.NETWORK_INPUT_HUB },
+                      { id: View.NETWORK_INPUT_HUB, label: 'Network Ingest Hub' },
                       { id: View.DASHBOARD, label: 'Impact Dashboard' },
                       { id: View.FUTURE_VISION, label: 'Vision Lab' },
                       { id: View.SUSTAINABILITY_FRAMEWORK, label: 'Thrust Matrix' },
                     ].map(link => (
-                      <li key={link.label} onClick={() => onNavigate(link.view || link.id as View)} className="cursor-pointer hover:text-agro-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
+                      <li key={link.id} onClick={() => onNavigate(link.id as View)} className="cursor-pointer hover:text-agro-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
                          <div className="w-1 h-1 rounded-full bg-slate-800 group-hover:bg-agro-500 transition-all"></div>
                          {link.label}
                       </li>
@@ -127,9 +134,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     </button>
                 </div>
             </div>
-          </div>
+        </div>
 
-          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10 text-[9px] font-black uppercase tracking-[0.5em] text-slate-600">
+        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10 text-[9px] font-black uppercase tracking-[0.5em] text-slate-600">
               <p>© {new Date().getFullYear()} ENVIROSAGRO STRATEGIC INFRASTRUCTURE. ALL ASSETS HASHED VIA m(t) LEDGER.</p>
               
               <div className="flex gap-12">
