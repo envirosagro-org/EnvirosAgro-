@@ -14,7 +14,7 @@ const CommandPalette = ({ onNavigate }) => {
   );
 
   const filteredCommands = allCommands.filter(command =>
-    command.name.toLowerCase().includes(searchTerm.toLowerCase())
+    command.name && command.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleNavigate = (view: View) => {
