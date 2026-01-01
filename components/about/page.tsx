@@ -1,5 +1,10 @@
 import React from 'react';
-import { Target, Eye, Users, Lightbulb, Leaf, RefreshCw, ShieldCheck, Smile, Heart, Gavel, AlertTriangle, Zap } from 'lucide-react';
+import { Target, Eye, Users, Lightbulb, Leaf, RefreshCw, ShieldCheck, Smile, Heart, Gavel, AlertTriangle, Zap, ArrowLeft } from 'lucide-react';
+import { View } from '../../types';
+
+interface AboutPageProps {
+  onNavigate?: (view: View) => void;
+}
 
 const MissionVision = () => (
     <div className="grid md:grid-cols-2 gap-8 mb-20">
@@ -111,14 +116,24 @@ const FrameworkDistinctions = () => (
   </div>
 );
 
-export const AboutPage = () => {
+export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   return (
-    <div className="max-w-5xl mx-auto py-20 px-4">
-        <h1 className="text-5xl font-serif font-bold text-center text-agro-900 mb-12">About EnvirosAgro</h1>
-        <MissionVision />
-        <Principles />
-        <Values />
-        <FrameworkDistinctions />
+    <div className="min-h-screen bg-white dark:bg-earth-950">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <button 
+                onClick={() => onNavigate?.(View.HOME)}
+                className="flex items-center gap-2 text-gray-500 hover:text-agro-600 transition-colors text-sm font-bold uppercase tracking-widest"
+            >
+                <ArrowLeft size={16} /> Back to Home
+            </button>
+        </div>
+        <div className="max-w-5xl mx-auto py-20 px-4">
+            <h1 className="text-5xl font-serif font-bold text-center text-earth-900 dark:text-white mb-12">About EnvirosAgro</h1>
+            <MissionVision />
+            <Principles />
+            <Values />
+            <FrameworkDistinctions />
+        </div>
     </div>
   );
 };

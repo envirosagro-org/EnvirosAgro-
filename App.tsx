@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
 import { Home } from './views/Home';
@@ -12,11 +12,12 @@ import { CropDoctor } from './components/CropDoctor';
 import { FarmScout } from './components/FarmScout';
 import { SmartFarmVR } from './components/SmartFarmVR';
 import { SafeHarvest } from './components/SafeHarvest';
-import { View } from './types';
+import { View, User } from './types';
 import { ThemeProvider } from './context/ThemeContext';
-import { StateProvider } from './context/StateContext';
+import { StateProvider, useStateValue } from './context/StateContext';
 import { CurrencyProvider } from './context/CurrencyContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { CartProvider } from './context/CartContext';
 import { reducer, initialState } from './context/reducer';
 import { NAVIGATION_STRUCTURE } from './components/layout/NavigationConstants';
 import { ViewPlaceholder } from './components/ViewPlaceholder';
@@ -56,6 +57,7 @@ import { ResilienceView } from './components/professional/ResilienceView';
 import { Thrusts } from './components/five-thrusts/Thrusts';
 import { Information } from './components/Information';
 import { Products } from './components/Products';
+import { ProductDetail } from './components/ProductDetail';
 import { Cart } from './components/Cart';
 import { Database } from './components/Database';
 import { SustainabilityCalculator } from './components/SustainabilityCalculator';
@@ -70,6 +72,10 @@ import { IntranetDashboard } from './components/IntranetDashboard';
 import { ExtranetDashboard } from './components/ExtranetDashboard';
 import { FrameworkDistinctions } from './components/FrameworkDistinctions';
 import { Portfolio } from './components/Portfolio';
+import { auth, db } from './lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { Loader2 } from 'lucide-react';
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
@@ -123,6 +129,7 @@ const componentMap: { [key in View]?: React.ComponentType<any> } = {
     [View.FIVE_THRUSTS]: Thrusts,
     [View.INFORMATION]: Information,
     [View.PRODUCTS]: Products,
+    [View.PRODUCT_DETAIL]: ProductDetail,
     [View.CART]: Cart,
     [View.DATABASE]: Database,
     [View.SUSTAINABILITY_CALCULATOR]: SustainabilityCalculator,
@@ -142,12 +149,38 @@ const componentMap: { [key in View]?: React.ComponentType<any> } = {
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [{ user, isAuthLoading }, dispatch] = useStateValue();
   const currentView = pathToView(location.pathname);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      if (firebaseUser) {
+        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+        if (userDoc.exists()) {
+          dispatch({ type: 'SET_USER', payload: userDoc.data() as User });
+        }
+      } else {
+        dispatch({ type: 'SET_USER', payload: null });
+      }
+      dispatch({ type: 'SET_AUTH_LOADING', payload: false });
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const onNavigate = (view: View, params?: any) => {
     const path = view === View.HOME ? '/' : `/${view.toLowerCase().replace(/_/g, '-')}`;
     navigate(path, { state: params });
   };
+
+  if (isAuthLoading) {
+    return (
+        <div className="h-screen bg-earth-950 flex flex-col items-center justify-center gap-6">
+            <Loader2 className="text-agro-500 animate-spin" size={48} />
+            <p className="text-[10px] font-black text-agro-400 uppercase tracking-[0.4em] animate-pulse">Initializing Ecosystem Engine...</p>
+        </div>
+    );
+  }
 
   return (
     <main className='bg-white dark:bg-gray-900'>
@@ -156,11 +189,17 @@ function App() {
       <CommandPalette onNavigate={onNavigate} />
       <div>
         <Routes>
-          <Route path="/" element={<Home onNavigate={onNavigate} />} />
-          <Route path="/home" element={<Home onNavigate={onNavigate} />} />
+          <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
+          <Route path="/home" element={<Home user={user} onNavigate={onNavigate} />} />
           {Object.values(View).map(view => {
             const Component = componentMap[view as View] || (() => <ViewPlaceholder viewName={view} />);
-            return <Route key={view} path={`/${view.toLowerCase().replace(/_/g, '-')}`} element={<Component onNavigate={onNavigate} />} />
+            return (
+                <Route 
+                    key={view} 
+                    path={`/${view.toLowerCase().replace(/_/g, '-')}`} 
+                    element={<Component user={user} onNavigate={onNavigate} navigationParams={location.state} onLogin={(u) => dispatch({ type: 'SET_USER', payload: u })} />} 
+                />
+            );
           })}
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -176,7 +215,9 @@ const AppWrapper = () => (
       <ThemeProvider>
         <LanguageProvider>
           <CurrencyProvider>
-            <App />
+            <CartProvider>
+              <App />
+            </CartProvider>
           </CurrencyProvider>
         </LanguageProvider>
       </ThemeProvider>

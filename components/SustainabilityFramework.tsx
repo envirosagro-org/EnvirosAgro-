@@ -6,7 +6,7 @@ import {
   Share2, X, Copy, AlertCircle, Info, Zap, AlertTriangle,
   Database, Network, ArrowRight, RefreshCw, Layers, 
   Search, Server, Smartphone, Microscope, BrainCircuit,
-  ArrowUpRight, Recycle, Box, ChevronRight, ExternalLink
+  ArrowUpRight, Recycle, Box, ChevronRight, ExternalLink, ArrowLeft
 } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { View } from '../types';
@@ -150,7 +150,15 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in duration-700">
-      
+      <div className="max-w-7xl mx-auto mb-8">
+        <button 
+          onClick={() => onNavigate?.(View.HOME)}
+          className="flex items-center gap-2 text-gray-500 hover:text-agro-600 transition-colors text-sm font-bold uppercase tracking-widest"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </button>
+      </div>
+
       <div className="text-center mb-16 max-w-4xl mx-auto">
         <div className="ea-label-meta justify-center mb-4">Strategic Architecture</div>
         <h1 className="text-5xl md:text-7xl font-serif font-black text-agro-900 dark:text-white tracking-tighter mb-6">Sustainability <span className="text-blue-600 italic">Operating System</span></h1>
@@ -226,7 +234,7 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
 
               {/* Looping Connector */}
               <div className="hidden lg:block absolute -bottom-16 left-[10%] right-[10%] h-32 border-x-4 border-b-4 border-dashed border-agro-500/20 rounded-b-[5rem] pointer-events-none">
-                 <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-agro-50 dark:bg-agro-900/40 px-6 py-2 rounded-full border border-agro-100 dark:border-agro-800">
+                 <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-agro-50 dark:bg-agro-900/40 px-6 py-2 rounded-full border border-agro-100 dark:border-earth-800">
                     <span className="text-[10px] font-black text-agro-600 uppercase tracking-[0.4em] flex items-center gap-3">
                        <RefreshCw size={14} className="animate-spin-slow" /> {"Continuous Improvement Loop (Process 05 -> 02)"}
                     </span>

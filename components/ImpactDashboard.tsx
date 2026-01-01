@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { View } from '../types';
+import { ArrowLeft, LayoutGrid } from 'lucide-react';
 
 interface ImpactDashboardProps {
   onNavigate: (view: View) => void;
@@ -33,11 +34,11 @@ const MetricCards: React.FC = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
       {metrics.map((metric, index) => (
-        <div key={index} className="bg-white/5 rounded-lg p-5">
-          <p className="text-sm text-slate-400">{metric.title}</p>
-          <p className="text-3xl font-bold text-white mt-1">{metric.value}</p>
-          <p className={`text-sm mt-1 ${metric.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
-            {metric.change} vs last month
+        <div key={index} className="bg-white/5 rounded-lg p-5 border border-white/5 hover:border-agro-500/30 transition-all">
+          <p className="text-sm text-slate-400 uppercase tracking-widest font-bold">{metric.title}</p>
+          <p className="text-3xl font-black text-white mt-2">{metric.value}</p>
+          <p className={`text-xs mt-2 font-bold ${metric.change.startsWith('+') ? 'text-green-400' : 'text-red-400'}`}>
+            {metric.change} <span className="text-slate-500">vs last month</span>
           </p>
         </div>
       ))}
@@ -47,11 +48,13 @@ const MetricCards: React.FC = () => {
 
 const PerformanceChart: React.FC = () => {
   return (
-    <div className="bg-white/5 rounded-lg p-6 h-96">
-      <h3 className="text-lg font-semibold text-white mb-4">Performance Overview</h3>
-      {/* Placeholder for a chart library component */}
-      <div className="h-full flex items-center justify-center text-slate-500">
-        <p>Chart will be displayed here</p>
+    <div className="bg-white/5 rounded-lg p-8 h-96 border border-white/5">
+      <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest flex items-center gap-3">
+         <LayoutGrid size={20} className="text-agro-500" /> Performance Overview
+      </h3>
+      <div className="h-full flex flex-col items-center justify-center text-slate-500 gap-4">
+        <div className="w-16 h-16 border-4 border-slate-800 border-t-agro-500 rounded-full animate-spin"></div>
+        <p className="font-bold text-xs uppercase tracking-[0.2em]">Synchronizing Impact Data...</p>
       </div>
     </div>
   );
@@ -59,13 +62,13 @@ const PerformanceChart: React.FC = () => {
 
 const FutureVisionWidget: React.FC = () => {
   return (
-    <div className="bg-white/5 rounded-lg p-6 h-96">
-      <h3 className="text-lg font-semibold text-white mb-4">Future Vision</h3>
-      <ul>
+    <div className="bg-white/5 rounded-lg p-8 h-96 border border-white/5">
+      <h3 className="text-lg font-bold text-white mb-6 uppercase tracking-widest">Future Roadmap</h3>
+      <ul className="space-y-6">
         {futureItems.map((item, index) => (
-          <li key={index} className="mb-4">
-            <p className="text-md font-semibold text-white">{item.title}</p>
-            <p className="text-sm text-slate-400">{item.description}</p>
+          <li key={index} className="group cursor-default">
+            <p className="text-sm font-black text-agro-400 uppercase tracking-widest mb-1 group-hover:text-white transition-colors">{item.title}</p>
+            <p className="text-xs text-slate-500 leading-relaxed font-medium">{item.description}</p>
           </li>
         ))}
       </ul>
@@ -76,18 +79,26 @@ const FutureVisionWidget: React.FC = () => {
 export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-[#050a14] pt-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1700px] mx-auto mb-8 flex justify-between items-center">
+        <button 
+          onClick={() => onNavigate(View.HOME)}
+          className="flex items-center gap-2 text-slate-500 hover:text-agro-400 transition-colors text-sm font-bold uppercase tracking-widest"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </button>
+        <button 
+            onClick={() => onNavigate(View.DASHBOARD)} 
+            className="bg-white/5 hover:bg-white/10 text-white font-black text-[10px] uppercase tracking-[0.2em] py-3 px-6 rounded-xl border border-white/10 transition-all"
+        >
+            Switch to Professional View
+        </button>
+      </div>
+      
       <DashboardHeader />
-      <main className="max-w-[1700px] mx-auto mt-8">
-        <div className="flex justify-end mb-4">
-            <button 
-                onClick={() => onNavigate(View.DASHBOARD)} 
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                Back to Dashboard
-            </button>
-        </div>
+      
+      <main className="max-w-[1700px] mx-auto mt-12">
         <MetricCards />
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
           <div className="lg:col-span-2">
             <PerformanceChart />
           </div>

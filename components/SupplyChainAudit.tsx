@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { ClipboardCheck, ArrowRight, ShieldCheck, AlertCircle, TrendingUp, DollarSign, Package, Users, Clock, Zap, Target, HelpCircle, Loader2, FileText } from 'lucide-react';
+import { ClipboardCheck, ArrowRight, ShieldCheck, AlertCircle, TrendingUp, DollarSign, Package, Users, Clock, Zap, Target, HelpCircle, Loader2, FileText, ArrowLeft } from 'lucide-react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from 'recharts';
+import { View } from '../types';
 
 const STANDARDS = [
   { id: 'cost', label: 'Cost Control', icon: <DollarSign size={18} />, desc: 'Negotiation with suppliers and minimization of waste.' },
@@ -10,7 +11,11 @@ const STANDARDS = [
   { id: 'market', label: 'Time to Market', icon: <Clock size={18} />, desc: 'Liaison between suppliers and engineers for product development.' },
 ];
 
-export const SupplyChainAudit: React.FC = () => {
+interface SupplyChainAuditProps {
+    onNavigate?: (view: View) => void;
+}
+
+export const SupplyChainAudit: React.FC<SupplyChainAuditProps> = ({ onNavigate }) => {
   const [scores, setScores] = useState<Record<string, number>>({
     cost: 50,
     quality: 50,
@@ -53,6 +58,15 @@ export const SupplyChainAudit: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto mb-8">
+        <button 
+          onClick={() => onNavigate?.(View.HOME)}
+          className="flex items-center gap-2 text-gray-500 hover:text-agro-600 transition-colors text-sm font-bold uppercase tracking-widest"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </button>
+      </div>
+
       <div className="mb-12">
         <div className="inline-flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border border-amber-100 dark:border-amber-800">
            <ClipboardCheck size={14} /> Diagnostic Tool

@@ -4,16 +4,20 @@ const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
+// Use 'gemini-1.5-flash' and 'gemini-1.5-pro' with explicit v1 API version
+const FLASH_MODEL = 'gemini-1.5-flash';
+const PRO_MODEL = 'gemini-1.5-pro';
+
 /**
  * Creates a unified chat session for the EnvirosAgro AI Assistant.
  */
 export const createAgroChat = (): ChatSession => {
   const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: FLASH_MODEL,
     systemInstruction: `You are the "EnvirosAgro AI Assistant", a world-class expert in sustainable agriculture and technical innovation. 
     Your mission is to support farmers, researchers, and industrial stakeholders through the EnvirosAgro Five Thrusts Framework.
     Help users interpret sensor data, plan crop rotations, and improve their sustainability scores.`,
-  });
+  }, { apiVersion: 'v1' });
 
   return model.startChat({
     history: [
@@ -43,7 +47,7 @@ export const analyzeIndustrialGaps = async (metrics: any) => {
     throw new Error("Gemini API key is not configured.");
   }
 
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
   const prompt = `Perform a high-level scientific gap analysis for an industrial agricultural supply chain with the following metrics:
   Cost Control: ${metrics.cost}%, Quality: ${metrics.quality}%, Resources: ${metrics.resources}%, Relations: ${metrics.relations}%, Market Timing: ${metrics.market}%.
   Output a technical assessment (3 sentences) identifying the most critical 'Process Disconnect' and suggesting a specific 'Technical Agriculture' intervention.`;
@@ -73,7 +77,7 @@ export const analyzeCropHealth = async (imageData: string, mimeType: string) => 
   if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
   const prompt = "Analyze this image of a plant/crop. Identify any pests, diseases, or nutrient deficiencies. Provide a clear diagnosis and recommended sustainable treatments following the EnvirosAgro Five Thrusts framework.";
 
   const result = await model.generateContent([
@@ -100,9 +104,9 @@ export const generateRoadmap = async (params: {
   }
 
   const model = genAI.getGenerativeModel({ 
-    model: 'gemini-1.5-pro',
+    model: PRO_MODEL,
     systemInstruction: "You are a professional agricultural strategist. Output in clear Markdown.",
-  });
+  }, { apiVersion: 'v1' });
   
   const prompt = `Based on the following farm status, generate a structured 12-month sustainability roadmap.
   Region: ${params.region} | Crops: ${params.crops}
@@ -123,9 +127,9 @@ export const summarizeResearch = async (articles: any[]) => {
     throw new Error("Gemini API key is not configured.");
   }
   const model = genAI.getGenerativeModel({ 
-    model: 'gemini-1.5-flash',
+    model: FLASH_MODEL,
     systemInstruction: "You are a lead researcher at EnvirosAgro." 
-  });
+  }, { apiVersion: 'v1' });
   const context = articles.map(a => `${a.title}: ${a.excerpt}`).join('\\n\\n');
   const result = await model.generateContent(`Summarize this research: ${context}`);
   const response = await result.response;
@@ -136,7 +140,7 @@ export const validateCommunityPost = async (content: string) => {
   if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
   const result = await model.generateContent(`Analyze this community post for alignment with sustainable agriculture and community resilience. Provide a brief (1-2 sentence) validation or feedback.
     Post: "${content}"`);
   const response = await result.response;
@@ -147,7 +151,7 @@ export const generateRawDataset = async (type: string) => {
   if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
   const result = await model.generateContent(`Generate a sample CSV dataset for agricultural ${type} research. Include realistic columns and 5 rows of data.`);
   const response = await result.response;
   return response.text();
@@ -157,7 +161,7 @@ export const generateScoutReport = async (tileData: any) => {
   if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
   const result = await model.generateContent(`Generate a detailed agricultural scout report for a plot with these parameters:
     - Moisture: ${tileData.moisture}%
     - Nitrogen: ${tileData.nitrogen} ppm
@@ -172,7 +176,7 @@ export const analyzeSatelliteScan = async (fieldName: string) => {
   if (!API_KEY) {
     throw new Error("Gemini API key is not configured.");
   }
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
   const result = await model.generateContent(`Provide a high-level satellite analysis summary for the field block: "${fieldName}". 
     Simulate NDVI (Normalized Difference Vegetation Index) and biomass deltas. 
     Focus on environmental resilience (EA Thrust).`);
@@ -185,7 +189,7 @@ export const searchKnowledgeBase = async (query: string, category: string) => {
         throw new Error("Gemini API key is not configured.");
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const model = genAI.getGenerativeModel({ model: FLASH_MODEL }, { apiVersion: 'v1' });
     const prompt = `You are a world-class agricultural research assistant for EnvirosAgro.
     Search the EnvirosAgro knowledge base for information related to: "${query}".
     Filter the results to fit the category: "${category}". If the category is "All", search across all categories.

@@ -6,10 +6,15 @@ import { RegionalCuratedSection } from './podcast/RegionalCuratedSection';
 import { SubscribeCta } from './podcast/SubscribeCta';
 import { 
   Mic2, Radio, Activity, Globe, Sparkles, 
-  Search, Filter, ChevronRight, Headphones
+  Search, Filter, ChevronRight, Headphones, ArrowLeft
 } from 'lucide-react';
+import { View } from '../types';
 
-export const Podcast: React.FC = () => {
+interface PodcastProps {
+  onNavigate?: (view: View) => void;
+}
+
+export const Podcast: React.FC<PodcastProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white dark:bg-earth-950 text-earth-900 dark:text-white overflow-hidden">
       {/* Background Decorative Elements */}
@@ -17,6 +22,15 @@ export const Podcast: React.FC = () => {
       <div className="absolute bottom-0 left-0 w-[30%] h-[30%] bg-agro-500/5 blur-[120px] rounded-full pointer-events-none"></div>
 
       <div className="relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+            <button 
+                onClick={() => onNavigate?.(View.HOME)}
+                className="flex items-center gap-2 text-earth-400 hover:text-indigo-600 transition-colors text-sm font-bold uppercase tracking-widest"
+            >
+                <ArrowLeft size={16} /> Back to Home
+            </button>
+        </div>
+
         <PodcastHero />
 
         {/* Global Podcast Stats */}

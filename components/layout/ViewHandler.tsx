@@ -52,6 +52,7 @@ import { DataRegistry } from '../DataRegistry';
 import { Portfolio } from '../Portfolio';
 import { AiConsultantFloating } from '../AiConsultantFloating';
 import { ImpactDashboard } from '../ImpactDashboard';
+import { ProductDetail } from '../ProductDetail';
 
 interface ViewHandlerProps {
   currentView: View;
@@ -65,6 +66,7 @@ interface ViewHandlerProps {
   partnerData: { name: string; id: string } | null;
   setPartnerData: (data: { name: string; id: string } | null) => void;
   setCurrency: (currency: string) => void;
+  navigationParams?: any;
 }
 
 export const ViewHandler: React.FC<ViewHandlerProps> = ({
@@ -78,7 +80,8 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
   setIsPartnerIntegrated,
   partnerData,
   setPartnerData,
-  setCurrency
+  setCurrency,
+  navigationParams
 }) => {
   switch (currentView) {
     case View.HOME:
@@ -91,7 +94,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.IMPACT_DASHBOARD:
       return <ImpactDashboard onNavigate={handleNavClick} />;
     case View.PLANET_WATCH:
-      return <PlanetWatch />;
+      return <PlanetWatch onNavigate={handleNavClick} />;
     case View.SAFE_HARVEST:
       return <SafeHarvest onNavigate={handleNavClick} />;
     case View.SUSTAINABILITY_FRAMEWORK:
@@ -99,17 +102,17 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.CARBON_LEDGER:
       return <CarbonLedger user={user} onAwardEac={awardEac} onNavigate={handleNavClick} />;
     case View.GREEN_LENS:
-      return <GreenLens />;
+      return <GreenLens onNavigate={handleNavClick} />;
     case View.NUTRILIFE:
-      return <NutriLife />;
+      return <NutriLife onNavigate={handleNavClick} />;
     case View.AGBIZ:
-      return <AgBizWeekly />;
+      return <AgBizWeekly onNavigate={handleNavClick} />;
     case View.FINANCE:
       return <Finance user={user} onNavigate={handleNavClick} />;
     case View.INVESTOR_PORTAL:
       return <InvestorPortal onNavigate={handleNavClick} />;
     case View.SUPPLY_CHAIN_AUDIT:
-      return <SupplyChainAudit />;
+      return <SupplyChainAudit onNavigate={handleNavClick} />;
     case View.COMMUNITY:
       return <Community user={user} onNavigate={handleNavClick} onAwardEac={awardEac} />;
     case View.HERITAGE_FORUM:
@@ -117,11 +120,11 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.PEOPLE_AND_CULTURE:
       return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
     case View.SCALEUP_SUMMIT:
-      return <ScaleUpSummit />;
+      return <ScaleUpSummit onNavigate={handleNavClick} />;
     case View.AI_ADVISOR:
       return <AiAdvisor />;
     case View.CROP_DOCTOR:
-      return <CropDoctor />;
+      return <CropDoctor onNavigate={handleNavClick} />;
     case View.FARM_SCOUT:
       return <FarmScout onNavigate={handleNavClick} />;
     case View.SMART_FARM_VR:
@@ -129,7 +132,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.ROADMAP_AI:
       return <RoadmapAI />;
     case View.SIX_SIGMA_RCA:
-      return <SixSigmaRCA />;
+      return <SixSigmaRCA onNavigate={handleNavClick} />;
     case View.AI_CONSULTANT_FLOATING:
       return <AiConsultantFloating />;
     case View.DATA_REGISTRY:
@@ -145,7 +148,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.KNOWLEDGE:
       return <KnowledgeHub onNavigate={handleNavClick} />;
     case View.FUTURE_VISION:
-      return <FutureVision />;
+      return <FutureVision onNavigate={handleNavClick} />;
     case View.NETWORK_INPUT_HUB:
         return <NetworkInputHub onNavigate={handleNavClick} isIntegrated={isPartnerIntegrated} partnerName={partnerData?.name} partnerId={partnerData?.id} />;
     case View.SERVICES:
@@ -160,6 +163,12 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
         return <FrameworkDistinctions />;
     case View.FIVE_THRUSTS:
         return <FrameworkDistinctions />;
+    case View.PRODUCTS:
+        return <Products onNavigate={handleNavClick} />;
+    case View.PRODUCT_DETAIL:
+        return <ProductDetail onNavigate={handleNavClick} product={navigationParams} />;
+    case View.CART:
+        return <Cart onNavigate={handleNavClick} />;
     case View.PROFILE:
         return user ? <UserProfile user={user} onUpdateUser={(u) => setUser(u)} /> : <Auth onLogin={(u) => { setUser(u); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
     default:

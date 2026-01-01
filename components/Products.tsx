@@ -4,9 +4,12 @@ import { toast } from 'react-hot-toast';
 import { 
   ShoppingBag, Star, Filter, Users, Leaf, ShieldPlus, 
   Cpu, Factory, Search, Tag, GraduationCap, PlayCircle,
-  Clock, Award
+  Clock, Award, X, ChevronRight, CheckCircle2, TrendingUp,
+  Globe2, ShieldCheck, Zap, Eye
 } from 'lucide-react';
 import { SafeImage } from './SafeImage';
+import { motion, AnimatePresence } from 'framer-motion';
+import { View, Product } from '../types';
 
 const THRUST_FILTERS = [
   { id: 'ALL', title: 'All Assets', icon: null },
@@ -18,46 +21,87 @@ const THRUST_FILTERS = [
   { id: 'IA', title: 'Industrial', icon: <Factory size={16} />, color: 'bg-slate-100 text-slate-700 border-slate-200' },
 ];
 
-const PRODUCTS = [
-  // Physical Products
+const PRODUCTS: Product[] = [
   {
     id: 'p1',
     name: 'Heirloom Seed Starter Kit',
-    description: 'A collection of indigenous, drought-resistant seeds verified by the SA Thrust for community resilience.',
+    description: 'A collection of indigenous, drought-resistant seeds verified by the SA Thrust for community resilience. Perfect for establishing high-yield community gardens.',
     price: '$24.99',
     rating: 4.8,
     image: 'https://images.unsplash.com/photo-1592150621124-3c47ad43c316?w=400&auto=format&fit=crop&q=60',
     thrust: 'SA',
     category: 'Seeds',
-    type: 'PHYSICAL'
+    type: 'PHYSICAL',
+    features: ['Non-GMO', 'Indigenous Species', 'Climate-Resilient', 'High Germination Rate']
   },
   {
     id: 'p2',
     name: 'Bio-Active Compost Tea',
-    description: 'Rich microbial inoculant designed to restore soil health and boost the EA resilience coefficient.',
+    description: 'Rich microbial inoculant designed to restore soil health and boost the EA resilience coefficient. Formulated for rapid nutrient cycling.',
     price: '$35.00',
     rating: 4.9,
     image: 'https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=400&auto=format&fit=crop&q=60',
     thrust: 'EA',
     category: 'Soil',
-    type: 'PHYSICAL'
+    type: 'PHYSICAL',
+    features: ['High Microbial Density', 'Organic Certified', 'Restores Soil Micro-biome', 'Carbon Sequestration Support']
+  },
+  {
+    id: 'p5',
+    name: 'AI Pest Detection Drone (Precision-X)',
+    description: 'Advanced drone technology enabling a paradigm shift in crop protection. Moves from broad-spectrum pesticides to precision interventions using multispectral and hyperspectral sensors.',
+    price: '$2,450.00',
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=400&auto=format&fit=crop&q=60',
+    thrust: 'TA',
+    category: 'Robotics',
+    type: 'PHYSICAL',
+    features: ['90% Pesticide Reduction', '5-10% Yield Increase', 'Multispectral Sensors', 'Real-time AI Diagnosis'],
+    impact: 'Up to 90% reduction in chemical usage through targeted micro-dosing.'
+  },
+  {
+    id: 'mc4',
+    name: 'Carbon Credit Masterclass',
+    description: 'A practical guide for agricultural producers on how to monetize regenerative farming practices like no-till, cover cropping, and rotational grazing.',
+    price: '$199.00',
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=400&auto=format&fit=crop&q=60',
+    thrust: 'MC',
+    category: 'Finance',
+    type: 'DIGITAL',
+    duration: '8 Hours',
+    instructor: 'Priya Sharma, CFA',
+    features: ['MRV Protocol Training', 'Verra & Gold Standard Insights', 'Soil Sampling Methods', 'Monetization Roadmap'],
+    impact: 'Unlock new revenue streams while improving long-term farm resilience.'
   },
   {
     id: 'p4',
     name: 'Solar-Powered IoT Soil Sensor',
-    description: 'Precision TA hardware for real-time monitoring of moisture, NPK, and pH levels.',
+    description: 'Precision TA hardware for real-time monitoring of moisture, NPK, and pH levels. Mesh network compatible for large-scale deployments.',
     price: '$120.00',
     rating: 4.9,
     image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&auto=format&fit=crop&q=60',
     thrust: 'TA',
     category: 'Tech',
-    type: 'PHYSICAL'
+    type: 'PHYSICAL',
+    features: ['Solar Charged', 'Real-time Cloud Sync', 'Precision NPK Analysis', 'IP68 Waterproof']
   },
-  // Masterclasses
+  {
+    id: 'p6',
+    name: 'Modular Vertical Farm Unit',
+    description: 'Scalable LED-powered vertical farming module for urban food production. Optimized for high-density leafy greens and herbs.',
+    price: '$5,900.00',
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=400&auto=format&fit=crop&q=60',
+    thrust: 'IA',
+    category: 'Infrastructure',
+    type: 'PHYSICAL',
+    features: ['Automated Fertigation', 'Smart LED Spectrum Control', 'Space-Efficient', 'Year-round Production']
+  },
   {
     id: 'mc1',
     name: 'SI-D Diagnostic Masterclass',
-    description: 'Deep dive into diagnosing Social Influenza Disease in post-conflict clusters with Dr. Elena Rossi.',
+    description: 'Deep dive into diagnosing Social Influenza Disease in post-conflict clusters. Learn to identify and mitigate social vulnerabilities in agricultural communities.',
     price: '$99.00',
     rating: 5.0,
     image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&auto=format&fit=crop&q=60',
@@ -65,37 +109,16 @@ const PRODUCTS = [
     category: 'Learning',
     type: 'DIGITAL',
     duration: '12 Hours',
-    instructor: 'Dr. Elena Rossi'
+    instructor: 'Dr. Elena Rossi',
+    features: ['Case Studies', 'Interactive Diagnostics', 'Community Resiliency Tools', 'Certification']
   },
-  {
-    id: 'mc2',
-    name: 'Advanced m(t) Modeling',
-    description: 'Learn the mathematical foundations of the Five Thrusts framework and resilience forecasting.',
-    price: '$149.00',
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&auto=format&fit=crop&q=60',
-    thrust: 'MC',
-    category: 'Learning',
-    type: 'DIGITAL',
-    duration: '20 Hours',
-    instructor: 'Lead Advisor'
-  },
-  {
-    id: 'mc3',
-    name: 'Biomass Hashing Protocol',
-    description: 'Technical session on minting carbon credits and biomass verification for EA ledgers.',
-    price: '$199.00',
-    rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400&auto=format&fit=crop&q=60',
-    thrust: 'MC',
-    category: 'Learning',
-    type: 'DIGITAL',
-    duration: '15 Hours',
-    instructor: 'EA Node Team'
-  }
 ];
 
-export const Products: React.FC = () => {
+interface ProductsProps {
+    onNavigate: (view: View, params?: any) => void;
+}
+
+export const Products: React.FC<ProductsProps> = ({ onNavigate }) => {
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const { addToCart } = useCart();
@@ -160,7 +183,11 @@ export const Products: React.FC = () => {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product.id} className={`bg-white dark:bg-earth-900 rounded-[2.5rem] shadow-sm border ${product.type === 'DIGITAL' ? 'border-blue-100 dark:border-blue-900/30' : 'border-earth-100 dark:border-earth-800'} overflow-hidden group hover:shadow-cinematic transition-all duration-700 flex flex-col h-full relative`}>
+            <div 
+              key={product.id} 
+              className={`bg-white dark:bg-earth-900 rounded-[2.5rem] shadow-sm border ${product.type === 'DIGITAL' ? 'border-blue-100 dark:border-blue-900/30' : 'border-earth-100 dark:border-earth-800'} overflow-hidden group hover:shadow-cinematic transition-all duration-700 flex flex-col h-full relative cursor-pointer`}
+              onClick={() => onNavigate(View.PRODUCT_DETAIL, product)}
+            >
               {product.type === 'DIGITAL' && (
                 <div className="absolute top-4 right-4 z-10">
                    <div className="bg-blue-600 text-white p-2 rounded-xl shadow-lg">
@@ -207,12 +234,9 @@ export const Products: React.FC = () => {
                      <div className="flex items-center gap-3 text-xs text-earth-500 font-medium">
                         <Users size={14} className="text-blue-500" /> Instructor: {product.instructor}
                      </div>
-                     <p className="text-earth-400 text-xs leading-relaxed italic mt-2 line-clamp-2">
-                        "{product.description}"
-                     </p>
                   </div>
                 ) : (
-                  <p className="text-earth-500 dark:text-earth-400 text-sm mb-10 line-clamp-3 font-medium leading-relaxed">
+                  <p className="text-earth-500 dark:text-earth-400 text-sm mb-10 line-clamp-2 font-medium leading-relaxed">
                       {product.description}
                   </p>
                 )}
@@ -223,7 +247,7 @@ export const Products: React.FC = () => {
                     <span className="text-2xl font-black text-agro-600 dark:text-agro-400">{product.price}</span>
                   </div>
                   <button 
-                    onClick={() => handleAddToCart(product)}
+                    onClick={(e) => { e.stopPropagation(); handleAddToCart(product); }}
                     className={`flex items-center gap-3 font-black uppercase text-[10px] tracking-widest py-4 px-8 rounded-2xl shadow-xl transition-all active:scale-95 ${product.type === 'DIGITAL' ? 'bg-blue-600 hover:bg-blue-500 text-white' : 'bg-earth-900 dark:bg-agro-600 hover:bg-agro-600 dark:hover:bg-agro-500 text-white'}`}
                   >
                     <ShoppingBag size={18} />

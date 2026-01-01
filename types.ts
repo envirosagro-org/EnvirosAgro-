@@ -42,6 +42,7 @@ export enum View {
   PROFILE = 'PROFILE',
   INFORMATION = 'INFORMATION',
   PRODUCTS = 'PRODUCTS',
+  PRODUCT_DETAIL = 'PRODUCT_DETAIL',
   CART = 'CART',
   DATABASE = 'DATABASE',
   PEOPLE_AND_CULTURE_CLOUD = 'PEOPLE_AND_CULTURE_CLOUD',
@@ -76,4 +77,20 @@ export interface AgBizWeeklyReport {
   image: string;
   desc: string;
   type: string;
+}
+
+export interface Product {
+    id: string;
+    name: string;
+    description: string;
+    price: string;
+    rating: number;
+    image: string;
+    thrust: string;
+    category: string;
+    type: 'PHYSICAL' | 'DIGITAL';
+    features?: string[];
+    impact?: string;
+    instructor?: string;
+    duration?: string;
 }

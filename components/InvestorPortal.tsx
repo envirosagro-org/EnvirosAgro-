@@ -1,10 +1,24 @@
 import React from 'react';
 import { InvestorHeader } from './investorportal/InvestorHeader';
-import { ArrowUpRight, ShieldCheck, Globe, Zap, BarChart3, PieChart, Activity } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck, Globe, Zap, BarChart3, PieChart, Activity, ArrowLeft } from 'lucide-react';
+import { View } from '../types';
 
-export const InvestorPortal: React.FC = () => {
+interface InvestorPortalProps {
+  onNavigate?: (view: View) => void;
+}
+
+export const InvestorPortal: React.FC<InvestorPortalProps> = ({ onNavigate }) => {
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 animate-in fade-in duration-700">
+      <div className="max-w-7xl mx-auto mb-8">
+        <button 
+          onClick={() => onNavigate?.(View.HOME)}
+          className="flex items-center gap-2 text-gray-500 hover:text-agro-600 transition-colors text-sm font-bold uppercase tracking-widest"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </button>
+      </div>
+
       <InvestorHeader />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

@@ -4,7 +4,8 @@ import { View } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAVIGATION_STRUCTURE } from './layout/NavigationConstants';
 import { ThemeToggleButton } from './layout/ThemeToggleButton';
-import { LogIn } from 'lucide-react';
+import { LogIn, ShoppingCart } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 interface NavbarProps {
   onNavigate: (view: View) => void;
@@ -38,6 +39,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const { totalItems } = useCart();
 
   const handleMenuToggle = (label: string) => {
     setOpenMenu(openMenu === label ? null : label);
@@ -104,6 +106,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
 
           <div className='flex items-center gap-4'>
             <ThemeToggleButton />
+            
+            <button 
+                onClick={() => onNavigate(View.CART)}
+                className="relative p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+            >
+                <ShoppingCart size={22} />
+                {totalItems > 0 && (
+                    <span className="absolute top-0 right-0 bg-agro-600 text-white text-[10px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white dark:border-gray-900">
+                        {totalItems}
+                    </span>
+                )}
+            </button>
+
             <button 
                 onClick={() => onNavigate(View.SIGN_UP)}
                 className='hidden sm:flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-gray-900/10 dark:shadow-white/5'

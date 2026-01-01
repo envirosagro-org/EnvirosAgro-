@@ -4,7 +4,8 @@ import {
   Zap, ShieldCheck, Activity, Globe, Info, 
   ArrowRight, CheckCircle2, Loader2, Sparkles, 
   Database, GitBranch, History, TrendingUp,
-  Cloud, Leaf, Droplets, Target
+  Cloud, Leaf, Droplets, Target, ArrowLeft,
+  X, ExternalLink, FileText, Download, Share2
 } from 'lucide-react';
 
 import { LedgerHeader } from './carbonledger/LedgerHeader';
@@ -14,6 +15,7 @@ import { MintSidebar } from './carbonledger/MintSidebar';
 import { MintModal } from './carbonledger/MintModal';
 import { VerificationProtocol } from './carbonledger/VerificationProtocol';
 import { AuditSidebar } from './carbonledger/AuditSidebar';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const OFFSETS_DATA = [
   { month: 'Jan', tons: 1.2, sequestered: 45, goal: 40 },
@@ -25,15 +27,15 @@ const OFFSETS_DATA = [
 ];
 
 const INITIAL_PROJECTS = [
-  { id: 1, name: 'Kiriaini Reforestation', type: 'Afforestation', status: 'Active', credits: 450, impact: 'High', availableTons: 8.5, location: 'Kenya', efficiency: 94 },
-  { id: 2, name: 'Central Valley Biochar', type: 'Soil Sequestration', status: 'Verifying', credits: 120, impact: 'Medium', availableTons: 3.2, location: 'USA', efficiency: 82 },
-  { id: 3, name: 'Eco-Corridor Alpha', type: 'Biodiversity', status: 'Active', credits: 300, impact: 'High', availableTons: 5.4, location: 'Brazil', efficiency: 91 },
+  { id: 1, name: 'Kiriaini Reforestation', type: 'Afforestation', status: 'Active', credits: 450, impact: 'High', availableTons: 8.5, location: 'Kenya', efficiency: 94, desc: 'Large scale indigenous tree planting in the Central Highlands to restore watershed integrity.' },
+  { id: 2, name: 'Central Valley Biochar', type: 'Soil Sequestration', status: 'Verifying', credits: 120, impact: 'Medium', availableTons: 3.2, location: 'USA', efficiency: 82, desc: 'Integrating biochar into commercial almond orchards to improve water retention and carbon storage.' },
+  { id: 3, name: 'Eco-Corridor Alpha', type: 'Biodiversity', status: 'Active', credits: 300, impact: 'High', availableTons: 5.4, location: 'Brazil', efficiency: 91, desc: 'Connecting fragmented rainforest patches to facilitate species migration and biomass accumulation.' },
 ];
 
 const RECENT_TRANSACTIONS = [
-  { id: 'TX-901', project: 'Kiriaini Reforestation', amount: '+4.2 Tons', eac: '+210 EAC', date: '2024-05-12', status: 'Verified' },
-  { id: 'TX-894', project: 'Eco-Corridor Alpha', amount: '+1.5 Tons', eac: '+75 EAC', date: '2024-05-10', status: 'Verified' },
-  { id: 'TX-882', project: 'Central Valley Biochar', amount: '+0.8 Tons', eac: '+40 EAC', date: '2024-05-08', status: 'Pending' },
+  { id: 'TX-901', project: 'Kiriaini Reforestation', amount: '+4.2 Tons', eac: '+210 EAC', date: '2024-05-12', status: 'Verified', hash: '0x4f2...a9c', method: 'Biomass Hashing' },
+  { id: 'TX-894', project: 'Eco-Corridor Alpha', amount: '+1.5 Tons', eac: '+75 EAC', date: '2024-05-10', status: 'Verified', hash: '0x1b4...e8d', method: 'Soil Delta Analysis' },
+  { id: 'TX-882', project: 'Central Valley Biochar', amount: '+0.8 Tons', eac: '+40 EAC', date: '2024-05-08', status: 'Pending', hash: '0x9a2...f3b', method: 'Biochar Audit' },
 ];
 
 interface CarbonLedgerProps {
@@ -44,6 +46,7 @@ interface CarbonLedgerProps {
 
 export const CarbonLedger: React.FC<CarbonLedgerProps> = ({ user, onAwardEac, onNavigate }) => {
   const [showMintModal, setShowMintModal] = useState(false);
+  const [selectedTx, setSelectedTx] = useState<any>(null);
   const [mintStatus, setMintStatus] = useState<'IDLE' | 'PROCESSING' | 'SUCCESS'>('IDLE');
   const [mintAmount, setMintAmount] = useState('1.0');
   const [selectedProjectId, setSelectedProjectId] = useState<number>(1);
@@ -84,6 +87,15 @@ export const CarbonLedger: React.FC<CarbonLedgerProps> = ({ user, onAwardEac, on
 
   return (
     <div className="bg-white dark:bg-earth-950 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <button 
+          onClick={() => onNavigate?.(View.HOME)}
+          className="flex items-center gap-2 text-gray-500 hover:text-agro-600 transition-colors text-sm font-bold uppercase tracking-widest"
+        >
+          <ArrowLeft size={16} /> Back to Home
+        </button>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <LedgerHeader />
 
@@ -143,7 +155,11 @@ export const CarbonLedger: React.FC<CarbonLedgerProps> = ({ user, onAwardEac, on
                 </div>
                 <div className="space-y-4">
                    {RECENT_TRANSACTIONS.map((tx, i) => (
-                     <div key={i} className="flex items-center justify-between p-5 bg-earth-50/50 dark:bg-earth-800/30 rounded-2xl border border-transparent hover:border-earth-200 transition-all group">
+                     <div 
+                        key={i} 
+                        onClick={() => setSelectedTx(tx)}
+                        className="flex items-center justify-between p-5 bg-earth-50/50 dark:bg-earth-800/30 rounded-2xl border border-transparent hover:border-earth-200 cursor-pointer transition-all group"
+                     >
                         <div className="flex items-center gap-4">
                            <div className="w-12 h-12 rounded-xl bg-white dark:bg-earth-900 flex items-center justify-center text-earth-400 group-hover:text-agro-600 transition-colors border border-earth-100 dark:border-earth-800">
                               <Database size={20} />
@@ -207,6 +223,82 @@ export const CarbonLedger: React.FC<CarbonLedgerProps> = ({ user, onAwardEac, on
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {selectedTx && (
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-earth-950/80 backdrop-blur-md"
+                onClick={() => setSelectedTx(null)}
+            >
+                <motion.div
+                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                    className="bg-white dark:bg-earth-900 w-full max-w-2xl rounded-[3rem] overflow-hidden shadow-2xl relative"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button 
+                        onClick={() => setSelectedTx(null)}
+                        className="absolute top-6 right-6 p-2 bg-earth-50 dark:bg-earth-800 rounded-full hover:bg-earth-100 transition-all"
+                    >
+                        <X size={24} />
+                    </button>
+
+                    <div className="bg-agro-600 p-10 text-white relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12"><Database size={200} /></div>
+                        <div className="relative z-10">
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-agro-200 mb-4 block">Transaction Verified</span>
+                            <h2 className="text-4xl font-serif font-black">{selectedTx.id}</h2>
+                            <p className="text-agro-100 mt-2 font-medium">{selectedTx.date}</p>
+                        </div>
+                    </div>
+
+                    <div className="p-10 space-y-8">
+                        <div className="grid grid-cols-2 gap-8">
+                            <div>
+                                <span className="text-[10px] font-black uppercase text-earth-400 block mb-1">Project Node</span>
+                                <p className="text-lg font-bold text-earth-900 dark:text-white">{selectedTx.project}</p>
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-black uppercase text-earth-400 block mb-1">Verification Method</span>
+                                <p className="text-lg font-bold text-earth-900 dark:text-white">{selectedTx.method}</p>
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-black uppercase text-earth-400 block mb-1">Sequestered Amount</span>
+                                <p className="text-lg font-black text-agro-600">{selectedTx.amount}</p>
+                            </div>
+                            <div>
+                                <span className="text-[10px] font-black uppercase text-earth-400 block mb-1">EAC Generated</span>
+                                <p className="text-lg font-black text-blue-600">{selectedTx.eac}</p>
+                            </div>
+                        </div>
+
+                        <div className="p-6 bg-earth-50 dark:bg-earth-800 rounded-2xl border border-earth-100 dark:border-earth-700">
+                             <div className="flex justify-between items-center mb-4">
+                                <span className="text-[10px] font-black uppercase text-earth-400">Ledger Hash</span>
+                                <span className="text-[10px] font-mono font-bold text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 rounded">SECURE_CHAIN_V4</span>
+                             </div>
+                             <p className="text-xs font-mono text-earth-600 dark:text-earth-400 break-all bg-white dark:bg-earth-950 p-4 rounded-xl border border-earth-100 dark:border-earth-800 shadow-inner">
+                                {selectedTx.hash}7d2e9f1a8c4b0d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0
+                             </p>
+                        </div>
+
+                        <div className="flex gap-4">
+                           <button className="flex-1 flex items-center justify-center gap-3 bg-earth-900 dark:bg-white text-white dark:text-earth-900 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all">
+                              <Download size={18} /> Export Certificate
+                           </button>
+                           <button className="p-4 bg-earth-50 dark:bg-earth-800 rounded-2xl border border-earth-100 dark:border-earth-700 text-earth-400 hover:text-agro-600 transition-all">
+                              <Share2 size={20} />
+                           </button>
+                        </div>
+                    </div>
+                </motion.div>
+            </motion.div>
+        )}
+      </AnimatePresence>
 
       {showMintModal && (
         <MintModal

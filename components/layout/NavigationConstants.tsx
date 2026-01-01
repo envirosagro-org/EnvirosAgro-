@@ -2,7 +2,7 @@ import { View } from '../../types';
 import {
     LayoutGrid, BarChart3, Leaf, BrainCircuit, Users, HeartHandshake, Briefcase, Info, MessageSquare, Mic, 
     BookOpen, Globe, GitBranch, ShieldCheck, Factory, Dna, Anchor, Feather, Settings, Building2, Link, Tags, Home,
-    Database, LogIn
+    Database, LogIn, ShoppingCart
 } from 'lucide-react';
 
 export const NAVIGATION_STRUCTURE = [
@@ -10,6 +10,11 @@ export const NAVIGATION_STRUCTURE = [
     label: 'Home',
     icon: Home,
     view: View.HOME,
+  },
+  {
+    label: 'Impact',
+    icon: LayoutGrid,
+    view: View.IMPACT_DASHBOARD,
   },
   {
     label: 'Ecological Integrity',
@@ -27,6 +32,7 @@ export const NAVIGATION_STRUCTURE = [
     label: 'Economic Viability',
     icon: BarChart3,
     subItems: [
+      { label: 'Marketplace', view: View.PRODUCTS, icon: ShoppingCart },
       { label: 'AgBiz', view: View.AGBIZ, icon: Factory },
       { label: 'AgBiz Weekly', view: View.AGBIZ_WEEKLY, icon: Briefcase },
       { label: 'Finance', view: View.FINANCE, icon: Link },
@@ -88,6 +94,7 @@ export const MENU_SECTIONS = [
         label: 'Business',
         icon: <Briefcase size={16} />,
         items: [
+            { id: View.PRODUCTS, label: 'Marketplace', desc: 'Strategic assets and knowledge tokens for development.', icon: <ShoppingCart size={20} /> },
             { id: View.FINANCE, label: 'Finance', desc: 'Tools and resources for financial management.', icon: <BarChart3 size={20} /> },
             { id: View.INVESTOR_PORTAL, label: 'Investor Portal', desc: 'Exclusive content and insights for our investors.', icon: <Building2 size={20} /> },
             { id: View.PORTFOLIO, label: 'Portfolio', desc: 'An overview of our diverse investment portfolio.', icon: <BookOpen size={20} /> },

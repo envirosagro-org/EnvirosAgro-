@@ -9,10 +9,15 @@ import { ImpactStats } from './greenlens/ImpactStats';
 import { 
   Play, Film, Eye, Share2, 
   Maximize2, Volume2, Sparkles, 
-  Tv, Camera, Info, Target
+  Tv, Camera, Info, Target, ArrowLeft
 } from 'lucide-react';
+import { View } from '../types';
 
-export const GreenLens: React.FC = () => {
+interface GreenLensProps {
+  onNavigate?: (view: View) => void;
+}
+
+export const GreenLens: React.FC<GreenLensProps> = ({ onNavigate }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -34,6 +39,14 @@ export const GreenLens: React.FC = () => {
 
       {/* Main Experience */}
       <div className={`${isPlaying ? 'hidden' : 'block'}`}>
+        <div className="max-w-[1600px] mx-auto px-6 pt-6 relative z-10">
+            <button 
+                onClick={() => onNavigate?.(View.HOME)}
+                className="flex items-center gap-2 text-slate-500 hover:text-agro-400 transition-colors text-sm font-bold uppercase tracking-widest"
+            >
+                <ArrowLeft size={16} /> Back to Home
+            </button>
+        </div>
         <GreenLensHero onPlay={() => setIsPlaying(true)} />
         
         {/* Visual Impact Ticker */}
