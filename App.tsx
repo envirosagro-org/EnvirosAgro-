@@ -44,6 +44,7 @@ import { PrivacyPolicy } from './components/PrivacyPolicy';
 import { Brands } from './components/Brands';
 import { DataRegistry } from './components/DataRegistry';
 import { ImpactDashboard } from './components/ImpactDashboard';
+import { NetworkInputHub } from './components/NetworkInputHub';
 
 const Home = ({ onNavigate }) => (
   <>
@@ -106,6 +107,7 @@ const componentMap: { [key in View]?: React.ComponentType<any> } = {
     [View.PRIVACY_POLICY]: PrivacyPolicy,
     [View.BRANDS]: Brands,
     [View.DATA_REGISTRY]: DataRegistry,
+    [View.NETWORK_INPUT_HUB]: NetworkInputHub,
 };
 
 function App() {
