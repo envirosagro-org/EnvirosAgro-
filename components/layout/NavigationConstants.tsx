@@ -61,6 +61,7 @@ export const NAVIGATION_STRUCTURE = [
     label: 'About Us',
     icon: Info,
     subItems: [
+      { label: 'About', view: View.ABOUT, icon: Users },
       { label: 'Community Guidelines', view: View.COMMUNITY_GUIDELINES, icon: Users },
       { label: 'Trademarks', view: View.TRADEMARKS, icon: ShieldCheck },
       { label: 'Privacy Policy', view: View.PRIVACY_POLICY, icon: ShieldCheck },

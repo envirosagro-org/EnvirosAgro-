@@ -44,6 +44,7 @@ import { DataRegistry } from './components/DataRegistry';
 import { ImpactDashboard } from './components/ImpactDashboard';
 import { NetworkInputHub } from './components/NetworkInputHub';
 import { CommandPalette } from './components/CommandPalette';
+import { AboutPage } from './components/about/page';
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
@@ -60,6 +61,7 @@ const allViews = NAVIGATION_STRUCTURE.flatMap(category =>
 
 const componentMap: { [key in View]?: React.ComponentType<any> } = {
     [View.HOME]: Home,
+    [View.ABOUT]: AboutPage,
     [View.DASHBOARD]: Dashboard,
     [View.IMPACT_DASHBOARD]: ImpactDashboard,
     [View.CROP_DOCTOR]: CropDoctor,
