@@ -1,9 +1,20 @@
+
 import React from 'react';
 
-export const InputForm: React.FC = () => {
+interface InputFormProps {
+  isIntegrated: boolean;
+  partnerName: string | undefined;
+  partnerId: string | undefined;
+}
+
+export const InputForm: React.FC<InputFormProps> = ({ isIntegrated, partnerName }) => {
   return (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mt-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Submit Your Data</h2>
+        {isIntegrated ? (
+            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Submit Your Data, {partnerName}</h2>
+        ) : (
+            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Submit Your Data</h2>
+        )}
       <form>
         <div className="grid grid-cols-1 gap-6">
           <label className="block">

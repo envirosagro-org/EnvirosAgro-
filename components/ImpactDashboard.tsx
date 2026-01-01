@@ -1,5 +1,10 @@
 
 import React from 'react';
+import { View } from '../types';
+
+interface ImpactDashboardProps {
+  onNavigate: (view: View) => void;
+}
 
 const metrics = [
   { title: 'Active Projects', value: '12', change: '+5.4%' },
@@ -68,11 +73,19 @@ const FutureVisionWidget: React.FC = () => {
   );
 };
 
-export const ImpactDashboard: React.FC = () => {
+export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-[#050a14] pt-24 px-4 sm:px-6 lg:px-8">
       <DashboardHeader />
       <main className="max-w-[1700px] mx-auto mt-8">
+        <div className="flex justify-end mb-4">
+            <button 
+                onClick={() => onNavigate(View.DASHBOARD)} 
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+                Back to Dashboard
+            </button>
+        </div>
         <MetricCards />
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">

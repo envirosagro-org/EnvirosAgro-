@@ -51,6 +51,7 @@ import { FrameworkDistinctions } from '../FrameworkDistinctions';
 import { DataRegistry } from '../DataRegistry';
 import { Portfolio } from '../Portfolio';
 import { AiConsultantFloating } from '../AiConsultantFloating';
+import { ImpactDashboard } from '../ImpactDashboard';
 
 interface ViewHandlerProps {
   currentView: View;
@@ -87,57 +88,81 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
           <Community user={user} onNavigate={handleNavClick} onAwardEac={awardEac} />
         </>
       );
-    case View.INFORMATION: return <Information onNavigate={handleNavClick} />;
-    case View.PRODUCTS: return <Products setCurrency={setCurrency} />;
-    case View.CART: return <Cart onNavigate={handleNavClick} />;
-    case View.SERVICES: return <Services onNavigate={handleNavClick} />;
-    case View.DATABASE: return <Database user={user} onAwardEac={awardEac} />;
-    case View.PEOPLE_AND_CULTURE: return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
-    case View.PEOPLE_AND_CULTURE_CLOUD: return <PeopleAndCulture user={user} onNavigate={handleNavClick} initialTab="CLOUD" />;
-    case View.KNOWLEDGE: return <Information onNavigate={handleNavClick} />;
-    case View.DASHBOARD: return <Dashboard onNavigate={handleNavClick} />;
-    case View.AI_ADVISOR: return <AiAdvisor />;
-    case View.ROADMAP_AI: return <RoadmapAI />;
-    case View.CROP_DOCTOR: return <CropDoctor />;
-    case View.SUSTAINABILITY_CALCULATOR: return <SustainabilityCalculator />;
-    case View.FARM_SCOUT: return <FarmScout onNavigate={handleNavClick} />;
-    case View.CARBON_LEDGER: return <CarbonLedger user={user} onAwardEac={awardEac} onNavigate={handleNavClick} />;
-    case View.SIGN_UP: return <Auth onLogin={(u) => { setUser(u); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
-    case View.PROFILE: return user ? <UserProfile user={user} onUpdateUser={(u) => setUser(u)} /> : <Auth onLogin={(u) => { setUser(u); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
-    case View.SUSTAINABILITY_FRAMEWORK: return <SustainabilityFramework onNavigate={handleNavClick} />;
-    case View.BRANDS: return <Brands onNavigate={handleNavClick} />;
-    case View.TRADEMARKS: return <Trademarks />;
-    case View.MEDIA: return <Media onNavigate={handleNavClick} />;
-    case View.SUPPLY: return <Supply onNavigate={handleNavClick} />;
-    case View.CUSTOMER: return <Customer onNavigate={handleNavClick} />;
-    case View.PARTNERSHIPS: return <Partnerships onNavigate={handleNavClick} onIntegrationComplete={(data) => { setIsPartnerIntegrated(true); setPartnerData(data); }} />;
-    case View.FINANCE: return <Finance user={user} onNavigate={handleNavClick} />;
-    case View.COMMUNITY: return <Community user={user} onNavigate={handleNavClick} onAwardEac={awardEac} />;
-    case View.PODCAST: return <Podcast />;
-    case View.HERITAGE_FORUM: return <HeritageForum />;
-    case View.WEBINAR: return <Webinar />;
-    case View.SMART_FARM_VR: return <SmartFarmVR />;
-    case View.PLANET_WATCH: return <PlanetWatch />;
-    case View.GREEN_LENS: return <GreenLens />;
-    case View.SAFE_HARVEST: return <SafeHarvest onNavigate={handleNavClick} />;
-    case View.NUTRILIFE: return <NutriLife />;
-    case View.AGBIZ_WEEKLY: return <AgBizWeekly />;
-    case View.INVESTOR_PORTAL: return <InvestorPortal onNavigate={handleNavClick} />;
-    case View.SCALEUP_SUMMIT: return <ScaleUpSummit />;
-    case View.LIVE_HOST: return <LiveHost />;
-    case View.COMMUNITY_GUIDELINES: return <CommunityGuidelines onNavigate={handleNavClick} />;
-    case View.INTRANET_DASHBOARD: return <IntranetDashboard />;
-    case View.EXTRANET_DASHBOARD: return <ExtranetDashboard />;
-    case View.PRIVACY_POLICY: return <PrivacyPolicy />;
-    case View.SUPPLY_CHAIN_AUDIT: return <SupplyChainAudit />;
-    case View.NETWORK_INPUT_HUB: return <NetworkInputHub onNavigate={handleNavClick} isIntegrated={isPartnerIntegrated} partnerName={partnerData?.name} partnerId={partnerData?.id} />;
-    case View.TRANSMISSION_GATEWAY: return <TransmissionGateway onNavigate={handleNavClick} />;
-    case View.FUTURE_VISION: return <FutureVision />;
-    case View.SIX_SIGMA_RCA: return <SixSigmaRCA />;
-    case View.FRAMEWORK_DISTINCTIONS: return <FrameworkDistinctions />;
-    case View.DATA_REGISTRY: return <DataRegistry />;
-    case View.PORTFOLIO: return <Portfolio user={user} />;
-    case View.AI_CONSULTANT_FLOATING: return <AiConsultantFloating />;
-    default: return <Hero onNavigate={handleNavClick} />;
+    case View.IMPACT_DASHBOARD:
+      return <ImpactDashboard onNavigate={handleNavClick} />;
+    case View.PLANET_WATCH:
+      return <PlanetWatch />;
+    case View.SAFE_HARVEST:
+      return <SafeHarvest onNavigate={handleNavClick} />;
+    case View.SUSTAINABILITY_FRAMEWORK:
+      return <SustainabilityFramework onNavigate={handleNavClick} />;
+    case View.CARBON_LEDGER:
+      return <CarbonLedger user={user} onAwardEac={awardEac} onNavigate={handleNavClick} />;
+    case View.GREEN_LENS:
+      return <GreenLens />;
+    case View.NUTRILIFE:
+      return <NutriLife />;
+    case View.AGBIZ:
+      return <AgBizWeekly />;
+    case View.FINANCE:
+      return <Finance user={user} onNavigate={handleNavClick} />;
+    case View.INVESTOR_PORTAL:
+      return <InvestorPortal onNavigate={handleNavClick} />;
+    case View.SUPPLY_CHAIN_AUDIT:
+      return <SupplyChainAudit />;
+    case View.COMMUNITY:
+      return <Community user={user} onNavigate={handleNavClick} onAwardEac={awardEac} />;
+    case View.HERITAGE_FORUM:
+      return <HeritageForum />;
+    case View.PEOPLE_AND_CULTURE:
+      return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
+    case View.SCALEUP_SUMMIT:
+      return <ScaleUpSummit />;
+    case View.AI_ADVISOR:
+      return <AiAdvisor />;
+    case View.CROP_DOCTOR:
+      return <CropDoctor />;
+    case View.FARM_SCOUT:
+      return <FarmScout onNavigate={handleNavClick} />;
+    case View.SMART_FARM_VR:
+      return <SmartFarmVR />;
+    case View.ROADMAP_AI:
+      return <RoadmapAI />;
+    case View.SIX_SIGMA_RCA:
+      return <SixSigmaRCA />;
+    case View.AI_CONSULTANT_FLOATING:
+      return <AiConsultantFloating />;
+    case View.DATA_REGISTRY:
+      return <DataRegistry />;
+    case View.OUR_STORY:
+      return <Information onNavigate={handleNavClick} />;
+    case View.COMMUNITY_GUIDELINES:
+      return <CommunityGuidelines onNavigate={handleNavClick} />;
+    case View.TRADEMARKS:
+      return <Trademarks />;
+    case View.PRIVACY_POLICY:
+      return <PrivacyPolicy />;
+    case View.KNOWLEDGE:
+      return <KnowledgeHub onNavigate={handleNavClick} />;
+    case View.FUTURE_VISION:
+      return <FutureVision />;
+    case View.NETWORK_INPUT_HUB:
+        return <NetworkInputHub onNavigate={handleNavClick} isIntegrated={isPartnerIntegrated} partnerName={partnerData?.name} partnerId={partnerData?.id} />;
+    case View.SERVICES:
+        return <Services onNavigate={handleNavClick} />;
+    case View.BRANDS:
+        return <Brands onNavigate={handleNavClick} />;
+    case View.TRANSMISSION_GATEWAY:
+        return <TransmissionGateway onNavigate={handleNavClick} />;
+    case View.PROFESSIONAL:
+        return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
+    case View.RESILIENCE:
+        return <FrameworkDistinctions />;
+    case View.FIVE_THRUSTS:
+        return <FrameworkDistinctions />;
+    case View.PROFILE:
+        return user ? <UserProfile user={user} onUpdateUser={(u) => setUser(u)} /> : <Auth onLogin={(u) => { setUser(u); handleNavClick(View.HOME); }} onNavigate={handleNavClick} />;
+    default:
+      return <Hero onNavigate={handleNavClick} />;
   }
 };

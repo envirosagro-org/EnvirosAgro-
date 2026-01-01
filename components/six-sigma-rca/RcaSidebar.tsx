@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Terminal, Loader2 } from 'lucide-react';
+import { Zap, Terminal, Loader2, FileCheck } from 'lucide-react';
 
 export const RcaSidebar: React.FC = () => (
   <aside className="lg:col-span-4 space-y-8">
@@ -9,7 +9,10 @@ export const RcaSidebar: React.FC = () => (
         <h4 className="text-[10px] font-black uppercase tracking-[0.4em] mb-6 text-blue-200">Critical Quality Stat</h4>
         <div className="text-6xl font-serif font-bold mb-4 tracking-tighter">6.2 σ</div>
         <p className="text-sm font-medium leading-relaxed mb-10 opacity-80">The EnvirosAgro network is operating at Six Sigma reliability. This equates to fewer than 3.4 defects per million boot opportunities.</p>
-        <button className="w-full bg-white text-blue-700 font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">Download Audit PDF</button>
+        <button className="w-full bg-white text-blue-700 font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-3">
+          <FileCheck size={16} />
+          Download Audit PDF
+        </button>
       </div>
     </div>
 

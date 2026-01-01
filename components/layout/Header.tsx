@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, User } from '../../types';
 import { Logo } from '../Logo';
-import { LayoutDashboard, Minimize2, Maximize2, Coins, LogOut, Menu, X, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Minimize2, Maximize2, Coins, LogOut, Menu, X, ShoppingCart, Network } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { ThemeToggleButton } from './ThemeToggleButton';
 
@@ -52,6 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex items-center gap-1 p-1 bg-white/40 dark:bg-earth-900/50 rounded-2xl border border-white dark:border-white/5 shadow-sm backdrop-blur-md">
               <button onClick={() => handleNavClick(View.DASHBOARD)} className={`p-2.5 rounded-xl transition-all ${currentView === View.DASHBOARD ? 'bg-agro-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}><LayoutDashboard size={20} /></button>
+              <button onClick={() => handleNavClick(View.NETWORK_INPUT_HUB)} className={`p-2.5 rounded-xl transition-all ${currentView === View.NETWORK_INPUT_HUB ? 'bg-blue-600 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}><Network size={20} /></button>
               <button onClick={() => handleNavClick(View.CART)} className={`p-2.5 rounded-xl transition-all relative ${currentView === View.CART ? 'bg-amber-500 text-white shadow-lg' : 'text-earth-400 hover:bg-earth-50 dark:hover:bg-earth-800'}`}>
                 <ShoppingCart size={20} />
                 {totalItems > 0 && (
