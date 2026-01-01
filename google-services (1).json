@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "433406385828",
+    "project_id": "envirosagro-git-79265384-d5a15",
+    "storage_bucket": "envirosagro-git-79265384-d5a15.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433406385828:android:8d73aa684ac973f7f91031",
+        "android_client_info": {
+          "package_name": "EnvirosAgro.org"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433406385828-b0kittm9vmdg2ssod5vol9du0nac13ja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5nXYl2FnUiOiU9_TaWNcjUxHuojx0JjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433406385828-b0kittm9vmdg2ssod5vol9du0nac13ja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
