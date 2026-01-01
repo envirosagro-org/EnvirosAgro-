@@ -2,13 +2,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
-import { Hero } from './components/Hero';
-import { FrameworkDistinctions } from './components/FrameworkDistinctions';
-import { Cta } from './components/Cta';
+import { Home } from './views/Home';
 import { PeopleAndCulture } from './components/PeopleAndCulture';
 import { Footer } from './components/Footer';
-import { Podcast } from './components/Podcast';
-import { ImpactStats } from './components/greenlens/ImpactStats';
 import { Navbar } from './components/Navbar';
 import { ScrollToTop } from './components/ScrollToTop';
 import { Dashboard } from './components/Dashboard';
@@ -47,22 +43,6 @@ import { Brands } from './components/Brands';
 import { DataRegistry } from './components/DataRegistry';
 import { ImpactDashboard } from './components/ImpactDashboard';
 import { NetworkInputHub } from './components/NetworkInputHub';
-
-const Home = ({ onNavigate }) => (
-  <>
-    <Hero onNavigate={onNavigate} />
-    <FrameworkDistinctions />
-    <Cta 
-      title="Ready to dive in?" 
-      subtitle="Start your free trial today." 
-      buttonText="Get Started" 
-      onClick={() => onNavigate(View.KNOWLEDGE, { query: 'Getting Started' })}
-    />
-    <ImpactStats />
-    <Podcast />
-    <PeopleAndCulture />
-  </>
-);
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
