@@ -18,6 +18,8 @@ import { SmartFarmVR } from './components/SmartFarmVR';
 import { SafeHarvest } from './components/SafeHarvest';
 import { View } from './types';
 import { ThemeProvider } from './context/ThemeContext';
+import { StateProvider } from './context/StateContext';
+import { reducer, initialState } from './context/reducer';
 import { NAVIGATION_STRUCTURE } from './components/layout/NavigationConstants';
 import { ViewPlaceholder } from './components/ViewPlaceholder';
 import { UserProfile } from './components/UserProfile';
@@ -141,11 +143,13 @@ function App() {
 }
 
 const AppWrapper = () => (
-  <Router>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </Router>
+  <StateProvider initialState={initialState} reducer={reducer}>
+    <Router>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </Router>
+  </StateProvider>
 );
 
 export default AppWrapper;
