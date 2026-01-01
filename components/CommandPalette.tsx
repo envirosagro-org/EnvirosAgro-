@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { NAVIGATION_STRUCTURE } from './layout/NavigationConstants';
 import { View } from '../types';
 
-const CommandPalette = ({ onNavigate }) => {
+export const CommandPalette = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -59,5 +59,3 @@ const CommandPalette = ({ onNavigate }) => {
     </div>
   );
 };
-
-export default CommandPalette;
