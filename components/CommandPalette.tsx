@@ -2,12 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { NAVIGATION_STRUCTURE } from './layout/NavigationConstants';
 import { View } from '../types';
-import { useStateValue } from '../context/StateContext';
 
 const CommandPalette = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [{ currentView }] = useStateValue();
 
   const allCommands = NAVIGATION_STRUCTURE.flatMap(category =>
     category.subItems ? category.subItems.map(item => ({ ...item, category: category.name })) : []
