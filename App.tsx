@@ -15,6 +15,8 @@ import { SafeHarvest } from './components/SafeHarvest';
 import { View } from './types';
 import { ThemeProvider } from './context/ThemeContext';
 import { StateProvider } from './context/StateContext';
+import { CurrencyProvider } from './context/CurrencyContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { reducer, initialState } from './context/reducer';
 import { NAVIGATION_STRUCTURE } from './components/layout/NavigationConstants';
 import { ViewPlaceholder } from './components/ViewPlaceholder';
@@ -172,7 +174,11 @@ const AppWrapper = () => (
   <StateProvider initialState={initialState} reducer={reducer}>
     <Router>
       <ThemeProvider>
-        <App />
+        <LanguageProvider>
+          <CurrencyProvider>
+            <App />
+          </CurrencyProvider>
+        </LanguageProvider>
       </ThemeProvider>
     </Router>
   </StateProvider>

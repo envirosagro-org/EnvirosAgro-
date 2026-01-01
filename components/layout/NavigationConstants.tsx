@@ -1,7 +1,8 @@
 import { View } from '../../types';
 import {
     LayoutGrid, BarChart3, Leaf, BrainCircuit, Users, HeartHandshake, Briefcase, Info, MessageSquare, Mic, 
-    BookOpen, Globe, GitBranch, ShieldCheck, Factory, Dna, Anchor, Feather, Settings, Building2, Link, Tags, Home
+    BookOpen, Globe, GitBranch, ShieldCheck, Factory, Dna, Anchor, Feather, Settings, Building2, Link, Tags, Home,
+    Database, LogIn
 } from 'lucide-react';
 
 export const NAVIGATION_STRUCTURE = [
@@ -54,7 +55,8 @@ export const NAVIGATION_STRUCTURE = [
         { label: 'Roadmap AI', view: View.ROADMAP_AI, icon: GitBranch },
         { label: 'Six Sigma RCA', view: View.SIX_SIGMA_RCA, icon: Anchor },
         { label: 'AI Floating Consultant', view: View.AI_CONSULTANT_FLOATING, icon: Feather },
-        { label: 'Data Registry', view: View.DATA_REGISTRY, icon: Feather },
+        { label: 'Data Registry', view: View.DATA_REGISTRY, icon: Database },
+        { label: 'Network Ingest Hub', view: View.NETWORK_INPUT_HUB, icon: LogIn },
     ],
   },
   {
@@ -89,6 +91,7 @@ export const MENU_SECTIONS = [
             { id: View.FINANCE, label: 'Finance', desc: 'Tools and resources for financial management.', icon: <BarChart3 size={20} /> },
             { id: View.INVESTOR_PORTAL, label: 'Investor Portal', desc: 'Exclusive content and insights for our investors.', icon: <Building2 size={20} /> },
             { id: View.PORTFOLIO, label: 'Portfolio', desc: 'An overview of our diverse investment portfolio.', icon: <BookOpen size={20} /> },
+            { id: View.NETWORK_INPUT_HUB, label: 'Ingest Hub', desc: 'Centralized point for partners to submit data.', icon: <LogIn size={20} /> },
         ]
     },
     {
@@ -109,6 +112,7 @@ export const MENU_SECTIONS = [
             { id: View.AI_ADVISOR, label: 'AI Advisor', desc: 'Get expert advice and insights from our AI-powered assistant.', icon: <BrainCircuit size={20} /> },
             { id: View.SMART_FARM_VR, label: 'SmartFarm VR', desc: 'Experience the future of farming with our virtual reality simulation.', icon: <Dna size={20} /> },
             { id: View.SIX_SIGMA_RCA, label: 'Six Sigma RCA', desc: 'A systematic approach to problem-solving and process improvement.', icon: <Anchor size={20} /> },
+            { id: View.DATA_REGISTRY, label: 'Data Registry', desc: 'A centralized database for agricultural and environmental data.', icon: <Database size={20} /> },
         ]
     },
     {
