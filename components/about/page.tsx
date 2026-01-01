@@ -1,110 +1,124 @@
+import React from 'react';
+import { Target, Eye, Users, Lightbulb, Leaf, RefreshCw, ShieldCheck, Smile, Heart, Gavel, AlertTriangle, Zap } from 'lucide-react';
 
-import React, { useState, useEffect } from 'react';
-
-const TEAM_MEMBERS = [
-  {
-    name: 'Dr. Alistair Finch',
-    role: 'Founder & Chief Scientist',
-    imageUrl: '/images/team/alistair-finch.jpg',
-    bio: 'Alistair is a world-renowned conservation biologist with over 30 years of experience in ecosystem restoration. He founded GreenTide to bridge the gap between cutting-edge science and on-the-ground action, driven by a passion for preserving biodiversity for future generations.',
-  },
-  {
-    name: 'Priya Sharma',
-    role: 'CEO',
-    imageUrl: '/images/team/priya-sharma.jpg',
-    bio: 'Priya is a seasoned leader with a background in sustainable business and international development. She is dedicated to scaling GreenTide\'s impact globally, fostering strategic partnerships, and ensuring the long-term financial health of our initiatives.',
-  },
-  {
-    name: 'Ben Carter',
-    role: 'Head of Field Operations',
-    imageUrl: '/images/team/ben-carter.jpg',
-    bio: 'Ben coordinates all our field projects, working closely with local communities to implement restoration and conservation efforts. His hands-on approach and deep respect for indigenous knowledge are key to our success.',
-  },
-    {
-    name: 'Dr. Lena Petrova',
-    role: 'Director of Research',
-    imageUrl: '/images/team/lena-petrova.jpg',
-    bio: `Lena leads our research and development, focusing on innovative, scalable solutions for carbon capture and biodiversity monitoring. Her work ensures all our projects are grounded in the latest scientific evidence.`
-  }
-];
-
-const OUR_VALUES = [
-    {
-        name: "Science-Driven",
-        description: "Our strategies are rooted in rigorous scientific research to ensure effective and lasting impact.",
-    },
-    {
-        name: "Community-Powered",
-        description: "We believe in empowering local communities as the primary stewards of their ecosystems.",
-    },
-    {
-        name: "Radical Transparency",
-        description: "We are open and honest about our successes, our failures, and our finances.",
-    },
-    {
-        name: "Long-Term Commitment",
-        description: "We are dedicated to the long-term health of the ecosystems and communities we serve.",
-    },
-]
-
-export const AboutPage = () => {
-  const [team, setTeam] = useState([]);
-  const [values, setValues] = useState([]);
-
-  useEffect(() => {
-    // Simulate fetching data from a database
-    const fetchTeam = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(TEAM_MEMBERS);
-      }, 1000);
-    });
-
-    const fetchValues = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(OUR_VALUES);
-      }, 1000);
-    });
-
-    fetchTeam.then(data => setTeam(data));
-    fetchValues.then(data => setValues(data));
-  }, []);
-
-  return (
-    <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-      <div className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold text-center mb-12">About GreenTide</h1>
-        
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">Our Mission</h2>
-          <p className="text-xl text-center max-w-3xl mx-auto">To restore and protect marine ecosystems through science, technology, and community engagement. We are committed to creating a sustainable future for our oceans and the life they support.</p>
+const MissionVision = () => (
+    <div className="grid md:grid-cols-2 gap-8 mb-20">
+      <div className="bg-agro-900 text-white p-10 rounded-3xl flex flex-col justify-center text-center shadow-lg">
+        <div className="bg-white/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-agro-300">
+          <Target size={32} />
         </div>
+        <h3 className="text-3xl font-serif font-bold mb-4">Our Mission</h3>
+        <p className="text-xl text-agro-100 leading-relaxed italic">
+          \"To ensure agriculture and its environ is smooth, reliable and safe.\"
+        </p>
+      </div>
 
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center">Our Values</h2>
-          {values.length === 0 ? <p className='text-center'>Loading...</p> : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <div key={index} className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg text-center">
-                <h3 className="text-xl font-semibold mb-2">{value.name}</h3>
-                <p>{value.description}</p>
+      <div className="bg-white border border-earth-100 p-10 rounded-3xl flex flex-col justify-center text-center shadow-sm">
+        <div className="bg-blue-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-blue-600">
+          <Eye size={32} />
+        </div>
+        <h3 className="text-3xl font-serif font-bold text-earth-900 mb-4">Our Vision</h3>
+        <p className="text-xl text-earth-600 leading-relaxed italic">
+          \"To have socioeconomic and healthy future for agricultural community.\"
+        </p>
+      </div>
+    </div>
+);
+
+const Principles = () => {
+    const principles = [
+        { title: "Integration", icon: <Users size={24} />, desc: "Unifying diverse agricultural sectors." },
+        { title: "Vision", icon: <Eye size={24} />, desc: "Forward-thinking strategies for the future." },
+        { title: "Innovation", icon: <Lightbulb size={24} />, desc: "Embracing technology and creative solutions." },
+        { title: "Sustainability", icon: <Leaf size={24} />, desc: "Ensuring long-term ecological balance." },
+        { title: "Kaizen", icon: <RefreshCw size={24} />, desc: "Continuous improvement in all practices." }
+      ];
+
+    return (
+        <div className="mb-20">
+          <h3 className="text-3xl font-serif font-bold text-agro-900 mb-10 text-center">Principles of EnvirosAgro</h3>
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {principles.map((principle, idx) => (
+              <div key={idx} className="bg-white p-6 rounded-2xl border border-earth-100 shadow-sm hover:border-agro-300 hover:shadow-md transition-all text-center group">
+                <div className="w-12 h-12 bg-earth-50 rounded-full flex items-center justify-center mx-auto mb-4 text-earth-600 group-hover:bg-agro-50 group-hover:text-agro-600 transition-colors">
+                  {principle.icon}
+                </div>
+                <h4 className="font-bold text-lg text-earth-900 mb-2">{principle.title}</h4>
+                <p className="text-sm text-earth-500">{principle.desc}</p>
               </div>
             ))}
-          </div>}
+          </div>
         </div>
+    );
+};
 
-        <div>
-          <h2 className="text-3xl font-bold mb-8 text-center">Meet the Team</h2>
-          {team.length === 0 ? <p className='text-center'>Loading...</p> : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <div key={index} className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg text-center">
-                <img src={member.imageUrl} alt={member.name} className="w-32 h-32 rounded-full mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                <p className="text-gray-500 dark:text-gray-400 mb-4">{member.role}</p>
-                <p>{member.bio}</p>
+const Values = () => {
+    const values = [
+        { title: "Ethical", icon: <ShieldCheck size={28} />, color: "text-amber-600" },
+        { title: "Communal", icon: <Users size={28} />, color: "text-rose-600" },
+        { title: "Optimistic", icon: <Smile size={28} />, color: "text-yellow-500" },
+        { title: "Supportive", icon: <Heart size={28} />, color: "text-green-600" },
+        { title: "Governed", icon: <Gavel size={28} />, color: "text-blue-600" }
+      ];
+
+    return (
+        <div className="mb-20 bg-earth-50 rounded-3xl p-10 border border-earth-100">
+          <h3 className="text-3xl font-serif font-bold text-agro-900 mb-10 text-center">Values of EnvirosAgro</h3>
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-8">
+            {values.map((value, idx) => (
+              <div key={idx} className="flex flex-col items-center">
+                <div className={`mb-4 ${value.color}`}>{value.icon}</div>
+                <h4 className="font-bold text-lg text-earth-900">{value.title}</h4>
               </div>
             ))}
-          </div>}
+          </div>
+        </div>
+    );
+};
+
+const FrameworkDistinctions = () => (
+    <div className="mb-20">
+    <div className="bg-white border-2 border-agro-100 rounded-[3rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
+      <div className="absolute top-0 right-0 p-8 opacity-5">
+        <AlertTriangle size={200} />
+      </div>
+      <div className="relative z-10">
+        <h3 className="text-2xl font-serif font-bold text-agro-900 mb-8 flex items-center gap-3">
+          <Zap className="text-agro-600" /> Key Framework Distinctions
+        </h3>
+        <div className="grid md:grid-cols-2 gap-10">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 px-3 py-1 bg-agro-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest w-fit">
+              Strategic Framework
+            </div>
+            <h4 className="text-xl font-bold text-earth-900">Sustainable Integrated Development</h4>
+            <p className="text-sm text-earth-600 leading-relaxed">
+              This is our <strong>overarching organizational model</strong>. It focuses on the horizontal integration of technology, society, and nature to build long-term stability. Measured by the Sustainable Time Constant m(t).
+            </p>
+          </div>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 px-3 py-1 bg-red-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest w-fit">
+              Diagnostic Framework
+            </div>
+            <h4 className="text-xl font-bold text-earth-900">Social Influenza Disease (SI-D)</h4>
+            <p className="text-sm text-earth-600 leading-relaxed">
+              A specific <strong>socio-psychological framework</strong> within the Social Agriculture thrust. It treats societal fractures as \"infections\"—diagnosing how harmful narratives and stressors prevent integrated growth.
+            </p>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+);
+
+export const AboutPage = () => {
+  return (
+    <div className="max-w-5xl mx-auto py-20 px-4">
+        <h1 className="text-5xl font-serif font-bold text-center text-agro-900 mb-12">About EnvirosAgro</h1>
+        <MissionVision />
+        <Principles />
+        <Values />
+        <FrameworkDistinctions />
     </div>
   );
 };

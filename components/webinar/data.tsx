@@ -34,3 +34,6 @@ export const WEBINARS = [
         coverImage: "/images/webinars/vertical-farm.jpg"
     }
 ];
+
+export const UPCOMING_WEBINARS = WEBINARS;
+export const ARCHIVED_WEBINARS = [];
