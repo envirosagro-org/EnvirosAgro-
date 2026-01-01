@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI, ChatSession } from "@google/generative-ai";
 
-const API_KEY = process.env.VITE_GEMINI_API_KEY || "";
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -16,6 +16,16 @@ export const createAgroChat = (): ChatSession => {
   });
 
   return model.startChat({
+    history: [
+        {
+            role: "user",
+            parts: [{ text: "Hi, I\'m a farmer looking to improve my practices." }],
+        },
+        {
+            role: "model",
+            parts: [{ text: "Welcome! I am the EnvirosAgro AI Assistant. I\'m here to help you with any questions you have about sustainable agriculture, from soil health to market access. How can I assist you today?" }],
+        },
+    ],
     generationConfig: {
       temperature: 0.7,
     },
@@ -53,7 +63,7 @@ export const generateFarmVision = async (prompt: string) => {
     throw new Error("Gemini API key is not configured.");
   }
   // Image generation with Gemini is usually done via Imagen, 
-  // currently GoogleGenerativeAI SDK for Gemini 1.5 doesn't directly support text-to-image like this.
+  // currently GoogleGenerativeAI SDK for Gemini 1.5 doesn\'t directly support text-to-image like this.
   // This is a placeholder for where that integration would go.
   console.warn("Image generation (Imagen 3) requires different API/permissions.");
   return null;
@@ -116,7 +126,7 @@ export const summarizeResearch = async (articles: any[]) => {
     model: 'gemini-1.5-flash',
     systemInstruction: "You are a lead researcher at EnvirosAgro." 
   });
-  const context = articles.map(a => `${a.title}: ${a.excerpt}`).join('\n\n');
+  const context = articles.map(a => `${a.title}: ${a.excerpt}`).join('\\n\\n');
   const result = await model.generateContent(`Summarize this research: ${context}`);
   const response = await result.response;
   return response.text();
@@ -164,7 +174,7 @@ export const analyzeSatelliteScan = async (fieldName: string) => {
   }
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
   const result = await model.generateContent(`Provide a high-level satellite analysis summary for the field block: "${fieldName}". 
-    Simulate NDVI (Normalized Difference Vegetation Index) data and biomass deltas. 
+    Simulate NDVI (Normalized Difference Vegetation Index) and biomass deltas. 
     Focus on environmental resilience (EA Thrust).`);
   const response = await result.response;
   return response.text();
@@ -186,9 +196,9 @@ export const searchKnowledgeBase = async (query: string, category: string) => {
       "title": "string",
       "excerpt": "string (1-2 sentence summary)",
       "category": "string (Social, Environment, Health, Technical, or Industrial)",
-      "complexity": "string ('Beginner', 'Intermediate', or 'Expert')",
-      "duration": "string (e.g., '3 Weeks')",
-      "instructor": "string (a plausible instructor name, e.g., 'Dr. Jane Doe')",
+      "complexity": "string (\'Beginner\', \'Intermediate\', or \'Expert\')",
+      "duration": "string (e.g., \'3 Weeks\')",
+      "instructor": "string (a plausible instructor name, e.g., \'Dr. Jane Doe\')",
       "fullContent": "string (the full text of the module)",
       "image": "string (a relevant Unsplash or similar placeholder image URL)"
     }
@@ -198,7 +208,7 @@ export const searchKnowledgeBase = async (query: string, category: string) => {
         const result = await model.generateContent(prompt);
         const response = await result.response;
         // Clean the response to ensure it's a valid JSON string
-        const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        const text = response.text().replace(/\`\`\`json/g, '').replace(/\`\`\`/g, '').trim();
         return JSON.parse(text);
     } catch (error) {
         console.error("Error searching knowledge base:", error);
