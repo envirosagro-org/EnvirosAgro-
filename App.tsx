@@ -16,6 +16,12 @@ import { Loader2 } from 'lucide-react';
 import { AgBiz } from './components/AgBiz';
 import { KnowledgeBase } from './components/KnowledgeBase';
 
+const Podcast = lazy(() => import('./components/Podcast'));
+const GreenLens = lazy(() => import('./components/GreenLens'));
+const Services = lazy(() => import('./components/Services'));
+const Community = lazy(() => import('./components/Community'));
+const Finance = lazy(() => import('./components/Finance'));
+
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
 );
@@ -32,6 +38,11 @@ const componentMap: { [key in View]?: React.ComponentType<any> } = {
     [View.HOME]: Home,
     [View.AGBIZ]: AgBiz,
     [View.KNOWLEDGE]: KnowledgeBase,
+    [View.PODCAST]: Podcast,
+    [View.GREEN_LENS]: GreenLens,
+    [View.SERVICES]: Services,
+    [View.COMMUNITY]: Community,
+    [View.FINANCE]: Finance,
 };
 
 function App() {

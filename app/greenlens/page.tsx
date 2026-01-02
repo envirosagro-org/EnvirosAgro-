@@ -1,58 +1,92 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DOCS_LIBRARY, FEATURED_FILM, CATEGORIES } from '@/components/greenlens/data';
 import { Film } from 'lucide-react';
 import Link from 'next/link';
 
-const FilmCard = ({ film }: { film: typeof DOCS_LIBRARY[0] }) => (
-  <div className="group relative border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
-    <div className="relative h-64 w-full overflow-hidden bg-white">
-      <img
-        src={film.image}
-        alt={film.title}
-        className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+// Skeleton component for a card
+const CardSkeleton = () => (
+    <div className="border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm">
+      <div className="relative h-64 w-full bg-gray-300 dark:bg-gray-700 animate-pulse" />
+      <div className="p-4 bg-white dark:bg-gray-900">
+        <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-2 animate-pulse"></div>
+        <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-1/4 mb-4 animate-pulse"></div>
+        <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-full animate-pulse"></div>
+        <div className="h-3 bg-gray-300 dark:bg-gray-700 rounded w-5/6 animate-pulse mt-1"></div>
+      </div>
     </div>
-    <div className="p-4 bg-white dark:bg-gray-900">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white">
-            <Link href={`/greenlens/film/${film.id}`}>
-                <span className="absolute inset-0" />
-                {film.title}
-            </Link>
-        </h3>
-        <p className="mt-1 text-sm text-indigo-600 dark:text-indigo-400 font-medium">{film.category}</p>
-        <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{film.description}</p>
-    </div>
-  </div>
 );
 
 
-export default function GreenLensPage() {
-  const [filter, setFilter] = useState('All');
+const FilmCard = ({ film }: { film: typeof DOCS_LIBRARY[0] }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const filteredDocs = filter === 'All' ? DOCS_LIBRARY : DOCS_LIBRARY.filter(d => d.category === filter);
+  return (
+    <div className="group relative border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+      <div className="relative h-64 w-full overflow-hidden bg-gray-200 dark:bg-gray-800">
+        {!isLoaded && (
+          <div className="absolute inset-0 bg-gray-300 dark:bg-gray-700 animate-pulse" />
+        )}
+        <img
+          src={film.image}
+          alt={film.title}
+          loading="lazy"
+          className={`h-full w-full object-cover object-center transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          onLoad={() => setIsLoaded(true)}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+      </div>
+      <div className="p-4 bg-white dark:bg-gray-900">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+              <Link href={`/greenlens/film/${film.id}`}>
+                  <span className="absolute inset-0" />
+                  {film.title}
+              </Link>
+          </h3>
+          <p className="mt-1 text-sm text-indigo-600 dark:text-indigo-400 font-medium">{film.category}</p>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{film.description}</p>
+      </div>
+    </div>
+  );
+};
+
+const GreenLensPage = () => {
+  const [filter, setFilter] = useState('All');
+  const [heroImageLoaded, setHeroImageLoaded] = useState(false);
+  const [films, setFilms] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate API call
+    setTimeout(() => {
+      const filteredDocs = filter === 'All' ? DOCS_LIBRARY : DOCS_LIBRARY.filter(d => d.category === filter);
+      setFilms(filteredDocs);
+      setIsLoading(false);
+    }, 500); // Simulate network delay
+  }, [filter]);
 
   return (
     <div className="bg-earth-50 dark:bg-earth-950">
-      {/* Hero Section for Featured Film */}
+      {/* Hero Section */}
       <div className="relative">
-        <div className="absolute inset-0">
-          <img
+        <div className="absolute inset-0 bg-gray-300 dark:bg-gray-800 animate-pulse">
+          {!heroImageLoaded && <div className="h-full w-full bg-gray-400 dark:bg-gray-700"></div>}
+           <img
             src={FEATURED_FILM.image}
             alt={FEATURED_FILM.title}
-            className="h-full w-full object-cover"
+            className={`h-full w-full object-cover transition-opacity duration-1000 ${heroImageLoaded ? 'opacity-100' : 'opacity-0'}`}
+            onLoad={() => setHeroImageLoaded(true)}
           />
           <div className="absolute inset-0 bg-gray-900/60 mix-blend-multiply" aria-hidden="true" />
         </div>
         <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-extrabold font-serif tracking-tight text-white sm:text-5xl lg:text-6xl">{FEATURED_FILM.title}</h1>
-          <p className="mt-6 max-w-3xl mx-auto text-xl text-indigo-100">{FEATURED_FILM.description}</p>
+          <h1 className="text-4xl font-extrabold font-serif tracking-tight text-white sm:text-5xl lg:text-6xl drop-shadow-lg">{FEATURED_FILM.title}</h1>
+          <p className="mt-6 max-w-3xl mx-auto text-xl text-indigo-100 drop-shadow-md">{FEATURED_FILM.description}</p>
           <div className="mt-10">
             <Link
               href={`/greenlens/film/${FEATURED_FILM.id}`}
-              className="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700"
+              className="inline-block rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 transition-colors shadow-lg hover:shadow-xl"
             >
               Watch the Film
             </Link>
@@ -66,20 +100,21 @@ export default function GreenLensPage() {
         </div>
 
         <section aria-labelledby="library-heading" className="pt-6 pb-24">
-          <h2 id="library-heading" className="sr-only">
-            Films
-          </h2>
+          <h2 id="library-heading" className="sr-only">Films</h2>
 
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
             {/* Filters */}
-            <div className="hidden lg:block">
+            <div className="hidden lg:block bg-white dark:bg-gray-900/50 p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Categories</h3>
               <ul className="space-y-2">
                 {CATEGORIES.map((category) => (
                   <li key={category}>
                     <button
                         type="button"
-                        onClick={() => setFilter(category)}
+                        onClick={() => {
+                          setIsLoading(true);
+                          setFilter(category);
+                        }}
                         className={`w-full text-left px-4 py-2 rounded-md text-sm font-medium transition-colors ${filter === category ? 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
                     >
                       {category}
@@ -91,14 +126,18 @@ export default function GreenLensPage() {
 
             {/* Film grid */}
             <div className="lg:col-span-3">
-              {filteredDocs.length > 0 ? (
+               {isLoading ? (
                 <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {filteredDocs.map((film) => (
+                  {[...Array(6)].map((_, i) => <CardSkeleton key={i} />)}
+                </div>
+              ) : films.length > 0 ? (
+                <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 xl:grid-cols-3">
+                  {films.map((film) => (
                     <FilmCard key={film.id} film={film} />
                   ))}
                 </div>
               ) : (
-                 <div className="text-center py-16">
+                 <div className="text-center py-16 col-span-full">
                     <Film className="mx-auto h-12 w-12 text-gray-400" />
                     <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No films found</h3>
                     <p className="mt-1 text-sm text-gray-500">No films match the selected category.</p>
@@ -110,4 +149,6 @@ export default function GreenLensPage() {
       </main>
     </div>
   );
-}
+};
+
+export default GreenLensPage;

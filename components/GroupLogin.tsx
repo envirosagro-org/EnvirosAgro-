@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Loader2, ArrowLeft, Upload } from 'lucide-react';
+import { Loader2, ArrowLeft, Upload, Users, ShieldCheck } from 'lucide-react';
 
 interface GroupLoginProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -9,7 +9,6 @@ interface GroupLoginProps {
   error: string | null;
 }
 
-// Mock data for organizations and groups, now with registration numbers
 const ORGANIZATIONS = {
     'envirosource-inc': {
         name: 'EnviroSource Inc.',
@@ -27,7 +26,6 @@ const ORGANIZATIONS = {
     },
 };
 
-// Mock data for group membership (for validation)
 const GROUP_MEMBERS = {
     'farmers-club': ['user1@envirosource.com', 'farmer@envirosource.com'],
     'research-society': ['researcher@envirosource.com'],
@@ -90,134 +88,148 @@ export const GroupLogin: React.FC<GroupLoginProps> = ({ onLogin, onBack, isLoadi
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-            <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-2 text-gray-800">Group / Society / Club Login</h2>
-                <p className="mb-6 text-gray-500">Login via your affiliated group.</p>
+        <div className="min-h-screen flex items-center justify-center bg-earth-950 p-6 font-sans">
+            <div className="bg-earth-900/50 backdrop-blur-md p-8 rounded-[2.5rem] shadow-cinematic-xl w-full max-w-md border border-white/10 relative overflow-hidden flex flex-col max-h-[90vh]">
+                <div className="absolute top-0 right-0 p-8 opacity-5">
+                    <Users size={120} />
+                </div>
+                
+                <div className="mb-8 shrink-0">
+                    <h2 className="text-3xl font-serif font-black mb-2 text-white tracking-tighter">Affiliate Login</h2>
+                    <p className="text-earth-300 font-medium">Connect via your society, club or group.</p>
+                </div>
 
-                {error && <div className="bg-red-100 text-red-700 p-3 rounded-md mb-4 text-sm">{error}</div>}
-                {localError && <div className="bg-red-100 text-red-700 p-3 rounded-md mb-4 text-sm">{localError}</div>}
+                {(error || localError) && (
+                    <div className="bg-red-900/30 text-red-300 p-4 rounded-2xl mb-6 text-xs font-bold border border-red-500/20 flex items-center gap-3 shrink-0">
+                        <ShieldCheck size={16} className="shrink-0" />
+                        {error || localError}
+                    </div>
+                )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="organization" className="block text-sm font-medium text-gray-700 mb-1">Organization</label>
+                <form onSubmit={handleSubmit} className="space-y-6 overflow-y-auto pr-2 custom-scrollbar">
+                    <div>
+                        <label className="block text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-2 ml-1">Organization</label>
                         <select
-                            id="organization"
                             value={selectedOrg}
                             onChange={(e) => {
                                 setSelectedOrg(e.target.value);
                                 setSelectedGroup('');
                             }}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                            className="block w-full px-5 py-4 bg-black/30 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-agro-500/50 focus:border-agro-500 transition-all font-medium appearance-none"
                             required
                         >
-                            <option value="" disabled>Select an organization</option>
+                            <option value="" className="bg-earth-900">Select Organization</option>
                             {Object.entries(ORGANIZATIONS).map(([orgId, orgData]) => (
-                                <option key={orgId} value={orgId}>{(orgData as any).name}</option>
+                                <option key={orgId} value={orgId} className="bg-earth-900">{(orgData as any).name}</option>
                             ))}
                         </select>
                     </div>
 
                     {selectedOrg && (
                         <>
-                            <div className="mb-4">
-                                <label htmlFor="group" className="block text-sm font-medium text-gray-700 mb-1">Group</label>
-                                <select
-                                    id="group"
-                                    value={selectedGroup}
-                                    onChange={(e) => setSelectedGroup(e.target.value)}
-                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                    required
-                                >
-                                    <option value="" disabled>Select your group</option>
-                                    {Object.entries(ORGANIZATIONS[selectedOrg as keyof typeof ORGANIZATIONS].groups).map(([groupId, groupData]) => (
-                                        <option key={groupId} value={groupId}>{(groupData as any).name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="registrationNumber" className="block text-sm font-medium text-gray-700 mb-1">Society Registration Number</label>
-                                <input
-                                    id="registrationNumber"
-                                    type="text"
-                                    value={registrationNumber}
-                                    onChange={(e) => setRegistrationNumber(e.target.value)}
-                                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                                    required
-                                    placeholder="e.g., SOC-FARM-12345"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label htmlFor="groupCertificate" className="block text-sm font-medium text-gray-700 mb-1">Group Registration Certificate</label>
-                                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                                    <div className="space-y-1 text-center">
-                                        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                                        <div className="flex text-sm text-gray-600">
-                                            <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                                <span>Upload a file</span>
-                                                <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} />
-                                            </label>
-                                            <p className="pl-1">or drag and drop</p>
-                                        </div>
-                                        <p className="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
-                                    </div>
+                            <div className="animate-in fade-in slide-in-from-top-4 duration-500 space-y-6">
+                                <div>
+                                    <label className="block text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-2 ml-1">Affiliated Group</label>
+                                    <select
+                                        value={selectedGroup}
+                                        onChange={(e) => setSelectedGroup(e.target.value)}
+                                        className="block w-full px-5 py-4 bg-black/30 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-agro-500/50 focus:border-agro-500 transition-all font-medium appearance-none"
+                                        required
+                                    >
+                                        <option value="" className="bg-earth-900">Select Group</option>
+                                        {Object.entries(ORGANIZATIONS[selectedOrg as keyof typeof ORGANIZATIONS].groups).map(([groupId, groupData]) => (
+                                            <option key={groupId} value={groupId} className="bg-earth-900">{(groupData as any).name}</option>
+                                        ))}
+                                    </select>
                                 </div>
-                                {groupCertificate && <p className='text-sm text-gray-500 mt-2'>File: {groupCertificate.name}</p>}
+                                <div>
+                                    <label className="block text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-2 ml-1">Registration ID</label>
+                                    <input
+                                        type="text"
+                                        value={registrationNumber}
+                                        onChange={(e) => setRegistrationNumber(e.target.value)}
+                                        className="block w-full px-5 py-4 bg-black/30 border border-white/10 rounded-2xl text-white placeholder-earth-600 focus:outline-none focus:ring-2 focus:ring-agro-500/50 focus:border-agro-500 transition-all font-medium"
+                                        required
+                                        placeholder="SOC-FARM-XXXXX"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-2 ml-1">Registration Certificate</label>
+                                    <div className={`mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-2xl transition-all ${groupCertificate ? 'border-agro-500/50 bg-agro-500/5' : 'border-white/10 bg-black/30 hover:border-earth-700'}`}>
+                                        <div className="space-y-1 text-center">
+                                            <Upload className={`mx-auto h-10 w-10 ${groupCertificate ? 'text-agro-400' : 'text-earth-600'}`} />
+                                            <div className="flex text-sm text-earth-300">
+                                                <label className="relative cursor-pointer font-bold text-agro-400 hover:text-agro-300 transition-colors">
+                                                    <span>{groupCertificate ? 'Change File' : 'Upload Document'}</span>
+                                                    <input type="file" className="sr-only" onChange={handleFileChange} />
+                                                </label>
+                                            </div>
+                                            <p className="text-[10px] text-earth-500 font-black uppercase tracking-widest">PDF, PNG, JPG (Max 10MB)</p>
+                                        </div>
+                                    </div>
+                                    {groupCertificate && (
+                                        <div className="mt-3 px-4 py-2 bg-agro-500/10 border border-agro-500/20 rounded-xl flex items-center justify-between">
+                                            <span className="text-[10px] font-black text-agro-400 truncate max-w-[200px]">{groupCertificate.name}</span>
+                                            <ShieldCheck size={14} className="text-agro-400" />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </>
                     )}
 
-                    <div className="mb-4">
-                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                            required
-                            placeholder="your-email@example.com"
-                        />
+                    <div className="space-y-6 shrink-0">
+                        <div>
+                            <label className="block text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-2 ml-1">Member Email</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="block w-full px-5 py-4 bg-black/30 border border-white/10 rounded-2xl text-white placeholder-earth-600 focus:outline-none focus:ring-2 focus:ring-agro-500/50 focus:border-agro-500 transition-all font-medium"
+                                required
+                                placeholder="member@domain.org"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="block w-full px-5 py-4 bg-black/30 border border-white/10 rounded-2xl text-white placeholder-earth-600 focus:outline-none focus:ring-2 focus:ring-agro-500/50 focus:border-agro-500 transition-all font-medium"
+                                required
+                                placeholder="••••••••"
+                            />
+                        </div>
+                        <div className="flex items-center ml-1 pb-2">
+                            <input
+                                id="terms"
+                                type="checkbox"
+                                checked={agreedToTerms}
+                                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                                className="h-5 w-5 text-agro-600 focus:ring-agro-500 border-white/10 rounded bg-black/30 focus:ring-offset-earth-900 transition-all"
+                            />
+                            <label htmlFor="terms" className="ml-3 block text-sm text-earth-300 font-medium">
+                                I agree to the <a href="/terms" target="_blank" className="text-agro-400 hover:text-agro-300 transition-colors">Terms and Conditions</a>
+                            </label>
+                        </div>
                     </div>
-                    <div className="mb-6">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                            required
-                            placeholder="••••••••"
-                        />
-                    </div>
-                    <div className="mb-6 flex items-center">
-                        <input
-                            id="terms"
-                            type="checkbox"
-                            checked={agreedToTerms}
-                            onChange={(e) => setAgreedToTerms(e.target.checked)}
-                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                        />
-                        <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-                            I agree to the <a href="/terms" target="_blank" className="font-medium text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
-                        </label>
-                    </div>
-                     <div className="flex items-center justify-between">
+
+                    <div className="flex items-center justify-between pt-6 mt-auto sticky bottom-0 bg-transparent py-4 backdrop-blur-sm">
                         <button
                             type="button"
                             onClick={onBack}
-                            className="text-sm font-medium text-indigo-600 hover:text-indigo-500 flex items-center gap-1"
+                            className="text-xs font-black text-earth-400 hover:text-white uppercase tracking-[0.2em] flex items-center gap-2 transition-all group"
                         >
-                            <ArrowLeft size={16} />
+                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                             Back
                         </button>
                         <button
                             type="submit"
                             disabled={isLoading || !selectedGroup || !agreedToTerms}
-                            className="w-1/2 flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                            className="px-10 py-4 border border-agro-400/20 rounded-2xl shadow-glow-green text-xs font-black text-white bg-agro-600 hover:bg-agro-500 uppercase tracking-[0.2em] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-earth-900 focus:ring-agro-500 disabled:opacity-30 transition-all active:scale-95"
                         >
-                            {isLoading ? <Loader2 className="animate-spin" /> : 'Login'}
+                            {isLoading ? <Loader2 className="animate-spin" /> : 'Authorize'}
                         </button>
                     </div>
                 </form>

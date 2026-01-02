@@ -35,13 +35,13 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
-            <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-8">
-                <h2 className="text-center text-2xl font-bold text-gray-800 mb-2">Welcome</h2>
-                <p className="text-center text-gray-500 mb-8">Choose your authentication method.</p>
+        <div className="min-h-screen flex items-center justify-center bg-earth-950 p-6 font-sans">
+            <div className="max-w-md w-full bg-earth-900/50 backdrop-blur-sm shadow-strategic rounded-2xl p-8 border border-earth-700">
+                <h2 className="text-center text-3xl font-bold font-serif text-agro-200 mb-2">Welcome</h2>
+                <p className="text-center text-earth-300 mb-8">Choose your authentication method.</p>
 
                 {error && (
-                    <div className="bg-red-100 text-red-700 p-3 rounded-md mb-4 text-sm">
+                    <div className="bg-red-900/50 text-red-300 p-3 rounded-md mb-4 text-sm border border-red-700">
                         {error}
                     </div>
                 )}
@@ -50,7 +50,7 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
                     <button
                         onClick={onGoogleLogin}
                         disabled={isLoading || !agreedToTerms}
-                        className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                        className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-earth-600 rounded-md shadow-sm text-sm font-medium text-earth-100 bg-earth-800/60 hover:bg-earth-700/60 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-earth-900 focus:ring-agro-500 disabled:opacity-50 transition-all"
                     >
                         <img src="/google-logo.svg" alt="Google" className="h-5 w-5" />
                         Sign in with Google
@@ -58,14 +58,14 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
                     <button
                         onClick={() => setScreen(AuthScreen.ORGANIZATION_LOGIN)}
                         disabled={isLoading}
-                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-agro-600 hover:bg-agro-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-earth-900 focus:ring-agro-500 disabled:opacity-50 transition-all"
                     >
                         Organization Login
                     </button>
                     <button
                         onClick={() => setScreen(AuthScreen.GROUP_LOGIN)}
                         disabled={isLoading}
-                        className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 disabled:opacity-50"
+                        className="w-full flex justify-center py-3 px-4 border border-earth-600 rounded-md shadow-sm text-sm font-medium text-earth-100 bg-earth-700/40 hover:bg-earth-600/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-earth-900 focus:ring-earth-500 disabled:opacity-50 transition-all"
                     >
                         Group/Society/Club Login
                     </button>
@@ -76,10 +76,10 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
                         type="checkbox"
                         checked={agreedToTerms}
                         onChange={(e) => setAgreedToTerms(e.target.checked)}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-agro-600 focus:ring-agro-500 border-earth-600 rounded bg-earth-800 focus:ring-offset-earth-900"
                     />
-                    <label htmlFor="terms-main" className="ml-2 block text-sm text-gray-900">
-                        I agree to the <a href="/terms" target="_blank" className="font-medium text-indigo-600 hover:text-indigo-500">Terms and Conditions</a>
+                    <label htmlFor="terms-main" className="ml-2 block text-sm text-earth-200">
+                        I agree to the <a href="/terms" target="_blank" className="font-medium text-agro-400 hover:text-agro-300">Terms and Conditions</a>
                     </label>
                 </div>
             </div>
