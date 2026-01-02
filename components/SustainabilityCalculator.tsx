@@ -24,12 +24,25 @@ export const SustainabilityCalculator: React.FC<SustainabilityCalculatorProps> =
   const [activeVariable, setActiveVariable] = useState<string | null>('dn');
 
   const results = useMemo(() => {
+    // Guard clauses for invalid parameters
+    if (params.r === 1 || params.s === 0) {
+      return { in_val: 'N/A', ca: 'N/A', m: 'Error', score: 'N/A' };
+    }
+
     // In(val) = f * Dn
     const in_val = params.f * params.dn;
     // Geometric Maturity: C(a) = [x * (r^n - 1)] / (r - 1) + 1 where n = In(val)
     const ca = (params.x * (Math.pow(params.r, in_val) - 1)) / (params.r - 1) + 1;
+    
+    const expression = (in_val * params.dn * ca) / params.s;
+    
+    // Guard against square root of a negative number
+    if (expression < 0) {
+      return { in_val: in_val.toFixed(2), ca: ca.toFixed(2), m: 'Invalid', score: 'N/A' };
+    }
+
     // Resilience: m(t) = sqrt[ (In * Dn * ca) / S ]
-    const m = Math.sqrt((in_val * params.dn * ca) / params.s);
+    const m = Math.sqrt(expression);
     
     return { 
         in_val: in_val.toFixed(2),
@@ -41,12 +54,25 @@ export const SustainabilityCalculator: React.FC<SustainabilityCalculatorProps> =
 
   // Generate trend data based on changing Rainfall Duration (dn)
   const trendData = useMemo(() => {
+    // Guard clauses for invalid parameters
+    if (params.r === 1 || params.s === 0) {
+        return []; // Return empty array if params are invalid for the chart
+    }
+
     const data = [];
     for (let i = 4; i <= 12; i += 0.5) {
         const in_v = params.f * i;
         const c_a = (params.x * (Math.pow(params.r, in_v) - 1)) / (params.r - 1) + 1;
-        const m_val = Math.sqrt((in_v * i * c_a) / params.s);
-        data.push({ dn: i, m: parseFloat(m_val.toFixed(2)) });
+        
+        const expression = (in_v * i * c_a) / params.s;
+        
+        // Handle negative results gracefully for the chart
+        if (expression < 0) {
+            data.push({ dn: i, m: 0 });
+        } else {
+            const m_val = Math.sqrt(expression);
+            data.push({ dn: i, m: parseFloat(m_val.toFixed(2)) });
+        }
     }
     return data;
   }, [params.f, params.x, params.r, params.s]);
@@ -110,8 +136,8 @@ export const SustainabilityCalculator: React.FC<SustainabilityCalculatorProps> =
                         { id: 'dn', label: 'Rainfall (Dn)', min: 4, max: 12, step: 0.1, unit: 'mo' },
                         { id: 'f', label: 'Soil Retention (f)', min: 0.1, max: 1, step: 0.01, unit: '' },
                         { id: 'x', label: 'Ag Maturity (x)', min: 1, max: 5, step: 0.1, unit: '' },
-                        { id: 'r', label: 'Growth Ratio (r)', min: 1, max: 1.5, step: 0.01, unit: '' },
-                        { id: 's', label: 'Social Need (S)', min: 5, max: 25, step: 1, unit: '' }
+                        { id: 'r', label: 'Growth Ratio (r)', min: 1.01, max: 1.5, step: 0.01, unit: '' },
+                        { id: 's', label: 'Social Need (S)', min: 1, max: 25, step: 1, unit: '' }
                     ].map((v) => (
                         <div key={v.id} className="space-y-4 group" onMouseEnter={() => setActiveVariable(v.id)}>
                             <div className="flex justify-between items-end px-1">
@@ -158,7 +184,11 @@ export const SustainabilityCalculator: React.FC<SustainabilityCalculatorProps> =
                     <span className="text-[10px] font-black uppercase tracking-[0.4em] text-agro-400 mb-4 relative z-10">Resilience Constant m(t)</span>
                     <div className="text-7xl font-serif font-black tracking-tighter relative z-10">{results.m}</div>
                     <p className="text-xs text-agro-200 mt-8 leading-relaxed font-medium relative z-10">
-                        {parseFloat(results.m) > 2.5 ? "Steady-state sustainability achieved." : "System requires further TA Thrust optimization."}
+                        {results.m === 'Error' || results.m === 'Invalid' 
+                            ? "Calculation error due to invalid parameters."
+                            : parseFloat(results.m) > 2.5 
+                                ? "Steady-state sustainability achieved."
+                                : "System requires further TA Thrust optimization."}
                     </p>
                 </div>
                 <div className="bg-white dark:bg-earth-900 p-10 rounded-[3rem] border border-earth-100 dark:border-earth-800 flex flex-col justify-center shadow-sm relative overflow-hidden group">

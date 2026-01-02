@@ -1,1 +1,0 @@
-export { SixSigmaRCA } from './six-sigma-rca';
