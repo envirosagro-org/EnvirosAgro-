@@ -1,32 +1,27 @@
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { MongoClient } from 'mongodb';
+import { EPISODES } from '../components/podcast/data';
+import dotenv from 'dotenv';
 
-const customerData = [
-  {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '555-1234',
-    status: 'Active',
-  },
-  {
-    name: 'Jane Smith',
-    email: 'jane.smith@example.com',
-    phone: '555-5678',
-    status: 'Active',
-  },
-  {
-    name: 'Peter Jones',
-    email: 'peter.jones@example.com',
-    phone: '555-9012',
-    status: 'Inactive',
-  },
-];
+dotenv.config();
 
-const seedCustomers = async () => {
-  const customersCollection = collection(db, 'customers');
-  for (const customer of customerData) {
-    await addDoc(customersCollection, customer);
+const uri = process.env.MONGO_URI;
+const client = new MongoClient(uri);
+
+async function seedPodcasts() {
+  try {
+    await client.connect();
+    const database = client.db('EnvirosAgroDB');
+    const podcasts = database.collection('podcasts');
+
+    // Clear existing data
+    await podcasts.deleteMany({});
+
+    // Insert new data
+    const result = await podcasts.insertMany(EPISODES);
+    console.log(`${result.insertedCount} documents were inserted`);
+  } finally {
+    await client.close();
   }
-};
+}
 
-seedCustomers();
+seedPodcasts().catch(console.dir);
