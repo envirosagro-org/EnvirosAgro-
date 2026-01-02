@@ -15,7 +15,8 @@ export default defineConfig(({ mode }) => {
         output: {
           manualChunks(id) {
             if (id.includes('node_modules')) {
-              return 'vendor';
+              const module = id.split('node_modules/').pop().split('/')[0];
+              return `vendor-${module}`;
             }
             if (id.includes('/components/')) {
                 return id.toString().split('/components/')[1].replace('.tsx', '');
