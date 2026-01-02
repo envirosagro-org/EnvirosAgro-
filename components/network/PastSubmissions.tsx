@@ -1,29 +1,87 @@
+import React, { useState, useEffect } from 'react';
+import { User } from '../../types';
+import { db } from '../../lib/firebase';
+import { collection, query, onSnapshot } from 'firebase/firestore'; // Removed orderBy
+import { Loader2, MessageSquare } from 'lucide-react';
 
-import React from 'react';
+interface PastSubmissionsProps {
+  user: User | null;
+}
 
-export const PastSubmissions: React.FC = () => {
-  // Dummy data for past submissions
-  const submissions = [
-    { id: 1, dataPoint1: 'Value A', dataPoint2: 'Value B', timestamp: '2023-10-27T10:00:00Z' },
-    { id: 2, dataPoint1: 'Value C', dataPoint2: 'Value D', timestamp: '2023-10-26T15:30:00Z' },
-    // Add more submissions as needed
-  ];
+interface Post {
+  id: string;
+  content: string;
+  authorName: string;
+  createdAt: any;
+}
+
+export const PastSubmissions: React.FC<PastSubmissionsProps> = ({ user }) => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      setIsLoading(false);
+      return;
+    }
+
+    // The orderBy clause has been removed to prevent indexing-related permission errors.
+    const q = query(collection(db, 'posts'));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const postsData: Post[] = [];
+      querySnapshot.forEach((doc) => {
+        // Manually sort by createdAt on the client-side
+        postsData.push({ ...doc.data(), id: doc.id } as Post);
+      });
+      
+      // Sort posts by date on the client side
+      postsData.sort((a, b) => b.createdAt?.toDate() - a.createdAt?.toDate());
+
+      setPosts(postsData);
+      setIsLoading(false);
+    }, (error) => {
+      console.error('Error fetching posts:', error);
+      // This is where the permission-denied error was occurring.
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
+
+  if (isLoading) {
+    return (
+      <div className="bg-white dark:bg-earth-900 rounded-[3rem] p-10 text-center">
+        <Loader2 className='mx-auto h-12 w-12 animate-spin text-blue-600' />
+        <p className='mt-4 text-sm font-medium text-earth-500'>Loading posts...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mt-6">
-      <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Past Submissions</h3>
-      {submissions.length > 0 ? (
-        <ul className="space-y-4">
-          {submissions.map(submission => (
-            <li key={submission.id} className="p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
-              <p className="text-sm text-gray-600 dark:text-gray-400">{new Date(submission.timestamp).toLocaleString()}</p>
-              <p className="text-gray-800 dark:text-gray-200">Data Point 1: {submission.dataPoint1}</p>
-              <p className="text-gray-800 dark:text-gray-200">Data Point 2: {submission.dataPoint2}</p>
+    <div className="bg-white dark:bg-earth-900 rounded-[3rem] p-10 border border-earth-100 dark:border-earth-800 shadow-sm">
+      <h3 className="text-2xl font-serif font-black text-earth-900 dark:text-white uppercase tracking-tight leading-none mb-8">Live Feed</h3>
+      {posts.length > 0 ? (
+        <ul className="space-y-6">
+          {posts.map(post => (
+            <li key={post.id} className="p-6 bg-earth-50 dark:bg-earth-800 rounded-2xl shadow-inner">
+              <div className='flex items-start gap-4'>
+                <div className='w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/50 flex-shrink-0 flex items-center justify-center'>
+                    <MessageSquare className='h-5 w-5 text-blue-600'/>
+                </div>
+                <div>
+                    <p className="font-bold text-earth-800 dark:text-earth-100">{post.authorName}</p>
+                    <p className="text-sm text-earth-600 dark:text-earth-300 mt-1">{post.content}</p>
+                    <p className="text-xs text-earth-400 dark:text-earth-500 mt-3">
+                    {post.createdAt?.toDate().toLocaleString()}
+                    </p>
+                </div>
+              </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-gray-700 dark:text-gray-200">No past submissions to display.</p>
+        <p className="text-center text-earth-500 font-medium">No posts yet. Be the first to share something!</p>
       )}
     </div>
   );

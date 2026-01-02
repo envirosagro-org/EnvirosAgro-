@@ -1,31 +1,114 @@
-import React from 'react';
-import { Users } from 'lucide-react';
 
-export const RegisterGroup: React.FC = () => {
+import React, { useState } from 'react';
+import { db } from '../../lib/firebase';
+import { collection, addDoc } from 'firebase/firestore';
+import { Loader2, ArrowRight } from 'lucide-react';
+import { User } from '../../types';
+
+interface RegisterGroupProps {
+  user: User;
+  onGroupRegistered: () => void;
+}
+
+export const RegisterGroup: React.FC<RegisterGroupProps> = ({ user, onGroupRegistered }) => {
+  const [groupName, setGroupName] = useState('');
+  const [groupType, setGroupType] = useState('Group');
+  const [legalId, setLegalId] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    if (!groupName || !groupType || !legalId) {
+      setError('All fields are required.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'groups'), {
+        name: groupName,
+        type: groupType,
+        legalId: legalId,
+        createdBy: user.email,
+        createdAt: new Date(),
+        members: [user.email],
+      });
+      onGroupRegistered();
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="bg-white dark:bg-earth-900 p-8 rounded-[2rem] shadow-sm border border-earth-100 dark:border-earth-800">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="p-3 bg-rose-50 dark:bg-rose-900/30 rounded-xl text-rose-600">
-            <Users size={24} />
-          </div>
-          <div>
-            <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-white">Register Group</h3>
-            <p className="text-xs text-earth-500 dark:text-earth-400">Formalize your production node.</p>
-          </div>
+    <div className="p-8 bg-white dark:bg-earth-900 rounded-3xl shadow-lg">
+      <h3 className="text-2xl font-bold text-agro-900 dark:text-white mb-2">Register a New Group</h3>
+      <p className="text-earth-500 dark:text-earth-400 mb-6">Create a new group, society, or club on the EnvirosAgro network.</p>
+
+      {error && (
+        <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/50 rounded-xl text-red-600 dark:text-red-400 text-sm">
+          {error}
         </div>
-        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Registry request transmitted."); }}>
-          <div className="space-y-1">
-            <label className="text-[9px] font-black text-earth-400 uppercase tracking-widest px-1">Group Legal Name</label>
-            <input required className="w-full bg-earth-50 dark:bg-earth-800 border border-earth-100 dark:border-earth-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-agro-500 dark:text-white" placeholder="e.g. Kiriaini Smallholders" />
-          </div>
-          <div className="space-y-1">
-            <label className="text-[9px] font-black text-earth-400 uppercase tracking-widest px-1">Coordinator ESIN</label>
-            <input required className="w-full bg-earth-50 dark:bg-earth-800 border border-earth-100 dark:border-earth-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-agro-500 dark:text-white" placeholder="EA-FAR-2024-XXXX" />
-          </div>
-          <button type="submit" className="w-full bg-agro-600 hover:bg-agro-700 text-white font-black py-3 rounded-xl text-[9px] uppercase tracking-widest shadow-lg transition-all">Submit Registry Application</button>
-        </form>
-      </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="text-sm font-bold text-earth-600 dark:text-earth-300">Group Name</label>
+          <input
+            type="text"
+            value={groupName}
+            onChange={(e) => setGroupName(e.target.value)}
+            className="w-full mt-2 bg-earth-100 dark:bg-earth-800 border-2 border-transparent focus:border-agro-500 rounded-xl py-3 px-4 focus:outline-none transition-all dark:text-white"
+            placeholder="e.g., 'Future Farmers of America'"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-bold text-earth-600 dark:text-earth-300">Group Type</label>
+          <select
+            value={groupType}
+            onChange={(e) => setGroupType(e.target.value)}
+            className="w-full mt-2 bg-earth-100 dark:bg-earth-800 border-2 border-transparent focus:border-agro-500 rounded-xl py-3 px-4 focus:outline-none transition-all dark:text-white"
+          >
+            <option value="Group">Group</option>
+            <option value="Society">Society</option>
+            <option value="Club">Club</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="text-sm font-bold text-earth-600 dark:text-earth-300">Legal Registration ID</label>
+          <input
+            type="text"
+            value={legalId}
+            onChange={(e) => setLegalId(e.target.value)}
+            className="w-full mt-2 bg-earth-100 dark:bg-earth-800 border-2 border-transparent focus:border-agro-500 rounded-xl py-3 px-4 focus:outline-none transition-all dark:text-white"
+            placeholder="e.g., '123-456-7890'"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-agro-600 hover:bg-agro-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all"
+        >
+          {isLoading ? (
+            <Loader2 className="animate-spin" size={20} />
+          ) : (
+            <>
+              Register Group <ArrowRight size={18} />
+            </>
+          )}
+        </button>
+      </form>
     </div>
   );
 };

@@ -120,7 +120,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
             </button>
 
             <button 
-                onClick={() => onNavigate(View.SIGN_UP)}
+                onClick={() => onNavigate(View.AUTH)}
                 className='hidden sm:flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-gray-900/10 dark:shadow-white/5'
             >
                 <LogIn size={16} /> Sign Up
@@ -191,7 +191,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
               ))}
               <li className='pt-4'>
                 <button 
-                    onClick={() => { onNavigate(View.SIGN_UP); closeMobileMenu(); }}
+                    onClick={() => { onNavigate(View.AUTH); closeMobileMenu(); }}
                     className='w-full bg-agro-600 text-white py-4 rounded-xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-3'
                 >
                     <LogIn size={18} /> Sign Up for ESIN

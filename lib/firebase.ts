@@ -1,16 +1,18 @@
+
 import { initializeApp } from "firebase/app";
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAAD19Ni2GjWLM3vJWAIXayl4GwJeTDvWg",
-  authDomain: "envirosagro-git-79265384-d5a15.firebaseapp.com",
-  projectId: "envirosagro-git-79265384-d5a15",
-  storageBucket: "envirosagro-git-79265384-d5a15.firebasestorage.app",
-  messagingSenderId: "433406385828",
-  appId: "1:433406385828:web:32435a060395b6fbf91031",
-  measurementId: "G-31YH2XYV15"
+  apiKey: "AIzaSyBNVYoqxPepnbRRtC68BRTxgqFp1FVO3xI",
+  authDomain: "envirosagro-git-93534258-78537.firebaseapp.com",
+  projectId: "envirosagro-git-93534258-78537",
+  storageBucket: "envirosagro-git-93534258-78537.firebasestorage.app",
+  messagingSenderId: "399076515746",
+  appId: "1:399076515746:web:f947e5e4dd216826b81cfb",
+  measurementId: "G-1MNDXE8PG5"
 };
 
 // Initialize Firebase
@@ -21,5 +23,6 @@ export const analytics = typeof window !== "undefined" ? isSupported().then(yes 
 
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 export default app;

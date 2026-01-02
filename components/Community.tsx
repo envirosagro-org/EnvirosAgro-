@@ -10,6 +10,8 @@ import { UpcomingEvents } from './community/UpcomingEvents';
 import { MemberSpotlight } from './community/MemberSpotlight';
 import { GetESIN } from './community/GetESIN';
 import { IdCard } from './community/IdCard';
+import { RegisterGroup } from './community/RegisterGroup';
+import { CreatePost } from './community/CreatePost';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Users, MessageSquare, ShieldCheck, 
@@ -27,7 +29,8 @@ export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
   const [esinStep, setEsinStep] = useState(1);
   const [activeTab, setActiveTab] = useState('feed');
   const [currentUser, setCurrentUser] = useState<User | null>(user);
-  const [isPosting, setIsPosting] = useState(false);
+  const [isRegisteringGroup, setIsRegisteringGroup] = useState(false);
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
 
   const handleEsinGenerated = (esin: string) => {
     if (currentUser) {
@@ -49,7 +52,6 @@ export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
       <div className="max-w-[1600px] mx-auto px-6 py-12">
         <div className="flex flex-col xl:flex-row gap-12">
           
-          {/* 1. Left Sidebar: Enhanced Navigation & Profile */}
           <aside className="xl:w-[380px] space-y-8">
             <div className="bg-earth-50 dark:bg-earth-900 rounded-[2.5rem] p-8 border border-earth-100 dark:border-earth-800 shadow-sm overflow-hidden relative">
                <div className="absolute top-0 right-0 p-8 opacity-5 -rotate-12"><Users size={160} /></div>
@@ -88,10 +90,8 @@ export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
             <FeaturedMembers />
           </aside>
 
-          {/* 2. Main content area: Refined Interactivity */}
           <main className="flex-1 space-y-12">
             
-            {/* Action Bar */}
             <div className="flex flex-col sm:flex-row gap-6 items-center justify-between">
                 <div className="relative group w-full sm:w-96">
                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-earth-300 group-focus-within:text-agro-500 transition-colors" size={20} />
@@ -102,15 +102,54 @@ export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
                     />
                 </div>
                 <div className="flex gap-4 w-full sm:w-auto">
-                    <button className="flex-1 sm:flex-none flex items-center justify-center gap-3 bg-earth-900 dark:bg-white text-white dark:text-earth-900 px-8 py-5 rounded-[1.8rem] text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
+                    <button 
+                        onClick={() => setIsCreatingPost(true)}
+                        className="flex-1 sm:flex-none flex items-center justify-center gap-3 bg-earth-900 dark:bg-white text-white dark:text-earth-900 px-8 py-5 rounded-[1.8rem] text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
                        <Plus size={18} /> Create Post
                     </button>
+                    {currentUser?.role?.toLowerCase().includes('organization') && (
+                      <button 
+                          onClick={() => setIsRegisteringGroup(true)}
+                          className="flex-1 sm:flex-none flex items-center justify-center gap-3 bg-agro-500 dark:bg-agro-600 text-white px-8 py-5 rounded-[1.8rem] text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl">
+                         <Plus size={18} /> Register Group
+                      </button>
+                    )}
                     <button className="p-5 bg-earth-50 dark:bg-earth-900 rounded-[1.5rem] border border-earth-100 dark:border-earth-800 text-earth-400 hover:text-agro-600 transition-all relative">
                        <Bell size={22} />
                        <span className="absolute top-4 right-4 w-2.5 h-2.5 bg-red-500 rounded-full border-4 border-earth-50 dark:border-earth-900"></span>
                     </button>
                 </div>
             </div>
+            
+            <AnimatePresence>
+                {isCreatingPost && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }} 
+                    animate={{ opacity: 1, scale: 1 }} 
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+                  >
+                    <CreatePost 
+                      user={currentUser!} 
+                      onClose={() => setIsCreatingPost(false)} 
+                      onPostCreated={() => { /* can add a refetch here */ }}
+                    />
+                  </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {isRegisteringGroup && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 50 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  exit={{ opacity: 0, y: 50 }}
+                  className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4"
+                >
+                  <RegisterGroup user={currentUser!} onGroupRegistered={() => setIsRegisteringGroup(false)} />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="animate-in fade-in duration-700">
                 {activeTab === 'feed' && (

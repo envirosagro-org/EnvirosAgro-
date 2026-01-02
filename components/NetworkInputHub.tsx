@@ -1,28 +1,31 @@
 import React from 'react';
-import { View } from '../types';
+import { View, User } from '../types';
 import { InputForm } from './network/InputForm';
-import { IntegrationDetails } from './network/IntegrationDetails';
 import { PastSubmissions } from './network/PastSubmissions';
-import { ArrowLeft, Network, Globe, Activity, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Network, Globe, Activity, ShieldCheck, LogOut } from 'lucide-react';
 
 interface NetworkInputHubProps {
+  user: User | null;
   onNavigate: (view: View) => void;
-  isIntegrated: boolean;
-  partnerName: string | undefined;
-  partnerId: string | undefined;
+  onLogout: () => void;
 }
 
-export const NetworkInputHub: React.FC<NetworkInputHubProps> = ({ onNavigate, isIntegrated, partnerName, partnerId }) => {
+export const NetworkInputHub: React.FC<NetworkInputHubProps> = ({ user, onNavigate, onLogout }) => {
   return (
     <div className="min-h-screen bg-earth-50 dark:bg-earth-950 text-earth-900 dark:text-white transition-colors duration-500">
       
-      {/* Back Button */}
-      <div className="max-w-[1600px] mx-auto px-6 pt-8">
+      <div className="max-w-[1600px] mx-auto px-6 pt-8 flex justify-between items-center">
         <button 
           onClick={() => onNavigate(View.HOME)}
           className="flex items-center gap-2 text-earth-400 hover:text-blue-600 font-black text-[10px] uppercase tracking-widest transition-all group"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Command
+        </button>
+        <button 
+          onClick={onLogout}
+          className="flex items-center gap-2 text-earth-400 hover:text-red-600 font-black text-[10px] uppercase tracking-widest transition-all group"
+        >
+          Logout <LogOut size={14} />
         </button>
       </div>
 
@@ -56,26 +59,10 @@ export const NetworkInputHub: React.FC<NetworkInputHubProps> = ({ onNavigate, is
         
         <main className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-8">
-            <InputForm isIntegrated={isIntegrated} partnerName={partnerName} partnerId={partnerId} />
+            <InputForm user={user} />
           </div>
           <div className="lg:col-span-4 space-y-8">
-            <div className="bg-indigo-900 p-10 rounded-[3rem] text-white relative overflow-hidden shadow-2xl group">
-                <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12 transition-transform duration-1000 group-hover:scale-110"><ShieldCheck size={180} /></div>
-                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-300 mb-6">Security Handshake</h4>
-                <p className="text-sm text-indigo-100 font-medium leading-relaxed mb-10 relative z-10 italic">
-                    "All transmissions are automatically validated against the ISO-27001 standard and hashed into the Biomass Ledger."
-                </p>
-                <button className="relative z-10 w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all">
-                    View Security Protocols
-                </button>
-            </div>
-            
-            <IntegrationDetails 
-              isIntegrated={isIntegrated} 
-              partnerName={partnerName} 
-              onNavigate={() => onNavigate(View.PARTNERSHIPS)} 
-            />
-            <PastSubmissions />
+            <PastSubmissions user={user} />
           </div>
         </main>
       </div>

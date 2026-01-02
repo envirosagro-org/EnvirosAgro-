@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
 import { Home } from './views/Home';
@@ -19,7 +18,6 @@ import { CurrencyProvider } from './context/CurrencyContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import { reducer, initialState } from './context/reducer';
-import { NAVIGATION_STRUCTURE } from './components/layout/NavigationConstants';
 import { ViewPlaceholder } from './components/ViewPlaceholder';
 import { UserProfile } from './components/UserProfile';
 import { PlanetWatch } from './components/PlanetWatch';
@@ -73,9 +71,10 @@ import { ExtranetDashboard } from './components/ExtranetDashboard';
 import { FrameworkDistinctions } from './components/FrameworkDistinctions';
 import { Portfolio } from './components/Portfolio';
 import { auth, db } from './lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
+import { Auth } from './components/Auth';
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
@@ -83,7 +82,11 @@ const NotFound = () => (
 
 const pathToView = (path: string): View => {
   const view = path.substring(1).toUpperCase().replace(/-/g, '_');
-  return (Object.values(View) as string[]).includes(view) ? (View as any)[view] : View.HOME;
+  // Ensure that we are dealing with a string representation of the enum key
+  if (Object.keys(View).includes(view)) {
+    return View[view as keyof typeof View];
+  }
+  return View.HOME;
 }
 
 const componentMap: { [key in View]?: React.ComponentType<any> } = {
@@ -144,6 +147,7 @@ const componentMap: { [key in View]?: React.ComponentType<any> } = {
     [View.EXTRANET_DASHBOARD]: ExtranetDashboard,
     [View.FRAMEWORK_DISTINCTIONS]: FrameworkDistinctions,
     [View.PORTFOLIO]: Portfolio,
+    [View.AUTH]: Auth,
 };
 
 function App() {
@@ -151,6 +155,8 @@ function App() {
   const location = useLocation();
   const [{ user, isAuthLoading }, dispatch] = useStateValue();
   const currentView = pathToView(location.pathname);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -158,6 +164,19 @@ function App() {
         const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
         if (userDoc.exists()) {
           dispatch({ type: 'SET_USER', payload: userDoc.data() as User });
+        } else { // New user
+          const newUser: User = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email!,
+            name: firebaseUser.displayName!,
+            avatar: firebaseUser.photoURL!,
+            role: 'user', // default role
+          };
+          await setDoc(doc(db, 'users', firebaseUser.uid), newUser);
+          dispatch({ type: 'SET_USER', payload: newUser });
+        }
+        if(location.pathname.startsWith('/auth')) {
+            onNavigate(View.DASHBOARD);
         }
       } else {
         dispatch({ type: 'SET_USER', payload: null });
@@ -166,10 +185,25 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [dispatch]);
+  }, [dispatch, location.pathname]);
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      // onAuthStateChanged will handle the rest
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onNavigate = (view: View, params?: any) => {
-    const path = view === View.HOME ? '/' : `/${view.toLowerCase().replace(/_/g, '-')}`;
+    const viewName = View[view];
+    const path = view === View.HOME ? '/' : `/${viewName.toLowerCase().replace(/_/g, '-')}`;
     navigate(path, { state: params });
   };
 
@@ -191,13 +225,27 @@ function App() {
         <Routes>
           <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
           <Route path="/home" element={<Home user={user} onNavigate={onNavigate} />} />
-          {Object.values(View).map(view => {
-            const Component = componentMap[view as View] || (() => <ViewPlaceholder viewName={view} />);
+          {Object.keys(View).filter(v => isNaN(Number(v))).map(viewKey => {
+            const viewValue = View[viewKey as keyof typeof View];
+            const Component = componentMap[viewValue] || (() => <ViewPlaceholder viewName={viewKey} />);
+            const props = {
+                user,
+                onNavigate,
+                navigationParams: location.state,
+                onLogin: (u: User) => dispatch({ type: 'SET_USER', payload: u }),
+                // Auth-specific props
+                ...(viewValue === View.AUTH && {
+                    isLoading,
+                    error,
+                    onGoogleLogin: handleGoogleLogin, // Pass the function itself
+                    onEmailLogin: () => {}, // Replace with your email login logic
+                })
+            };
             return (
                 <Route 
-                    key={view} 
-                    path={`/${view.toLowerCase().replace(/_/g, '-')}`} 
-                    element={<Component user={user} onNavigate={onNavigate} navigationParams={location.state} onLogin={(u) => dispatch({ type: 'SET_USER', payload: u })} />} 
+                    key={viewKey} 
+                    path={`/${viewKey.toLowerCase().replace(/_/g, '-')}`} 
+                    element={<Component {...props} />} 
                 />
             );
           })}
