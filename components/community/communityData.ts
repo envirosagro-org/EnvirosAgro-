@@ -1,54 +1,128 @@
-export const FORUM_HIGHLIGHTS = [
+import { TrendingUp, Users, MessageSquare } from 'lucide-react';
+
+export const TOPICS = [
     {
-        id: 1,
-        topic: "What are your go-to methods for soil moisture testing?",
-        category: "Precision Agriculture",
-        author: "Dr. Eleanor Vance",
-        authorAvatar: "/images/avatars/eleanor-vance.jpg",
-        replies: 42,
-        lastReply: "3 hours ago",
+        id: 'T001',
+        title: 'What are your go-to methods for soil moisture testing?',
+        category: 'Precision Agriculture',
+        author: {
+            name: 'Dr. Eleanor Vance',
+            avatar: '/images/avatars/eleanor-vance.jpg'
+        },
+        stats: {
+            replies: 42,
+            views: 1800,
+            participants: 15
+        },
+        lastActivity: '3 hours ago',
         isTrending: true,
+        tags: ['soil', 'moisture', 'testing', 'sensors'],
+        participants: [
+            { name: 'Sam Wilson', avatar: '/images/avatars/sam-wilson.jpg' },
+            { name: 'Jane Doe', avatar: '/images/avatars/jane-doe.jpg' },
+            { name: 'Peter Jones', avatar: '/images/avatars/peter-jones.jpg' },
+        ]
     },
     {
-        id: 2,
-        topic: "Best crop choices for vertical farming setups?",
-        category: "Urban Farming",
-        author: "Marco Diaz",
-        authorAvatar: "/images/avatars/marco-diaz.jpg",
-        replies: 28,
-        lastReply: "1 day ago",
+        id: 'T002',
+        title: 'Best crop choices for vertical farming setups?',
+        category: 'Urban Farming',
+        author: {
+            name: 'Marco Diaz',
+            avatar: '/images/avatars/marco-diaz.jpg'
+        },
+        stats: {
+            replies: 28,
+            views: 1200,
+            participants: 10
+        },
+        lastActivity: '1 day ago',
         isTrending: false,
+        tags: ['vertical-farming', 'hydroponics', 'crop-selection'],
+        participants: [
+            { name: 'Emily Carter', avatar: '/images/avatars/emily-carter.jpg' },
+            { name: 'Chris Lee', avatar: '/images/avatars/chris-lee.jpg' },
+        ]
     },
     {
-        id: 3,
-        topic: "The ROI of drone-based pesticide spraying: A case study",
-        category: "Agri-Tech",
-        author: "Chen Liang",
-        authorAvatar: "/images/avatars/chen-liang.jpg",
-        replies: 65,
-        lastReply: "5 hours ago",
+        id: 'T003',
+        title: 'The ROI of drone-based pesticide spraying: A case study',
+        category: 'Agri-Tech',
+        author: {
+            name: 'Chen Liang',
+            avatar: '/images/avatars/chen-liang.jpg'
+        },
+        stats: {
+            replies: 65,
+            views: 3200,
+            participants: 25
+        },
+        lastActivity: '5 hours ago',
         isTrending: true,
+        tags: ['drones', 'agri-tech', 'roi', 'case-study'],
+        participants: [
+            { name: 'Dr. Alan Grant', avatar: '/images/avatars/alan-grant.jpg' },
+            { name: 'Sarah Jenkins', avatar: '/images/avatars/sarah-jenkins.jpg' },
+            { name: 'Tom Howard', avatar: '/images/avatars/tom-howard.jpg' },
+        ]
     },
     {
-        id: 4,
-        topic: "Organic vs. Synthetic Fertilizers: A Heated Debate",
-        category: "Sustainable Practices",
-        author: "Sarah Jenkins",
-        authorAvatar: "/images/avatars/sarah-jenkins.jpg",
-        replies: 112,
-        lastReply: "2 days ago",
+        id: 'T004',
+        title: 'Organic vs. Synthetic Fertilizers: A Heated Debate',
+        category: 'Sustainable Practices',
+        author: {
+            name: 'Sarah Jenkins',
+            avatar: '/images/avatars/sarah-jenkins.jpg'
+        },
+        stats: {
+            replies: 112,
+            views: 5600,
+            participants: 48
+        },
+        lastActivity: '2 days ago',
         isTrending: false,
+        tags: ['organic', 'fertilizers', 'sustainability'],
+        participants: [
+            { name: 'Dr. Eleanor Vance', avatar: '/images/avatars/eleanor-vance.jpg' },
+            { name: 'Marco Diaz', avatar: '/images/avatars/marco-diaz.jpg' },
+        ]
     },
     {
-        id: 6,
-        topic: "DIY automated irrigation systems for small-scale farms",
-        category: "DIY & Innovation",
-        author: "Tom Howard",
-        authorAvatar: "/images/avatars/tom-howard.jpg",
-        replies: 76,
-        lastReply: "8 hours ago",
+        id: 'T005',
+        title: 'DIY automated irrigation systems for small-scale farms',
+        category: 'DIY & Innovation',
+        author: {
+            name: 'Tom Howard',
+            avatar: '/images/avatars/tom-howard.jpg'
+        },
+        stats: {
+            replies: 76,
+            views: 4100,
+            participants: 32
+        },
+        lastActivity: '8 hours ago',
         isTrending: true,
+        tags: ['diy', 'automation', 'irrigation'],
+        participants: [
+             { name: 'Chen Liang', avatar: '/images/avatars/chen-liang.jpg' },
+        ]
     },
+];
+
+export const SORT_OPTIONS = [
+    { id: 'latest', label: 'Latest Activity' },
+    { id: 'trending', label: 'Trending' },
+    { id: 'popular', label: 'Popular' },
+    { id: 'newest', label: 'Newest' },
+];
+
+export const CATEGORIES = [
+    { id: 'all', label: 'All Categories' },
+    { id: 'precision-agriculture', label: 'Precision Agriculture' },
+    { id: 'urban-farming', label: 'Urban Farming' },
+    { id: 'agri-tech', label: 'Agri-Tech' },
+    { id: 'sustainable-practices', label: 'Sustainable Practices' },
+    { id: 'diy-innovation', label: 'DIY & Innovation' },
 ];
 
 export const FEATURED_MEMBERS = [

@@ -35,7 +35,7 @@ const SafeHarvest = React.lazy(() => import('./SafeHarvest'));
 const UserProfile = React.lazy(() => import('./UserProfile'));
 const PlanetWatch = React.lazy(() => import('./PlanetWatch'));
 const SustainabilityFramework = React.lazy(() => import('./SustainabilityFramework'));
-const CarbonLedger = React.lazy(() => import('./CarbonLedger'));
+const CarbonLedger = React.lazy(() => import('./carbonledger/CarbonLedger'));
 const GreenLens = React.lazy(() => import('./GreenLens'));
 const NutriLife = React.lazy(() => import('./NutriLife'));
 const AgBiz = React.lazy(() => import('./AgBiz'));
@@ -70,6 +70,10 @@ const LiveHost = React.lazy(() => import('./LiveHost'));
 const IntranetDashboard = React.lazy(() => import('./IntranetDashboard'));
 const ExtranetDashboard = React.lazy(() => import('./ExtranetDashboard'));
 const FrameworkDistinctions = React.lazy(() => import('./FrameworkDistinctions'));
+const CommunityGarden = React.lazy(() => import('./CommunityGarden'));
+const DesignSystem = React.lazy(() => import('./DesignSystem'));
+const GroupLogin = React.lazy(() => import('./GroupLogin'));
+const OrganizationLogin = React.lazy(() => import('./OrganizationLogin'));
 
 function App() {
   const [view, setView] = useState<View>(View.AUTH);
@@ -236,7 +240,7 @@ function App() {
       case View.SUSTAINABILITY_FRAMEWORK:
         return <Suspense fallback={<div>Loading Sustainability Framework...</div>}><SustainabilityFramework /></Suspense>;
       case View.CARBON_LEDGER:
-        return <Suspense fallback={<div>Loading Carbon Ledger...</div>}><CarbonLedger /></Suspense>;
+        return <Suspense fallback={<div>Loading Carbon Ledger...</div>}><CarbonLedger user={user} onNavigate={handleNavigate} /></Suspense>;
       case View.GREEN_LENS:
         return <Suspense fallback={<div>Loading Green Lens...</div>}><GreenLens /></Suspense>;
       case View.NUTRILIFE:
@@ -305,6 +309,14 @@ function App() {
         return <Suspense fallback={<div>Loading Extranet Dashboard...</div>}><ExtranetDashboard /></Suspense>;
       case View.FRAMEWORK_DISTINCTIONS:
         return <Suspense fallback={<div>Loading Framework Distinctions...</div>}><FrameworkDistinctions /></Suspense>;
+      case View.COMMUNITY_GARDEN:
+        return <Suspense fallback={<div>Loading Community Garden...</div>}><CommunityGarden /></Suspense>;
+      case View.DESIGN_SYSTEM:
+        return <Suspense fallback={<div>Loading Design System...</div>}><DesignSystem /></Suspense>;
+      case View.GROUP_LOGIN:
+        return <Suspense fallback={<div>Loading Group Login...</div>}><GroupLogin onNavigate={handleNavigate} /></Suspense>;
+      case View.ORGANIZATION_LOGIN:
+        return <Suspense fallback={<div>Loading Organization Login...</div>}><OrganizationLogin onNavigate={handleNavigate} /></Suspense>;
       case View.HOME:
       default:
         if (user) {

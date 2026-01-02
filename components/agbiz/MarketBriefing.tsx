@@ -1,35 +1,82 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { ArrowUp, ArrowDown, Briefcase, BarChart2 } from 'lucide-react';
 
 const stats = [
-  { name: 'Corn Futures (Dec)', value: '$5.48', change: '+0.02', changeType: 'increase' },
-  { name: 'Soybean Futures (Nov)', value: '$13.21', change: '-0.05', changeType: 'decrease' },
-  { name: 'Wheat Futures (Dec)', value: '$7.60', change: '+0.08', changeType: 'increase' },
-  { name: 'Live Cattle (Dec)', value: '$1.85/lb', change: '-0.01', changeType: 'decrease' },
-]
+  { name: 'Corn Futures (Dec)', value: '$5.48', change: '+0.37%', changeType: 'increase' },
+  { name: 'Soybean Futures (Nov)', value: '$13.21', change: '-0.23%', changeType: 'decrease' },
+  { name: 'Wheat Futures (Dec)', value: '$7.60', change: '+1.06%', changeType: 'increase' },
+  { name: 'Live Cattle (Dec)', value: '$1.85/lb', change: '-0.54%', changeType: 'decrease' },
+];
+
+const cardVariants = {
+  offscreen: {
+    y: 50,
+    opacity: 0
+  },
+  onscreen: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      bounce: 0.4,
+      duration: 0.8
+    }
+  }
+};
 
 export const MarketBriefing: React.FC = () => {
   return (
-    <div className="bg-gray-50 dark:bg-gray-800/50 py-24 sm:py-32">
+    <div className="bg-white dark:bg-gray-900 py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Market Briefing</h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                A snapshot of the latest commodity prices and market movements.
-            </p>
-        </div>
-        <dl className="mt-16 grid grid-cols-1 gap-8 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <div key={stat.name} className="flex flex-col-reverse">
-              <dt className="text-base leading-7 text-gray-600 dark:text-gray-400">{stat.name}</dt>
-              <dd className="text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">
-                {stat.value}
-                <span className={`ml-2 text-base font-medium ${stat.changeType === 'increase' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {stat.change}
-                </span>
-              </dd>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-8 gap-y-12 items-center">
+            <div className="lg:col-span-1">
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Daily Market Briefing</h2>
+                <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                    A snapshot of the latest commodity prices and market movements.
+                </p>
+                <div className="mt-6 text-xs text-gray-500 dark:text-gray-400 flex items-center">
+                    <BarChart2 size={14} className="mr-2"/>
+                    <span>Last updated: {new Date().toLocaleTimeString()}</span>
+                </div>
             </div>
-          ))}
-        </dl>
+            <dl className="lg:col-span-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.name}
+                  className="relative overflow-hidden rounded-2xl bg-gray-50 dark:bg-gray-800/50 p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+                  initial="offscreen"
+                  whileInView="onscreen"
+                  viewport={{ once: true, amount: 0.5 }}
+                  variants={cardVariants}
+                >
+                  <dt>
+                    <div className="absolute rounded-md bg-agro-500 p-3">
+                      <Briefcase className="h-6 w-6 text-white" aria-hidden="true" />
+                    </div>
+                    <p className="ml-16 truncate text-sm font-medium text-gray-500 dark:text-gray-400">{stat.name}</p>
+                  </dt>
+                  <dd className="ml-16 flex items-baseline">
+                    <p className="text-2xl font-semibold text-gray-900 dark:text-white">{stat.value}</p>
+                    <p
+                      className={[
+                        stat.changeType === 'increase' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400',
+                        'ml-2 flex items-baseline text-sm font-semibold'
+                      ].join(' ')}
+                    >
+                      {stat.changeType === 'increase' ? (
+                        <ArrowUp className="h-5 w-5 flex-shrink-0 self-center" aria-hidden="true" />
+                      ) : (
+                        <ArrowDown className="h-5 w-5 flex-shrink-0 self-center" aria-hidden="true" />
+                      )}
+                      <span className="sr-only"> {stat.changeType === 'increase' ? 'Increased' : 'Decreased'} by </span>
+                      {stat.change}
+                    </p>
+                  </dd>
+                </motion.div>
+              ))}
+            </dl>
+        </div>
       </div>
     </div>
   );

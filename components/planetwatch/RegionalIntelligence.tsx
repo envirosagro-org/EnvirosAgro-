@@ -1,48 +1,70 @@
 import React from 'react';
-import { Shield, CheckCircle, AlertTriangle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { MapPin, TrendingUp, TrendingDown, Circle } from 'lucide-react';
+
+const regions = [
+    {
+        name: 'Amazon Basin', 
+        status: 'Critical Alert', 
+        trend: 'Trending Down', 
+        icon: <TrendingDown className="w-5 h-5 text-red-400"/>, 
+        color: 'red'
+    },
+    {
+        name: 'Sahel Region', 
+        status: 'High Stress', 
+        trend: 'Trending Down', 
+        icon: <TrendingDown className="w-5 h-5 text-yellow-400"/>, 
+        color: 'yellow'
+    },
+    {
+        name: 'Great Barrier Reef', 
+        status: 'High Alert', 
+        trend: 'Trending Down', 
+        icon: <TrendingDown className="w-5 h-5 text-orange-400"/>, 
+        color: 'orange'
+    },
+    {
+        name: 'California Central Valley', 
+        status: 'Moderate Stress', 
+        trend: 'Stable', 
+        icon: <Circle className="w-5 h-5 text-gray-400"/>, 
+        color: 'gray'
+    },
+    {
+        name: 'European Union Farmlands', 
+        status: 'Stable', 
+        trend: 'Trending Up', 
+        icon: <TrendingUp className="w-5 h-5 text-green-400"/>, 
+        color: 'green'
+    }
+];
 
 export const RegionalIntelligence: React.FC = () => {
-  const regions = [
-    { name: 'East Africa Cluster', score: 82, status: 'Stable', color: 'text-green-500' },
-    { name: 'Southeast Asia Nodes', score: 64, status: 'At Risk', color: 'text-amber-500' },
-    { name: 'Amazon Basin Sector', score: 45, status: 'Critical', color: 'text-red-500' },
-    { name: 'European Plains', score: 88, status: 'Optimal', color: 'text-green-600' },
-  ];
-
   return (
-    <div className="bg-white dark:bg-earth-900 border border-earth-100 dark:border-earth-800 rounded-[3rem] p-10 shadow-sm mb-12">
-      <div className="flex items-center gap-4 mb-10">
-        <div className="p-3 bg-earth-50 dark:bg-earth-800 rounded-2xl text-agro-600">
-          <Shield size={28} />
-        </div>
-        <div>
-          <h3 className="text-2xl font-bold text-earth-900 dark:text-white">Regional Intelligence Index</h3>
-          <p className="text-earth-500 dark:text-earth-400 text-sm">Aggregated health scores based on multi-thrust telemetry.</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {regions.map((region, i) => (
-          <div key={i} className="p-6 rounded-[2rem] border border-earth-50 dark:border-earth-800/50 hover:border-agro-500/20 transition-all group">
-            <div className="flex justify-between items-start mb-4">
-              <span className="text-[10px] font-black uppercase tracking-widest text-earth-400">{region.name}</span>
-              {region.score > 80 ? <CheckCircle size={16} className="text-green-500" /> : <AlertTriangle size={16} className={region.color} />}
+    <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 h-full">
+      <h3 className="text-lg font-bold text-white mb-4">Regional Intelligence</h3>
+      <div className="space-y-3">
+        {regions.map((region, idx) => (
+          <motion.div 
+            key={idx} 
+            className="flex items-center justify-between bg-black/20 p-3 rounded-lg"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.1, duration: 0.4 }}
+          >
+            <div className="flex items-center gap-3">
+                <MapPin className={`w-5 h-5 text-${region.color}-400`} />
+                <div>
+                    <p className="text-sm font-semibold text-white">{region.name}</p>
+                    <p className={`text-xs text-${region.color}-400`}>{region.status}</p>
+                </div>
             </div>
-            <div className="flex items-end gap-3 mb-4">
-              <span className="text-4xl font-black text-earth-900 dark:text-white leading-none">{region.score}</span>
-              <span className="text-[10px] font-bold text-earth-400 uppercase tracking-widest mb-1">Index val</span>
+            <div className="flex items-center gap-2">
+                <p className="text-xs text-white/60 hidden sm:block">{region.trend}</p>
+                {region.icon}
             </div>
-            <div className="w-full h-1.5 bg-earth-100 dark:bg-earth-800 rounded-full overflow-hidden">
-              <div 
-                className={`h-full rounded-full ${region.score > 70 ? 'bg-green-500' : region.score > 50 ? 'bg-amber-500' : 'bg-red-500'}`}
-                style={{ width: `${region.score}%` }}
-              ></div>
-            </div>
-            <div className="mt-4 flex justify-between items-center">
-              <span className={`text-[9px] font-black uppercase tracking-widest ${region.color}`}>{region.status}</span>
-              <button className="text-[9px] font-bold text-earth-400 hover:text-agro-600 uppercase tracking-widest transition-colors">Details →</button>
-            </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

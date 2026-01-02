@@ -57,7 +57,11 @@ export enum View {
   EXTRANET_DASHBOARD = "EXTRANET_DASHBOARD",
   FRAMEWORK_DISTINCTIONS = "FRAMEWORK_DISTINCTIONS",
   PORTFOLIO = "PORTFOLIO",
-  AI_CHAT = "AI_CHAT"
+  AI_CHAT = "AI_CHAT",
+  COMMUNITY_GARDEN = "COMMUNITY_GARDEN",
+  DESIGN_SYSTEM = "DESIGN_SYSTEM",
+  GROUP_LOGIN = "GROUP_LOGIN",
+  ORGANIZATION_LOGIN = "ORGANIZATION_LOGIN"
 }
 
 export interface User {
@@ -86,4 +90,18 @@ export interface Product {
   impact?: string;
   duration?: string;
   instructor?: string;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'model';
+  text: string;
+  timestamp: Date;
+}
+
+export interface Report {
+  title: string;
+  author: string;
+  date: string;
+  tags: string[];
+  content: string;
 }
