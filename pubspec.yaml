@@ -1,0 +1,12 @@
+name: enviros_agro_app
+description: A new Flutter project.
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.1
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.19.0

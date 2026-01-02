@@ -35,7 +35,7 @@ export enum View {
   KNOWLEDGE = "KNOWLEDGE",
   FUTURE_VISION = "FUTURE_VISION",
   SERVICES = "SERVICES",
-  TRANSMISSION_GATEWAY = "TRANSMISSION_GATEWAY",
+  TRANSMISSION_GATEWAY = "TRANSMISSION_GATEway",
   PROFESSIONAL = "PROFESSIONAL",
   RESILIENCE = "RESILIENCE",
   FIVE_THRUSTS = "FIVE_THRUSTS",
@@ -104,4 +104,35 @@ export interface Report {
   date: string;
   tags: string[];
   content: string;
+}
+
+export interface MongoUser {
+  _id: string; // or ObjectId if using mongodb library
+  auth_id: string;
+  email: string;
+  wallet: {
+    balance: number;
+    lifetime: number;
+  };
+  sustainability: {
+    m: number;
+    Ca: number;
+    last_calibrated: string; // or Date
+  };
+  thrust_history: string[];
+}
+
+export interface Registry {
+  _id: string; // or ObjectId if using mongodb library
+  title: string;
+  type: string;
+  quality_score: number;
+  source_m_score: number;
+}
+
+export interface Ledger {
+  uid: string;
+  amount: number;
+  type: string;
+  timestamp: string; // or Date
 }
