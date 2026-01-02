@@ -65,7 +65,7 @@ export const HeroPlayer = ({
                 </div>
               </div>
               <div>
-                <h4 className="font-bold text-white text-sm leading-tight">{doc.title}</h4>
+                <h4 className="font-bold text-white text-sm leading-.tight">{doc.title}</h4>
                 <p className="text-xs text-gray-400 mt-1">{doc.category}</p>
               </div>
             </div>

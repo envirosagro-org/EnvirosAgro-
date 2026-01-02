@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Database as DbIcon, Search, Download, Globe, Terminal } from 'lucide-react';
-import { DATASETS } from './data';
+import { DATASETS } from './data.tsx';
 
 export const DataRegistry: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');

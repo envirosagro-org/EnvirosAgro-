@@ -102,7 +102,7 @@ interface SustainabilityFrameworkProps {
   onNavigate?: (view: View) => void;
 }
 
-export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = ({ onNavigate }) => {
+const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'model' | 'simulation' | 'network'>('network');
   
   // Simulation State
@@ -439,3 +439,5 @@ export const SustainabilityFramework: React.FC<SustainabilityFrameworkProps> = (
     </div>
   );
 };
+
+export default SustainabilityFramework;

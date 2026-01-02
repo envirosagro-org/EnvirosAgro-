@@ -3,12 +3,13 @@ import { VRHeader } from './smartfarmvr/VRHeader';
 import { 
   Glasses, Play, Cpu, Box, Activity, ArrowRight, 
   ShieldCheck, Zap, ArrowLeft, Maximize2, Monitor, 
-  Settings, Radio, User, Loader2, X, Download, Share2
+  Settings, Radio, User, Loader2, X, Download, Share2, Clock, Info
 } from 'lucide-react';
 import { View } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
-export const SmartFarmVR: React.FC<{ onNavigate?: (view: View) => void }> = ({ onNavigate }) => {
+const SmartFarmVR: React.FC<{ onNavigate?: (view: View) => void }> = ({ onNavigate }) => {
   const [selectedSimulation, setSelectedSimulation] = useState<any>(null);
   const [isLaunching, setIsLaunching] = useState(false);
 
@@ -218,3 +219,5 @@ export const SmartFarmVR: React.FC<{ onNavigate?: (view: View) => void }> = ({ o
     </div>
   );
 };
+
+export default SmartFarmVR;

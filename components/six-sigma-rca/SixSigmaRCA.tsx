@@ -4,7 +4,7 @@ import {
   ArrowLeft, ShieldCheck, Zap, Layers, 
   Search, FileText, ChevronRight, Info
 } from 'lucide-react';
-import { renderPhaseContent } from './helpers.tsx';
+import { renderPhaseContent } from './helpers';
 import { Sidebar } from './Sidebar';
 import { View } from '../../types';
 

@@ -61,7 +61,7 @@ interface SafeHarvestProps {
   onNavigate?: (view: View) => void;
 }
 
-export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
+const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'ALERTS' | 'MAP'>('ALERTS');
   const [selectedAlert, setSelectedAlert] = useState<typeof ALERTS[0] | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -238,3 +238,5 @@ export const SafeHarvest: React.FC<SafeHarvestProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default SafeHarvest;

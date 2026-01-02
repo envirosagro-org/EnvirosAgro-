@@ -30,9 +30,15 @@ const Countdown = ({ date }:any) => {
 
     return (
         <div className="flex items-center space-x-4">
-            {timeLeft.days > 0 && <span className="font-bold">{timeLeft.days}d </span>}
-            {timeLeft.hours > 0 && <span className="font-bold">{timeLeft.hours}h </span>}
-            {timeLeft.minutes > 0 && <span className="font-bold">{timeLeft.minutes}m</span>}
+            {timeLeft.minutes ? (
+              <>
+                {timeLeft.days > 0 && <span className="font-bold">{timeLeft.days}d </span>}
+                {timeLeft.hours > 0 && <span className="font-bold">{timeLeft.hours}h </span>}
+                {timeLeft.minutes > 0 && <span className="font-bold">{timeLeft.minutes}m</span>}
+              </>
+            ) : (
+                <span className="font-bold text-green-500">Starting soon...</span>
+            )}
         </div>
     );
 };

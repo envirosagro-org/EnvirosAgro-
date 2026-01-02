@@ -103,7 +103,7 @@ interface ServicesProps {
   onNavigate?: (view: View) => void;
 }
 
-export const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
+const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
   const [activeThrust, setActiveThrust] = useState('All');
   const [selectedService, setSelectedService] = useState<typeof SERVICES[0] | null>(null);
   const [isAiConsulting, setIsAiConsulting] = useState(false);
@@ -426,3 +426,5 @@ export const Services: React.FC<ServicesProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default Services;

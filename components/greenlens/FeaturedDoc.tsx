@@ -1,4 +1,5 @@
 import React from 'react';
+import { FEATURED_FILM } from './data';
 
 export const FeaturedDoc: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ export const FeaturedDoc: React.FC = () => {
           <div className="relative h-0 pb-[56.25%] lg:pb-0 lg:h-auto lg:w-full">
             <iframe 
               className="absolute top-0 left-0 w-full h-full rounded-lg shadow-2xl"
-              src="https://www.youtube.com/embed/vG-QZotN6_Q"
+              src={`https://www.youtube.com/embed/${FEATURED_FILM.youtubeId}`}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen
@@ -16,9 +17,9 @@ export const FeaturedDoc: React.FC = () => {
           </div>
           <div className="mt-12 lg:mt-0">
             <p className="text-sm font-semibold leading-6 text-green-400">Featured Documentary</p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">The Soil Story</h2>
+            <h2 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">{FEATURED_FILM.title}</h2>
             <p className="mt-6 text-lg leading-8 text-slate-300">
-              Discover the hidden world beneath our feet and its critical role in the future of agriculture. This film explores the innovative techniques farmers are using to regenerate soil and build a more resilient food system.
+              {FEATURED_FILM.description}
             </p>
             <div className="mt-8 flex gap-x-4">
               <button className="inline-block rounded-md bg-green-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-green-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">

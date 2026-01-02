@@ -46,10 +46,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentView }) => {
   };
 
   const handleItemClick = (item) => {
+    if (item.view) {
+      onNavigate(item.view);
+    }
     if (item.subItems) {
       handleMenuToggle(item.label);
     } else {
-      onNavigate(item.view);
       closeMobileMenu();
     }
   };

@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
 import { Home } from './views/Home';
-import { PeopleAndCulture } from './components/PeopleAndCulture';
 import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { ScrollToTop } from './components/ScrollToTop';
-import { Dashboard } from './components/Dashboard';
-import { CropDoctor } from './components/CropDoctor';
-import { FarmScout } from './components/FarmScout';
-import { SmartFarmVR } from './components/SmartFarmVR';
-import { SafeHarvest } from './components/SafeHarvest';
 import { View, User } from './types';
 import { ThemeProvider } from './context/ThemeContext';
 import { StateProvider, useStateValue } from './context/StateContext';
@@ -18,136 +12,81 @@ import { CurrencyProvider } from './context/CurrencyContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import { reducer, initialState } from './context/reducer';
-import { ViewPlaceholder } from './components/ViewPlaceholder';
-import { UserProfile } from './components/UserProfile';
-import { PlanetWatch } from './components/PlanetWatch';
-import { SustainabilityFramework } from './components/SustainabilityFramework';
-import { CarbonLedger } from './components/CarbonLedger';
-import { GreenLens } from './components/GreenLens';
-import { NutriLife } from './components/NutriLife';
-import { AgBiz } from './components/AgBiz';
-import { AgBizWeekly } from './components/AgBizWeekly';
-import { Finance } from './components/Finance';
-import { InvestorPortal } from './components/InvestorPortal';
-import { SupplyChainAudit } from './components/SupplyChainAudit';
-import { Community } from './components/Community';
-import { HeritageForum } from './components/HeritageForum';
-import { ScaleUpSummit } from './components/ScaleUpSummit';
-import { AiAdvisor } from './components/AiAdvisor';
-import { RoadmapAI } from './components/RoadmapAI';
-import { SixSigmaRCA } from './components/SixSigmaRCA';
-import { AiConsultantFloating } from './components/AiConsultantFloating';
-import { CommunityGuidelines } from './components/CommunityGuidelines';
-import { Trademarks } from './components/Trademarks';
-import { PrivacyPolicy } from './components/PrivacyPolicy';
-import { Brands } from './components/Brands';
-import { DataRegistry } from './components/DataRegistry';
-import { ImpactDashboard } from './components/ImpactDashboard';
-import { NetworkInputHub } from './components/NetworkInputHub';
-import { CommandPalette } from './components/CommandPalette';
-import { AboutPage } from './components/about/page';
-import { KnowledgeHub } from './components/KnowledgeHub';
-import { FutureVision } from './components/FutureVision';
-import { Services } from './components/Services';
-import { TransmissionGateway } from './components/TransmissionGateway';
-import { ProfessionalView } from './components/professional/ProfessionalView';
-import { ResilienceView } from './components/professional/ResilienceView';
-import { Thrusts } from './components/five-thrusts/Thrusts';
-import { Information } from './components/Information';
-import { Products } from './components/Products';
-import { ProductDetail } from './components/ProductDetail';
-import { Cart } from './components/Cart';
-import { Database } from './components/Database';
-import { SustainabilityCalculator } from './components/SustainabilityCalculator';
-import { Media } from './components/Media';
-import { Supply } from './components/Supply';
-import { Customer } from './components/Customer';
-import { Partnerships } from './components/Partnerships';
-import { Podcast } from './components/Podcast';
-import { Webinar } from './components/Webinar';
-import { LiveHost } from './components/LiveHost';
-import { IntranetDashboard } from './components/IntranetDashboard';
-import { ExtranetDashboard } from './components/ExtranetDashboard';
-import { FrameworkDistinctions } from './components/FrameworkDistinctions';
-import { Portfolio } from './components/Portfolio';
 import { auth, db } from './lib/firebase';
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
-import { Auth } from './components/Auth';
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
 );
 
 const pathToView = (path: string): View => {
-  const view = path.substring(1).toUpperCase().replace(/-/g, '_');
-  // Ensure that we are dealing with a string representation of the enum key
-  if (Object.keys(View).includes(view)) {
-    return View[view as keyof typeof View];
+  const viewStr = path.substring(1).toUpperCase().replace(/-/g, '_');
+  if (Object.values(View).includes(viewStr as View)) {
+    return viewStr as View;
   }
   return View.HOME;
 }
 
 const componentMap: { [key in View]?: React.ComponentType<any> } = {
     [View.HOME]: Home,
-    [View.ABOUT]: AboutPage,
-    [View.DASHBOARD]: Dashboard,
-    [View.IMPACT_DASHBOARD]: ImpactDashboard,
-    [View.CROP_DOCTOR]: CropDoctor,
-    [View.FARM_SCOUT]: FarmScout,
-    [View.SMART_FARM_VR]: SmartFarmVR,
-    [View.SAFE_HARVEST]: SafeHarvest,
-    [View.PEOPLE_AND_CULTURE]: PeopleAndCulture,
-    [View.PROFILE]: UserProfile,
-    [View.PLANET_WATCH]: PlanetWatch,
-    [View.SUSTAINABILITY_FRAMEWORK]: SustainabilityFramework,
-    [View.CARBON_LEDGER]: CarbonLedger,
-    [View.GREEN_LENS]: GreenLens,
-    [View.NUTRILIFE]: NutriLife,
-    [View.AGBIZ]: AgBiz,
-    [View.AGBIZ_WEEKLY]: AgBizWeekly,
-    [View.FINANCE]: Finance,
-    [View.INVESTOR_PORTAL]: InvestorPortal,
-    [View.SUPPLY_CHAIN_AUDIT]: SupplyChainAudit,
-    [View.COMMUNITY]: Community,
-    [View.HERITAGE_FORUM]: HeritageForum,
-    [View.SCALEUP_SUMMIT]: ScaleUpSummit,
-    [View.AI_ADVISOR]: AiAdvisor,
-    [View.ROADMAP_AI]: RoadmapAI,
-    [View.SIX_SIGMA_RCA]: SixSigmaRCA,
-    [View.AI_CONSULTANT_FLOATING]: AiConsultantFloating,
-    [View.COMMUNITY_GUIDELINES]: CommunityGuidelines,
-    [View.TRADEMARKS]: Trademarks,
-    [View.PRIVACY_POLICY]: PrivacyPolicy,
-    [View.BRANDS]: Brands,
-    [View.DATA_REGISTRY]: DataRegistry,
-    [View.NETWORK_INPUT_HUB]: NetworkInputHub,
-    [View.KNOWLEDGE]: KnowledgeHub,
-    [View.FUTURE_VISION]: FutureVision,
-    [View.SERVICES]: Services,
-    [View.TRANSMISSION_GATEWAY]: TransmissionGateway,
-    [View.PROFESSIONAL]: ProfessionalView,
-    [View.RESILIENCE]: ResilienceView,
-    [View.FIVE_THRUSTS]: Thrusts,
-    [View.INFORMATION]: Information,
-    [View.PRODUCTS]: Products,
-    [View.PRODUCT_DETAIL]: ProductDetail,
-    [View.CART]: Cart,
-    [View.DATABASE]: Database,
-    [View.SUSTAINABILITY_CALCULATOR]: SustainabilityCalculator,
-    [View.MEDIA]: Media,
-    [View.SUPPLY]: Supply,
-    [View.CUSTOMER]: Customer,
-    [View.PARTNERSHIPS]: Partnerships,
-    [View.PODCAST]: Podcast,
-    [View.WEBINAR]: Webinar,
-    [View.LIVE_HOST]: LiveHost,
-    [View.INTRANET_DASHBOARD]: IntranetDashboard,
-    [View.EXTRANET_DASHBOARD]: ExtranetDashboard,
-    [View.FRAMEWORK_DISTINCTIONS]: FrameworkDistinctions,
-    [View.PORTFOLIO]: Portfolio,
-    [View.AUTH]: Auth,
+    [View.ABOUT]: lazy(() => import('./components/about/page')),
+    [View.DASHBOARD]: lazy(() => import('./components/Dashboard')),
+    [View.IMPACT_DASHBOARD]: lazy(() => import('./components/ImpactDashboard')),
+    [View.CROP_DOCTOR]: lazy(() => import('./components/CropDoctor')),
+    [View.FARM_SCOUT]: lazy(() => import('./components/FarmScout')),
+    [View.SMART_FARM_VR]: lazy(() => import('./components/SmartFarmVR')),
+    [View.SAFE_HARVEST]: lazy(() => import('./components/SafeHarvest')),
+    [View.PROFILE]: lazy(() => import('./components/UserProfile')),
+    [View.PLANET_WATCH]: lazy(() => import('./components/PlanetWatch')),
+    [View.SUSTAINABILITY_FRAMEWORK]: lazy(() => import('./components/SustainabilityFramework')),
+    [View.CARBON_LEDGER]: lazy(() => import('./components/CarbonLedger')),
+    [View.GREEN_LENS]: lazy(() => import('./components/GreenLens')),
+    [View.NUTRILIFE]: lazy(() => import('./components/NutriLife')),
+    [View.AGBIZ]: lazy(() => import('./components/AgBiz')),
+    [View.AGBIZ_WEEKLY]: lazy(() => import('./components/AgBizWeekly')),
+    [View.FINANCE]: lazy(() => import('./components/Finance')),
+    [View.INVESTOR_PORTAL]: lazy(() => import('./components/InvestorPortal')),
+    [View.SUPPLY_CHAIN_AUDIT]: lazy(() => import('./components/SupplyChainAudit')),
+    [View.COMMUNITY]: lazy(() => import('./components/Community')),
+    [View.HERITAGE_FORUM]: lazy(() => import('./components/HeritageForum')),
+    [View.SCALEUP_SUMMIT]: lazy(() => import('./components/ScaleUpSummit')),
+    [View.AI_ADVISOR]: lazy(() => import('./components/AiAdvisor')),
+    [View.ROADMAP_AI]: lazy(() => import('./components/RoadmapAI')),
+    [View.SIX_SIGMA_RCA]: lazy(() => import('./components/SixSigmaRCA')),
+    [View.AI_CONSULTANT_FLOATING]: lazy(() => import('./components/AiConsultantFloating')),
+    [View.COMMUNITY_GUIDELINES]: lazy(() => import('./components/CommunityGuidelines')),
+    [View.TRADEMARKS]: lazy(() => import('./components/Trademarks')),
+    [View.PRIVACY_POLICY]: lazy(() => import('./components/PrivacyPolicy')),
+    [View.BRANDS]: lazy(() => import('./components/Brands')),
+    [View.DATA_REGISTRY]: lazy(() => import('./components/DataRegistry')),
+    [View.NETWORK_INPUT_HUB]: lazy(() => import('./components/NetworkInputHub')),
+    [View.KNOWLEDGE]: lazy(() => import('./components/KnowledgeHub')),
+    [View.FUTURE_VISION]: lazy(() => import('./components/FutureVision')),
+    [View.SERVICES]: lazy(() => import('./components/Services')),
+    [View.TRANSMISSION_GATEWAY]: lazy(() => import('./components/TransmissionGateway')),
+    [View.PROFESSIONAL]: lazy(() => import('./components/professional/ProfessionalView')),
+    [View.RESILIENCE]: lazy(() => import('./components/professional/ResilienceView')),
+    [View.FIVE_THRUSTS]: lazy(() => import('./components/five-thrusts/Thrusts')),
+    [View.INFORMATION]: lazy(() => import('./components/Information')),
+    [View.PRODUCTS]: lazy(() => import('./components/marketplace/Products')),
+    [View.PRODUCT_DETAIL]: lazy(() => import('./components/ProductDetail')),
+    [View.CART]: lazy(() => import('./components/Cart')),
+    [View.DATABASE]: lazy(() => import('./components/Database')),
+    [View.SUSTAINABILITY_CALCULATOR]: lazy(() => import('./components/SustainabilityCalculator')),
+    [View.MEDIA]: lazy(() => import('./components/Media')),
+    [View.SUPPLY]: lazy(() => import('./components/Supply')),
+    [View.CUSTOMER]: lazy(() => import('./components/Customer')),
+    [View.PARTNERSHIPS]: lazy(() => import('./components/Partnerships')),
+    [View.PODCAST]: lazy(() => import('./components/Podcast')),
+    [View.WEBINAR]: lazy(() => import('./components/Webinar')),
+    [View.LIVE_HOST]: lazy(() => import('./components/LiveHost')),
+    [View.INTRANET_DASHBOARD]: lazy(() => import('./components/IntranetDashboard')),
+    [View.EXTRANET_DASHBOARD]: lazy(() => import('./components/ExtranetDashboard')),
+    [View.FRAMEWORK_DISTINCTIONS]: lazy(() => import('./components/FrameworkDistinctions')),
+    [View.PORTFOLIO]: lazy(() => import('./components/Portfolio')),
+    [View.AUTH]: lazy(() => import('./components/Auth')),
 };
 
 function App() {
@@ -202,8 +141,7 @@ function App() {
   };
 
   const onNavigate = (view: View, params?: any) => {
-    const viewName = View[view];
-    const path = view === View.HOME ? '/' : `/${viewName.toLowerCase().replace(/_/g, '-')}`;
+    const path = view === View.HOME ? '/' : `/${view.toLowerCase().replace(/_/g, '-')}`;
     navigate(path, { state: params });
   };
 
@@ -220,38 +158,44 @@ function App() {
     <main className='bg-white dark:bg-gray-900'>
       <ScrollToTop />
       <Navbar onNavigate={onNavigate} currentView={currentView} />
-      <CommandPalette onNavigate={onNavigate} />
-      <div>
-        <Routes>
-          <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
-          <Route path="/home" element={<Home user={user} onNavigate={onNavigate} />} />
-          {Object.keys(View).filter(v => isNaN(Number(v))).map(viewKey => {
-            const viewValue = View[viewKey as keyof typeof View];
-            const Component = componentMap[viewValue] || (() => <ViewPlaceholder viewName={viewKey} />);
-            const props = {
-                user,
-                onNavigate,
-                navigationParams: location.state,
-                onLogin: (u: User) => dispatch({ type: 'SET_USER', payload: u }),
-                // Auth-specific props
-                ...(viewValue === View.AUTH && {
-                    isLoading,
-                    error,
-                    onGoogleLogin: handleGoogleLogin, // Pass the function itself
-                    onEmailLogin: () => {}, // Replace with your email login logic
-                })
-            };
-            return (
-                <Route 
-                    key={viewKey} 
-                    path={`/${viewKey.toLowerCase().replace(/_/g, '-')}`} 
-                    element={<Component {...props} />} 
-                />
-            );
-          })}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
+      <Suspense fallback={
+        <div className="h-screen bg-earth-950 flex flex-col items-center justify-center gap-6">
+          <Loader2 className="text-agro-500 animate-spin" size={48} />
+          <p className="text-[10px] font-black text-agro-400 uppercase tracking-[0.4em] animate-pulse">Loading Page...</p>
+        </div>
+      }>
+        <div>
+          <Routes>
+            <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
+            <Route path="/home" element={<Home user={user} onNavigate={onNavigate} />} />
+            {Object.keys(componentMap).map(viewKey => {
+              const viewValue = viewKey as View;
+              const Component = componentMap[viewValue] || (() => <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>);
+              const props = {
+                  user,
+                  onNavigate,
+                  navigationParams: location.state,
+                  onLogin: (u: User) => dispatch({ type: 'SET_USER', payload: u }),
+                  // Auth-specific props
+                  ...(viewValue === View.AUTH && {
+                      isLoading,
+                      error,
+                      onGoogleLogin: handleGoogleLogin, // Pass the function itself
+                      onEmailLogin: () => {}, // Replace with your email login logic
+                  })
+              };
+              return (
+                  <Route 
+                      key={viewValue} 
+                      path={`/${viewValue.toLowerCase().replace(/_/g, '-')}`} 
+                      element={<Component {...props} />} 
+                  />
+              );
+            })}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </Suspense>
       <Footer onNavigate={onNavigate} />
     </main>
   );

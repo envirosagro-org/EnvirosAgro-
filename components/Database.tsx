@@ -7,7 +7,7 @@ import {
   ShieldAlert, AlertCircle, Eye, RefreshCw, ArrowLeft
 } from 'lucide-react';
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
-import { THRUSTS, DATASETS, RESOURCE_TYPES } from './data';
+import { THRUSTS, DATASETS, RESOURCE_TYPES } from './data.tsx';
 import { User, View } from '../types';
 import { toast } from 'react-hot-toast';
 

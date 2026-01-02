@@ -4,53 +4,54 @@ export const FEATURED_FILM = {
     category: "Restoration",
     duration: "1h 24m",
     year: "2023",
-    director: "Amani K.",
     image: "/images/greenlens/great-green-wall.jpg",
+    youtubeId: "vG-QZotN6_Q",
     description: "A cinematic journey across the Sahel, following the ambitious African-led initiative to grow an 8,000km natural wonder of the world to combat desertification.",
     synopsis: "The Great Green Wall is an epic ambition to grow an 8,000km natural wonder of the world across the entire width of Africa. Its goal is to provide food, jobs and a future for the millions of people who live in a region on the frontline of climate change. This documentary follows the pioneers working on the ground to transform the Sahel into a green haven, proving that humanity can indeed heal the Earth.",
     impact: "15% Canopy Increase",
     crew: [
       { role: "Director", name: "Amani K." },
       { role: "Cinematography", name: "Liam Sterling" },
-      { role: "Scientific Lead", name: "Dr. Elena Rossi" }
+      { role: "Sound Design", name: "Echo Collective" },
+      { role: "Editor", name: "Jordan Vance" }
     ],
-    awards: ["Green Film Award 2023", "Critics Choice: Impact"]
+    awards: ["Sundance Grand Jury Prize", "Tribeca Visionary Award"]
   };
-
-  export const DOCS_LIBRARY = [
+  
+  export const GALLERY_FILMS = [
     {
       id: 2,
-      title: "Guardians of the Soil",
-      category: "Regenerative Ag",
-      duration: "45m",
+      title: "Bio-char: The Black Gold Rush",
+      category: "Soil Health",
+      duration: "55m",
       year: "2024",
-      image: "/images/greenlens/guardians-of-the-soil.jpg",
-      impact: "1.2k Farmers Trained",
-      description: "The story of four farmers transitioning to regenerative practices.",
-      synopsis: "Soil is not dirt; it is a living organism. 'Guardians of the Soil' dives into the microbial universe beneath our feet. Through the lens of four farmers in different continents, we witness the struggle and triumph of letting go of chemical dependency to embrace the natural intelligence of the earth. This film serves as a practical and emotional guide to the regenerative revolution.",
-      crew: [{ role: "Director", name: "Marcus Thorne" }],
-      awards: ["Best Feature Doc - AgroFilm Fest"]
+      image: "/images/greenlens/bio-char.jpg",
+      impact: "80% Reduction in Fertilizer Use",
+      description: "Investigating the power of bio-char to restore degraded soils and sequester carbon.",
+      synopsis: "This film follows a group of farmers and scientists who are leading the charge in the bio-char revolution. From small-scale community projects to large agricultural operations, discover how this ancient soil amendment can boost fertility, reduce the need for chemical fertilizers, and play a crucial role in mitigating climate change. It's a story of innovation, hope, and the power of working with nature.",
+      crew: [{ role: "Director", name: "Maya Lin" }],
+      awards: ["Green Docs Fest Winner"]
     },
     {
       id: 3,
-      title: "Beneath the Canopy",
+      title: "Guardians of the Seed",
       category: "Biodiversity",
-      duration: "52m",
-      year: "2022",
-      image: "/images/greenlens/beneath-the-canopy.jpg",
-      impact: "500 Acres Protected",
-      description: "Exploring the symbiotic relationships in tropical agroforestry.",
-      synopsis: "In the heart of the rainforest, agriculture and nature aren't at odds—they are partners. 'Beneath the Canopy' explores the intricate web of life in shade-grown coffee and cocoa plantations. From the insects that pollinate to the birds that manage pests, discover why preserving the canopy is the ultimate insurance for our food systems.",
-      crew: [{ role: "Director", name: "Sarah Jenkins" }],
-      awards: ["Earth Day Selection 2022"]
+      duration: "1h 10m",
+      year: "2023",
+      image: "/images/greenlens/seed-guardians.jpg",
+      impact: "Protection of 500+ Heirloom Varieties",
+      description: "Meet the farmers and activists saving our agricultural heritage, one seed at a time.",
+      synopsis: "In an era of industrialized agriculture, global seed diversity is plummeting. This documentary profiles the dedicated individuals who are building community seed banks, reviving ancient farming practices, and fighting to keep heirloom varieties from extinction. It's a beautiful and urgent call to protect the source of our food.",
+      crew: [{ role: "Director", name: "Carlos Suarez" }],
+      awards: ["Slow Food Film Festival Selection"]
     },
     {
       id: 4,
-      title: "Water Wars & Peace",
-      category: "Conservation",
-      duration: "1h 10m",
-      year: "2023",
-      image: "/images/greenlens/water-wars-and-peace.jpg",
+      title: "The Flow of Power",
+      category: "Water Scarcity",
+      duration: "1h 5m",
+      year: "2024",
+      image: "/images/greenlens/water-rights.jpg",
       impact: "Policy Change Enacted",
       description: "How communities are redefining water rights through conservation.",
       synopsis: "As rivers dry up and glaciers melt, water has become the most valuable commodity on Earth. This film investigates the innovative community-led management systems that are preventing conflict and ensuring water security in the most arid regions of the globe. A story of diplomacy, engineering, and shared survival.",
@@ -66,10 +67,10 @@ export const FEATURED_FILM = {
       image: "/images/greenlens/the-urban-harvest.jpg",
       impact: "50 Community Gardens",
       description: "The rise of vertical and rooftop farming in modern megacities.",
-      synopsis: "By 2050, 70% of the world will live in cities. 'The Urban Harvest' explores the technological and social movement to grow food where it is consumed. From high-tech aeroponics to community-managed rooftops, witness how concrete jungles are becoming the breadbaskets of the future.",
-      crew: [{ role: "Director", name: "Lisa Chen" }],
-      awards: ["Urban Future Award 2024"]
+      synopsis: "By 2050, 70% of the world will live in cities. How will we feed them? This film explores the burgeoning urban agriculture movement, from high-tech vertical farms to community-run rooftop gardens. It showcases the pioneers who are transforming concrete jungles into edible landscapes, creating jobs, and improving food security for all.",
+      crew: [{ role: "Director", name: "Lina Chen" }],
+      awards: ["Smart Cities Expo Audience Award"]
     }
   ];
 
-  export const CATEGORIES = ["All", "Restoration", "Regenerative Ag", "Biodiversity", "Conservation", "Food Security"];
+  export const DOCS_LIBRARY = [FEATURED_FILM, ...GALLERY_FILMS];

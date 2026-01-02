@@ -14,7 +14,7 @@ const MissionVision = () => (
         </div>
         <h3 className="text-3xl font-serif font-bold mb-4">Our Mission</h3>
         <p className="text-xl text-agro-100 leading-relaxed italic">
-          \"To ensure agriculture and its environ is smooth, reliable and safe.\"
+          "To ensure agriculture and its environ is smooth, reliable and safe."
         </p>
       </div>
 
@@ -24,7 +24,7 @@ const MissionVision = () => (
         </div>
         <h3 className="text-3xl font-serif font-bold text-earth-900 mb-4">Our Vision</h3>
         <p className="text-xl text-earth-600 leading-relaxed italic">
-          \"To have socioeconomic and healthy future for agricultural community.\"
+          "To have socioeconomic and healthy future for agricultural community."
         </p>
       </div>
     </div>
@@ -107,7 +107,7 @@ const FrameworkDistinctions = () => (
             </div>
             <h4 className="text-xl font-bold text-earth-900">Social Influenza Disease (SI-D)</h4>
             <p className="text-sm text-earth-600 leading-relaxed">
-              A specific <strong>socio-psychological framework</strong> within the Social Agriculture thrust. It treats societal fractures as \"infections\"—diagnosing how harmful narratives and stressors prevent integrated growth.
+              A specific <strong>socio-psychological framework</strong> within the Social Agriculture thrust. It treats societal fractures as "infections"—diagnosing how harmful narratives and stressors prevent integrated growth.
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@ const FrameworkDistinctions = () => (
   </div>
 );
 
-export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
+const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white dark:bg-earth-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
@@ -137,3 +137,5 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default AboutPage;

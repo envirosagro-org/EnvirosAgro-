@@ -62,12 +62,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </h4>
                 <ul className="space-y-4">
                     {[
-                      { id: View.NETWORK_INPUT_HUB, label: 'Network Ingest Hub' },
-                      { id: View.DASHBOARD, label: 'Impact Dashboard' },
-                      { id: View.FUTURE_VISION, label: 'Vision Lab' },
-                      { id: View.SUSTAINABILITY_FRAMEWORK, label: 'Thrust Matrix' },
+                      { view: View.NETWORK_INPUT_HUB, label: 'Network Ingest Hub' },
+                      { view: View.DASHBOARD, label: 'Impact Dashboard' },
+                      { view: View.FUTURE_VISION, label: 'Vision Lab' },
+                      { view: View.SUSTAINABILITY_FRAMEWORK, label: 'Thrust Matrix' },
                     ].map(link => (
-                      <li key={link.id} onClick={() => onNavigate(link.id as View)} className="cursor-pointer hover:text-agro-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
+                      <li key={link.view} onClick={() => onNavigate(link.view)} className="cursor-pointer hover:text-agro-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
                          <div className="w-1 h-1 rounded-full bg-slate-800 group-hover:bg-agro-500 transition-all"></div>
                          {link.label}
                       </li>
@@ -82,13 +82,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </h4>
                 <ul className="space-y-4">
                     {[
-                      { id: View.CROP_DOCTOR, label: 'AI Diagnostic' },
-                      { id: View.FARM_SCOUT, label: 'Field Telemetry' },
-                      { id: View.SMART_FARM_VR, label: 'Virtual Training' },
-                      { id: View.SERVICES, label: 'Scientific Services' },
-                      { id: View.ROADMAP_AI, label: 'AI Roadmap' }
+                      { view: View.CROP_DOCTOR, label: 'AI Diagnostic' },
+                      { view: View.FARM_SCOUT, label: 'Field Telemetry' },
+                      { view: View.SMART_FARM_VR, label: 'Virtual Training' },
+                      { view: View.SERVICES, label: 'Scientific Services' },
+                      { view: View.ROADMAP_AI, label: 'AI Roadmap' }
                     ].map(link => (
-                      <li key={link.id} onClick={() => onNavigate(link.id)} className="cursor-pointer hover:text-blue-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
+                      <li key={link.view} onClick={() => onNavigate(link.view)} className="cursor-pointer hover:text-blue-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
                          <div className="w-1 h-1 rounded-full bg-slate-800 group-hover:bg-blue-500 transition-all"></div>
                          {link.label}
                       </li>
@@ -103,13 +103,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </h4>
                 <ul className="space-y-4">
                     {[
-                      { id: View.COMMUNITY, label: 'Member Hubs' },
-                      { id: View.FINANCE, label: 'Tokenz™ Node' },
-                      { id: View.INVESTOR_PORTAL, label: 'Capital Node' },
-                      { id: View.BRANDS, label: 'Portfolio' },
-                      { id: View.KNOWLEDGE, label: 'Intelligence Base' }
+                      { view: View.COMMUNITY, label: 'Member Hubs' },
+                      { view: View.FINANCE, label: 'Tokenz™ Node' },
+                      { view: View.INVESTOR_PORTAL, label: 'Capital Node' },
+                      { view: View.BRANDS, label: 'Portfolio' },
+                      { view: View.KNOWLEDGE, label: 'Intelligence Base' }
                     ].map(link => (
-                      <li key={link.id} onClick={() => onNavigate(link.id)} className="cursor-pointer hover:text-rose-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
+                      <li key={link.view} onClick={() => onNavigate(link.view)} className="cursor-pointer hover:text-rose-400 transition-all flex items-center gap-3 text-xs font-bold uppercase tracking-wider group">
                          <div className="w-1 h-1 rounded-full bg-slate-800 group-hover:bg-rose-500 transition-all"></div>
                          {link.label}
                       </li>

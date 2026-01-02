@@ -29,7 +29,7 @@ export const MenuOverlay: React.FC<MenuOverlayProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10 items-start">
              {MENU_SECTIONS.map((section) => (
                 <section key={section.id} className="space-y-8 group/sec">
-                   <h3 className="text-[11px] font-black uppercase tracking(0.5em] text-earth-400 flex items-center gap-4 pb-4 border-b border-earth-100 dark:border-white/5">{section.icon} {section.label}</h3>
+                   <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-earth-400 flex items-center gap-4 pb-4 border-b border-earth-100 dark:border-white/5">{section.icon} {section.label}</h3>
                    <div className="grid gap-3">
                       {section.items.map(item => (
                         <button key={item.id} onClick={() => handleNavClick(item.id)} className={`flex items-start gap-5 p-4 rounded-[1.5rem] text-left transition-all border border-transparent group relative overflow-hidden ${currentView === item.id ? 'bg-agro-600 text-white shadow-xl' : 'hover:bg-agro-500/5 dark:hover:bg-white/5 hover:border-agro-500/10'}`}>

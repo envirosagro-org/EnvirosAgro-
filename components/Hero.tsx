@@ -40,23 +40,23 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
 
   const thrusts = [
     { 
-      id: 'SA', label: "Social", icon: <Users size={24} />, title: "Social Immunity", desc: "Diagnosing fractures like SI-D to build durable communal bonds.",
+      id: 'SA', label: "Social", icon: Users, title: "Social Immunity", desc: "Diagnosing fractures like SI-D to build durable communal bonds.",
       color: "text-rose-500", bg: "bg-rose-500/5", border: "border-rose-500/20", target: View.COMMUNITY
     },
     { 
-      id: 'EA', label: "Environmental", icon: <Leaf size={24} />, title: "Resource Integrity", desc: "Regenerating soil health and localized biomass reserves.",
+      id: 'EA', label: "Environmental", icon: Leaf, title: "Resource Integrity", desc: "Regenerating soil health and localized biomass reserves.",
       color: "text-green-500", bg: "bg-green-500/5", border: "border-green-500/20", target: View.CARBON_LEDGER
     },
     { 
-      id: 'HA', label: "Health", icon: <ShieldCheck size={24} />, title: "Biological Safety", desc: "Standardizing safety protocols for human and plant health.",
+      id: 'HA', label: "Health", icon: ShieldCheck, title: "Biological Safety", desc: "Standardizing safety protocols for human and plant health.",
       color: "text-red-500", bg: "bg-red-500/5", border: "border-red-500/20", target: View.SAFE_HARVEST
     },
     { 
-      id: 'TA', label: "Technical", icon: <Cpu size={24} />, title: "AI Precision", desc: "Optimizing efficiency through diagnostic neural networks.",
+      id: 'TA', label: "Technical", icon: Cpu, title: "AI Precision", desc: "Optimizing efficiency through diagnostic neural networks.",
       color: "text-blue-500", bg: "bg-blue-500/5", border: "border-blue-500/20", target: View.ROADMAP_AI
     },
     { 
-      id: 'IA', label: "Industrial", icon: <Layers size={24} />, title: "Value Maturity", desc: "Scaling supply chains to global industrial standards.",
+      id: 'IA', label: "Industrial", icon: Layers, title: "Value Maturity", desc: "Scaling supply chains to global industrial standards.",
       color: "text-slate-400", bg: "bg-slate-500/5", border: "border-slate-500/20", target: View.SCALEUP_SUMMIT
     }
   ];
@@ -204,22 +204,25 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
       <div className="relative z-20 -mt-32 mb-40 px-12">
         <div className="w-full bg-white dark:bg-slate-900 rounded-[4rem] border border-white/10 shadow-cinematic-xl py-14 px-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-20 items-center backdrop-blur-3xl relative overflow-hidden">
             {[
-                { label: "Network Nodes", value: "12,482", icon: <Globe className="text-blue-500" />, trend: "+2.4%" },
-                { label: "Biomass Vol", value: "2.4M Tons", icon: <Layers className="text-agro-500" />, trend: "+12.1%" },
-                { label: "Community Hubs", value: "840+", icon: <Users size={24} className="text-rose-500" />, trend: "+5.8%" },
-                { label: "Impact Assets", value: "$420M+", icon: <Wallet className="text-amber-500" />, trend: "+18.2%" }
-            ].map((stat, i) => (
-                <div key={i} className="flex items-center gap-10 group cursor-default relative z-10">
-                    <div className="p-6 bg-black/5 dark:bg-white/5 rounded-[2.2rem] group-hover:scale-110 group-hover:rotate-3 transition-all duration-700 shadow-inner ring-1 ring-white/10">{stat.icon}</div>
-                    <div>
-                        <div className="flex items-baseline gap-4">
-                           <div className="text-4xl font-serif font-black text-slate-900 dark:text-white tracking-tight leading-none">{stat.value}</div>
-                           <span className="text-[10px] font-black text-agro-500">{stat.trend}</span>
+                { label: "Network Nodes", value: "12,482", icon: Globe, trend: "+2.4%" },
+                { label: "Biomass Vol", value: "2.4M Tons", icon: Layers, trend: "+12.1%" },
+                { label: "Community Hubs", value: "840+", icon: Users, trend: "+5.8%" },
+                { label: "Impact Assets", value: "$420M+", icon: Wallet, trend: "+18.2%" }
+            ].map((stat, i) => {
+                const Icon = stat.icon;
+                return (
+                    <div key={i} className="flex items-center gap-10 group cursor-default relative z-10">
+                        <div className="p-6 bg-black/5 dark:bg-white/5 rounded-[2.2rem] group-hover:scale-110 group-hover:rotate-3 transition-all duration-700 shadow-inner ring-1 ring-white/10"><Icon className={i === 0 ? "text-blue-500" : i === 1 ? "text-agro-500" : i === 2 ? "text-rose-500" : "text-amber-500"} /></div>
+                        <div>
+                            <div className="flex items-baseline gap-4">
+                               <div className="text-4xl font-serif font-black text-slate-900 dark:text-white tracking-tight leading-none">{stat.value}</div>
+                               <span className="text-[10px] font-black text-agro-500">{stat.trend}</span>
+                            </div>
+                            <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2 opacity-80">{stat.label}</div>
                         </div>
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2 opacity-80">{stat.label}</div>
                     </div>
-                </div>
-            ))}
+                )
+            })}
         </div>
       </div>
 
@@ -233,32 +236,35 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-              {thrusts.map((thrust) => (
-                  <div 
-                    key={thrust.id}
-                    onMouseEnter={() => setActiveThrust(thrust.id)}
-                    onClick={() => onNavigate(thrust.target)}
-                    className={`p-12 rounded-[4rem] flex flex-col items-center text-center group h-full transition-all duration-1000 border-4 cursor-pointer ${
-                        activeThrust === thrust.id 
-                        ? `${thrust.bg} ${thrust.border} scale-[1.05] z-10 shadow-cinematic-xl ring-1 ring-white/10` 
-                        : 'bg-white/50 dark:bg-white/5 border-transparent opacity-60 grayscale hover:grayscale-0 hover:opacity-100'
-                    }`}
-                  >
-                      <div className={`w-24 h-24 rounded-[2.5rem] flex items-center justify-center mb-12 shadow-2xl transition-all duration-1000 group-hover:rotate-[360deg] ${
-                          activeThrust === thrust.id ? 'bg-white dark:bg-slate-800 scale-110 shadow-strategic' : 'bg-white dark:bg-white/10'
-                      } ${thrust.color}`}>
-                          {React.cloneElement(thrust.icon as React.ReactElement<any>, { size: 38 })}
-                      </div>
-                      <h4 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] leading-none mb-8">{thrust.label}</h4>
-                      <p className="text-base font-bold text-slate-500 dark:text-slate-400 leading-relaxed mb-16 flex-1">{thrust.desc}</p>
-                      
-                      <div className={`w-16 h-16 rounded-1.8rem border-2 flex items-center justify-center transition-all duration-500 ${
-                          activeThrust === thrust.id ? `${thrust.color} border-agro-500/30 rotate-45 bg-agro-500/10` : 'border-slate-200 dark:border-white/5 text-slate-300'
-                      }`}>
-                          <ChevronRight size={28} />
-                      </div>
-                  </div>
-              ))}
+              {thrusts.map((thrust) => {
+                  const Icon = thrust.icon;
+                  return (
+                    <div 
+                        key={thrust.id}
+                        onMouseEnter={() => setActiveThrust(thrust.id)}
+                        onClick={() => onNavigate(thrust.target)}
+                        className={`p-12 rounded-[4rem] flex flex-col items-center text-center group h-full transition-all duration-1000 border-4 cursor-pointer ${
+                            activeThrust === thrust.id 
+                            ? `${thrust.bg} ${thrust.border} scale-[1.05] z-10 shadow-cinematic-xl ring-1 ring-white/10` 
+                            : 'bg-white/50 dark:bg-white/5 border-transparent opacity-60 grayscale hover:grayscale-0 hover:opacity-100'
+                        }`}
+                    >
+                        <div className={`w-24 h-24 rounded-[2.5rem] flex items-center justify-center mb-12 shadow-2xl transition-all duration-1000 group-hover:rotate-[360deg] ${
+                            activeThrust === thrust.id ? 'bg-white dark:bg-slate-800 scale-110 shadow-strategic' : 'bg-white dark:bg-white/10'
+                        } ${thrust.color}`}>
+                            <Icon size={38} />
+                        </div>
+                        <h4 className="text-3xl font-black text-slate-900 dark:text-white uppercase tracking-[0.2em] leading-none mb-8">{thrust.label}</h4>
+                        <p className="text-base font-bold text-slate-500 dark:text-slate-400 leading-relaxed mb-16 flex-1">{thrust.desc}</p>
+                        
+                        <div className={`w-16 h-16 rounded-1.8rem border-2 flex items-center justify-center transition-all duration-500 ${
+                            activeThrust === thrust.id ? `${thrust.color} border-agro-500/30 rotate-45 bg-agro-500/10` : 'border-slate-200 dark:border-white/5 text-slate-300'
+                        }`}>
+                            <ChevronRight size={28} />
+                        </div>
+                    </div>
+                  )
+              })}
           </div>
       </section>
     </div>

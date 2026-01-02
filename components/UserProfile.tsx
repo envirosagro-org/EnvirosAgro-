@@ -17,7 +17,7 @@ interface UserProfileProps {
   onNavigate?: (view: View) => void;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onNavigate }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, onNavigate }) => {
   const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'SECURITY' | 'NODE' | 'CERTIFICATES'>('OVERVIEW');
   const [esinStep, setEsinStep] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
@@ -350,3 +350,5 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, onUpdateUser, on
     </div>
   );
 };
+
+export default UserProfile;

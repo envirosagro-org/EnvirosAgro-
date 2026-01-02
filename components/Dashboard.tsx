@@ -10,7 +10,7 @@ interface DashboardProps {
   onNavigate: (view: View) => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
+const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-[#050a14] pt-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1700px] mx-auto mb-8">
@@ -44,3 +44,5 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default Dashboard;

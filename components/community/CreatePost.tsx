@@ -4,10 +4,10 @@ import { User } from '../../types';
 import { db, storage } from '../../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { Loader2, X, Paperclip, Image as ImageIcon, Link as LinkIcon, Pilcrow } from 'lucide-react';
+import { Loader2, X, Paperclip, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 
 interface CreatePostProps {
-  user: User;
+  user?: User;
   onClose: () => void;
   onPostCreated: () => void;
 }
@@ -36,6 +36,10 @@ export const CreatePost: React.FC<CreatePostProps> = ({ user, onClose, onPostCre
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+        setError('User not found. Please log in again.');
+        return;
+    }
     if (!postText.trim()) {
       setError('Post content cannot be empty.');
       return;
@@ -73,6 +77,14 @@ export const CreatePost: React.FC<CreatePostProps> = ({ user, onClose, onPostCre
       setIsLoading(false);
     }
   };
+
+  if (!user) {
+    return (
+        <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-2xl w-full max-w-2xl p-8 relative flex items-center justify-center h-96">
+            <Loader2 className="animate-spin text-agro-500" size={48} />
+        </div>
+    );
+  }
 
   return (
     <div className="bg-white dark:bg-earth-900 rounded-3xl shadow-2xl w-full max-w-2xl p-8 relative">

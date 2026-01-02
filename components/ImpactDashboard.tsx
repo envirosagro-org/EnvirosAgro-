@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { View } from '../types';
 import { ArrowLeft, LayoutGrid } from 'lucide-react';
@@ -76,7 +75,7 @@ const FutureVisionWidget: React.FC = () => {
   );
 };
 
-export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({ onNavigate }) => {
+const ImpactDashboard: React.FC<ImpactDashboardProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-[#050a14] pt-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-[1700px] mx-auto mb-8 flex justify-between items-center">
@@ -110,3 +109,5 @@ export const ImpactDashboard: React.FC<ImpactDashboardProps> = ({ onNavigate }) 
     </div>
   );
 };
+
+export default ImpactDashboard;

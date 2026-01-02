@@ -47,6 +47,7 @@ export const NAVIGATION_STRUCTURE = [
       { label: 'Community', view: View.COMMUNITY, icon: Users },
       { label: 'Heritage Forum', view: View.HERITAGE_FORUM, icon: BookOpen },
       { label: 'People and Culture', view: View.PEOPLE_AND_CULTURE, icon: HeartHandshake },
+      { label: 'Agro People and Culture', view: View.AGRO_PEOPLE_AND_CULTURE, icon: HeartHandshake },
       { label: 'ScaleUp Summit', view: View.SCALEUP_SUMMIT, icon: MessageSquare },
     ],
   },
@@ -95,10 +96,12 @@ export const MENU_SECTIONS = [
         icon: <Briefcase size={16} />,
         items: [
             { id: View.PRODUCTS, label: 'Marketplace', desc: 'Strategic assets and knowledge tokens for development.', icon: <ShoppingCart size={20} /> },
-            { id: View.FINANCE, label: 'Finance', desc: 'Tools and resources for financial management.', icon: <BarChart3 size={20} /> },
+            { id: View.FINANCE, label: 'Finance', desc: 'Access financial tools and resources for your agricultural business.', icon: <BarChart3 size={20} /> },
             { id: View.INVESTOR_PORTAL, label: 'Investor Portal', desc: 'Exclusive content and insights for our investors.', icon: <Building2 size={20} /> },
             { id: View.PORTFOLIO, label: 'Portfolio', desc: 'An overview of our diverse investment portfolio.', icon: <BookOpen size={20} /> },
             { id: View.NETWORK_INPUT_HUB, label: 'Ingest Hub', desc: 'Centralized point for partners to submit data.', icon: <LogIn size={20} /> },
+            { id: View.AGBIZ, label: 'AgBiz', desc: 'Access market intelligence and business development resources.', icon: <Factory size={20} /> },
+            { id: View.AGBIZ_WEEKLY, label: 'AgBiz Weekly', desc: 'Your weekly briefing on the agricultural economy.', icon: <Briefcase size={20} /> },
         ]
     },
     {
@@ -106,9 +109,10 @@ export const MENU_SECTIONS = [
         label: 'Community',
         icon: <Users size={16} />,
         items: [
-            { id: View.COMMUNITY, label: 'Community Hub', desc: 'Connect with fellow members and share your experiences.', icon: <Users size={20} /> },
+            { id: View.COMMUNITY, label: 'Community Hub', desc: 'Connect with our vibrant community of farmers, researchers, and experts.', icon: <Users size={20} /> },
             { id: View.HERITAGE_FORUM, label: 'Heritage Forum', desc: 'Preserving and celebrating our cultural heritage.', icon: <BookOpen size={20} /> },
-            { id: View.SCALEUP_SUMMIT, label: 'ScaleUp Summit', desc: 'Join our annual summit for entrepreneurs and innovators.', icon: <MessageSquare size={20} /> },
+            { id: View.SCALEUP_SUMMIT, label: 'ScaleUp Summit', desc: 'Join our annual summit for entrepreneurs and innovators in the agricultural sector.', icon: <MessageSquare size={20} /> },
+            { id: View.COMMUNITY_GARDEN, label: 'Community Garden', desc: 'Cultivating local food systems and community resilience.', icon: <HeartHandshake size={20} /> },
         ]
     },
     {
@@ -120,6 +124,23 @@ export const MENU_SECTIONS = [
             { id: View.SMART_FARM_VR, label: 'SmartFarm VR', desc: 'Experience the future of farming with our virtual reality simulation.', icon: <Dna size={20} /> },
             { id: View.SIX_SIGMA_RCA, label: 'Six Sigma RCA', desc: 'A systematic approach to problem-solving and process improvement.', icon: <Anchor size={20} /> },
             { id: View.DATA_REGISTRY, label: 'Data Registry', desc: 'A centralized database for agricultural and environmental data.', icon: <Database size={20} /> },
+            { id: View.CROP_DOCTOR, label: 'Crop Doctor', desc: 'Diagnose crop diseases and get treatment recommendations.', icon: <Leaf size={20} /> },
+            { id: View.FARM_SCOUT, label: 'Farm Scout', desc: 'Monitor your fields and crops with remote sensing technology.', icon: <Globe size={20} /> },
+            { id: View.TRANSMISSION_GATEWAY, label: 'Transmission Gateway', desc: 'Securely transmit data from your farm to the cloud.', icon: <Link size={20} /> },
+        ]
+    },
+    {
+        id: 'sustainability',
+        label: 'Sustainability',
+        icon: <Leaf size={16} />,
+        items: [
+            { id: View.CARBON_LEDGER, label: 'Carbon Ledger', desc: 'Track your carbon footprint and trade carbon credits.', icon: <GitBranch size={20} /> },
+            { id: View.GREEN_LENS, label: 'Green Lens', desc: 'A new perspective on sustainable agriculture.', icon: <Feather size={20} /> },
+            { id: View.NUTRILIFE, label: 'Nutri-Life', desc: 'Optimize nutrient management for healthy soils and crops.', icon: <Dna size={20} /> },
+            { id: View.PLANET_WATCH, label: 'Planet Watch', desc: 'Monitor the health of our planet in real time.', icon: <Globe size={20} /> },
+            { id: View.SAFE_HARVEST, label: 'Safe Harvest', desc: 'Ensure food safety and quality from farm to table.', icon: <ShieldCheck size={20} /> },
+            { id: View.SUSTAINABILITY_FRAMEWORK, label: 'Sustainability Framework', desc: 'A comprehensive framework for sustainable agriculture.', icon: <Anchor size={20} /> },
+            { id: View.FRAMEWORK_DISTINCTIONS, label: 'Framework Distinctions', desc: 'Learn what makes our sustainability framework unique.', icon: <Tags size={20} /> },
         ]
     },
     {
@@ -130,6 +151,7 @@ export const MENU_SECTIONS = [
             { id: View.KNOWLEDGE, label: 'Knowledge Hub', desc: 'A curated library of articles, case studies, and tutorials.', icon: <BookOpen size={20} /> },
             { id: View.WEBINAR, label: 'Webinars', desc: 'Join our live webinars and learn from industry experts.', icon: <Mic size={20} /> },
             { id: View.PODCAST, label: 'Podcasts', desc: 'Listen to our podcast series and stay up-to-date on the latest trends.', icon: <Mic size={20} /> },
+            { id: View.LIVE_HOST, label: 'Live Host', desc: 'Connect with our experts for live support and guidance.', icon: <Users size={20} /> },
         ]
     }
 ];

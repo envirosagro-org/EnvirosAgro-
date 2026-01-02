@@ -1,16 +1,16 @@
 
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Hero } from '../components/Hero';
-import { FrameworkDistinctions } from '../components/FrameworkDistinctions';
 import { Cta } from '../components/Cta';
-import { PeopleAndCulture } from '../components/PeopleAndCulture';
-import { Podcast } from '../components/Podcast';
 import { ImpactStats } from '../components/greenlens/ImpactStats';
 import { 
   Globe, ShieldCheck, Zap, BarChart3, 
   ArrowRight, Users, Microscope, Database
 } from 'lucide-react';
 import { View, User } from '../types';
+
+const FrameworkDistinctions = lazy(() => import('../components/FrameworkDistinctions'));
+const Podcast = lazy(() => import('../components/Podcast'));
 
 interface HomeProps {
     onNavigate: (view: View) => void;
@@ -42,46 +42,49 @@ const StrategicPillars = ({ onNavigate }: any) => (
                 { 
                     title: 'Intelligence Nodes', 
                     desc: 'Standardized agricultural telemetry across 14 regional clusters.', 
-                    icon: <Globe className="text-blue-500" />,
+                    icon: Globe,
                     target: View.PLANET_WATCH 
                 },
                 { 
                     title: 'Strategic Audits', 
                     desc: 'Identifying professionalism-output gaps in industrial supply chains.', 
-                    icon: <ShieldCheck className="text-agro-600" />,
+                    icon: ShieldCheck,
                     target: View.SUPPLY_CHAIN_AUDIT
                 },
                 { 
                     title: 'M(t) Modeling', 
                     desc: 'Quantifying sustainability through advanced mathematical simulation.', 
-                    icon: <Zap className="text-amber-500" />,
+                    icon: Zap,
                     target: View.DASHBOARD
                 },
                 { 
                     title: 'Asset Ledger', 
                     desc: 'Minting verifiable carbon credits through biomass hashing.', 
-                    icon: <Database className="text-purple-500" />,
+                    icon: Database,
                     target: View.CARBON_LEDGER
                 }
-            ].map((pillar, i) => (
-                <div 
-                    key={i} 
-                    onClick={() => onNavigate(pillar.target)}
-                    className="bg-white dark:bg-earth-900 p-10 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 shadow-sm group hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden"
-                >
-                    <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-125 transition-transform duration-700">
-                        {React.cloneElement(pillar.icon as React.ReactElement, { size: 100 })}
+            ].map((pillar, i) => {
+                const Icon = pillar.icon;
+                return (
+                    <div 
+                        key={i} 
+                        onClick={() => onNavigate(pillar.target)}
+                        className="bg-white dark:bg-earth-900 p-10 rounded-[2.5rem] border border-earth-100 dark:border-earth-800 shadow-sm group hover:shadow-xl hover:-translate-y-2 transition-all cursor-pointer relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-125 transition-transform duration-700">
+                            <Icon size={100} />
+                        </div>
+                        <div className="w-14 h-14 bg-earth-50 dark:bg-earth-800 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-agro-50 transition-colors">
+                            <Icon className={i === 0 ? "text-blue-500" : i === 1 ? "text-agro-600" : i === 2 ? "text-amber-500" : "text-purple-500"} />
+                        </div>
+                        <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-3">{pillar.title}</h3>
+                        <p className="text-xs text-earth-500 dark:text-earth-400 font-medium leading-relaxed mb-6">{pillar.desc}</p>
+                        <div className="flex items-center gap-2 text-[9px] font-black text-agro-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                            Access Node <ArrowRight size={12} />
+                        </div>
                     </div>
-                    <div className="w-14 h-14 bg-earth-50 dark:bg-earth-800 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-agro-50 transition-colors">
-                        {pillar.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-earth-900 dark:text-white mb-3">{pillar.title}</h3>
-                    <p className="text-xs text-earth-500 dark:text-earth-400 font-medium leading-relaxed mb-6">{pillar.desc}</p>
-                    <div className="flex items-center gap-2 text-[9px] font-black text-agro-600 uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                        Access Node <ArrowRight size={12} />
-                    </div>
-                </div>
-            ))}
+                )
+            })}
         </div>
     </section>
 );
@@ -138,7 +141,9 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, user }) => (
     <StrategicPillars onNavigate={onNavigate} />
 
     <div className="bg-earth-50 dark:bg-earth-900/50 py-24">
+      <Suspense fallback={<div className="h-96" />}>
         <FrameworkDistinctions />
+      </Suspense>
     </div>
 
     <section className="max-w-7xl mx-auto px-6 py-24">
@@ -187,17 +192,15 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, user }) => (
         <ImpactStats />
     </div>
 
-    <Podcast />
-    
-    <div className="bg-earth-50 dark:bg-earth-900/50 py-24">
-        <PeopleAndCulture user={user} onNavigate={onNavigate} />
-    </div>
+    <Suspense fallback={<div className="h-96" />}>
+      <Podcast />
+    </Suspense>
 
     <Cta 
       title="Ready to stabilize your m(t) score?" 
       subtitle="Join the 2,400+ nodes already optimizing regional agricultural resilience." 
       buttonText="Register Intelligence Node" 
-      onClick={() => onNavigate(View.SIGN_UP)}
+      onClick={() => onNavigate(View.AUTH)}
     />
   </div>
 );

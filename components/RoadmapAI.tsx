@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, MapPin, Sprout, Loader2, Send } from 'lucide-react';
 import { generateRoadmap } from '../services/gemini';
 
-export const RoadmapAI: React.FC = () => {
+const RoadmapAI: React.FC = () => {
   const [formData, setFormData] = useState({ region: '', crops: '', sa: 50, ea: 50, ha: 50, ta: 50, ia: 50 });
   const [isGenerating, setIsGenerating] = useState(false);
   const [roadmap, setRoadmap] = useState<string | null>(null);
@@ -51,3 +51,5 @@ export const RoadmapAI: React.FC = () => {
     </div>
   );
 };
+
+export default RoadmapAI;

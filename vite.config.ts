@@ -13,8 +13,13 @@ export default defineConfig(({ mode }) => {
       sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom', 'recharts', 'lucide-react'],
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+            if (id.includes('/components/')) {
+                return id.toString().split('/components/')[1].replace('.tsx', '');
+            }
           },
         },
       },

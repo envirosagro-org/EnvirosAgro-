@@ -14,7 +14,7 @@ interface PodcastProps {
   onNavigate?: (view: View) => void;
 }
 
-export const Podcast: React.FC<PodcastProps> = ({ onNavigate }) => {
+const Podcast: React.FC<PodcastProps> = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white dark:bg-earth-950 text-earth-900 dark:text-white overflow-hidden">
       {/* Background Decorative Elements */}
@@ -130,3 +130,5 @@ export const Podcast: React.FC<PodcastProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default Podcast;

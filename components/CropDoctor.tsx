@@ -14,7 +14,7 @@ interface CropDoctorProps {
     onNavigate?: (view: View) => void;
 }
 
-export const CropDoctor: React.FC<CropDoctorProps> = ({ onNavigate }) => {
+const CropDoctor: React.FC<CropDoctorProps> = ({ onNavigate }) => {
   const [image, setImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [diagnosis, setDiagnosis] = useState<string | null>(null);
@@ -264,3 +264,5 @@ export const CropDoctor: React.FC<CropDoctorProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default CropDoctor;

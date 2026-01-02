@@ -6,7 +6,7 @@ import { Products } from '../Products';
 import { Cart } from '../Cart';
 import { Services } from '../Services';
 import { Database } from '../Database';
-import { PeopleAndCulture } from '../PeopleAndCulture';
+import { AgroPeopleAndCulture } from '../AgroPeopleAndCulture';
 import { KnowledgeHub } from '../KnowledgeHub';
 import { Dashboard } from '../Dashboard';
 import { AiAdvisor } from '../AiAdvisor';
@@ -118,7 +118,9 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.HERITAGE_FORUM:
       return <HeritageForum />;
     case View.PEOPLE_AND_CULTURE:
-      return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
+      return <AgroPeopleAndCulture user={user} onNavigate={handleNavClick} />;
+    case View.AGRO_PEOPLE_AND_CULTURE:
+      return <AgroPeopleAndCulture user={user} onNavigate={handleNavClick} />;
     case View.SCALEUP_SUMMIT:
       return <ScaleUpSummit onNavigate={handleNavClick} />;
     case View.AI_ADVISOR:
@@ -158,7 +160,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.TRANSMISSION_GATEWAY:
         return <TransmissionGateway onNavigate={handleNavClick} />;
     case View.PROFESSIONAL:
-        return <PeopleAndCulture user={user} onNavigate={handleNavClick} />;
+        return <AgroPeopleAndCulture user={user} onNavigate={handleNavClick} />;
     case View.RESILIENCE:
         return <FrameworkDistinctions />;
     case View.FIVE_THRUSTS:

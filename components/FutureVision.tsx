@@ -10,7 +10,7 @@ interface FutureVisionProps {
     onNavigate: (view: View) => void;
 }
 
-export const FutureVision: React.FC<FutureVisionProps> = ({ onNavigate }) => {
+const FutureVision: React.FC<FutureVisionProps> = ({ onNavigate }) => {
     const [activeVision, setActiveVision] = useState(VISIONS[0]);
 
     return (
@@ -41,3 +41,5 @@ export const FutureVision: React.FC<FutureVisionProps> = ({ onNavigate }) => {
         </div>
     );
 };
+
+export default FutureVision;

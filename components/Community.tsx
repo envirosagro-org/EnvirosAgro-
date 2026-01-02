@@ -25,7 +25,7 @@ interface CommunityProps {
   onAwardEac?: (amount: number) => void;
 }
 
-export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
+const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
   const [esinStep, setEsinStep] = useState(1);
   const [activeTab, setActiveTab] = useState('feed');
   const [currentUser, setCurrentUser] = useState<User | null>(user);
@@ -222,3 +222,5 @@ export const Community: React.FC<CommunityProps> = ({ user, onNavigate }) => {
     </div>
   );
 };
+
+export default Community;

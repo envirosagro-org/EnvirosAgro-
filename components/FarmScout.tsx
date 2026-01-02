@@ -22,7 +22,7 @@ interface FarmScoutProps {
   onNavigate?: (view: View) => void;
 }
 
-export const FarmScout: React.FC<FarmScoutProps> = ({ onNavigate }) => {
+const FarmScout: React.FC<FarmScoutProps> = ({ onNavigate }) => {
   const [selectedTile, setSelectedTile] = useState<string | null>('tile-0-2');
   const [isGenerating, setIsGenerating] = useState(false);
   const [isScanningSatellite, setIsScanningSatellite] = useState(false);
@@ -342,3 +342,5 @@ export const FarmScout: React.FC<FarmScoutProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default FarmScout;
