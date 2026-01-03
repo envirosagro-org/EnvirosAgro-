@@ -1,21 +1,25 @@
 import 'package:realm/realm.dart';
+import '../models/user_model.dart';
 
 class AtlasService {
-  // IMPORTANT: REPLACE WITH YOUR ATLAS APP ID
   static const String _appId = '6957933ebaecce170fa892b1'; 
   final App _app = App(AppConfiguration(_appId));
 
   User? _currentUser;
+  Realm? _realm;
 
   Future<void> login() async {
     if (_currentUser == null) {
-      // Using anonymous login for simplicity. 
-      // Replace with your desired authentication provider.
       _currentUser = await _app.logIn(Credentials.anonymous());
+      _realm = Realm(Configuration.flexibleSync(_currentUser!, [UserModel.schema]));
     }
   }
 
-  // This function would call a serverless function in your Atlas backend.
+  Stream<RealmResultsChanges<UserModel>> getProfileStream() {
+    if (_realm == null) throw Exception("Realm not initialized. Call login() first.");
+    return _realm!.all<UserModel>().changes;
+  }
+
   Future<Map<String, dynamic>> calibrateSustainability(double-a, double-b, double-c, double-d) async {
     if (_currentUser == null) await login();
     
@@ -23,10 +27,13 @@ class AtlasService {
     return result as Map<String, dynamic>;
   }
 
-  // This function would call another serverless function.
   Future<void> mineReaction(String documentId, String reactionType) async {
     if (_currentUser == null) await login();
     
     await _currentUser!.functions.call('mineOnReaction', [documentId, reactionType]);
+  }
+
+  void dispose() {
+    _realm?.close();
   }
 }
