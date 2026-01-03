@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
 import { Footer } from './components/Footer';
@@ -12,6 +12,8 @@ import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import { reducer, initialState } from './context/reducer';
 import { Loader2 } from 'lucide-react';
+import { auth } from './lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Home = lazy(() => import('./views/Home'));
 const AgBiz = lazy(() => import('./components/AgBiz'));
@@ -40,6 +42,30 @@ function App() {
   const location = useLocation();
   const [{ user, isAuthLoading }, dispatch] = useStateValue();
   const currentView = pathToView(location.pathname);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const appUser: User = {
+          uid: user.uid,
+          name: user.displayName || 'Anonymous',
+          email: user.email || '',
+          role: 'user',
+          avatar: user.photoURL || undefined,
+          joinedDate: user.metadata.creationTime,
+          esin: '',
+          eacBalance: 0,
+          isVerified: user.emailVerified,
+        };
+        dispatch({ type: 'SET_USER', payload: appUser });
+      } else {
+        dispatch({ type: 'SET_USER', payload: null });
+      }
+      dispatch({ type: 'SET_AUTH_LOADING', payload: false });
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
 
   const onNavigate = (view: View, params?: any) => {
     const path = view === View.HOME ? '/' : `/${view.toLowerCase().replace(/_/g, '-')}`;

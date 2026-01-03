@@ -100,7 +100,7 @@ const UserStatsWidget = ({ user, onNavigate }: any) => {
                     </div>
                     <div>
                         <span className="text-[10px] font-black text-earth-400 uppercase tracking-[0.2em] mb-1 block">Authenticated Node</span>
-                        <h4 className="text-2xl font-serif font-black text-earth-900 dark:text-white">{user.name}</h4>
+                        <h4 className="text-2xl font-serif font-black text-earth-900 dark:text-white">{typeof user.name === 'string' ? user.name : ''}</h4>
                     </div>
                 </div>
 

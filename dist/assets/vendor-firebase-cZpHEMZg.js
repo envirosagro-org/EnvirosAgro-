@@ -1,4 +1,4 @@
-import{r}from"./vendor-@firebase-DgWq4N02.js";var e="firebase",a="12.7.0";/**
+import{r}from"./vendor-@firebase-5Fy99INn.js";var e="firebase",a="12.7.0";/**
  * @license
  * Copyright 2020 Google LLC
  *

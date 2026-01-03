@@ -1,0 +1,85 @@
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T06:15:15.906Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:15:15.907Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:15:15.927Z] Running auto auth
+[debug] [2026-01-03T06:15:15.928Z] Running auto auth
+[debug] [2026-01-03T06:15:15.996Z] No OAuth tokens found
+[debug] [2026-01-03T06:15:15.997Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:15:16.091Z] No OAuth tokens found
+[debug] [2026-01-03T06:15:16.092Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:15:16.198Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 403
+[debug] [2026-01-03T06:15:16.198Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"error":{"code":403,"message":"Request had insufficient authentication scopes.","status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"ACCESS_TOKEN_SCOPE_INSUFFICIENT","domain":"googleapis.com","metadata":{"method":"google.cloud.billing.v1.CloudBilling.GetProjectBillingInfo","service":"cloudbilling.googleapis.com"}}]}}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T06:15:16.205Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:15:16.206Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:15:16.206Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:15:16.206Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:15:16.206Z] No OAuth tokens found
+[debug] [2026-01-03T06:15:16.206Z] No OAuth tokens found
+[debug] [2026-01-03T06:15:16.206Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:15:16.207Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:15:16.288Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 403
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T06:57:03.082Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.082Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.083Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.084Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.084Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.084Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.084Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.085Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.085Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.085Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.085Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.085Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.086Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:57:03.116Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:57:03.231Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 403
+[debug] [2026-01-03T06:57:03.231Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"error":{"code":403,"message":"Request had insufficient authentication scopes.","status":"PERMISSION_DENIED","details":[{"@type":"type.googleapis.com/google.rpc.ErrorInfo","reason":"ACCESS_TOKEN_SCOPE_INSUFFICIENT","domain":"googleapis.com","metadata":{"method":"google.cloud.billing.v1.CloudBilling.GetProjectBillingInfo","service":"cloudbilling.googleapis.com"}}]}}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T06:57:03.237Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.237Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.237Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.238Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.238Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.238Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.238Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T06:57:03.241Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.241Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.241Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.241Z] No OAuth tokens found
+[debug] [2026-01-03T06:57:03.241Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T06:57:03.241Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T06:57:03.241Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T06:57:03.307Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 403
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T07:05:48.859Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T07:05:48.859Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T07:05:48.860Z] No OAuth tokens found
+[debug] [2026-01-03T07:05:48.861Z] No OAuth tokens found
+[debug] [2026-01-03T07:05:48.861Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T07:05:48.861Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T07:05:48.861Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T07:05:48.862Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T07:05:48.862Z] No OAuth tokens found
+[debug] [2026-01-03T07:05:48.862Z] No OAuth tokens found
+[debug] [2026-01-03T07:05:48.862Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T07:05:48.862Z] > authorizing via signed-in user (id-monospace-workstations-sa@monospace-3.iam.gserviceaccount.com)
+[debug] [2026-01-03T07:05:48.863Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T07:05:48.891Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T07:05:49.007Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 403
