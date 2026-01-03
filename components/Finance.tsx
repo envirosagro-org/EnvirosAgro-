@@ -4,7 +4,7 @@ import { FinanceSidebar } from './finance/FinanceSidebar';
 import { ProductGrid } from './finance/ProductGrid';
 import { TransactionHistory } from './finance/TransactionHistory';
 import { DepositModal } from './finance/DepositModal';
-import { FINANCIAL_PRODUCTS, TRANSACTIONS } from './finance/data';
+import { FINANCIAL_PRODUCTS, TRANSACTIONS } from './finance/data.tsx';
 import { User, View } from '../../types';
 
 interface FinanceProps {

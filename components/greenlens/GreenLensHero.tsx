@@ -1,4 +1,5 @@
 import React from 'react';
+import { HERO_VIDEO_URL } from './data';
 
 export const GreenLensHero: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ export const GreenLensHero: React.FC = () => {
         className="absolute z-0 w-auto min-w-full min-h-full max-w-none"
         style={{ objectFit: 'cover', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
       >
-        <source src="https://cdn.pixabay.com/video/2024/02/13/200780-911181846_large.mp4" type="video/mp4" />
+        <source src={HERO_VIDEO_URL} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div className="absolute inset-0 bg-black/50"></div>

@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { EPISODES } from './data';
+import { FEATURED_EPISODE } from './data.tsx';
 import { Play, Mic } from 'lucide-react';
 
 export const FeaturedEpisode: React.FC = () => {
-  const featuredEpisode = EPISODES[0];
+  const featuredEpisode = FEATURED_EPISODE;
 
   return (
     <div className="bg-earth-50 dark:bg-earth-900/50 py-20 sm:py-28">

@@ -1,17 +1,18 @@
 
 import React from 'react';
 import { Mail } from 'lucide-react';
+import { SUBSCRIBE_CTA_IMAGE } from './data';
 
 export const SubscribeCta: React.FC = () => {
   return (
     <div className="relative bg-indigo-700 dark:bg-indigo-900/50">
       <div className="absolute inset-0">
-        <img className="w-full h-full object-cover" src="/images/podcast/audio-waves.svg" alt="Audio waveform" />
+        <img className="w-full h-full object-cover" src={SUBSCRIBE_CTA_IMAGE} alt="Audio waveform" />
         <div className="absolute inset-0 bg-indigo-700/80 mix-blend-multiply" aria-hidden="true" />
       </div>
       <div className="relative max-w-4xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-extrabold font-serif text-white sm:text-4xl">
-          <span className="block">Don\'t Miss an Episode.</span>
+          <span className="block">Don't Miss an Episode.</span>
           <span className="block">Subscribe to Our Podcast.</span>
         </h2>
         <p className="mt-4 text-lg leading-6 text-indigo-200">

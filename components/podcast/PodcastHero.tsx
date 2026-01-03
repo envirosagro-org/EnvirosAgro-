@@ -1,4 +1,5 @@
 import React from 'react';
+import { HERO_IMAGE } from './data';
 
 export const PodcastHero: React.FC = () => {
   return (
@@ -6,7 +7,7 @@ export const PodcastHero: React.FC = () => {
       <div className="absolute inset-0">
         <img
           className="h-full w-full object-cover"
-          src="https://images.unsplash.com/photo-1590602847991-9d6243b17c24?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=2400"
+          src={HERO_IMAGE}
           alt="Podcast background"
         />
         <div className="absolute inset-0 bg-gray-800/80" />

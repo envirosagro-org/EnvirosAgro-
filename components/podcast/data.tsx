@@ -45,3 +45,9 @@ export const PODCAST_STATS = [
   { name: 'Downloads', stat: '1.2M', icon: Download },
   { name: 'Subscriber Growth', stat: '+15%', icon: BarChart },
 ];
+
+export const HERO_IMAGE = 'https://images.unsplash.com/photo-1590602847991-9d6243b17c24?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=2400';
+
+export const FEATURED_EPISODE = EPISODES[0];
+
+export const SUBSCRIBE_CTA_IMAGE = '/images/podcast/audio-waves.svg';

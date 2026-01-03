@@ -35,7 +35,8 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^7.11.0",
     "recharts": "^2.12.7",
-    "tailwind-merge": "^2.2.2"
+    "tailwind-merge": "^2.2.2",
+    "use-count-up": "^3.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",

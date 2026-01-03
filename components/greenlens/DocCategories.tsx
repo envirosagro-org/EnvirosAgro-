@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
-const categories = [
-    { name: 'All', count: 12 },
-    { name: 'Soil Health', count: 4 },
-    { name: 'Biodiversity', count: 3 },
-    { name: 'Water Scarcity', count: 2 },
-    { name: 'Restoration', count: 3 },
-];
+import { DOC_CATEGORIES } from './data';
 
 export const DocCategories: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('All');
@@ -14,7 +7,7 @@ export const DocCategories: React.FC = () => {
   return (
     <div className="mb-12">
         <div className="flex items-center justify-center space-x-2 md:space-x-4 lg:space-x-6">
-            {categories.map((category) => (
+            {DOC_CATEGORIES.map((category) => (
                 <button 
                     key={category.name} 
                     onClick={() => setActiveCategory(category.name)}

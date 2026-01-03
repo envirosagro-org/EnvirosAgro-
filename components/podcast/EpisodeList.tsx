@@ -1,7 +1,5 @@
-
-import React from 'react';
-import { EPISODES } from './data';
 import { Play } from 'lucide-react';
+import { EPISODES } from './data.tsx';
 
 export const EpisodeList: React.FC = () => {
   const episodes = EPISODES;

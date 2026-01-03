@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Product } from '../../types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, SlidersHorizontal, ChevronDown, X, Check } from 'lucide-react';
-import { THRUST_FILTERS, PRODUCTS } from './data'; // Changed import
+import { THRUST_FILTERS, PRODUCTS } from './data.tsx'; // Changed import
 import { SafeImage } from '../SafeImage';
 
 interface ProductsProps {

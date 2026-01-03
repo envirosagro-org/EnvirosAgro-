@@ -46,3 +46,23 @@ export const GALLERY_FILMS = [
     image: "/images/greenlens/beneath-the-canopy.jpg",
   },
 ];
+
+export const DOC_CATEGORIES = [
+    { name: 'All', count: 12 },
+    { name: 'Soil Health', count: 4 },
+    { name: 'Biodiversity', count: 3 },
+    { name: 'Water Scarcity', count: 2 },
+    { name: 'Restoration', count: 3 },
+];
+
+export const FEATURED_FILM = GREENLENS_VIDEOS[0];
+
+export const FILM_STRIP_IMAGES = [
+  'https://images.unsplash.com/photo-1560493676-04071c5f467b?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600',
+  'https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600',
+  'https://images.unsplash.com/photo-1580910223797-9099403d15a5?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600',
+  'https://images.unsplash.com/photo-1621939512495-4c8a245d6232?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600',
+  'https://images.unsplash.com/photo-1615759910381-2b66a8a3a2a2?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=600',
+];
+
+export const HERO_VIDEO_URL = "https://cdn.pixabay.com/video/2024/02/13/200780-911181846_large.mp4";
