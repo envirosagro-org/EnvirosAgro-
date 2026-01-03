@@ -2013,3 +2013,289 @@
 [error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
 [debug] [2026-01-03T00:55:21.080Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
 [debug] [2026-01-03T00:55:21.080Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:10.570Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:10.571Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:10.572Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.573Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.573Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:10.573Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:10.574Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.574Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.575Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:15:10.613Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:15:10.807Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:10.807Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[debug] [2026-01-03T01:15:10.813Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.813Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.814Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.814Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.831Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.831Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.832Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.832Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.832Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-01-03T01:15:10.832Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:10.835Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-01-03T01:15:10.835Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:10.836Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [none]
+[debug] [2026-01-03T01:15:10.837Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:10.838Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [none]
+[debug] [2026-01-03T01:15:10.838Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:10.922Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.922Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:10.923Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [none]
+[debug] [2026-01-03T01:15:10.923Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:11.214Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:11.214Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[debug] [2026-01-03T01:15:11.215Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.215Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.216Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.216Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.221Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.221Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.221Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.221Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.221Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-01-03T01:15:11.221Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:11.223Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-01-03T01:15:11.223Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:11.225Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [none]
+[debug] [2026-01-03T01:15:11.225Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:11.227Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [none]
+[debug] [2026-01-03T01:15:11.227Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:11.292Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.292Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.292Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [none]
+[debug] [2026-01-03T01:15:11.292Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:15:11.519Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com 403
+[debug] [2026-01-03T01:15:11.519Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [omitted]
+[debug] [2026-01-03T01:15:11.664Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com 200
+[debug] [2026-01-03T01:15:11.664Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2026-01-03T01:15:11.669Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com 200
+[debug] [2026-01-03T01:15:11.670Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-01-03T01:15:11.670Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-01-03T01:15:11.670Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2026-01-03T01:15:11.674Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com 200
+[debug] [2026-01-03T01:15:11.675Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [omitted]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:11.678Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:11.678Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:11.678Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.678Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.678Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:15:11.844Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:11.844Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:11.846Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:11.847Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:11.858Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:11.858Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:11.858Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.858Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.858Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:11.863Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:11.863Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:11.863Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.863Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:11.864Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:15:11.893Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com 403
+[debug] [2026-01-03T01:15:11.893Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [omitted]
+[debug] [2026-01-03T01:15:11.976Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-01-03T01:15:11.976Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2026-01-03T01:15:11.980Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com 200
+[debug] [2026-01-03T01:15:11.980Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2026-01-03T01:15:11.985Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com 200
+[debug] [2026-01-03T01:15:11.985Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-01-03T01:15:12.007Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:12.007Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:12.008Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:12.009Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:12.016Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:12.016Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:12.017Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:12.018Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:12.036Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com 200
+[debug] [2026-01-03T01:15:12.036Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [omitted]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:14.515Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:14.515Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:14.515Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:14.515Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:14.515Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:14.520Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:14.520Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:14.520Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:14.520Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:15:14.520Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:15:14.664Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:14.664Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:14.666Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:14.666Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:15:14.672Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:15:14.672Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:15:14.674Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:15:14.674Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:19.554Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:19.555Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:19.556Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.556Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.557Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:19.557Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:19.557Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.558Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.559Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:16:19.596Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:16:19.775Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:19.776Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[debug] [2026-01-03T01:16:19.783Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.783Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.785Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.785Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.801Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.801Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.802Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.802Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.802Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.802Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.804Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.804Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.805Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.805Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.806Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [none]
+[debug] [2026-01-03T01:16:19.807Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.890Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.891Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.891Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.891Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.904Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:19.904Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[debug] [2026-01-03T01:16:19.905Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.905Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.906Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.906Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.911Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.911Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.912Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.912Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.912Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.912Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.914Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.914Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.916Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.920Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.922Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [none]
+[debug] [2026-01-03T01:16:19.922Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:19.985Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.985Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:19.986Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [none]
+[debug] [2026-01-03T01:16:19.986Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com x-goog-quota-user=projects/envirosagro-git-93534258-78537
+[debug] [2026-01-03T01:16:20.480Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com 403
+[debug] [2026-01-03T01:16:20.480Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [omitted]
+[debug] [2026-01-03T01:16:20.568Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com 403
+[debug] [2026-01-03T01:16:20.568Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseio.com [omitted]
+[debug] [2026-01-03T01:16:20.612Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com 200
+[debug] [2026-01-03T01:16:20.613Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.613Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-01-03T01:16:20.613Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.629Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com 200
+[debug] [2026-01-03T01:16:20.629Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.701Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com 200
+[debug] [2026-01-03T01:16:20.701Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseapphosting.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.708Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com 200
+[debug] [2026-01-03T01:16:20.709Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebasedataconnect.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.713Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com 200
+[debug] [2026-01-03T01:16:20.713Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [omitted]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:20.719Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:20.719Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:20.719Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:20.719Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:20.720Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:16:20.721Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com 200
+[debug] [2026-01-03T01:16:20.721Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/firebaseappdistribution.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.723Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com 200
+[debug] [2026-01-03T01:16:20.723Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/envirosagro-git-93534258-78537/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2026-01-03T01:16:20.870Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:20.870Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:20.872Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:20.873Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.469Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.469Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.469Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.469Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.469Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.474Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.474Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.475Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.475Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.475Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.487Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.487Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.487Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.487Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.487Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.492Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.492Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.492Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.492Z] Checked if tokens are valid: true, expires at: 1767405304906
+[debug] [2026-01-03T01:16:21.492Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo [none]
+[debug] [2026-01-03T01:16:21.740Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:21.740Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.742Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.742Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.744Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:21.745Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.746Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.746Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.748Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:21.748Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.749Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.749Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
+[debug] [2026-01-03T01:16:21.762Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo 200
+[debug] [2026-01-03T01:16:21.762Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/envirosagro-git-93534258-78537/billingInfo {"name":"projects/envirosagro-git-93534258-78537/billingInfo","projectId":"envirosagro-git-93534258-78537","billingAccountName":"","billingEnabled":false}
+[error] Failed to fetch Firebase Project from Studio Workspace because WORKSPACE_SLUG environment variable is empty
+[debug] [2026-01-03T01:16:21.764Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"]
+[debug] [2026-01-03T01:16:21.764Z] > authorizing via signed-in user (envirosagro.com@gmail.com)
