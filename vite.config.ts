@@ -12,9 +12,6 @@ export default defineConfig(({ mode }) => {
         open: true,
       }),
     ],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
     build: {
       outDir: 'dist',
       sourcemap: false,
@@ -24,9 +21,6 @@ export default defineConfig(({ mode }) => {
             if (id.includes('node_modules')) {
               const module = id.split('node_modules/').pop().split('/')[0];
               return `vendor-${module}`;
-            }
-            if (id.includes('/components/')) {
-                return id.toString().split('/components/')[1].replace('.tsx', '');
             }
           },
         },

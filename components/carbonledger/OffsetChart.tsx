@@ -1,12 +1,57 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { createChart, IChartApi, ISeriesApi } from 'lightweight-charts';
 import { TrendingUp, Download } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface OffsetChartProps {
   data: any[];
 }
 
 export const OffsetChart: React.FC<OffsetChartProps> = ({ data }) => {
+  const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<IChartApi>();
+  const seriesRef = useRef<ISeriesApi<"Bar">>();
+
+  useEffect(() => {
+    if (chartContainerRef.current) {
+      chartRef.current = createChart(chartContainerRef.current, {
+        width: chartContainerRef.current.clientWidth,
+        height: chartContainerRef.current.clientHeight,
+        layout: {
+          backgroundColor: '#ffffff',
+          textColor: '#333',
+        },
+        grid: {
+          vertLines: {
+            visible: false,
+          },
+          horzLines: {
+            color: '#f0f0f0',
+          },
+        },
+        rightPriceScale: {
+          borderColor: '#e0e0e0',
+        },
+        timeScale: {
+          borderColor: '#e0e0e0',
+        },
+      });
+
+      seriesRef.current = chartRef.current.addBarSeries({
+        color: '#22c55e',
+      });
+
+      if (data) {
+        seriesRef.current.setData(data);
+      }
+    }
+
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.remove();
+      }
+    };
+  }, [data]);
+
   return (
     <div className="bg-white dark:bg-earth-900 p-8 rounded-3xl shadow-sm border border-earth-100 dark:border-earth-800">
       <div className="flex justify-between items-center mb-8">
@@ -17,21 +62,7 @@ export const OffsetChart: React.FC<OffsetChartProps> = ({ data }) => {
           <Download size={14} /> Export CSV
         </button>
       </div>
-      <div className="h-64 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(0,0,0,0.05)" />
-            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-            <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-            <Tooltip cursor={{ fill: 'rgba(0,0,0,0.02)' }} contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
-            <Bar dataKey="tons" radius={[4, 4, 0, 0]}>
-              {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={index === data.length - 1 ? '#15803d' : '#22c55e'} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      <div ref={chartContainerRef} className="h-64 w-full" />
     </div>
   );
 };

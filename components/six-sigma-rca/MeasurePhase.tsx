@@ -1,5 +1,4 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Gauge } from 'lucide-react';
 import { DPMO_DATA } from './constants';
 
@@ -9,15 +8,9 @@ export const MeasurePhase: React.FC = () => (
       <Gauge className="text-blue-500" /> DPMO Baseline
     </h3>
     <div className="h-[400px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={DPMO_DATA}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.05} />
-          <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10, fontWeight: 900 }} />
-          <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} />
-          <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', background: 'rgba(255,255,255,0.98)', fontSize: '11px' }} />
-          <Line type="monotone" dataKey="dpmo" stroke="#3b82f6" strokeWidth={4} dot={{ r: 6, fill: '#3b82f6' }} />
-        </LineChart>
-      </ResponsiveContainer>
+      <div className="h-full flex items-center justify-center text-slate-500">
+          <p>Chart will be displayed here</p>
+      </div>
     </div>
     <div className="p-8 bg-blue-50 dark:bg-blue-900/20 rounded-[2rem] border border-blue-100 dark:border-blue-800 flex justify-between items-center">
       <div>
