@@ -1,0 +1,1 @@
+import{j as r}from"./vendor-react-BGx942Si.js";import t from"./SixSigmaRCA-BQFANpMb.js";import"./vendor-cookie-CqkleIqs.js";import"./vendor-lucide-react-CTXwqOk8.js";const p=()=>r.jsx(t,{});export{p as default};

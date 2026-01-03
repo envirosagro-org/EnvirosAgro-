@@ -1,0 +1,1 @@
+// Industrial module entry point

@@ -13,7 +13,7 @@ import { CartProvider } from './context/CartContext';
 import { reducer, initialState } from './context/reducer';
 import { Loader2 } from 'lucide-react';
 import { auth } from './lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 
 const Home = lazy(() => import('./views/Home'));
 const AgBiz = lazy(() => import('./components/AgBiz'));
@@ -24,6 +24,7 @@ const Services = lazy(() => import('./components/Services'));
 const Community = lazy(() => import('./components/Community'));
 const Finance = lazy(() => import('./components/Finance'));
 const Contact = lazy(() => import('./components/Contact'));
+const Auth = lazy(() => import('./components/Auth'));
 const SixSigmaRCA = lazy(() => import('./components/six-sigma-rca/SixSigmaRCA'));
 
 const NotFound = () => (
@@ -73,6 +74,35 @@ function App() {
     navigate(path, { state: params });
   };
 
+  const handleSignUp = async (name: string, email: string, password: string) => {
+    dispatch({ type: 'SET_AUTH_LOADING', payload: true });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName: name });
+      // Manually refetch user to get updated profile
+      const updatedUser = auth.currentUser;
+      if (updatedUser) {
+        const appUser: User = {
+          uid: updatedUser.uid,
+          name: updatedUser.displayName || 'Anonymous',
+          email: updatedUser.email || '',
+          role: 'user',
+          avatar: updatedUser.photoURL || undefined,
+          joinedDate: updatedUser.metadata.creationTime,
+          esin: '',
+          eacBalance: 0,
+          isVerified: updatedUser.emailVerified,
+        };
+        dispatch({ type: 'SET_USER', payload: appUser });
+      }
+      onNavigate(View.HOME);
+    } catch (error: any) {
+      dispatch({ type: 'SET_AUTH_ERROR', payload: error.message });
+    } finally {
+      dispatch({ type: 'SET_AUTH_LOADING', payload: false });
+    }
+  };
+
   if (isAuthLoading) {
     return (
         <div className="h-screen bg-earth-950 flex flex-col items-center justify-center gap-6">
@@ -103,6 +133,7 @@ function App() {
           <Route path="/finance" element={<Finance user={user} onNavigate={onNavigate} />} />
           <Route path="/contact" element={<Contact onNavigate={onNavigate} />} />
           <Route path="/six-sigma-rca" element={<SixSigmaRCA />} />
+          <Route path="/auth" element={<Auth onSignUp={handleSignUp} onGoogleLogin={() => {}} onEmailLogin={() => {}} isLoading={isAuthLoading} error={null} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

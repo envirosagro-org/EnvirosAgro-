@@ -1,39 +1,31 @@
 import 'package:realm/realm.dart';
-import '../models/user_model.dart';
 
 class AtlasService {
-  static const String _appId = '6957933ebaecce170fa892b1'; 
-  final App _app = App(AppConfiguration(_appId));
+  // Connect to your Atlas App ID
+  final App app = App(AppConfiguration("envirosagro-app-id-xxxxx"));
 
-  User? _currentUser;
-  Realm? _realm;
-
-  Future<void> login() async {
-    if (_currentUser == null) {
-      _currentUser = await _app.logIn(Credentials.anonymous());
-      _realm = Realm(Configuration.flexibleSync(_currentUser!, [UserModel.schema]));
-    }
+  // 1. Authenticate
+  Future<User> login() async {
+    return await app.logIn(Credentials.anonymous()); // Or EmailPassword
   }
 
-  Stream<RealmResultsChanges<UserModel>> getProfileStream() {
-    if (_realm == null) throw Exception("Realm not initialized. Call login() first.");
-    return _realm!.all<UserModel>().changes;
-  }
-
-  Future<Map<String, dynamic>> calibrateSustainability(double-a, double-b, double-c, double-d) async {
-    if (_currentUser == null) await login();
+  // 2. Call the Sustainability Function
+  Future<Map<String, dynamic>> calibrateSustainability(double S, double Dn, double In, double x) async {
+    final user = app.currentUser!;
     
-    final result = await _currentUser!.functions.call('calculateSustainability', [a, b, c, d]);
-    return result as Map<String, dynamic>;
-  }
-
-  Future<void> mineReaction(String documentId, String reactionType) async {
-    if (_currentUser == null) await login();
+    // Call the Atlas Function defined in Part 2
+    final result = await user.functions.call("calculateSustainability", [{
+      'S': S, 'Dn': Dn, 'In': In, 'x': x
+    }]);
     
-    await _currentUser!.functions.call('mineOnReaction', [documentId, reactionType]);
+    return Map<String, dynamic>.from(result);
   }
 
-  void dispose() {
-    _realm?.close();
+  // 3. Call the Mining Function
+  Future<void> mineReaction(String contentId, String type) async {
+    final user = app.currentUser!;
+    await user.functions.call("mineOnReaction", [{
+      'contentId': contentId, 'reactionType': type
+    }]);
   }
 }

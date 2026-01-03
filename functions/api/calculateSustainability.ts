@@ -1,6 +1,13 @@
 
-import clientPromise from "../../lib/mongodb";
-import type { MongoUser } from "../../types";
+import * as admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
+
+// Initialize Firebase Admin SDK
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
+
+const db = getFirestore();
 
 // This is the shape of the data the function expects in the request body.
 interface SustainabilityArgs {
@@ -15,10 +22,6 @@ interface SustainabilityArgs {
 
 export const onRequestPost = async ({ request }: { request: Request }) => {
     try {
-        const client = await clientPromise;
-        const db = client.db("EnvirosAgroDB");
-        const usersCollection = db.collection<MongoUser>("users");
-
         const { S, Dn, In, x, r = 1.0, n = 1, auth_id }: SustainabilityArgs = await request.json();
 
         // Basic validation
@@ -39,25 +42,15 @@ export const onRequestPost = async ({ request }: { request: Request }) => {
         
         const m = Math.sqrt((Dn * In * Ca) / S);
 
-        // Update MongoDB Document
-        const result = await usersCollection.updateOne(
-            { auth_id: auth_id },
-            { 
-                $set: { 
-                    "sustainability.Ca": Ca,
-                    "sustainability.m": m,
-                    "sustainability.last_calibrated": new Date()
-                }
-            },
-            { upsert: true }
-        );
-
-        if (result.matchedCount === 0 && result.upsertedCount === 0) {
-             return new Response(JSON.stringify({ error: "Could not find user and failed to create a new one." }), {
-                status: 404,
-                headers: { "Content-Type": "application/json" },
-            });
-        }
+        // Update Firestore Document
+        const userRef = db.collection("users").doc(auth_id);
+        await userRef.set({
+            sustainability: {
+                Ca: Ca,
+                m: m,
+                last_calibrated: new Date()
+            }
+        }, { merge: true });
 
         return new Response(JSON.stringify({ Ca, m, status: "Calibrated" }), {
             headers: { "Content-Type": "application/json" },

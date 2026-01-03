@@ -1,9 +1,8 @@
 
 import React, { useState } from 'react';
-import { db } from '../../lib/firebase';
-import { collection, addDoc } from 'firebase/firestore';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { User } from '../../types';
+import { registerGroup } from '../../lib/groups';
 
 interface RegisterGroupProps {
   user: User;
@@ -22,21 +21,8 @@ export const RegisterGroup: React.FC<RegisterGroupProps> = ({ user, onGroupRegis
     setIsLoading(true);
     setError(null);
 
-    if (!groupName || !groupType || !legalId) {
-      setError('All fields are required.');
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      await addDoc(collection(db, 'groups'), {
-        name: groupName,
-        type: groupType,
-        legalId: legalId,
-        createdBy: user.email,
-        createdAt: new Date(),
-        members: [user.email],
-      });
+      await registerGroup(groupName, groupType, legalId, user);
       onGroupRegistered();
     } catch (err) {
       if (err instanceof Error) {

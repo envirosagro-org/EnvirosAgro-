@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { OrganizationLogin } from './OrganizationLogin';
 import { GroupLogin } from './GroupLogin';
+import { SignUp } from './SignUp';
 import { View } from '../types';
 
 interface AuthProps {
     onGoogleLogin: () => Promise<void>;
     onEmailLogin: (email: string, password: string) => Promise<void>;
+    onSignUp: (name: string, email: string, password: string) => Promise<void>;
     isLoading: boolean;
     error: string | null;
 }
@@ -16,9 +18,10 @@ enum AuthScreen {
     CHOICE,
     ORGANIZATION_LOGIN,
     GROUP_LOGIN,
+    SIGN_UP
 }
 
-export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoading, error }) => {
+const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, onSignUp, isLoading, error }) => {
     const [screen, setScreen] = useState<AuthScreen>(AuthScreen.CHOICE);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
 
@@ -32,6 +35,10 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
 
     if (screen === AuthScreen.GROUP_LOGIN) {
         return <GroupLogin onLogin={onEmailLogin} onBack={handleBack} isLoading={isLoading} error={error} />;
+    }
+
+    if (screen === AuthScreen.SIGN_UP) {
+        return <SignUp onSignUp={onSignUp} onBack={handleBack} isLoading={isLoading} error={error} />;
     }
 
     return (
@@ -69,6 +76,23 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
                     >
                         Group/Society/Club Login
                     </button>
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-earth-600" />
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-earth-900 text-earth-400">
+                                Or
+                            </span>
+                        </div>
+                    </div>
+                    <button
+                        onClick={() => setScreen(AuthScreen.SIGN_UP)}
+                        disabled={isLoading}
+                        className="w-full flex justify-center py-3 px-4 border border-agro-500/50 rounded-md shadow-sm text-sm font-medium text-agro-200 bg-agro-700/40 hover:bg-agro-600/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-earth-900 focus:ring-agro-500 disabled:opacity-50 transition-all"
+                    >
+                        Sign Up with Email
+                    </button>
                 </div>
                 <div className="mt-6 flex items-center justify-center">
                      <input
@@ -86,3 +110,5 @@ export const Auth: React.FC<AuthProps> = ({ onGoogleLogin, onEmailLogin, isLoadi
         </div>
     );
 };
+
+export default Auth;
