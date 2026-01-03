@@ -1,1 +1,0 @@
-import{j as e}from"../vendor-paJ_2uBt.js";const r=()=>e.jsxs("div",{className:"bg-white/5 rounded-lg p-6 h-96",children:[e.jsx("h3",{className:"text-lg font-semibold text-white mb-4",children:"Performance Overview"}),e.jsx("div",{className:"h-full flex items-center justify-center text-slate-500",children:e.jsx("p",{children:"Chart will be displayed here"})})]});export{r as P};

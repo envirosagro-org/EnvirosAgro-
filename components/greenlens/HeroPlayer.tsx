@@ -1,6 +1,6 @@
 import React from 'react';
 import { Play, Pause, X, Info } from 'lucide-react';
-import { DOCS_LIBRARY } from './data';
+import { GREENLENS_VIDEOS } from './data';
 
 export const HeroPlayer = ({
   activeFilm,
@@ -11,7 +11,7 @@ export const HeroPlayer = ({
   handleWatchNow,
   handleOpenDetails,
 }: any) => {
-  const upNextDocs = DOCS_LIBRARY.filter(d => d.id !== activeFilm.id).slice(0, 3);
+  const upNextDocs = GREENLENS_VIDEOS.filter(d => d.id !== activeFilm.id).slice(0, 3);
 
   return (
     <div className="flex flex-col lg:flex-row gap-8">
