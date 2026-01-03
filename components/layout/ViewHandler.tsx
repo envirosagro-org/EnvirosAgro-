@@ -4,10 +4,9 @@ import { Hero } from '../Hero';
 import { Information } from '../Information';
 import { Products } from '../Products';
 import { Cart } from '../Cart';
-import { Services } from '../Services';
-import { Database } from '../Database';
+import Services from '../Services';
 import { AgroPeopleAndCulture } from '../AgroPeopleAndCulture';
-import { KnowledgeHub } from '../KnowledgeHub';
+import KnowledgeHub from '../KnowledgeHub';
 import { Dashboard } from '../Dashboard';
 import { AiAdvisor } from '../AiAdvisor';
 import { RoadmapAI } from '../RoadmapAI';
@@ -24,17 +23,17 @@ import { Media } from '../Media';
 import { Supply } from '../Supply';
 import { Customer } from '../Customer';
 import { Partnerships } from '../Partnerships';
-import { Finance } from '../Finance';
-import { Community } from '../Community';
-import { Podcast } from '../Podcast';
+import Finance from '../Finance';
+import Community from '../Community';
+import Podcast from '../Podcast';
 import { HeritageForum } from '../HeritageForum';
 import { Webinar } from '../Webinar';
 import { SmartFarmVR } from '../SmartFarmVR';
 import { PlanetWatch } from '../PlanetWatch';
-import { GreenLens } from '../GreenLens';
+import GreenLens from '../GreenLens';
 import { SafeHarvest } from '../SafeHarvest';
 import { NutriLife } from '../NutriLife';
-import { AgBizWeekly } from '../AgBizWeekly';
+import AgBizWeekly from '../AgBizWeekly';
 import { InvestorPortal } from '../InvestorPortal';
 import { ScaleUpSummit } from '../ScaleUpSummit';
 import { LiveHost } from '../LiveHost';
@@ -46,8 +45,8 @@ import { SupplyChainAudit } from '../SupplyChainAudit';
 import { NetworkInputHub } from '../NetworkInputHub';
 import { TransmissionGateway } from '../TransmissionGateway';
 import { FutureVision } from '../FutureVision';
-import { SixSigmaRCA } from '../SixSigmaRCA';
-import { FrameworkDistinctions } from '../FrameworkDistinctions';
+import SixSigmaRCA from '../six-sigma-rca/SixSigmaRCA';
+import FrameworkDistinctions from '../FrameworkDistinctions';
 import { DataRegistry } from '../DataRegistry';
 import { Portfolio } from '../Portfolio';
 import { AiConsultantFloating } from '../AiConsultantFloating';
@@ -134,7 +133,7 @@ export const ViewHandler: React.FC<ViewHandlerProps> = ({
     case View.ROADMAP_AI:
       return <RoadmapAI />;
     case View.SIX_SIGMA_RCA:
-      return <SixSigmaRCA onNavigate={handleNavClick} />;
+      return <SixSigmaRCA />;
     case View.AI_CONSULTANT_FLOATING:
       return <AiConsultantFloating />;
     case View.DATA_REGISTRY:

@@ -17,7 +17,7 @@ interface GreenLensProps {
   onNavigate?: (view: View) => void;
 }
 
-export const GreenLens: React.FC<GreenLensProps> = ({ onNavigate }) => {
+const GreenLens: React.FC<GreenLensProps> = ({ onNavigate }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -184,3 +184,5 @@ export const GreenLens: React.FC<GreenLensProps> = ({ onNavigate }) => {
     </div>
   );
 };
+
+export default GreenLens;

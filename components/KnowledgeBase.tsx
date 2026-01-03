@@ -10,7 +10,7 @@ interface KnowledgeBaseProps {
   initialSearchQuery?: string;
 }
 
-export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ onNavigate, initialSearchQuery }) => {
+const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ onNavigate, initialSearchQuery }) => {
   const [searchQuery, setSearchQuery] = React.useState(initialSearchQuery || '');
   const [searchResults, setSearchResults] = React.useState(sampleData);
   const [activeFilters, setActiveFilters] = React.useState<string[]>([]);
@@ -69,3 +69,5 @@ export const KnowledgeBase: React.FC<KnowledgeBaseProps> = ({ onNavigate, initia
     </div>
   );
 };
+
+export default KnowledgeBase;

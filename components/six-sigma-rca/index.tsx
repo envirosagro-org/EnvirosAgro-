@@ -11,7 +11,7 @@ import { Globe, Activity } from 'lucide-react';
 
 type Phase = 'DEFINE' | 'MEASURE' | 'ANALYZE' | 'IMPROVE' | 'CONTROL';
 
-export const SixSigmaRCA: React.FC = () => {
+const SixSigmaRCA: React.FC = () => {
   const [activePhase, setActivePhase] = useState<Phase>('ANALYZE');
 
   return (
@@ -42,3 +42,5 @@ export const SixSigmaRCA: React.FC = () => {
     </div>
   );
 };
+
+export default SixSigmaRCA;

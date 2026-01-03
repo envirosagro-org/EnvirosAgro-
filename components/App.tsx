@@ -46,7 +46,7 @@ const Community = React.lazy(() => import('./Community'));
 const HeritageForum = React.lazy(() => import('./HeritageForum'));
 const ScaleUpSummit = React.lazy(() => import('./ScaleUpSummit'));
 const AiAdvisor = React.lazy(() => import('./AiAdvisor'));
-const SixSigmaRCA = React.lazy(() => import('./SixSigmaRCA'));
+const SixSigmaRCA = React.lazy(() => import('./six-sigma-rca'));
 const AiConsultantFloating = React.lazy(() => import('./AiConsultantFloating'));
 const CommunityGuidelines = React.lazy(() => import('./CommunityGuidelines'));
 const Trademarks = React.lazy(() => import('./Trademarks'));

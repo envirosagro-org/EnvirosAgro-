@@ -24,6 +24,7 @@ const Services = lazy(() => import('./components/Services'));
 const Community = lazy(() => import('./components/Community'));
 const Finance = lazy(() => import('./components/Finance'));
 const Contact = lazy(() => import('./components/Contact'));
+const SixSigmaRCA = lazy(() => import('./components/six-sigma-rca/SixSigmaRCA'));
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
@@ -94,13 +95,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
           <Route path="/agbiz" element={<AgBiz user={user} onNavigate={onNavigate} />} />
-          <Route path="/knowledge" element={<KnowledgeBase user={user} onNavigate={onNavigate} />} />
-          <Route path="/podcast" element={<Podcast user={user} onNavigate={onNavigate} />} />
-          <Route path="/green-lens" element={<GreenLens user={user} onNavigate={onNavigate} />} />
-          <Route path="/services" element={<Services user={user} onNavigate={onNavigate} />} />
+          <Route path="/knowledge" element={<KnowledgeBase onNavigate={onNavigate} />} />
+          <Route path="/podcast" element={<Podcast onNavigate={onNavigate} />} />
+          <Route path="/green-lens" element={<GreenLens onNavigate={onNavigate} />} />
+          <Route path="/services" element={<Services onNavigate={onNavigate} />} />
           <Route path="/community" element={<Community user={user} onNavigate={onNavigate} />} />
           <Route path="/finance" element={<Finance user={user} onNavigate={onNavigate} />} />
           <Route path="/contact" element={<Contact onNavigate={onNavigate} />} />
+          <Route path="/six-sigma-rca" element={<SixSigmaRCA />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

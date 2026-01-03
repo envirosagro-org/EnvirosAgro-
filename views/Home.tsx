@@ -1,4 +1,3 @@
-
 import React, { lazy, Suspense } from 'react';
 import { Hero } from '../components/Hero';
 import { Cta } from '../components/Cta';
@@ -8,9 +7,9 @@ import {
   ArrowRight, Users, Microscope, Database
 } from 'lucide-react';
 import { View, User } from '../types';
+import Podcast from '../components/Podcast';
 
 const FrameworkDistinctions = lazy(() => import('../components/FrameworkDistinctions'));
-const Podcast = lazy(() => import('../components/Podcast'));
 
 interface HomeProps {
     onNavigate: (view: View) => void;
@@ -132,7 +131,7 @@ const UserStatsWidget = ({ user, onNavigate }: any) => {
     );
 };
 
-export const Home: React.FC<HomeProps> = ({ onNavigate, user }) => (
+const Home: React.FC<HomeProps> = ({ onNavigate, user }) => (
   <div className="bg-white dark:bg-earth-950 transition-colors duration-500">
     <Hero onNavigate={onNavigate} />
     
@@ -193,7 +192,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, user }) => (
     </div>
 
     <Suspense fallback={<div className="h-96" />}>
-      <Podcast />
+      <Podcast onNavigate={onNavigate} />
     </Suspense>
 
     <Cta 
@@ -204,3 +203,5 @@ export const Home: React.FC<HomeProps> = ({ onNavigate, user }) => (
     />
   </div>
 );
+
+export default Home;

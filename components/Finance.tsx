@@ -5,7 +5,7 @@ import { ProductGrid } from './finance/ProductGrid';
 import { TransactionHistory } from './finance/TransactionHistory';
 import { DepositModal } from './finance/DepositModal';
 import { FINANCIAL_PRODUCTS, TRANSACTIONS } from './finance/data.tsx';
-import { User, View } from '../../types';
+import { User, View } from '../types';
 
 interface FinanceProps {
     user: User | null;
