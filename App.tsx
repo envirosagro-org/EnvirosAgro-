@@ -1,7 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './index.css';
-import { Home } from './views/Home';
 import { Footer } from './components/Footer';
 import { Navbar } from './components/Navbar';
 import { ScrollToTop } from './components/ScrollToTop';
@@ -13,14 +12,16 @@ import { LanguageProvider } from './context/LanguageContext';
 import { CartProvider } from './context/CartContext';
 import { reducer, initialState } from './context/reducer';
 import { Loader2 } from 'lucide-react';
-import { AgBiz } from './components/AgBiz';
-import { KnowledgeBase } from './components/KnowledgeBase';
 
+const Home = lazy(() => import('./views/Home'));
+const AgBiz = lazy(() => import('./components/AgBiz'));
+const KnowledgeBase = lazy(() => import('./components/KnowledgeBase'));
 const Podcast = lazy(() => import('./components/Podcast'));
 const GreenLens = lazy(() => import('./components/GreenLens'));
 const Services = lazy(() => import('./components/Services'));
 const Community = lazy(() => import('./components/Community'));
 const Finance = lazy(() => import('./components/Finance'));
+const Contact = lazy(() => import('./components/Contact'));
 
 const NotFound = () => (
   <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>
@@ -33,17 +34,6 @@ const pathToView = (path: string): View => {
   }
   return View.HOME;
 }
-
-const componentMap: { [key in View]?: React.ComponentType<any> } = {
-    [View.HOME]: Home,
-    [View.AGBIZ]: AgBiz,
-    [View.KNOWLEDGE]: KnowledgeBase,
-    [View.PODCAST]: Podcast,
-    [View.GREEN_LENS]: GreenLens,
-    [View.SERVICES]: Services,
-    [View.COMMUNITY]: Community,
-    [View.FINANCE]: Finance,
-};
 
 function App() {
   const navigate = useNavigate();
@@ -75,30 +65,18 @@ function App() {
           <p className="text-[10px] font-black text-agro-400 uppercase tracking-[0.4em] animate-pulse">Loading Page...</p>
         </div>
       }>
-        <div>
-          <Routes>
-            <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
-            <Route path="/home" element={<Home user={user} onNavigate={onNavigate} />} />
-            {Object.keys(componentMap).map(viewKey => {
-              const viewValue = viewKey as View;
-              const Component = componentMap[viewValue] || (() => <div className="h-screen flex items-center justify-center text-4xl">Not Found</div>);
-              const props = {
-                  user,
-                  onNavigate,
-                  navigationParams: location.state,
-                  onLogin: (u: User) => dispatch({ type: 'SET_USER', payload: u }),
-              };
-              return (
-                  <Route 
-                      key={viewValue} 
-                      path={`/${viewValue.toLowerCase().replace(/_/g, '-')}`} 
-                      element={<Component {...props} />} 
-                  />
-              );
-            })}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/" element={<Home user={user} onNavigate={onNavigate} />} />
+          <Route path="/agbiz" element={<AgBiz user={user} onNavigate={onNavigate} />} />
+          <Route path="/knowledge" element={<KnowledgeBase user={user} onNavigate={onNavigate} />} />
+          <Route path="/podcast" element={<Podcast user={user} onNavigate={onNavigate} />} />
+          <Route path="/green-lens" element={<GreenLens user={user} onNavigate={onNavigate} />} />
+          <Route path="/services" element={<Services user={user} onNavigate={onNavigate} />} />
+          <Route path="/community" element={<Community user={user} onNavigate={onNavigate} />} />
+          <Route path="/finance" element={<Finance user={user} onNavigate={onNavigate} />} />
+          <Route path="/contact" element={<Contact onNavigate={onNavigate} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Suspense>
       <Footer onNavigate={onNavigate} />
     </main>

@@ -1,37 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TrendingUp, Landmark, Cpu, PenSquare } from 'lucide-react';
-
-const features = [
-  {
-    name: 'Market Trends',
-    description: 'Stay ahead of commodity prices, futures, and global market shifts.',
-    icon: TrendingUp,
-    color: 'text-blue-400',
-    bg: 'bg-blue-900/20'
-  },
-  {
-    name: 'Policy & Regulation',
-    description: 'Understand how new legislation and trade agreements impact your business.',
-    icon: Landmark,
-    color: 'text-green-400',
-    bg: 'bg-green-900/20'
-  },
-  {
-    name: 'AgTech Insights',
-    description: 'The latest on venture capital, startups, and technology disrupting the industry.',
-    icon: Cpu,
-    color: 'text-purple-400',
-    bg: 'bg-purple-900/20'
-  },
-  {
-    name: 'Expert Analysis',
-    description: 'In-depth commentary from leading agricultural economists and analysts.',
-    icon: PenSquare,
-    color: 'text-amber-400',
-    bg: 'bg-amber-900/20'
-  },
-];
+import { agBizFeatures } from '../../data';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -92,7 +61,7 @@ export const AgBizHero: React.FC = () => {
           initial="hidden"
           animate="visible"
         >
-          {features.map((feature) => (
+          {agBizFeatures.map((feature) => (
             <motion.div 
               key={feature.name} 
               className="flex flex-col gap-y-4 rounded-xl bg-white/5 p-8 ring-1 ring-inset ring-white/10 backdrop-blur-sm transition-all hover:ring-white/20 hover:bg-white/10"

@@ -1,23 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, User, Clock } from 'lucide-react';
-
-const featuredArticle = {
-  category: 'Deep Dive',
-  title: 'Navigating the Carbon Market: A Guide for Modern Farmers',
-  excerpt: 'Carbon credits present a significant new revenue stream for farmers, but the market is notoriously complex. This guide breaks down the core opportunities, potential pitfalls, and strategic steps for successfully participating in agricultural carbon programs.',
-  author: {
-    name: 'Dr. Evelyn Reed',
-    role: 'Agricultural Economist',
-    avatarUrl: 'https://randomuser.me/api/portraits/women/68.jpg',
-  },
-  stats: {
-    readTime: '12 min read',
-    date: 'October 26, 2023',
-  },
-  imageUrl: 'https://images.unsplash.com/photo-1563514227-925955360679?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb&w=1200',
-  link: '#',
-};
+import { featuredArticle } from '../../data';
 
 export const FeaturedArticle: React.FC = () => {
   return (

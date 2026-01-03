@@ -1,13 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUp, ArrowDown, Briefcase, BarChart2 } from 'lucide-react';
-
-const stats = [
-  { name: 'Corn Futures (Dec)', value: '$5.48', change: '+0.37%', changeType: 'increase' },
-  { name: 'Soybean Futures (Nov)', value: '$13.21', change: '-0.23%', changeType: 'decrease' },
-  { name: 'Wheat Futures (Dec)', value: '$7.60', change: '+1.06%', changeType: 'increase' },
-  { name: 'Live Cattle (Dec)', value: '$1.85/lb', change: '-0.54%', changeType: 'decrease' },
-];
+import { marketBriefingStats } from '../../data';
 
 const cardVariants = {
   offscreen: {
@@ -41,7 +35,7 @@ export const MarketBriefing: React.FC = () => {
                 </div>
             </div>
             <dl className="lg:col-span-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-2">
-              {stats.map((stat, index) => (
+              {marketBriefingStats.map((stat, index) => (
                 <motion.div
                   key={stat.name}
                   className="relative overflow-hidden rounded-2xl bg-gray-50 dark:bg-gray-800/50 p-6 shadow-sm border border-gray-200 dark:border-gray-700"

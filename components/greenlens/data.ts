@@ -19,3 +19,30 @@ export const GREENLENS_VIDEOS = [
     awards: ["Sundance Grand Jury Prize"],
   },
 ];
+
+export const GALLERY_FILMS = [
+  {
+    id: 1,
+    title: "Guardians of the Soil",
+    description: "A deep dive into the world of regenerative agriculture and the farmers leading the movement.",
+    image: "/images/greenlens/guardians-of-the-soil.jpg",
+  },
+  {
+    id: 2,
+    title: "The Urban Harvest",
+    description: "Exploring the innovative ways cities are tackling food security through vertical farming and community gardens.",
+    image: "/images/greenlens/the-urban-harvest.jpg",
+  },
+  {
+    id: 3,
+    title: "Water Wars and Peace",
+    description: "A look at the geopolitical tensions and collaborative solutions surrounding the world\'s most precious resource.",
+    image: "/images/greenlens/water-wars-and-peace.jpg",
+  },
+  {
+    id: 4,
+    title: "Beneath the Canopy",
+    description: "An immersive journey into the Amazon rainforest, highlighting its biodiversity and the threats it faces.",
+    image: "/images/greenlens/beneath-the-canopy.jpg",
+  },
+];

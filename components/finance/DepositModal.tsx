@@ -1,45 +1,64 @@
-import React from 'react';
-import { Wallet, X, CheckCircle2, Loader2 } from 'lucide-react';
+import React, { useState } from 'react';
+import { X, DollarSign, CreditCard, Banknote } from 'lucide-react';
 
 interface DepositModalProps {
-  setShowDepositModal: (show: boolean) => void;
-  depositStatus: 'IDLE' | 'PROCESSING' | 'SUCCESS';
-  amount: string;
-  setAmount: (amount: string) => void;
-  handleDeposit: () => void;
+    isOpen: boolean;
+    onClose: () => void;
+    onDeposit: (amount: number) => void;
 }
 
-export const DepositModal: React.FC<DepositModalProps> = ({
-  setShowDepositModal,
-  depositStatus,
-  amount,
-  setAmount,
-  handleDeposit,
-}) => {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-earth-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-        <div className="p-6 border-b border-earth-100 flex justify-between items-center bg-blue-50">
-          <h3 className="font-bold text-xl text-blue-900 flex items-center gap-2"><Wallet className="text-blue-600" /> Fund Wallet</h3>
-          <button onClick={() => setShowDepositModal(false)} className="text-blue-400 hover:text-blue-700 transition-colors"><X size={24} /></button>
-        </div>
-        <div className="p-6">
-          {depositStatus === 'SUCCESS' ? (
-            <div className="text-center py-8">
-              <CheckCircle2 size={48} className="text-green-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-earth-900">Success!</h3>
-              <button onClick={() => setShowDepositModal(false)} className="mt-6 bg-blue-600 text-white font-bold py-2 px-8 rounded-lg">Close</button>
+export const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit }) => {
+    const [amount, setAmount] = useState(100);
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black/50 z-50 flex justify-center items-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg w-full max-w-md transform transition-all">
+                <div className="p-6 flex justify-between items-center border-b border-gray-200 dark:border-gray-700">
+                    <h2 className="text-xl font-bold">Buy EAC Tokenz</h2>
+                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+                        <X size={24} />
+                    </button>
+                </div>
+                <div className="p-6">
+                    <div className="mb-4">
+                        <label className="text-sm font-bold text-gray-600 dark:text-gray-300 mb-2 block">Amount (USD)</label>
+                        <div className="relative">
+                            <DollarSign size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(Number(e.target.value))}
+                                className="w-full bg-gray-100 dark:bg-gray-700 border-transparent rounded-lg py-3 pl-10 pr-4"
+                            />
+                        </div>
+                        <div className="flex justify-between mt-2 text-xs text-gray-500">
+                            <span>= {amount} EAC</span>
+                            <span>Rate: 1 USD = 1 EAC</span>
+                        </div>
+                    </div>
+
+                    <div className="mb-6">
+                        <label className="text-sm font-bold text-gray-600 dark:text-gray-300 mb-2 block">Payment Method</label>
+                        <div className="grid grid-cols-2 gap-4">
+                             <button className="flex items-center gap-2 p-4 border rounded-lg bg-blue-500 text-white">
+                                <CreditCard size={20} /> Credit Card
+                            </button>
+                            <button className="flex items-center gap-2 p-4 border rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <Banknote size={20} /> Bank Transfer
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button 
+                        onClick={() => onDeposit(amount)}
+                        className="w-full bg-amber-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-amber-700 transition-colors"
+                    >
+                        Deposit ${amount}
+                    </button>
+                </div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="w-full border border-earth-200 rounded-xl px-4 py-3 font-mono text-lg" placeholder="Enter Amount" />
-              <button onClick={handleDeposit} disabled={depositStatus === 'PROCESSING'} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2">
-                {depositStatus === 'PROCESSING' ? <Loader2 className="animate-spin" /> : 'Confirm Deposit'}
-              </button>
-            </div>
-          )}
         </div>
-      </div>
-    </div>
-  );
+    );
 };

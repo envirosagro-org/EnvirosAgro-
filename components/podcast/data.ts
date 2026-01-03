@@ -1,3 +1,5 @@
+import { Users, Podcast, Download, BarChart } from 'lucide-react';
+
 export const EPISODES = [
     {
         id: 1,
@@ -35,4 +37,11 @@ export const EPISODES = [
         audioUrl: '/audio/episode4.mp3',
         coverArt: '/images/podcast/elena-garcia.jpg'
     }
+];
+
+export const PODCAST_STATS = [
+  { name: 'Monthly Listeners', stat: '12K', icon: Users },
+  { name: 'Total Episodes', stat: '48', icon: Podcast },
+  { name: 'Downloads', stat: '1.2M', icon: Download },
+  { name: 'Subscriber Growth', stat: '+15%', icon: BarChart },
 ];
